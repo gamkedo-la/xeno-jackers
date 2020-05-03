@@ -42,11 +42,12 @@ function loadStartImagePic() {
         loadImages();
     } 
     
-    titleScreenPic.src = assetPath.Image + "screens/screen_title.png";
+    titleScreenPic.src = assetPath.Image + "screens/screen_title_base.png";
 }
 
 //-----Load the rest of the game images----//
 const playerSpriteSheet = document.createElement("img");
+const bikerEnemySheet = document.createElement("img");
 const pauseScreenPic = document.createElement("img");
 const tileSheet = document.createElement("img");
 const fontSheet = document.createElement("img");
@@ -71,7 +72,7 @@ function loadImages() {
         { imgName: tileSheet, theFile: "backgrounds/spritesheet_grassyrock.png" },
 
         // enemies
-//        { imgName: alienPic, theFile: "alien-anim.png" },
+        { imgName: bikerEnemySheet, theFile: "enemies/enemy_biker.png" },
 
         // screens
         { imgName: pauseScreenPic, theFile: "screens/screen_pause.png" },
@@ -83,7 +84,7 @@ function loadImages() {
 //        { imgName: tempPlayer, theFile: "TempPlayer.png" },
 
         // UI
-        { imgName: fontSheet, theFile: "xjfont.png" },
+        { imgName: fontSheet, theFile: "interface/xjfont.png" },
     ];
 
     picsToLoad = imageList.length;

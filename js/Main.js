@@ -16,7 +16,7 @@ window.onload = function() {
 		localStorage.setItem(localStorageKey.Language, currentLanguage);
 	}
 
-    colorText(getLocalizedStringForKey(STRINGS_KEY.Loading), canvas.width / 2, canvas.height / 2, Color.White, Fonts.Subtitle, TextAlignment.Center, opacity = 1);
+//    colorText(getLocalizedStringForKey(STRINGS_KEY.Loading), canvas.width / 2, canvas.height / 2, Color.White, Fonts.Subtitle, TextAlignment.Center, opacity = 1);
 
     TitleTextX = canvas.width / 2;
     subTitleTextX = canvas.width / 2;
