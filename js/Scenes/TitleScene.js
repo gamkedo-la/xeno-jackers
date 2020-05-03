@@ -12,8 +12,11 @@ function TitleScene() {
         SCENE.CREDITS
     ];
 
-    this.transitionIn = function() {
+    const buttons = [];
 
+    this.transitionIn = function() {
+        buttons.push(buildPlayButton(235, 260, 36, 2));
+        buttons.push(buildOptionsButton(235, 300, 36, 2));
     };
 
     this.transitionOut = function() {
@@ -30,6 +33,33 @@ function TitleScene() {
         if (pressed) {//only act on key released events => prevent multiple changes on single press
             return false;
         }
+
+        switch (newKeyEvent) {
+/*            case ALIAS.UP:
+            case ALIAS.LEFT:
+                selectorPositionsIndex--;
+                if (selectorPositionsIndex < 0) {
+                    selectorPositionsIndex += selections.length;
+                }
+                return true;
+            case ALIAS.DOWN:
+            case ALIAS.RIGHT:
+                selectorPositionsIndex++;
+                if (selectorPositionsIndex >= selections.length) {
+                    selectorPositionsIndex = 0;
+                }
+                return true;
+            case ALIAS.SELECT1:
+                console.log("Activated the current button");
+                SceneState.setState(selections[selectorPositionsIndex]);
+                return true;
+            case ALIAS.SELECT2:
+                console.log("Selected the Play button");
+                SceneState.setState(SCENE.GAME);*/
+            case ALIAS.POINTER:
+                checkButtons();
+                return true;
+        }
         
         return false;
     };
@@ -37,11 +67,10 @@ function TitleScene() {
     const buildPlayButton = function(x, y, height, padding) {
         const thisClick = function() {
             console.log("Clicked the Play Button");
-            SceneState.setState(SCENE.GAME);
+//            SceneState.setState(SCENE.GAME);
         }
 
-        return new UIButton("STRINGS_KEY.Play",
-                        x, y, height, padding, thisClick, Color.Red);
+        return new UIButton("START", x, y, height, padding, thisClick, Color.Red);
     }
 
     const buildHelpButton = function(x, y, height, padding) {
@@ -53,13 +82,13 @@ function TitleScene() {
         return new UIButton(STRINGS_KEY.Help, x, y, height, padding, thisClick, Color.Green);
     }
 
-    const buildSettingsButton = function(x, y, height, padding) {
+    const buildOptionsButton = function(x, y, height, padding) {
         const thisClick = function() {
-            console.log("Clicked the Settings Button");
-            SceneState.setState(SCENE.SETTINGS);
+            console.log("Clicked the Options Button");
+//            SceneState.setState(SCENE.SETTINGS);
         }
 
-        return new UIButton(STRINGS_KEY.Settings, x, y, height, padding, thisClick, Color.Aqua);
+        return new UIButton("OPTIONS", x, y, height, padding, thisClick, Color.Aqua);
     }
 
     const buildCreditsButton = function(x, y, height, padding) {
@@ -73,15 +102,15 @@ function TitleScene() {
 
     const checkButtons = function() {
         let wasClicked = false;
-        for(let i = 0; i < buttons.length; i++) {
-            wasClicked = buttons[i].respondIfClicked(mouseX, mouseY);
+        for(let button of buttons) {
+            wasClicked = button.respondIfClicked(mouseX, mouseY);
             if(wasClicked) {break;}
         }
     }
     
-    const printMenu = function(menuItems, selected) {
-        for(let i = 0; i < menuItems.length; i++) {
-            menuItems[i].draw();
+    const drawMenu = function() {
+        for(button of buttons) {
+            button.draw();
         }
 	}
 	
@@ -95,8 +124,8 @@ function TitleScene() {
 
         // render menu
         canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, 200, 250, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
-        fontRenderer.drawString(canvasContext, 220, 260, "START", GAME_SCALE);
-        //        printMenu(buttons, selectorPositionIndex);        
+//        fontRenderer.drawString(canvasContext, 220, 260, "START", GAME_SCALE);
+        drawMenu();        
 	}
 	
 	const drawBG = function() {

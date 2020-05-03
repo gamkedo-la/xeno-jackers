@@ -1,7 +1,7 @@
 //UIButton
-function UIButton(stringsKey, x, y, height, padding = 2, onClick, color = Color.Blue) {
+function UIButton(title, x, y, height, padding = 2, onClick) {
     const bounds = {};
-    this.title = getLocalizedStringForKey(stringsKey);
+    this.title = title;
     
     this.onClick = onClick;
 
@@ -17,11 +17,6 @@ function UIButton(stringsKey, x, y, height, padding = 2, onClick, color = Color.
 
     this.getBounds = function() {
         return bounds;
-    }
-
-    this.updateTitle = function() {
-        this.title = getLocalizedStringForKey(stringsKey);
-        setBounds(this.title, bounds.x, bounds.y, bounds.height, padding);
     }
 
     this.updateXPosition = function(newX) {
@@ -54,7 +49,7 @@ function UIButton(stringsKey, x, y, height, padding = 2, onClick, color = Color.
         const posX = bounds.x + padding;
         const posY = bounds.y + padding + fontOverhangAdjustment;
         
-        colorText(this.title, posX, posY, color, Fonts.ButtonTitle, TextAlignment.Left);
+        fontRenderer.drawString(canvasContext, x, y, title, GAME_SCALE);
         
         if(DEBUG) { // draw bounds for buttons in semi-transparent colors
             const BGColor = Color.Aqua;

@@ -26,12 +26,7 @@ function getFontWeight(font) {
 }
 
 function getTextWidth(txt, font) {
-  canvasContext.save();
-  canvasContext.font = font;
-  
-  var width = canvasContext.measureText(txt).width;
-  
-  canvasContext.restore();
+  return fontRenderer.getWidthOfText (txt, GAME_SCALE);
   
   return width;
 }
