@@ -1,4 +1,4 @@
-//Main for Kung Tu
+//Main for Xeno Jackers
 window.onload = function() {
     window.addEventListener("focus", windowOnFocus);
     window.addEventListener("blur", windowOnBlur);
@@ -34,6 +34,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
 	if(finishedLoading) {
 		timer = new Chronogram();
+		fontRenderer = new FontBuilder(fontSheet, CHAR_WIDTH, CHAR_HEIGHT);
 		SceneState.setState(SCENE.TITLE);
 		requestAnimationFrame(update);
 	} else {

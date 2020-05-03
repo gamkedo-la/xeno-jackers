@@ -51,6 +51,7 @@ const bikerEnemySheet = document.createElement("img");
 const pauseScreenPic = document.createElement("img");
 const tileSheet = document.createElement("img");
 const fontSheet = document.createElement("img");
+const uiMenuBorderPic = document.createElement("img");
 const offMenuButton = document.createElement("img");
 const onMenuButton = document.createElement("img");
 

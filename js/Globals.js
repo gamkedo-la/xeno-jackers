@@ -2,10 +2,11 @@
 //----------Drawing and Canvas---------//
 let canvas;
 let canvasContext;
-let currentLanguage;
 
 let DEBUG = false;
 let CHEATS_ACTIVE = false;
+
+const GAME_SCALE = 4;
 
 const canvasClearColor = "black";
 
@@ -63,6 +64,10 @@ const assetPath = {
 let isMuted = false;
 
 //------------Text------------------//
+let fontRenderer;
+const CHAR_WIDTH = 6;
+const CHAR_HEIGHT = 9;
+
 const TextAlignment = {
 	Left:"left",
 	Right:"right",

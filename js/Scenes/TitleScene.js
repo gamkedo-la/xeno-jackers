@@ -40,7 +40,7 @@ function TitleScene() {
             SceneState.setState(SCENE.GAME);
         }
 
-        return new UIButton(STRINGS_KEY.Play,
+        return new UIButton("STRINGS_KEY.Play",
                         x, y, height, padding, thisClick, Color.Red);
     }
 
@@ -94,7 +94,9 @@ function TitleScene() {
         drawBG();
 
         // render menu
-        printMenu(buttons, selectorPositionIndex);        
+        canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, 200, 250, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
+        fontRenderer.drawString(canvasContext, 220, 260, "START", GAME_SCALE);
+        //        printMenu(buttons, selectorPositionIndex);        
 	}
 	
 	const drawBG = function() {
