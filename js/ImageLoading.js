@@ -51,6 +51,8 @@ const bikerEnemySheet = document.createElement("img");
 const pauseScreenPic = document.createElement("img");
 const tileSheet = document.createElement("img");
 const fontSheet = document.createElement("img");
+const offMenuButton = document.createElement("img");
+const onMenuButton = document.createElement("img");
 
 let picsToLoad = 0;
 
@@ -76,6 +78,7 @@ function loadImages() {
 
         // screens
         { imgName: pauseScreenPic, theFile: "screens/screen_pause.png" },
+        { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
 
         // power ups
 //        { imgName: shieldPowerUpPic, theFile: "shieldPowerUp.png" },
@@ -85,6 +88,8 @@ function loadImages() {
 
         // UI
         { imgName: fontSheet, theFile: "interface/xjfont.png" },
+        { imgName: offMenuButton, theFile: "interface/menu_button_off.png" },
+        { imgName: onMenuButton, theFile: "interface/menu_button_on.png" },
     ];
 
     picsToLoad = imageList.length;
