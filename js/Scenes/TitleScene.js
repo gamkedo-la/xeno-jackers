@@ -1,20 +1,15 @@
 //TitleScene
 function TitleScene() {
-	const MENU_BG_COLOR = "#010139";
-
     let selectorPositionsIndex = 0;
-    let selectorPosition = {x:0, y:0};
-    let selectorSprite;
     const selections = [
         SCENE.GAME,
-        SCENE.HELP,
-        SCENE.SETTINGS,
-        SCENE.CREDITS
+        SCENE.OPTIONS,
     ];
 
     const buttons = [];
 
     this.transitionIn = function() {
+        //add these in the same order as the selections array above
         buttons.push(buildPlayButton(235, 260, 36, 2));
         buttons.push(buildOptionsButton(235, 300, 36, 2));
     };
@@ -35,15 +30,15 @@ function TitleScene() {
         }
 
         switch (newKeyEvent) {
-/*            case ALIAS.UP:
-            case ALIAS.LEFT:
+            case KEY_UP:
+            case KEY_LEFT:
                 selectorPositionsIndex--;
                 if (selectorPositionsIndex < 0) {
                     selectorPositionsIndex += selections.length;
                 }
                 return true;
-            case ALIAS.DOWN:
-            case ALIAS.RIGHT:
+            case KEY_DOWN:
+            case KEY_RIGHT:
                 selectorPositionsIndex++;
                 if (selectorPositionsIndex >= selections.length) {
                     selectorPositionsIndex = 0;
@@ -51,11 +46,11 @@ function TitleScene() {
                 return true;
             case ALIAS.SELECT1:
                 console.log("Activated the current button");
-                SceneState.setState(selections[selectorPositionsIndex]);
+//                SceneState.setState(selections[selectorPositionsIndex]);
                 return true;
             case ALIAS.SELECT2:
                 console.log("Selected the Play button");
-                SceneState.setState(SCENE.GAME);*/
+//                SceneState.setState(SCENE.GAME);
             case ALIAS.POINTER:
                 checkButtons();
                 return true;
@@ -109,8 +104,17 @@ function TitleScene() {
     }
     
     const drawMenu = function() {
-        for(button of buttons) {
+
+        for(let i = 0; i < buttons.length; i++) {
+            const button = buttons[i];
             button.draw();
+
+            const buttonBounds = button.getBounds();
+            if(i === selectorPositionsIndex) {
+                canvasContext.drawImage(onMenuButton, 0, 0, onMenuButton.width, onMenuButton.height, buttonBounds.x - 20, buttonBounds.y + 10, GAME_SCALE * onMenuButton.width, GAME_SCALE * onMenuButton.height);
+            } else {
+                canvasContext.drawImage(offMenuButton, 0, 0, offMenuButton.width, offMenuButton.height, buttonBounds.x - 20, buttonBounds.y + 10, GAME_SCALE * offMenuButton.width, GAME_SCALE * offMenuButton.height);
+            }
         }
 	}
 	

@@ -1,5 +1,5 @@
 //Settings Scene
-function SettingsScene() {
+function OptionsScene() {
     const SETTINGS_BG_COLOR = "#010139";
 
     let selectorPositionsIndex = 0;

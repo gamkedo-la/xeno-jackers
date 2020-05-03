@@ -1,17 +1,16 @@
 //Player
 function Player() {
-    const scale = 4;//TODO: Make player sprite larger so this can be a 1
+    const SCALE = GAME_SCALE;
     let currentAnimation;
     let position = {x:canvas.width / 2, y:canvas.height / 2}
     
-    let isOnGround = true;
-    let isCrouching = false;
     let isBlocking = false;
+    let isCrouching = false;
 
-    let hasBlock = false;
-    let hasSweep = false;
-    let hasJumpKick = false;
-    let hasHelicopterKick = false;
+    let isOnGround = true;
+    let hasChainWeapon = false;
+    let hasWheelWeapon = false;
+    let hasHandleBarWeapon = false;
 
     this.update = function(deltaTime) {
         currentAnimation.update(deltaTime);
@@ -20,38 +19,29 @@ function Player() {
     }
 
     const processInput = function() {
-        let stillCrouching = false;
-        let stillBlocking = false;
         for(let i = 0; i < heldButtons.length; i++) {
             switch(heldButtons[i]) {
-                case ALIAS.LEFT:
+                case ALIAS.WALK_LEFT:
                     moveLeft();
                     break;
-                case ALIAS.RIGHT:
+                case ALIAS.WALK_RIGHT:
                     moveRight();
                     break;
                 case ALIAS.JUMP:
                     jump();
                     break;
-                case ALIAS.CROUCH:
-                    stillCrouching = true;
-                    crouch();
-                    break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
                     block();
                     break;
-                case ALIAS.PUNCH:
-                    punch();
+                case ALIAS.ATTACK:
+                    attack();
                     break;
-                case ALIAS.KICK:
-                    kick();
+                case ALIAS.CROUCH:
+                    crouch();
                     break;
             }
         }
-
-        if(!stillCrouching) {isCrouching = false;}
-        if(!stillBlocking) {isBlocking = false;}
     }
 
     const moveLeft = function() {
@@ -70,48 +60,28 @@ function Player() {
         }
     }
 
-    const crouch = function() {
-        if(isOnGround && !isCrouching) {
-            console.log("I'm crouching now");
-            isCrouching = true;
-//            currentAnimation = animations.crouching;
-        }
-    }
-
     const block = function() {
-        if(isOnGround && hasBlock && !isBlocking) {
+        if(isOnGround && hasWheelWeapon && !isBlocking) {
             console.log("I'm blocking now");
             isBlocking = true;
 //            currentAnimation = animations.blocking;
         }
     }
 
-    const punch = function() {
-        if((currentAnimation === animations.punching) && (!currentAnimation.isFinished)) {
+    const attack = function() {
+        if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
             return;
         } else {
-            console.log("Trying to punch");
-//            currentAnimation = animations.punching;
+            console.log("Trying to attack");
+//            currentAnimation = animations.attacking;
         }
     }
 
-    const kick = function() {
-        if(isStillKicking()) {return;}
-
-        console.log("Trying to kick");
-        if(isOnGround) {
-//            currentAnimation = animations.kicking;
-        } else {
-            if(hasHelicopterKick && isHoldingLeftorRight()) {
-                console.log("Helicopter Kick!!!!");
-//                currentAnimation = animations.helicopterKicking;
-            } else if(hasJumpKick) {
-                console.log("Jump Kick");
-//                currentAnimation = animations.jumpKicking;
-            } else if(hasSweep) {
-                console.log("Sweep");
-//                currentAnimation = animations.sweeping;
-            }
+    const crouch = function() {
+        if(isOnGround && !isCrouching) {
+            console.log("I'm crouching now");
+            isCrouching = true;
+//            currentAnimation = animations.crouching;
         }
     }
 
@@ -123,15 +93,11 @@ function Player() {
         const anims = {};
 
         anims.idle = new SpriteAnimation('idle', tempPlayer, [0], 11, 58, [64], false, true);
-        anims.idle.scale = scale;
+        anims.idle.scale = SCALE;
 //        animations.jumping = ...
-//        animations.crouching = ...
-//        animations.punching = ...
-//        animations.kicking = ...
+//        animations.attacking = ...
 //        animations.blocking = ...
-//        animations.sweeping = ...
-//        animations.jumpKicking = ...
-//        animations.helicopterKicking = ...
+//        animations.crouching = ...
 
         return anims;
     }
@@ -148,17 +114,5 @@ function Player() {
         }
 
         return false;
-    }
-
-    const isStillKicking = function() {
-        if(((currentAnimation === animations.kicking) ||
-        (currentAnimation === animations.sweeping) ||
-        (currentAnimation === animations.jumpKicking) ||
-        (currentAnimation === animations.helicopterKicking)) &&
-        (!currentAnimation.isFinished)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

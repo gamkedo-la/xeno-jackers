@@ -6,7 +6,7 @@ const SceneState = {
 	scenes: {
 //		[SCENE.LOADING]: new LoadingScreen(),
 		[SCENE.TITLE]: new TitleScene(),
-        [SCENE.SETTINGS]: new SettingsScene(),
+        [SCENE.OPTIONS]: new OptionsScene(),
 		[SCENE.CREDITS]: new CreditsScene(),
 		[SCENE.HELP]: new HelpScene(),
 		[SCENE.GAME]: new GameScene(),
