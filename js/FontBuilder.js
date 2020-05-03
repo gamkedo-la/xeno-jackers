@@ -21,102 +21,134 @@ function FontBuilder(fontSheet, charWidth, charHeight) {
         switch(char) {
             case 'A':
             case 'a':
-                return {};
+                return {x:0, y:0};
             case 'B':
             case 'b':
-                return {};
+                return {x:5, y:0};
             case 'C':
             case 'c':
-                return {};
+                return {x:10, y:0};
             case 'D':
             case 'd':
-                return {};
+                return {x:15, y:0};
             case 'E':
             case 'e':
-                return {};
+                return {x:20, y:0};
             case 'F':
             case 'f':
-                return {};
+                return {x:25, y:0};
             case 'G':
             case 'g':
-                return {};
+                return {x:30, y:0};
             case 'H':
             case 'h':
-                return {};
+                return {x:35, y:0};
             case 'I':
             case "i":
-                return {};
+                return {x:40, y:0};
             case 'J':
             case 'j':
-                return {};
+                return {x:45, y:0};
             case 'K':
             case 'k':
-                return {};
+                return {x:50, y:0};
             case 'L':
             case 'l':
-                return {};
+                return {x:55, y:0};
             case 'M':
             case 'm':
-                return {};
+                return {x:60, y:0};
             case 'N':
             case 'n':
-                return {};
+                return {x:0, y:7};
             case 'O':
             case 'o':
-                return {};
+                return {x:5, y:7};
             case 'P':
             case 'p':
-                return {};
+                return {x:10, y:7};
             case 'Q':
             case 'q':
-                return {};
+                return {x:15, y:7};
             case 'R':
             case 'r':
-                return {};
+                return {x:20, y:7};
             case 'S':
             case 's':
-                return {};
+                return {x:25, y:7};
             case 'T':
             case 't':
-                return {};
+                return {x:30, y:7};
             case 'U':
             case 'u':
-                return {};
+                return {x:35, y:7};
             case 'V':
             case 'v':
-                return {};
+                return {x:40, y:7};
             case 'W':
             case 'w':
-                return {};
+                return {x:45, y:7};
             case 'X':
             case 'x':
-                return {};
+                return {x:50, y:7};
             case 'Y':
             case 'y':
-                return {};
+                return {x:55, y:7};
             case 'Z':
             case 'z':
-                return {};
-            case '0':
-                return {};
+                return {x:60, y:7};
             case '1':
-                return {};
+                return {x:0, y:14};
             case '2':
-                return {};
+                return {x:5, y:14};
             case '3':
-                return {};
+                return {x:10, y:14};
             case '4':
-                return {};
+                return {x:15, y:14};
             case '5':
-                return {};
+                return {x:20, y:14};
             case '6':
-                return {};
+                return {x:25, y:14};
             case '7':
-                return {};
+                return {x:30, y:14};
             case '8':
-                return {};
+                return {x:35, y:14};
             case '9':
-                return {};
+                return {x:40, y:14};
+            case '0':
+                return {x:45, y:14};
+            case '.':
+                return {x:50, y:14};
+            case ',':
+                return {x:55, y:14};
+            case '?':
+                return {x:60, y:14};
+            case '!':
+                return {x:0, y:21};
+            case '@':
+                return {x:5, y:21};
+            case '#':
+                return {x:10, y:21};
+            case '$':
+                return {x:15, y:21};
+            case '%':
+                return {x:20, y:21};
+            case '^':
+                return {x:25, y:21};
+            case '&':
+                return {x:30, y:21};
+            case '*':
+                return {x:35, y:21};
+            case '(':
+                return {x:40, y:21};
+            case ')':
+                return {x:45, y:21};
+            case '-':
+                return {x:50, y:21};
+            case '+':
+                return {x:55, y:21};
+            case '=':
+                return {x:60, y:21};
         }
     }
 }
