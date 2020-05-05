@@ -87,8 +87,8 @@ function loadImages() {
         // tiles
         { imgName: tileSheet, theFile: "backgrounds/spritesheet_grassyrock.png" },
 
-        // enemies
-        { imgName: bikerEnemySheet, theFile: "enemies/enemy_biker.png" },
+        // characters
+        { imgName: bikerEnemySheet, theFile: "characters/enemy_biker.png" },
 
         // screens
         { imgName: pauseScreenPic, theFile: "screens/screen_pause.png" },
@@ -98,7 +98,7 @@ function loadImages() {
 //        { imgName: shieldPowerUpPic, theFile: "shieldPowerUp.png" },
 
         // player related
-        { imgName: playerSpriteSheet, theFile: "enemies/enemy_biker.png" },
+        { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" },
 
         // UI
         { imgName: fontSheet, theFile: "interface/xjfont.png" },
