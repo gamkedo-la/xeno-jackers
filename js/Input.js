@@ -56,6 +56,7 @@ let mouseY = 0;
 let mouseX = 0;
 const LEFT_MOUSE_BUTTON = 'LeftMouseButton';
 const RIGHT_MOUSE_BUTTON = 'RightMouseButton';
+let didInteract = false;
 
 const heldButtons = [];
 const ALIAS = {
@@ -120,6 +121,7 @@ function keyRelease(evt) {
 }
 
 function mouseButtonPressed(evt) {
+	didInteract = true;
 	evt.preventDefault();
 
 	if (evt.button === 0) {//left mouse button is button 0
