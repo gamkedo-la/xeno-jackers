@@ -1,8 +1,8 @@
-//Player
-function Player() {
+//BikerEnemy.js
+function BikerEnemy(posX, posY) {
     const SCALE = GAME_SCALE;
     let currentAnimation;
-    let position = {x:canvas.width / 2, y:canvas.height / 2}
+    let position = {x:posX, y:posY};
     
     let isBlocking = false;
     let isCrouching = false;
@@ -13,49 +13,21 @@ function Player() {
     let hasHandleBarWeapon = false;
     let flipped = false;
 
-    this.getPosition = function() {
-        return {x:position.x, y:position.y};
-    };
-
-    this.update = function(deltaTime) {
+    this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
 
-        processInput();
-    }
-
-    const processInput = function() {
-        for(let i = 0; i < heldButtons.length; i++) {
-            switch(heldButtons[i]) {
-                case ALIAS.WALK_LEFT:
-                    moveLeft();
-                    break;
-                case ALIAS.WALK_RIGHT:
-                    moveRight();
-                    break;
-                case ALIAS.JUMP:
-                    jump();
-                    break;
-                case ALIAS.BLOCK:
-                    stillBlocking = true;
-                    block();
-                    break;
-                case ALIAS.ATTACK:
-                    attack();
-                    break;
-                case ALIAS.CROUCH:
-                    crouch();
-                    break;
-            }
+        if(player.getPosition().x < position.x) {
+            flipped = true;
+        } else {
+            flipped = false;
         }
     }
 
     const moveLeft = function() {
-        flipped = true;
         position.x -= 10;
     }
 
     const moveRight = function() {
-        flipped = false;
         position.x += 10;
     }
 
@@ -63,13 +35,13 @@ function Player() {
         if(isOnGround) {
             isOnGround = false;
 //            currentAnimation = animations.jumping;
-            console.log("Need to jump now, also need some gravity to make you land");
+            console.log("Biker Enemy is trying to jump.");
         }
     }
 
     const block = function() {
         if(isOnGround && hasWheelWeapon && !isBlocking) {
-            console.log("I'm blocking now");
+            console.log("Biker Enemy is trying to block.");
             isBlocking = true;
 //            currentAnimation = animations.blocking;
         }
@@ -79,14 +51,14 @@ function Player() {
         if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
             return;
         } else {
-            console.log("Trying to attack");
+            console.log("Kiker Enemy is trying to attack.");
 //            currentAnimation = animations.attacking;
         }
     }
 
     const crouch = function() {
         if(isOnGround && !isCrouching) {
-            console.log("I'm crouching now");
+            console.log("Biker Enemy is crouching now.");
             isCrouching = true;
 //            currentAnimation = animations.crouching;
         }
@@ -110,16 +82,4 @@ function Player() {
     }
     const animations = initializeAnimations();
     currentAnimation = animations.idle;
-
-    const isHoldingLeft = function() {
-        for(let i = 0; i < heldButtons.length; i++) {
-            if(heldButtons[i] === ALIAS.WALK_LEFT) {
-                return true;
-            } else if(heldButtons[i] === ALIAS.WALK_RIGHT) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

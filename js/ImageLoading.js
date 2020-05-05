@@ -22,11 +22,6 @@ function loadGamkedoLogo() {
 
         startTime = Date.now();
         animatedHTGDLogo();
-
-//        //Show the Gamkedo Logo Image for 1 second
-//        setTimeout(function() {
-//            showTitleImage();
-//        }, 1000);
     }
     
     gamkedoLogoPic.src = assetPath.Image + "screens/screen_HTGD_Logo_GB.png";
@@ -103,7 +98,7 @@ function loadImages() {
 //        { imgName: shieldPowerUpPic, theFile: "shieldPowerUp.png" },
 
         // player related
-//        { imgName: tempPlayer, theFile: "TempPlayer.png" },
+        { imgName: playerSpriteSheet, theFile: "enemies/enemy_biker.png" },
 
         // UI
         { imgName: fontSheet, theFile: "interface/xjfont.png" },

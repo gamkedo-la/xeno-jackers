@@ -29,11 +29,25 @@ function SpriteAnimation(name, //string identifier for this animation
         }
     }
 
-    this.drawAt = function(x = 0, y = 0) {
+    this.drawAt = function(x = 0, y = 0, flipped = false) {
         const thisFrameRect = getCurrentFrameRect();
+		
+		canvasContext.save();
+		
+		let drawPosX = x;
+		let drawPosY = y;
+		if(flipped) {
+			canvasContext.translate(x + (this.scale * thisFrameRect.width), y);
+			canvasContext.scale(-1, 1);
+			drawPosX = 0;
+			drawPosY = 0;
+		}
+
         canvasContext.drawImage(image, 
-                                thisFrameRect.x, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
-                                x, y, thisFrameRect.width * this.scale, thisFrameRect.height * this.scale);
+            thisFrameRect.x, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
+            drawPosX, drawPosY, thisFrameRect.width * this.scale, thisFrameRect.height * this.scale);
+
+            canvasContext.restore();
     }
 
     const getCurrentFrameRect = function() {

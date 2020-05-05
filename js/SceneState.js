@@ -7,9 +7,10 @@ const SceneState = {
 //		[SCENE.LOADING]: new LoadingScreen(),
 		[SCENE.TITLE]: new TitleScene(),
         [SCENE.OPTIONS]: new OptionsScene(),
+		[SCENE.GAME]: new GameScene(),
+		[SCENE.PAUSE]: new PauseScene(),
 		[SCENE.CREDITS]: new CreditsScene(),
 		[SCENE.HELP]: new HelpScene(),
-		[SCENE.GAME]: new GameScene(),
 //		[SCENE.GAMEOVER]: new GameOverScene(),
 //		[SCENE.ENDING]: new EndgameScene()
 	},
@@ -28,7 +29,7 @@ const SceneState = {
 		if(!pauseManager.getIsPaused()) {
 		    this.scenes[this.currentScene].run(deltaTime);
 		} else if(this.currentScene === SCENE.GAME) {
-		    this.scenes[SCENE.GAME].runPausedOptions(deltaTime);
+		    this.scenes[SCENE.PAUSE];
 		}
 
 		if (isMuted) {

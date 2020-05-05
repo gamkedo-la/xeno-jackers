@@ -1,8 +1,13 @@
 //Game Play scene
 function GameScene() {
+    const enemies = [];
     this.transitionIn = function() {
         if(player === null) {
             player = new Player();
+        }
+
+        if(enemies.length === 0) {
+            enemies.push(new BikerEnemy(canvas.width / 4, canvas.height / 2));
         }
     }
 
@@ -18,25 +23,17 @@ function GameScene() {
 
     this.control = function(newKeyEvent, pressed, pressedKeys) {
         switch (newKeyEvent) {
-/*            case ALIAS.JUMP:
-                console.log("Jumping?");
+            case KEY_P:
+                for(key of pressedKeys) {
+                    if(key === newKeyEvent) {
+                        return;
+                    }
+                }
+                
+                if(pressed) {
+                    SceneState.setState(SCENE.PAUSE);
+                }
                 return true;
-            case ALIAS.LEFT:
-                console.log("Moving left?");
-                player.moveLeft();
-                return true;
-            case ALIAS.CROUCH:
-                console.log("Crouching?");
-                return true;
-            case ALIAS.RIGHT:
-                console.log("Moving right?");
-                player.moveRight();
-                return true;
-            case ALIAS.PUNCH:
-                console.log("Punching?");
-                return true;
-            case ALIAS.KICK:
-                console.log("Kicking?");*/
             case ALIAS.CHEATS:
                 CHEATS_ACTIVE = !CHEATS_ACTIVE;
                 return true;
@@ -51,12 +48,17 @@ function GameScene() {
 
     const update = function(deltaTime) {
         player.update(deltaTime);
+        for(enemy of enemies) {
+            enemy.update(deltaTime, player);
+        }
     }
 
     const draw = function(deltaTime) {
-        drawRect(0, 0, canvas.width, canvas.height, 'blue');
-        canvasContext.drawImage(tempBackground, 0, 0, canvas.width, canvas.height);
+        drawRect(0, 0, canvas.width, canvas.height, 'black');
 
         player.draw(deltaTime);
+        for(enemy of enemies) {
+            enemy.draw(deltaTime);
+        }
     }
 }

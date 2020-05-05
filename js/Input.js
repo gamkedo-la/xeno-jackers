@@ -102,11 +102,11 @@ function keyPress(evt) {
 		}
 	}
 
+	notifyCurrentScene(evt.keyCode, true);
+
 	if(isNewKey) {
 		heldButtons.push(evt.keyCode);
 	}
-
-	notifyCurrentScene(evt.keyCode, true);
 }
 
 function keyRelease(evt) {

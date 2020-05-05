@@ -55,7 +55,7 @@ function TitleScene() {
                 return true;
             case ALIAS.SELECT1:
                 console.log("Activated the current button");
-//                SceneState.setState(selections[selectorPositionsIndex]);
+                SceneState.setState(selections[selectorPositionsIndex]);
                 return true;
             case ALIAS.SELECT2:
                 console.log("Selected the Play button");
@@ -70,8 +70,7 @@ function TitleScene() {
 
     const buildPlayButton = function(x, y, height, padding) {
         const thisClick = function() {
-            console.log("Clicked the Play Button");
-//            SceneState.setState(SCENE.GAME);
+            SceneState.setState(SCENE.GAME);
         }
 
         return new UIButton("START", x, y, height, padding, thisClick, Color.Red);
@@ -79,7 +78,6 @@ function TitleScene() {
 
     const buildHelpButton = function(x, y, height, padding) {
         const thisClick = function() {
-            console.log("Clicked the Help Button");
             SceneState.setState(SCENE.HELP);
         }
 
