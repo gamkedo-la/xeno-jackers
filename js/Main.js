@@ -8,7 +8,7 @@ window.onload = function() {
     document.body.appendChild(canvas);
     canvas.width = 800;
     canvas.height = 600;
-	drawRect(0, 0, canvas.width, canvas.height, Color.White);
+	drawRect(0, 0, canvas.width, canvas.height, Color.Black);
 	
 	currentLanguage = localStorage.getItem(localStorageKey.Language);
 	if((currentLanguage === null) || (currentLanguage === undefined)) {
@@ -16,7 +16,7 @@ window.onload = function() {
 		localStorage.setItem(localStorageKey.Language, currentLanguage);
 	}
 
-    colorText("L..O..A..D..I..N..G..", canvas.width / 2, canvas.height / 2, Color.White, Fonts.Subtitle, TextAlignment.Center, opacity = 1);
+    colorText("L..O..A..D..I..N..G..", canvas.width / 2, canvas.height / 2, Color.White, Fonts.MainTitle, TextAlignment.Center, opacity = 1);
 
     TitleTextX = canvas.width / 2;
     subTitleTextX = canvas.width / 2;

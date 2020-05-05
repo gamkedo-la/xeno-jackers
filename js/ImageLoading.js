@@ -14,21 +14,39 @@ function showTitleImage() {
 
 //-----Load the Gamkedo Logo-----//
 const gamkedoLogoPic = document.createElement("img");
+let startTime;
 function loadGamkedoLogo() {
     gamkedoLogoPic.onload = function() {
-        //Draw the Gamkedo Logo Image
-        canvasContext.drawImage(this, 0, 0);
-
         //Begin loading the Start Image
         loadStartImagePic();
 
-        //Show the Gamkedo Logo Image for 1 second
-        setTimeout(function() {
-            showTitleImage();
-        }, 1000);
+        startTime = Date.now();
+        animatedHTGDLogo();
+
+//        //Show the Gamkedo Logo Image for 1 second
+//        setTimeout(function() {
+//            showTitleImage();
+//        }, 1000);
     }
     
-    gamkedoLogoPic.src = assetPath.Image + "screens/screen_HTGD_Logo.png";
+    gamkedoLogoPic.src = assetPath.Image + "screens/screen_HTGD_Logo_GB.png";
+}
+
+let htgdLogoScale = 2.0;
+function animatedHTGDLogo() {
+    
+    drawRect(0, 0, canvas.width, canvas.height, '#252525');
+
+    //Draw the Gamkedo Logo Image
+    canvasContext.drawImage(gamkedoLogoPic, 0, 0, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width/2 - (htgdLogoScale * gamkedoLogoPic.width)/2, canvas.height/2 - (htgdLogoScale * gamkedoLogoPic.height)/2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
+
+    const nowTime = Date.now();
+    if(nowTime - startTime < 1000) {
+        htgdLogoScale += 0.0125;
+        requestAnimationFrame(animatedHTGDLogo);
+    } else {
+        showTitleImage();
+    }
 }
 
 //-----Load the title screen image-----//
