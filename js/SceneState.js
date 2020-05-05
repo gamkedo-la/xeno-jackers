@@ -32,7 +32,7 @@ const SceneState = {
 		}
 
 		if (isMuted) {
-			gameFont.printTextAt(getLocalizedStringForKey(STRINGS_KEY.Muted), {x:760, y: 10}, 14, textAlignment.Left);
+			fontRenderer.drawString(canvasContext, 760, 10, "MUTED", 2);
 		}
 	},
 	control: function(newKeyEvent, pressed, pressedKeys) {

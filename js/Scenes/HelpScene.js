@@ -22,8 +22,6 @@ function HelpScene() {
 
             mainMenuX = canvas.width - (buttons[1].getBounds().width + canvas.width / 40);
             buttons[1].updateXPosition(mainMenuX);
-        } else {
-            updateButtonTitles();
         }
 
         selectorPositionsIndex = 0;
@@ -92,7 +90,7 @@ function HelpScene() {
             SceneState.setState(SCENE.GAME);
         }
 
-        return new UIButton(STRINGS_KEY.Play, x, y, height, padding, thisClick, Color.Aqua);
+        return new UIButton("PLAY", x, y, height, padding, thisClick, Color.Aqua);
     }
 
     const buildBackButton = function(x, y, height, padding) {
@@ -101,13 +99,7 @@ function HelpScene() {
             SceneState.setState(SCENE.TITLE);
         }
 
-        return new UIButton(STRINGS_KEY.Back, x, y, height, padding, thisClick, Color.Purple);
-    }
-
-    const updateButtonTitles = function() {
-        for(let i = 0; i < buttons.length; i++) {
-            buttons[i].updateTitle();
-        }
+        return new UIButton("BACK", x, y, height, padding, thisClick, Color.Purple);
     }
 
     const printNavigation = function(navItems) {
@@ -132,6 +124,6 @@ function HelpScene() {
     }
     
     const drawTitle = function() {
-	    colorText(getLocalizedStringForKey(STRINGS_KEY.HelpScreenTitle), canvas.width / 2, canvas.height / 3, Color.White, Fonts.MainTitle, TextAlignment.Center);
+        fontRenderer.drawString(canvasContext, canvas.width / 2, canvas.height / 3, "HELP", 2 * GAME_SCALE);
     }
 }

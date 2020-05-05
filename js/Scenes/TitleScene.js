@@ -9,9 +9,18 @@ function TitleScene() {
     const buttons = [];
 
     this.transitionIn = function() {
-        //add these in the same order as the selections array above
-        buttons.push(buildPlayButton(235, 260, 36, 2));
-        buttons.push(buildOptionsButton(235, 300, 36, 2));
+        const mainMenuX = 235;
+        const mainMenuY = 260;
+        const buttonHeight = 36;
+        const buttonTitlePadding = 0;
+        
+        if(buttons.length === 0) {
+            //add these in the same order as the selections array above
+            buttons.push(buildPlayButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
+            buttons.push(buildOptionsButton(mainMenuX, mainMenuY + 40, buttonHeight, buttonTitlePadding));
+        }
+
+        selectorPositionsIndex = 0;
     };
 
     this.transitionOut = function() {
@@ -74,13 +83,13 @@ function TitleScene() {
             SceneState.setState(SCENE.HELP);
         }
 
-        return new UIButton(STRINGS_KEY.Help, x, y, height, padding, thisClick, Color.Green);
+        return new UIButton("HELP", x, y, height, padding, thisClick, Color.Green);
     }
 
     const buildOptionsButton = function(x, y, height, padding) {
         const thisClick = function() {
             console.log("Clicked the Options Button");
-//            SceneState.setState(SCENE.SETTINGS);
+            SceneState.setState(SCENE.OPTIONS);
         }
 
         return new UIButton("OPTIONS", x, y, height, padding, thisClick, Color.Aqua);
@@ -92,7 +101,7 @@ function TitleScene() {
             SceneState.setState(SCENE.CREDITS);
         }
 
-        return new UIButton(STRINGS_KEY.Credits, x, y, height, padding, thisClick, Color.Purple);
+        return new UIButton("CREDITS", x, y, height, padding, thisClick, Color.Purple);
     }
 
     const checkButtons = function() {

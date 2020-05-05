@@ -1,7 +1,5 @@
-//Settings Scene
+//Options Scene
 function OptionsScene() {
-    const SETTINGS_BG_COLOR = "#010139";
-
     let selectorPositionsIndex = 0;
     const selections = [
         SCENE.TITLE,
@@ -14,16 +12,12 @@ function OptionsScene() {
 
     this.transitionIn = function() {
         let mainMenuX = 0;
-        const mainMenuY = canvas.height - canvas.height / 20;
+        const mainMenuY = canvas.height - 45;
         
         if(buttons.length === 0) {
-            buttons.push(buildBackButton(canvas.width / 40, mainMenuY, buttonHeight, buttonTitlePadding));
-            buttons.push(buildPlayButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
-
-            mainMenuX = canvas.width - (buttons[1].getBounds().width + canvas.width / 40);
-            buttons[1].updateXPosition(mainMenuX);
-        } else {
-            updateButtonTitles();
+            const playButtonX = canvas.width - fontRenderer.getWidthOfText("PLAY", GAME_SCALE) - 20;
+            buttons.push(buildBackButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
+            buttons.push(buildPlayButton(playButtonX, mainMenuY, buttonHeight, buttonTitlePadding));
         }
 
         selectorPositionsIndex = 0;
@@ -92,7 +86,7 @@ function OptionsScene() {
             SceneState.setState(SCENE.GAME);
         }
 
-        return new UIButton(STRINGS_KEY.Play, x, y, height, padding, thisClick, Color.Aqua);
+        return new UIButton("PLAY", x, y, height, padding, thisClick, Color.Aqua);
     }
 
     const buildBackButton = function(x, y, height, padding) {
@@ -101,13 +95,7 @@ function OptionsScene() {
             SceneState.setState(SCENE.TITLE);
         }
 
-        return new UIButton(STRINGS_KEY.Back, x, y, height, padding, thisClick, Color.Purple);
-    }
-
-    const updateButtonTitles = function() {
-        for(let i = 0; i < buttons.length; i++) {
-            buttons[i].updateTitle();
-        }
+        return new UIButton("BACK", x, y, height, padding, thisClick, Color.Purple);
     }
 
     const printNavigation = function(navItems) {
@@ -128,10 +116,11 @@ function OptionsScene() {
 	
 	const drawBG = function() {
         // fill the background since there is no image for now
-        drawRect(0, 0, canvas.width, canvas.height, SETTINGS_BG_COLOR);
+        drawRect(0, 0, canvas.width, canvas.height, "black");
     }
     
     const drawTitle = function() {
-	    colorText(getLocalizedStringForKey(STRINGS_KEY.SettingsScreenTitle), canvas.width / 2, canvas.height / 3, Color.White, Fonts.MainTitle, TextAlignment.Center);
+        const titleWidth = fontRenderer.getWidthOfText("OPTIONS", 2 * GAME_SCALE);
+        fontRenderer.drawString(canvasContext, canvas.width / 2 - titleWidth / 2, canvas.height / 4, "OPTIONS", 2 * GAME_SCALE);
     }
 }
