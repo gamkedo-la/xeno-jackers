@@ -59,14 +59,33 @@ function loadStartImagePic() {
 }
 
 //-----Load the rest of the game images----//
-const playerSpriteSheet = document.createElement("img");
+//tiles
+const tileSheetRock = document.createElement("img");
+const tileSheetWorkshop = document.createElement("img");
+const tempGameSceneBG = document.createElement("img");
+
+//characters
 const bikerEnemySheet = document.createElement("img");
-const pauseScreenPic = document.createElement("img");
-const tileSheet = document.createElement("img");
-const fontSheet = document.createElement("img");
+
+//screens
 const uiMenuBorderPic = document.createElement("img");
+const pauseScreenPic = document.createElement("img");
+
+//power ups
+
+//player related
+const playerSpriteSheet = document.createElement("img");
+
+//UI
+const fontSheet = document.createElement("img");
+const fontSheet2 = document.createElement("img");
+const fontSheet3 = document.createElement("img");
+const fontSheet4 = document.createElement("img");
+const fontSheetStroke = document.createElement("img");
 const offMenuButton = document.createElement("img");
 const onMenuButton = document.createElement("img");
+const statusbarBase = document.createElement("img");
+const healthSegment = document.createElement("img");
 
 let picsToLoad = 0;
 
@@ -85,7 +104,9 @@ function beginLoadingImage(imgVar, fileName) {
 function loadImages() {
     const imageList = [
         // tiles
-        { imgName: tileSheet, theFile: "backgrounds/spritesheet_grassyrock.png" },
+        { imgName: tileSheetRock, theFile: "backgrounds/spritesheet_grassyrock.png" },
+        { imgName: tileSheetWorkshop, theFile: "backgrounds/spritesheet_workshop.png" },
+        { imgName: tempGameSceneBG, theFile: "backgrounds/background_test.png" },
 
         // characters
         { imgName: bikerEnemySheet, theFile: "characters/enemy_biker.png" },
@@ -102,8 +123,14 @@ function loadImages() {
 
         // UI
         { imgName: fontSheet, theFile: "interface/xjfont.png" },
+        { imgName: fontSheet2, theFile: "interface/xjfont2.png" },
+        { imgName: fontSheet3, theFile: "interface/xjfont3.png" },
+        { imgName: fontSheet4, theFile: "interface/xjfont4.png" },
+        { imgName: fontSheetStroke, theFile: "interface/xjfont_stroke.png" },
         { imgName: offMenuButton, theFile: "interface/menu_button_off.png" },
         { imgName: onMenuButton, theFile: "interface/menu_button_on.png" },
+        { imgName: statusbarBase, theFile: "interface/statusbar_base.png" },
+        { imgName: healthSegment, theFile: "interface/statusbar_health_segment.png" },
     ];
 
     picsToLoad = imageList.length;

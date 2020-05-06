@@ -3,7 +3,7 @@ function Player() {
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 8;
     let currentAnimation;
-    let position = {x:canvas.width / 2, y:canvas.height / 2}
+    let position = {x:canvas.width / 2, y:canvas.height / 2};
     
     let isBlocking = false;
     let isCrouching = false;
@@ -13,6 +13,8 @@ function Player() {
     let hasWheelWeapon = false;
     let hasHandleBarWeapon = false;
     let flipped = false;
+
+    this.health = 10;
 
     this.getPosition = function() {
         return {x:position.x, y:position.y};

@@ -1,5 +1,10 @@
 //TitleScene
 function TitleScene() {
+    const mainMenuX = 160;
+    const mainMenuY = 240;
+    const buttonHeight = 36;
+    const buttonTitlePadding = 0;
+
     let selectorPositionsIndex = 0;
     const selections = [
         SCENE.GAME,
@@ -9,11 +14,6 @@ function TitleScene() {
     const buttons = [];
 
     this.transitionIn = function() {
-        const mainMenuX = 235;
-        const mainMenuY = 260;
-        const buttonHeight = 36;
-        const buttonTitlePadding = 0;
-        
         if(buttons.length === 0) {
             //add these in the same order as the selections array above
             buttons.push(buildPlayButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
@@ -111,7 +111,6 @@ function TitleScene() {
     }
     
     const drawMenu = function() {
-
         for(let i = 0; i < buttons.length; i++) {
             const button = buttons[i];
             button.draw();
@@ -134,7 +133,7 @@ function TitleScene() {
         drawBG();
 
         // render menu
-        canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, 200, 250, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
+        canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, mainMenuX - 35, mainMenuY - 10, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
 //        fontRenderer.drawString(canvasContext, 220, 260, "START", GAME_SCALE);
         drawMenu();        
 	}

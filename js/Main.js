@@ -6,8 +6,8 @@ window.onload = function() {
     canvas = document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
     document.body.appendChild(canvas);
-    canvas.width = 800;
-    canvas.height = 600;
+    canvas.width = 640;
+    canvas.height = 576;
 	drawRect(0, 0, canvas.width, canvas.height, Color.Black);
 	
     colorText("L..O..A..D..I..N..G..", canvas.width / 2, canvas.height / 2, Color.White, Fonts.MainTitle, TextAlignment.Center, opacity = 1);

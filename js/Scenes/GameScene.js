@@ -1,9 +1,14 @@
 //Game Play scene
 function GameScene() {
+    let gameUI = null;
     const enemies = [];
     this.transitionIn = function() {
         if(player === null) {
             player = new Player();
+        }
+
+        if(gameUI === null) {
+            gameUI = new GameUI(canvas, canvasContext);
         }
 
         if(enemies.length === 0) {
@@ -51,14 +56,19 @@ function GameScene() {
         for(enemy of enemies) {
             enemy.update(deltaTime, player);
         }
+
+        gameUI.update(deltaTime, player);
     }
 
     const draw = function(deltaTime) {
-        drawRect(0, 0, canvas.width, canvas.height, 'black');
+        //Temp until we get Tiled integration working
+        canvasContext.drawImage(tempGameSceneBG, 0, 0, tempGameSceneBG.width, tempGameSceneBG.height, 0, 0, tempGameSceneBG.width * GAME_SCALE, tempGameSceneBG.height * GAME_SCALE);
 
         player.draw(deltaTime);
         for(enemy of enemies) {
             enemy.draw(deltaTime);
         }
+
+        gameUI.draw(deltaTime);
     }
 }
