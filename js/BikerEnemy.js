@@ -71,7 +71,7 @@ function BikerEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1], 23, 33, [256], false, true);
+        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], 23, 33, [256], false, true);
         anims.idle.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...
