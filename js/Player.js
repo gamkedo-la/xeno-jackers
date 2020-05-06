@@ -1,7 +1,7 @@
 //Player
 function Player() {
     const SCALE = GAME_SCALE;
-    const WALK_SPEED = 8;
+    const WALK_SPEED = 5;
     let currentAnimation;
     let position = {x:canvas.width / 2, y:canvas.height / 2 + 64};
     
@@ -112,7 +112,7 @@ function Player() {
 
         anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0], 23, 33, [256], false, true);
         anims.idle.scale = SCALE;
-        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [0, 1, 2, 3], 23, 33, [128], false, true);
+        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3], 23, 33, [164], false, true);
         anims.walking.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...

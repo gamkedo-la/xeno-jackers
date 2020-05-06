@@ -3,6 +3,8 @@ let audioFormat;
 let musicSound = null;
 let pauseSound;
 let resumeSound;
+let menuSelect; //confirm any menu item
+let menuNav; //up or down navigation through any menu
 let menuMusic;
 let musicVolume;
 let effectsVolume;
@@ -25,8 +27,10 @@ function configureGameAudio() {
 }
 
 function loadAudio() {
-	pauseSound = new SoundOverlapsClass(assetPath.Audio + "PauseSoundLow");
-	resumeSound = new SoundOverlapsClass(assetPath.Audio + "ResumeSoundLow");
+	pauseSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
+	resumeSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
+	menuSelect = new SoundOverlapsClass(assetPath.Audio + "menu_select");
+	menuNav = new SoundOverlapsClass(assetPath.Audio + "menu_nav1");
 //	menuMusic = assetPath.Audio + "beeblebrox";
 }
 
