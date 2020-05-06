@@ -12,7 +12,7 @@ function GameScene() {
         }
 
         if(enemies.length === 0) {
-            enemies.push(new BikerEnemy(canvas.width / 4, canvas.height / 2));
+            enemies.push(new BikerEnemy(canvas.width / 4, canvas.height / 2 + 64));
         }
     }
 
