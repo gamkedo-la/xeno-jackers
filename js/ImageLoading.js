@@ -66,6 +66,7 @@ const tempGameSceneBG = document.createElement("img");
 
 //characters
 const bikerEnemySheet = document.createElement("img");
+const enemyAlienGuardSheet = document.createElement("img");
 
 //screens
 const uiMenuBorderPic = document.createElement("img");
@@ -110,6 +111,7 @@ function loadImages() {
 
         // characters
         { imgName: bikerEnemySheet, theFile: "characters/enemy_biker.png" },
+        { imgName: enemyAlienGuardSheet, theFile: "characters/enemy_alien_guard.png" },
 
         // screens
         { imgName: pauseScreenPic, theFile: "screens/screen_pause.png" },
