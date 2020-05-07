@@ -1,7 +1,7 @@
 //GameUI.js
 function GameUI(canvas, context) {
     let playerHealth = 0;
-    const HEALTH_X = canvas.width * 0.35 + 20;
+    const HEALTH_X = canvas.width * 0.35 + 5;
     const TOP = canvas.height - (GAME_SCALE * statusbarBase.height);
 
     this.update = function(deltaTime, player) {
@@ -19,7 +19,7 @@ function GameUI(canvas, context) {
                 context.drawImage(healthSegment, 
                     0, 0, 
                     healthSegment.width, healthSegment.height, 
-                    HEALTH_X + i * (healthSegment.width + 1) * GAME_SCALE, TOP + 8,
+                    HEALTH_X + i * (healthSegment.width + 1) * GAME_SCALE, TOP + 2,
                     healthSegment.width * GAME_SCALE, healthSegment.height * GAME_SCALE);
             }
     };

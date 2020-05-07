@@ -1,9 +1,9 @@
 //Player
 function Player() {
     const SCALE = GAME_SCALE;
-    const WALK_SPEED = 5;
+    const WALK_SPEED = 1;
     let currentAnimation;
-    let position = {x:canvas.width / 2, y:canvas.height / 2 + 64};
+    let position = {x:canvas.width / 2, y:canvas.height / 2 + 16};
     
     let isBlocking = false;
     let isCrouching = false;
