@@ -3,7 +3,7 @@
 let canvas;
 let canvasContext;
 
-let DEBUG = true;
+let DEBUG = false;
 let CHEATS_ACTIVE = false;
 
 const GAME_SCALE = 1;

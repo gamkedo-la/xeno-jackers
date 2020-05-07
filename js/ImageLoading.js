@@ -27,7 +27,7 @@ function loadGamkedoLogo() {
     gamkedoLogoPic.src = assetPath.Image + "screens/screen_HTGD_Logo_GB.png";
 }
 
-let htgdLogoScale = 2.0;
+let htgdLogoScale = 0.5;
 function animatedHTGDLogo() {
     
     drawRect(0, 0, canvas.width, canvas.height, '#252525');
@@ -37,7 +37,7 @@ function animatedHTGDLogo() {
 
     const nowTime = Date.now();
     if(nowTime - startTime < 1000) {
-        htgdLogoScale += 0.0125;
+        htgdLogoScale += 0.003125;
         requestAnimationFrame(animatedHTGDLogo);
     } else {
         showTitleImage();

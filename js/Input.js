@@ -152,9 +152,9 @@ function mouseButtonReleased(evt) {
 }
 
 function calculateMousePos(evt) {
-    const rect = canvas.getBoundingClientRect();
-    mouseX = evt.clientX - rect.left;
-    mouseY = evt.clientY - rect.top;
+	const rect = canvas.getBoundingClientRect();
+    mouseX = (evt.clientX - rect.left) / ((rect.right - rect.left) / 160);
+	mouseY = (evt.clientY - rect.top) / ((rect.bottom - rect.top) / 144);
 }
 
 function mouseInside(x, y, width, height) {
