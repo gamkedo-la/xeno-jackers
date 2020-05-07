@@ -36,7 +36,10 @@ function GameScene() {
                 }
                 
                 if(pressed) {
-                    SceneState.setState(SCENE.PAUSE);
+                    if(!gameIsPaused) {
+                        pauseSound.play();
+                        SceneState.setState(SCENE.PAUSE);
+                    }
                 }
                 return true;
             case ALIAS.CHEATS:

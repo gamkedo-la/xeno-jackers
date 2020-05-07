@@ -1,8 +1,5 @@
 //Main for Xeno Jackers
 window.onload = function() {
-    window.addEventListener("focus", windowOnFocus);
-    window.addEventListener("blur", windowOnBlur);
-
     canvas = document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
     document.body.appendChild(canvas);
@@ -16,13 +13,14 @@ window.onload = function() {
     subTitleTextX = canvas.width / 2;
     opacity = 0;
 
-	pauseManager = new PauseManager();
-
 	initializeInput();
 	configureGameAudio();
 	loadAudio();
 //	currentBackgroundMusic.loopSong(menuMusic);//TODO: Restore once there is background music
 	loadGamkedoLogo();
+
+	window.addEventListener("focus", windowOnFocus);
+    window.addEventListener("blur", windowOnBlur);
 };
 
 function loadingDoneSoStartGame() {
@@ -45,9 +43,7 @@ function updateButtonText() {
 function update() {
 	const deltaTime = timer.update();
 	SceneState.run(deltaTime);
-	if(!pauseManager.getIsPaused()) {
-		requestAnimationFrame(update);
-	}
+	requestAnimationFrame(update);
 };
 
 function startGame() {
@@ -74,9 +70,17 @@ function moveAll() {
 };
 
 function windowOnFocus() {
-	pauseManager.resumeGame(CAUSE.Focus);
+	if(SceneState.currentScene === SCENE.PAUSE) {
+		gameIsPaused = false;
+		resumeSound.play();
+		SceneState.setState(SCENE.GAME);
+	}
 }
 
 function windowOnBlur() {
-	pauseManager.pauseGame(CAUSE.Focus);
+	if(SceneState.currentScene === SCENE.GAME) {
+		gameIsPaused = true;
+		pauseSound.play();
+		SceneState.setState(SCENE.PAUSE);
+	}
 }

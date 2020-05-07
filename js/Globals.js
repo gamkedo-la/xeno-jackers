@@ -26,14 +26,13 @@ let player = null;
 
 //---------------Persistence-----------//
 const localStorageKey = {
-	MusicVolume:"musicVolume",
-	SFXVolume:"effectsVolume",
-    Language:"language",
-    FirstLoad:"firstLoad"
+	MusicVolume:"xeno_jackers_musicVolume",
+	SFXVolume:"xeno_jackers_effectsVolume",
+    FirstLoad:"xeno_jackers_firstLoad"
 }
 
 //----------State Management----------//
-let pauseManager;
+let gameIsPaused = false;
 const CAUSE = {
 	Keypress: 'keypress',
 	Focus: 'focus',

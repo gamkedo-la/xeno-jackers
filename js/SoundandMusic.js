@@ -15,15 +15,13 @@ function configureGameAudio() {
 //	currentBackgroundMusic = new backgroundMusicClass();//TODO: Restore once there is background music
 	
 	musicVolume = parseFloat(localStorage.getItem(localStorageKey.MusicVolume));
+	if(Number.isNaN(musicVolume)) musicVolume = 1.0;
+	localStorage.setItem(localStorageKey.MusicVolume, musicVolume);
+
 	effectsVolume = parseFloat(localStorage.getItem(localStorageKey.SFXVolume));
+	if(Number.isNaN(effectsVolume)) effectsVolume = 1.0;
+	localStorage.setItem(localStorageKey.SFXVolume, effectsVolume);
 	
-	if(isNaN(musicVolume)) {
-		musicVolume = 1;
-	}
-	
-	if(isNaN(effectsVolume)) {
-		effectsVolume = 1;
-	}	
 }
 
 function loadAudio() {
@@ -31,7 +29,6 @@ function loadAudio() {
 	resumeSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
 	menuSelect = new SoundOverlapsClass(assetPath.Audio + "menu_select");
 	menuNav = new SoundOverlapsClass(assetPath.Audio + "menu_nav1");
-//	menuMusic = assetPath.Audio + "beeblebrox";
 }
 
 function setFormat() {

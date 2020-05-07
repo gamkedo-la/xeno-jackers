@@ -39,6 +39,7 @@ function PauseScene() {
         }
         
         if(pressed) {
+            resumeSound.play();
             SceneState.setState(SCENE.GAME);
         }
 

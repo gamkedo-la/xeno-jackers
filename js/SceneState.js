@@ -26,11 +26,7 @@ const SceneState = {
 		return this.log[this.log.length-1];
 	},
 	run: function(deltaTime) {
-		if(!pauseManager.getIsPaused()) {
-		    this.scenes[this.currentScene].run(deltaTime);
-		} else if(this.currentScene === SCENE.GAME) {
-		    this.scenes[SCENE.PAUSE];
-		}
+		this.scenes[this.currentScene].run(deltaTime);
 
 		if (isMuted) {
 			fontRenderer.drawString(canvasContext, 760, 10, "MUTED", 2);
