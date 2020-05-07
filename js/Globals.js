@@ -3,10 +3,10 @@
 let canvas;
 let canvasContext;
 
-let DEBUG = false;
+let DEBUG = true;
 let CHEATS_ACTIVE = false;
 
-const GAME_SCALE = 4;
+const GAME_SCALE = 1;
 
 const canvasClearColor = "black";
 

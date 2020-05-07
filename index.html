@@ -5,36 +5,10 @@
 	<meta content="utf-8" http-equiv="encoding">
 	<link rel="shortcut icon" href="img/backgrounds/favicon.ico" type="image/x-icon">
 	<link rel="icon" href="img/backgrounds/favicon.ico" type="image/x-icon">
-	<style>
-		body {
-			background:black;
-			margin:0;
-			padding:0;
-			overflow:hidden;
-		}
-		#gameCanvas {
-			height:100vh;
-			padding:0;
-			outline:0;
-			image-rendering: pixelated;
-			-ms-interpolation-mode: nearest-neighbor;
-			image-rendering: -webkit-optimize-contrast;
-			image-rendering: -webkit-crisp-edges;
-			image-rendering: -moz-crisp-edges;
-			image-rendering: -o-crisp-edges;
-			image-rendering: pixelated;
-		    margin: 0 auto;
-    		display: block;
-		}
-		#debugText {
-			float: right;
-		    position: absolute;
-		    left: 90px;
-		    top: 0;
-		}
-	</style>
 </head>
 <body>
+	<canvas id="gameCanvas" width="160" height="144"></canvas>
+
 	<script src="js/Globals.js"></script>
 	<script src="js/FontBuilder.js"></script>
 	<script src="js/UIButton.js"></script>
@@ -56,5 +30,36 @@
 	<script src="js/Scenes/CreditsScene.js"></script>
 	<script src="js/SceneState.js"></script>
 	<script src="js/Main.js"></script>
+
+	<style>
+		body {
+			background:black;
+			margin:0;
+			padding:0;
+			overflow:hidden;
+		}
+		#gameCanvas {
+			height:100vh;
+			padding:0;
+			outline:0;
+			image-rendering: pixelated;
+			-ms-interpolation-mode: nearest-neighbor;
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: -webkit-crisp-edges;
+			image-rendering: -moz-crisp-edges;
+			image-rendering: -o-crisp-edges;
+			image-rendering: pixelated;
+		    margin: 0 auto;
+    		display: block;
+			width: 640;
+			height: 576;
+		}
+		#debugText {
+			float: right;
+		    position: absolute;
+		    left: 90px;
+		    top: 0;
+		}
+	</style>
 </body>
 </html>

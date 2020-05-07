@@ -1,8 +1,8 @@
 //TitleScene
 function TitleScene() {
-    const mainMenuX = 160;
-    const mainMenuY = 240;
-    const buttonHeight = 36;
+    const mainMenuX = 40;// 160;
+    const mainMenuY = 80;//240;
+    const buttonHeight = 9;//36;
     const buttonTitlePadding = 0;
 
     let selectorPositionsIndex = 0;
@@ -17,7 +17,7 @@ function TitleScene() {
         if(buttons.length === 0) {
             //add these in the same order as the selections array above
             buttons.push(buildPlayButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
-            buttons.push(buildOptionsButton(mainMenuX, mainMenuY + 40, buttonHeight, buttonTitlePadding));
+            buttons.push(buildOptionsButton(mainMenuX, mainMenuY + 10, buttonHeight, buttonTitlePadding));
         }
 
         selectorPositionsIndex = 0;
@@ -117,9 +117,9 @@ function TitleScene() {
 
             const buttonBounds = button.getBounds();
             if(i === selectorPositionsIndex) {
-                canvasContext.drawImage(onMenuButton, 0, 0, onMenuButton.width, onMenuButton.height, buttonBounds.x - 20, buttonBounds.y + 10, GAME_SCALE * onMenuButton.width, GAME_SCALE * onMenuButton.height);
+                canvasContext.drawImage(onMenuButton, 0, 0, onMenuButton.width, onMenuButton.height, buttonBounds.x - 5, buttonBounds.y + 2, GAME_SCALE * onMenuButton.width, GAME_SCALE * onMenuButton.height);
             } else {
-                canvasContext.drawImage(offMenuButton, 0, 0, offMenuButton.width, offMenuButton.height, buttonBounds.x - 20, buttonBounds.y + 10, GAME_SCALE * offMenuButton.width, GAME_SCALE * offMenuButton.height);
+                canvasContext.drawImage(offMenuButton, 0, 0, offMenuButton.width, offMenuButton.height, buttonBounds.x - 5, buttonBounds.y + 2, GAME_SCALE * offMenuButton.width, GAME_SCALE * offMenuButton.height);
             }
         }
 	}
@@ -133,7 +133,7 @@ function TitleScene() {
         drawBG();
 
         // render menu
-        canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, mainMenuX - 35, mainMenuY - 10, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
+        canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, mainMenuX - 9, mainMenuY - 2, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
 //        fontRenderer.drawString(canvasContext, 220, 260, "START", GAME_SCALE);
         drawMenu();        
 	}

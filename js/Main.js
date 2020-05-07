@@ -1,10 +1,10 @@
 //Main for Xeno Jackers
 window.onload = function() {
-    canvas = document.createElement("canvas");
+    canvas = document.getElementById("gameCanvas");// document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
-    document.body.appendChild(canvas);
-    canvas.width = 640;
-    canvas.height = 576;
+//    document.body.appendChild(canvas);
+//    canvas.width = 160;
+//    canvas.height = 144;
 	drawRect(0, 0, canvas.width, canvas.height, Color.Black);
 	
     colorText("L..O..A..D..I..N..G..", canvas.width / 2, canvas.height / 2, Color.White, Fonts.MainTitle, TextAlignment.Center, opacity = 1);
