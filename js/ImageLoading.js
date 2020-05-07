@@ -37,7 +37,7 @@ function animatedHTGDLogo() {
 
     const nowTime = Date.now();
     if(nowTime - startTime < 1000) {
-        htgdLogoScale += 0.003125;
+//        htgdLogoScale += 0.003125;//not animating it anymore.
         requestAnimationFrame(animatedHTGDLogo);
     } else {
         showTitleImage();

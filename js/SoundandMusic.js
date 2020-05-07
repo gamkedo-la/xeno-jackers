@@ -4,7 +4,11 @@ let musicSound = null;
 let pauseSound;
 let resumeSound;
 let menuSelect; //confirm any menu item
-let menuNav; //up or down navigation through any menu
+let menuNav1; //up or down navigation through any menu
+let menuNav2; 
+let alienBossDeath;
+let alienGrowl2;
+let hurt1;
 let menuMusic;
 let musicVolume;
 let effectsVolume;
@@ -28,7 +32,11 @@ function loadAudio() {
 	pauseSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
 	resumeSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
 	menuSelect = new SoundOverlapsClass(assetPath.Audio + "menu_select");
-	menuNav = new SoundOverlapsClass(assetPath.Audio + "menu_nav1");
+	menuNav1 = new SoundOverlapsClass(assetPath.Audio + "menu_nav1");
+	menuNav2 = new SoundOverlapsClass(assetPath.Audio + "menu_nav2");
+	alienBossDeath = new SoundOverlapsClass(assetPath.Audio + "alien_boss_death");
+	alienGrowl2 = new SoundOverlapsClass(assetPath.Audio + "alien_growl2");
+	hurt1 = new SoundOverlapsClass(assetPath.Audio + "hit_hurt1");
 }
 
 function setFormat() {
