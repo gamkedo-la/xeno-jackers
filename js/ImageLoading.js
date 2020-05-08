@@ -60,6 +60,7 @@ function loadStartImagePic() {
 
 //-----Load the rest of the game images----//
 //tiles
+const tileSheet = document.createElement("img");
 const tileSheetRock = document.createElement("img");
 const tileSheetWorkshop = document.createElement("img");
 const tempGameSceneBG = document.createElement("img");
@@ -105,6 +106,7 @@ function beginLoadingImage(imgVar, fileName) {
 function loadImages() {
     const imageList = [
         // tiles
+        { imgName: tileSheet, theFile: "backgrounds/spritesheet_workshop.png" },
         { imgName: tileSheetRock, theFile: "backgrounds/spritesheet_grassyrock.png" },
         { imgName: tileSheetWorkshop, theFile: "backgrounds/spritesheet_workshop.png" },
         { imgName: tempGameSceneBG, theFile: "backgrounds/background_test.png" },
@@ -116,6 +118,9 @@ function loadImages() {
         // screens
         { imgName: pauseScreenPic, theFile: "screens/screen_pause.png" },
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
+
+        // skyboxes
+//        { imgName: workshopSkybox, theFile: "workshopSkybox.png" },
 
         // power ups
 //        { imgName: shieldPowerUpPic, theFile: "shieldPowerUp.png" },
@@ -144,3 +149,12 @@ function loadImages() {
     } // end of for imageList
 
 } // end of function loadImages
+
+function getSkyboxForName(name) {
+    switch(name) {
+        case "workshopSkybox.png":
+            return workshopSkybox;
+        default:
+            return null;
+    }
+}

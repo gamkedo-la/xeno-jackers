@@ -33,10 +33,7 @@ const localStorageKey = {
 
 //----------State Management----------//
 let gameIsPaused = false;
-const CAUSE = {
-	Keypress: 'keypress',
-	Focus: 'focus',
-}
+let worldSpeed = 1;
 
 const SCENE = {
 	LOADING:"loading",
@@ -49,9 +46,24 @@ const SCENE = {
 	ENDING:"ending"
 }
 
+const MAP_NAME = {
+	Bar:"bar",
+	Highway:"highway",
+	Boss:"boss",
+	TestMap:"testMap"
+};
+
+const MAP_LAYER_NAME = {
+	Skybox:"Skybox",
+	BackgroundTiles:"BackgroundTiles",
+	CollisionTiles:"CollisionTiles",
+	InteractionObjects:"Interaction Objects",
+	ForegroundTiles:"ForegroundTiles"
+};
+
 let firstLoad = localStorage.getItem(localStorageKey.FirstLoad);
+let currentLevelName = MAP_NAME.TestMap;
 let timer;
-let worldSpeed = 1;
 
 //------------Asset Management----------//
 const assetPath = {

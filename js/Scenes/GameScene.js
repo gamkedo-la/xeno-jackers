@@ -1,6 +1,10 @@
 //Game Play scene
 function GameScene() {
     let gameUI = null;
+    let mapLoader = null;
+    let currentMap = null;
+    let mapRenderer = null;
+
     const enemies = [];
     this.transitionIn = function() {
         if(player === null) {
@@ -13,6 +17,16 @@ function GameScene() {
 
         if(enemies.length === 0) {
             enemies.push(new BikerEnemy(canvas.width / 4, canvas.height / 2 + 16));
+        }
+
+        if(mapLoader === null) {
+            mapLoader = new MapLoader();
+        }
+
+        currentMap = mapLoader.loadMap(currentLevelName);
+
+        if(mapRenderer === null) {
+            mapRenderer = new MapRenderer(canvas, canvasContext, tileSheet);
         }
     }
 
@@ -64,13 +78,17 @@ function GameScene() {
     }
 
     const draw = function(deltaTime) {
-        //Temp until we get Tiled integration working
-        canvasContext.drawImage(tempGameSceneBG, 0, 0, tempGameSceneBG.width, tempGameSceneBG.height, 0, 0, tempGameSceneBG.width * GAME_SCALE, tempGameSceneBG.height * GAME_SCALE);
+        mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
+
+        mapRenderer.drawTileLayer(currentMap.backgroundTiles.tiles, currentMap.backgroundTiles.widthInTiles, canvas.width / 2, canvas.height/2);
+        mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, canvas.width / 2, canvas.height / 2);
 
         player.draw(deltaTime);
         for(enemy of enemies) {
             enemy.draw(deltaTime);
         }
+
+        mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles, canvas.width / 2, canvas.height / 2);
 
         gameUI.draw(deltaTime);
     }
