@@ -1,6 +1,6 @@
 //MapRenderer.js
 function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_ImageHeight = 8, tile_RenderWidth = 8, tile_RenderHeight = 8) {
-    let renderedTilesPerRow = Math.ceil(canvas.width / tile_RenderWidth);
+    let renderedTilesPerRow = Math.ceil(canvas.width / tile_RenderWidth) + 1;
     let renderedRowCount = Math.ceil(canvas.height / tile_RenderHeight);
 
     this.drawSkybox = function(context, skybox) {
