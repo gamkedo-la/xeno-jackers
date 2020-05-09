@@ -61,6 +61,9 @@ const MAP_LAYER_NAME = {
 	ForegroundTiles:"ForegroundTiles"
 };
 
+const TILE_WIDTH = 8;
+const TILE_HEIGHT = 8;
+
 let firstLoad = localStorage.getItem(localStorageKey.FirstLoad);
 let currentLevelName = MAP_NAME.TestMap;
 let timer;

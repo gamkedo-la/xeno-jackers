@@ -1,9 +1,10 @@
 //Player
-function Player() {
+function Player(startX, startY) {
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 1;
+    const FRAME_WIDTH = 23;
     let currentAnimation;
-    let position = {x:canvas.width / 2, y:canvas.height / 2 + 16};
+    let position = {x:startX, y:startY};
     
     let isBlocking = false;
     let isCrouching = false;
@@ -13,6 +14,9 @@ function Player() {
     let hasWheelWeapon = false;
     let hasHandleBarWeapon = false;
     let flipped = false;
+
+    let levelWidth = 0;
+    let levelHeight = 0;
 
     this.health = 10;
 
@@ -24,7 +28,15 @@ function Player() {
         currentAnimation.update(deltaTime);
 
         processInput();
-    }
+    };
+
+    this.setLevelWidth = function(newWidth) {
+        levelWidth = newWidth;
+    };
+
+    this.setLevelHeight = function(newHeight) {
+        levelHeight = newHeight;
+    };
 
     const processInput = function() {
         if(heldButtons.length === 0) idle();
@@ -61,13 +73,27 @@ function Player() {
     const moveLeft = function() {
         flipped = true;
         position.x -= WALK_SPEED;
-        currentAnimation = animations.walking;
+        if(position.x < 0) {
+            position.x = 0;
+            currentAnimation = animations.idle;
+        } else {
+            currentAnimation = animations.walking;
+        }
     };
 
     const moveRight = function() {
         flipped = false;
         position.x += WALK_SPEED;
-        currentAnimation = animations.walking;
+        if(position.x + FRAME_WIDTH > levelWidth) {
+            position.x = levelWidth;
+            currentAnimation = animations.idle;
+        } else {
+            currentAnimation = animations.walking;
+        }
+    };
+
+    const fall = function() {
+        
     };
 
     const jump = function() {
@@ -104,15 +130,15 @@ function Player() {
     };
 
     this.draw = function(deltaTime) {
-        currentAnimation.drawAt(position.x, position.y, flipped);
+        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped);
     };
 
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0], 23, 33, [256], false, true);
+        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0], FRAME_WIDTH, 33, [256], false, true);
         anims.idle.scale = SCALE;
-        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3], 23, 33, [164], false, true);
+        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3], FRAME_WIDTH, 33, [164], false, true);
         anims.walking.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...

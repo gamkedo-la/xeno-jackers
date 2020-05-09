@@ -51,44 +51,41 @@ function MapLoader() {
 
         return this.currentMap;
     };
+
+    this.goToNextMap = function() {
+        switch(this.currentMap) {
+            case MAP_NAME.Bar:
+                this.currentMap = loadHighway();
+                break;
+            case MAP_NAME.Highway:
+                this.currentMap = loadBoss();
+                break;
+            case MAP_NAME.Boss:
+                this.currentMap = null;
+                break;
+            default:
+                this.currentMap = loadBar();
+                break;
+        }
+    };
+    
+    const loadBar = function() {
+        const layers = TileMaps.bar.layers;
+        return new Map(layers);
+    };
+    
+    const loadHighway = function() {
+        const layers = TileMaps.highway.layers;
+        return new Map(layers);
+    };
+    
+    const loadBoss = function() {
+        const layers = TileMaps.boss.layers;
+        return new Map(layers);
+    };
+    
+    const loadTestMap = function() {
+        const layers = TileMaps.testMap.layers;
+        return new Map(layers);
+    };
 }
-
-this.goToNextMap = function() {
-    switch(this.currentMap) {
-        case MAP_NAME.Bar:
-            this.currentMap = loadHighway();
-            break;
-        case MAP_NAME.Highway:
-            this.currentMap = loadBoss();
-            break;
-        case MAP_NAME.Boss:
-            this.currentMap = null;
-            break;
-        default:
-            this.currentMap = loadBar();
-            break;
-    }
-}
-
-const loadBar = function() {
-    const layers = TileMaps.bar.layers;
-    return new Map(layers);
-};
-
-const loadHighway = function() {
-    const layers = TileMaps.highway.layers;
-    return new Map(layers);
-
-};
-
-const loadBoss = function() {
-    const layers = TileMaps.boss.layers;
-    return new Map(layers);
-
-};
-
-const loadTestMap = function() {
-    const layers = TileMaps.testMap.layers;
-    return new Map(layers);
-
-};

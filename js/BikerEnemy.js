@@ -15,6 +15,8 @@ function BikerEnemy(posX, posY) {
 
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
+        position.x -= canvas.deltaX;
+        position.y -= canvas.deltaY;
 
         if(player.getPosition().x < position.x) {
             flipped = true;
