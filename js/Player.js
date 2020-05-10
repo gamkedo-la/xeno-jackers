@@ -73,22 +73,18 @@ function Player(startX, startY) {
     const moveLeft = function() {
         flipped = true;
         position.x -= WALK_SPEED;
+        currentAnimation = animations.walking;
         if(position.x < 0) {
             position.x = 0;
-            currentAnimation = animations.idle;
-        } else {
-            currentAnimation = animations.walking;
         }
     };
 
     const moveRight = function() {
         flipped = false;
         position.x += WALK_SPEED;
+        currentAnimation = animations.walking;
         if(position.x + FRAME_WIDTH > levelWidth) {
             position.x = levelWidth;
-            currentAnimation = animations.idle;
-        } else {
-            currentAnimation = animations.walking;
         }
     };
 
