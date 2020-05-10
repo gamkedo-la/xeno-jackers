@@ -20,6 +20,13 @@ function Player(startX, startY) {
 
     this.health = 10;
 
+/*    this.collisionBody = new Collider(ColliderType.Polygon, [
+        {x:startX + 1, y:startY + 1}, //top left +1/+1 to make collision box smaller than sprite
+        {x:startX + 21, y:startY + 1}, //top right +21/+1 makes collision box smaller than sprite
+        {x:startX + 21, y:startY + 30}, //bottom right +21/+30 makes collision box smaller than sprite
+        {x:startX + 1, y:startY + 30} //bottom left +1/+30 makes collision box smaller than sprite
+    ]);*/
+
     this.getPosition = function() {
         return {x:position.x, y:position.y};
     };
@@ -28,6 +35,12 @@ function Player(startX, startY) {
         currentAnimation.update(deltaTime);
 
         processInput();
+
+        //keep collisionBody in synch with sprite
+/*        this.collisionBody.setPosition(//this is complicated because the player moves the camera/canvas
+            position.x + (startX - canvas.center.x), 
+            position.y + (startY - canvas.center.y)
+        );*/
     };
 
     this.setLevelWidth = function(newWidth) {
@@ -127,6 +140,9 @@ function Player(startX, startY) {
 
     this.draw = function(deltaTime) {
         currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped);
+
+        //colliders only draw when DRAW_COLLIDERS is set to true
+//        this.collisionBody.draw();
     };
 
     const initializeAnimations = function() {

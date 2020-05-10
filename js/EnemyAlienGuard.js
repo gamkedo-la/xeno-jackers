@@ -13,6 +13,13 @@ function EnemyAlienGuard(posX, posY) {
     let hasHandleBarWeapon = false;
     let flipped = false;
 
+    this.collisionBody = new Collider(ColliderType.Polygon, [
+        {x:posX + 1, y:posY + 1}, //top left +1/+1 to make collision box smaller than sprite
+        {x:posX + 21, y:posY + 1}, //top right +21/+1 makes collision box smaller than sprite
+        {x:posX + 21, y:posY + 31}, //bottom right +21/+30 makes collision box smaller than sprite
+        {x:posX + 1, y:posY + 31} //bottom left +1/+30 makes collision box smaller than sprite
+    ]);
+
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
@@ -23,15 +30,18 @@ function EnemyAlienGuard(posX, posY) {
         } else {
             flipped = false;
         }
-    }
+
+        //keep collisionBody in synch with sprite
+        this.collisionBody.setPosition(position.x, position.y);
+    };
 
     const moveLeft = function() {
         position.x -= 10;
-    }
+    };
 
     const moveRight = function() {
         position.x += 10;
-    }
+    };
 
     const jump = function() {
         if(isOnGround) {
@@ -39,7 +49,7 @@ function EnemyAlienGuard(posX, posY) {
 //            currentAnimation = animations.jumping;
             console.log("Enemy Alien Guard is trying to jump.");
         }
-    }
+    };
 
     const block = function() {
         if(isOnGround && hasWheelWeapon && !isBlocking) {
@@ -47,7 +57,7 @@ function EnemyAlienGuard(posX, posY) {
             isBlocking = true;
 //            currentAnimation = animations.blocking;
         }
-    }
+    };
 
     const attack = function() {
         if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
@@ -56,7 +66,7 @@ function EnemyAlienGuard(posX, posY) {
             console.log("Enemy Alien Guard is trying to attack.");
 //            currentAnimation = animations.attacking;
         }
-    }
+    };
 
     const crouch = function() {
         if(isOnGround && !isCrouching) {
@@ -64,11 +74,14 @@ function EnemyAlienGuard(posX, posY) {
             isCrouching = true;
 //            currentAnimation = animations.crouching;
         }
-    }
+    };
 
     this.draw = function(deltaTime) {
         currentAnimation.drawAt(position.x, position.y, flipped);
-    }
+
+        //colliders only draw when DRAW_COLLIDERS is set to true
+        this.collisionBody.draw();
+    };
 
     const initializeAnimations = function() {
         const anims = {};
@@ -81,7 +94,7 @@ function EnemyAlienGuard(posX, posY) {
 //        animations.crouching = ...
 
         return anims;
-    }
+    };
     const animations = initializeAnimations();
     currentAnimation = animations.idle;
 }

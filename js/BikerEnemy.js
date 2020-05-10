@@ -13,6 +13,13 @@ function BikerEnemy(posX, posY) {
     let hasHandleBarWeapon = false;
     let flipped = false;
 
+/*    this.collisionBody = new Collider(ColliderType.Polygon, [
+        {x:posX + 1, y:posY + 1}, //top left +1/+1 to make collision box smaller than sprite
+        {x:posX + 21, y:posY + 1}, //top right +21/+1 makes collision box smaller than sprite
+        {x:posX + 21, y:posY + 30}, //bottom right +21/+30 makes collision box smaller than sprite
+        {x:posX + 1, y:posY + 30} //bottom left +1/+30 makes collision box smaller than sprite
+    ]);*/
+
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
@@ -23,7 +30,10 @@ function BikerEnemy(posX, posY) {
         } else {
             flipped = false;
         }
-    }
+
+        //keep collisionBody in synch with sprite
+//        this.collisionBody.setPosition(position.x, position.y);
+    };
 
     const moveLeft = function() {
         position.x -= 10;
@@ -68,6 +78,9 @@ function BikerEnemy(posX, posY) {
 
     this.draw = function(deltaTime) {
         currentAnimation.drawAt(position.x, position.y, flipped);
+
+        //colliders only draw when DRAW_COLLIDERS is set to true
+//        this.collisionBody.draw();
     }
 
     const initializeAnimations = function() {

@@ -5,6 +5,7 @@ function GameScene() {
     let currentMap = null;
     let mapRenderer = null;
     let camera = null;
+    let collisionManager = null;
 
     const enemies = [];
     this.transitionIn = function() {
@@ -21,6 +22,10 @@ function GameScene() {
         player.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
         player.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);
 
+        if(collisionManager === null) {
+            collisionManager = new CollisionManager(player);
+        }
+
         if(camera === null) {
             canvas.center = {};
             canvas.deltaX = 0;
@@ -36,7 +41,9 @@ function GameScene() {
         }
 
         if(enemies.length === 0) {
-            enemies.push(new BikerEnemy(canvas.width / 4, canvas.height / 2 + 16));
+            const anEnemy = new BikerEnemy(canvas.width / 4, canvas.height / 2 + 16);
+            enemies.push(anEnemy);
+            collisionManager.addEntity(anEnemy);
         }
 
         if(mapRenderer === null) {
