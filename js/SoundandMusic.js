@@ -41,10 +41,10 @@ function loadAudio() {
 
 function setFormat() {
     const audio = new Audio();
-    if (audio.canPlayType("audio/mp3")) {
-        audioFormat = ".mp3";
-    } else {
+    if (audio.canPlayType("audio/ogg")) {
         audioFormat = ".ogg";
+    } else {
+        audioFormat = ".mp3";
     }
 }
 
