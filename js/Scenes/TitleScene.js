@@ -1,7 +1,7 @@
 //TitleScene
 function TitleScene() {
-    const mainMenuX = 40;// 160;
-    const mainMenuY = 80;//240;
+    const mainMenuX = 35;// 160;
+    const mainMenuY = 60;//240;
     const buttonHeight = 9;//36;
     const buttonTitlePadding = 0;
 
