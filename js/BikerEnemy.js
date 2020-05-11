@@ -13,12 +13,15 @@ function BikerEnemy(posX, posY) {
     let hasHandleBarWeapon = false;
     let flipped = false;
 
-/*    this.collisionBody = new Collider(ColliderType.Polygon, [
-        {x:posX + 1, y:posY + 1}, //top left +1/+1 to make collision box smaller than sprite
-        {x:posX + 21, y:posY + 1}, //top right +21/+1 makes collision box smaller than sprite
-        {x:posX + 21, y:posY + 30}, //bottom right +21/+30 makes collision box smaller than sprite
-        {x:posX + 1, y:posY + 30} //bottom left +1/+30 makes collision box smaller than sprite
-    ]);*/
+    this.type = EntityType.EnemyBiker;
+    this.health = 5;
+
+    this.collisionBody = new Collider(ColliderType.Polygon, [
+        {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
+        {x:posX + 21, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
+        {x:posX + 21, y:posY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
+        {x:posX + 2, y:posY + 32} //bottom left +2/+32 makes collision box smaller than sprite
+    ], {x:posX, y:posY});
 
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
@@ -32,16 +35,16 @@ function BikerEnemy(posX, posY) {
         }
 
         //keep collisionBody in synch with sprite
-//        this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.setPosition(position.x, position.y);
     };
 
     const moveLeft = function() {
         position.x -= 10;
-    }
+    };
 
     const moveRight = function() {
         position.x += 10;
-    }
+    };
 
     const jump = function() {
         if(isOnGround) {
@@ -49,7 +52,7 @@ function BikerEnemy(posX, posY) {
 //            currentAnimation = animations.jumping;
             console.log("Biker Enemy is trying to jump.");
         }
-    }
+    };
 
     const block = function() {
         if(isOnGround && hasWheelWeapon && !isBlocking) {
@@ -57,7 +60,7 @@ function BikerEnemy(posX, posY) {
             isBlocking = true;
 //            currentAnimation = animations.blocking;
         }
-    }
+    };
 
     const attack = function() {
         if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
@@ -66,7 +69,7 @@ function BikerEnemy(posX, posY) {
             console.log("Biker Enemy is trying to attack.");
 //            currentAnimation = animations.attacking;
         }
-    }
+    };
 
     const crouch = function() {
         if(isOnGround && !isCrouching) {
@@ -74,14 +77,26 @@ function BikerEnemy(posX, posY) {
             isCrouching = true;
 //            currentAnimation = animations.crouching;
         }
-    }
+    };
 
     this.draw = function(deltaTime) {
         currentAnimation.drawAt(position.x, position.y, flipped);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
-//        this.collisionBody.draw();
-    }
+        this.collisionBody.draw();
+    };
+
+    this.didCollideWith = function(otherEntity) {
+        if(otherEntity.type === EntityType.Player) {
+            this.health--;
+
+            if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
+                position.x -= 5;
+            } else {
+                position.x += 5;
+            }
+        }
+    };
 
     const initializeAnimations = function() {
         const anims = {};
@@ -94,7 +109,7 @@ function BikerEnemy(posX, posY) {
 //        animations.crouching = ...
 
         return anims;
-    }
+    };
     const animations = initializeAnimations();
     currentAnimation = animations.idle;
 }

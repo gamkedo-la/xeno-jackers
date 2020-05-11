@@ -13,12 +13,15 @@ function EnemyAlienGuard(posX, posY) {
     let hasHandleBarWeapon = false;
     let flipped = false;
 
+    this.type = EntityType.EnemyBugBiker;
+    this.health = 5;
+
     this.collisionBody = new Collider(ColliderType.Polygon, [
-        {x:posX + 1, y:posY + 1}, //top left +1/+1 to make collision box smaller than sprite
-        {x:posX + 21, y:posY + 1}, //top right +21/+1 makes collision box smaller than sprite
-        {x:posX + 21, y:posY + 31}, //bottom right +21/+30 makes collision box smaller than sprite
-        {x:posX + 1, y:posY + 31} //bottom left +1/+30 makes collision box smaller than sprite
-    ]);
+        {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
+        {x:posX + 21, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
+        {x:posX + 21, y:posY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
+        {x:posX + 2, y:posY + 32} //bottom left +2/+32 makes collision box smaller than sprite
+    ], {x:posX, y:posY});
 
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
@@ -81,6 +84,18 @@ function EnemyAlienGuard(posX, posY) {
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
+    };
+
+    this.didCollideWith = function(otherEntity) {
+        if(otherEntity.type === EntityType.Player) {
+            this.health--;
+
+            if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
+                position.x -= 5;
+            } else {
+                position.x += 5;
+            }
+        }
     };
 
     const initializeAnimations = function() {

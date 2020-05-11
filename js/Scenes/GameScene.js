@@ -96,6 +96,8 @@ function GameScene() {
             enemy.update(deltaTime, player);
         }
 
+        collisionManager.doCollisionChecks();
+
         gameUI.update(deltaTime, player);
     };
 

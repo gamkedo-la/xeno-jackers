@@ -6,6 +6,7 @@ let canvasContext;
 let DEBUG = false;
 let CHEATS_ACTIVE = false;
 let DRAW_COLLIDERS = true;
+const COLLIDER_COLOR = 'red';
 
 const GAME_SCALE = 1;
 

@@ -4,11 +4,11 @@ const ColliderType = {
 	Circle:"circle"
 };
 
-function Collider(type, points, position) {
+function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0}, radius = 1) {
 	this.type = type;
-	this.center = {x:0, y:0};
-	this.radius = 1;
-	this.points = [];
+	this.center = center;
+	this.radius = radius;
+	this.points = points;
  	for(let i = 0; i < points.length; i++) {
 		this.points[i] = {x:points[i].x, y:points[i].y};
 	}
@@ -40,11 +40,11 @@ function Collider(type, points, position) {
 	};
 		
 	if(this.type === ColliderType.Polygon) {
-		this.points = data.points;
+		this.points = points;
 		this.findCenterAndRadiusOfPoints(this.points);
 	} else if(this.type === ColliderType.Circle) {
-		this.center = data.center;
-		this.radius = data.radius;
+		this.center = center;
+		this.radius = radius;
 		this.points = null;
 	}
 	
@@ -73,9 +73,9 @@ function Collider(type, points, position) {
         const bottom = canvas.center.y + canvas.height / 2;
 
         if(this.type === ColliderType.Circle) {
-            return isCircleOnScreen(left, top, right, bottom);
+            return isCircleOnScreen(left, top, right, bottom, this.position);
         } else {
-            return isPolygonOnScreen(left, top, right, bottom);
+            return isPolygonOnScreen(left, top, right, bottom, this.points);
         }
     };
 	
@@ -103,19 +103,19 @@ function Collider(type, points, position) {
 		}
     };
     
-    const isCircleOnScreen = function(left, top, right, bottom) {
-        if((this.position.x > left - this.radius) &&
-            (this.position.x < right + this.radius) &&
-            (this.position.y > top - this.radius) &&
-            (this.position.y < bottom + this.radius)) {
+    const isCircleOnScreen = function(left, top, right, bottom, position) {
+        if((position.x > left - this.radius) &&
+            (position.x < right + this.radius) &&
+            (position.y > top - this.radius) &&
+            (position.y < bottom + this.radius)) {
                 return true;
             } 
             
             return false;
     };
 
-    const isPolygonOnScreen = function(left, top, right, bottom) {
-        for(let point in this.points) {
+    const isPolygonOnScreen = function(left, top, right, bottom, points) {
+        for(let point of points) {
             if(isPointOnScreen(left, top, right, bottom, point)) {
                 return true;
             }
