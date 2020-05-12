@@ -163,7 +163,7 @@ function Player(startX, startY) {
 
         anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0], FRAME_WIDTH, 33, [256], false, true);
         anims.idle.scale = SCALE;
-        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3], FRAME_WIDTH, 33, [164], false, true);
+        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3, 4], FRAME_WIDTH, 33, [164], false, true);
         anims.walking.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...
