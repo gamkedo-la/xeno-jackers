@@ -26,6 +26,10 @@ function GameScene() {
             collisionManager = new CollisionManager(player);
         }
 
+        for(let collider of currentMap.colliders) {
+            collisionManager.addEntity(collider);
+        }
+
         if(camera === null) {
             canvas.center = {};
             canvas.deltaX = 0;

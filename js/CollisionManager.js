@@ -119,7 +119,22 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
             if(isPointOnScreen(left, top, right, bottom, point)) {
                 return true;
             }
-        }
+		}
+		
+		for(let i = 0; i < points.length; i++) {
+			//Large objects (like the ground) might cross the screen, but have no points onscreen
+			//Look for pairs of points that cause lines to cross the screen
+			const point1 = points[i];
+			let point2;
+			if(i === points.length - 1) {
+				point2 = points[0];
+			} else {
+				point2 = points[i + 1];
+			}
+			if(lineIsOnScreen(left, top, right, bottom, point1, point2)) {
+				return true;
+			}
+		}
 
         return false;
     };
@@ -133,7 +148,38 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
         }
 
         return false;
-    };
+	};
+	
+	const lineIsOnScreen = function(left, top, right, bottom, point1, point2) {
+		//check left edge of screen
+		if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, left, top, left, bottom)) {
+			return true;
+		//check bottom of screen
+		} else if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, left, bottom, right, bottom)) {
+			return true;
+		//check right edge of screen
+		} else if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, right, top, right, bottom)) {
+			return true;
+		//check top of screen
+		} else if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, left, top, right, top)) {
+			return true;
+		}
+
+		return false;
+	};
+
+	const lineVLineCollision = function(line1x1, line1y1, line1x2, line1y2, line2x1, line2y1, line2x2, line2y2) {
+		const denominator = ((line1x2 - line1x1) * (line2y2 - line2y1)) - ((line1y2 - line1y1) * (line2x2 - line2x1));
+		const numerator1 = ((line1y1 - line2y1) * (line2x2 - line2x1)) - ((line1x1 - line2x1) * (line2y2 - line2y1));
+		const numerator2 = ((line1y1 - line2y1) * (line1x2 - line1x1)) - ((line1x1 - line2x1) * (line1y2 - line1y1));
+	
+		if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
+	
+		const r = numerator1 / denominator;
+		const s = numerator2 / denominator;
+	
+		return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
+	};
 }
 
 //Collision Manager
