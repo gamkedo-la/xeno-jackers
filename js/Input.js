@@ -121,8 +121,16 @@ function keyRelease(evt) {
 }
 
 function mouseButtonPressed(evt) {
-	didInteract = true;
-	evt.preventDefault();
+    
+    if (!didInteract) { // very first click ever?
+        didInteract = true;
+        console.log("First click, audio now available, starting bg music.")
+        if (currentBackgroundMusic) {
+            currentBackgroundMusic.resumeSound();
+        }
+    }
+    
+    evt.preventDefault();
 
 	if (evt.button === 0) {//left mouse button is button 0
 		heldButtons.push(LEFT_MOUSE_BUTTON);

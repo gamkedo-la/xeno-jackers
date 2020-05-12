@@ -7,6 +7,7 @@ let DEBUG = false;
 let CHEATS_ACTIVE = false;
 let DRAW_COLLIDERS = true;
 const COLLIDER_COLOR = 'red';
+const MENU_MUSIC_FILENAME = 'audio/Shadow 51';
 
 const GAME_SCALE = 1;
 

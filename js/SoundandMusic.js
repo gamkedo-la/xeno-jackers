@@ -9,14 +9,14 @@ let menuNav2;
 let alienBossDeath;
 let alienGrowl2;
 let hurt1;
-let menuMusic;
+let menuMusic = MENU_MUSIC_FILENAME;
 let musicVolume;
 let effectsVolume;
 let currentBackgroundMusic;
 const VOLUME_INCREMENT = 0.05;
 
 function configureGameAudio() {
-//	currentBackgroundMusic = new backgroundMusicClass();//TODO: Restore once there is background music
+	currentBackgroundMusic = new backgroundMusicClass();
 	
 	musicVolume = parseFloat(localStorage.getItem(localStorageKey.MusicVolume));
 	if(Number.isNaN(musicVolume)) musicVolume = 1.0;
@@ -41,15 +41,16 @@ function loadAudio() {
 
 function setFormat() {
     const audio = new Audio();
-    if (audio.canPlayType("audio/mp3")) {
-        audioFormat = ".mp3";
-    } else {
+    if (audio.canPlayType("audio/ogg")) {
         audioFormat = ".ogg";
+    } else {
+        audioFormat = ".mp3";
     }
 }
 
 function backgroundMusicClass() {	
     this.loopSong = function(filenameWithPath) {
+        console.log("Looping background music: " + filenameWithPath);
         setFormat(); // calling this to ensure that audioFormat is set before needed
 
         if (musicSound != null) {
@@ -130,7 +131,7 @@ function getRandomVolume(){
 
 function toggleMute() {
 	isMuted = !isMuted;
-//	currentBackgroundMusic.setVolume(musicVolume);//TODO: restore once there is background music
+	currentBackgroundMusic.setVolume(musicVolume);
 }
 
 function setEffectsVolume(amount)
@@ -150,7 +151,7 @@ function setMusicVolume(amount){
 	} else if (musicVolume < 0.0) {
 		musicVolume = 0.0;
 	}
-//	currentBackgroundMusic.setVolume(musicVolume);//TODO:Restore once there is background music
+	currentBackgroundMusic.setVolume(musicVolume);
 }
 
 function turnVolumeUp() {
