@@ -27,16 +27,16 @@ function loadGamkedoLogo() {
     gamkedoLogoPic.src = assetPath.Image + "screens/screen_HTGD_Logo_GB.png";
 }
 
-let htgdLogoScale = 0.5;
+let htgdLogoScale = 0.75;
 function animatedHTGDLogo() {
     
     drawRect(0, 0, canvas.width, canvas.height, '#252525');
 
     //Draw the Gamkedo Logo Image
-    canvasContext.drawImage(gamkedoLogoPic, 0, 0, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width/2 - (htgdLogoScale * gamkedoLogoPic.width)/2, canvas.height/2 - (htgdLogoScale * gamkedoLogoPic.height)/2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
+    canvasContext.drawImage(gamkedoLogoPic, 0, 20, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width/2 - (htgdLogoScale * gamkedoLogoPic.width)/2, canvas.height/2 - (htgdLogoScale * gamkedoLogoPic.height)/2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
 
     const nowTime = Date.now();
-    if(nowTime - startTime < 1000) {
+    if(nowTime - startTime < 2000) {
 //        htgdLogoScale += 0.003125;//not animating it anymore.
         requestAnimationFrame(animatedHTGDLogo);
     } else {
