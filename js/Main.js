@@ -16,7 +16,7 @@ window.onload = function() {
 	initializeInput();
 	configureGameAudio();
 	loadAudio();
-//	currentBackgroundMusic.loopSong(menuMusic);//TODO: Restore once there is background music
+	currentBackgroundMusic.loopSong(menuMusic);
 	loadGamkedoLogo();
 
 	window.addEventListener("focus", windowOnFocus);
