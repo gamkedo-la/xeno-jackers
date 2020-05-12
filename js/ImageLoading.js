@@ -12,7 +12,7 @@ function showTitleImage() {
     
 }
 
-//-----Load the Gamkedo Logo-----//
+//-----Load the HTGD Logo-----//
 const gamkedoLogoPic = document.createElement("img");
 let startTime;
 function loadGamkedoLogo() {
@@ -27,22 +27,39 @@ function loadGamkedoLogo() {
     gamkedoLogoPic.src = assetPath.Image + "screens/screen_HTGD_Logo_GB.png";
 }
 
-let htgdLogoScale = 0.75;
+let htgdLogoScale = 1.0;
+
 function animatedHTGDLogo() {
-    
-    drawRect(0, 0, canvas.width, canvas.height, '#252525');
 
-    //Draw the Gamkedo Logo Image
-    canvasContext.drawImage(gamkedoLogoPic, 0, 20, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width/2 - (htgdLogoScale * gamkedoLogoPic.width)/2, canvas.height/2 - (htgdLogoScale * gamkedoLogoPic.height)/2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
+    //Legacy
+    //const nowTime = Date.now();
+    //if(nowTime - startTime < 2500) {  //how many milliseconds to show HTGD Logo at start
+    //canvasContext.drawImage(gamkedoLogoPic, 0, 0, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width/2 - (htgdLogoScale * gamkedoLogoPic.width)/2, canvas.height/2 - (htgdLogoScale * gamkedoLogoPic.height)/2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
+    //htgdLogoScale += 0.003125;//not animating it anymore.
+    //requestAnimationFrame(animatedHTGDLogo);
+    //} else {
+    //showTitleImage();
+    //}
+    //}
 
-    const nowTime = Date.now();
-    if(nowTime - startTime < 2000) {
-//        htgdLogoScale += 0.003125;//not animating it anymore.
-        requestAnimationFrame(animatedHTGDLogo);
-    } else {
-        showTitleImage();
+    function drawFirstBlank() {
+        drawRect(0, 0, canvas.width, canvas.height, '#252525');
+        setTimeout(drawHTGDLogo, 750); //blank screen for 0.5 seconds, then draw Logo
     }
+    function drawHTGDLogo() {
+        canvasContext.drawImage(gamkedoLogoPic, 0, 0, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width / 2 - (htgdLogoScale * gamkedoLogoPic.width) / 2, canvas.height / 2 - (htgdLogoScale * gamkedoLogoPic.height) / 2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
+        setTimeout(drawSecondBlank, 3000); //HTGD Logo for 2.5 seconds, then draw blank
+        //htgdLogoScale += 0.003125;//not animating it anymore.
+        //requestAnimationFrame(animatedHTGDLogo);
+    }
+    function drawSecondBlank() {
+        drawRect(0, 0, canvas.width, canvas.height, '#252525');
+        setTimeout(showTitleImage, 750); //blank screen for 0.5 seconds, then go to Title
+    }
+
+    drawFirstBlank();
 }
+    
 
 //-----Load the title screen image-----//
 const titleScreenPic = document.createElement("img");
