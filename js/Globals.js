@@ -6,6 +6,9 @@ let canvasContext;
 let DEBUG = false;
 let CHEATS_ACTIVE = false;
 let DRAW_COLLIDERS = true;
+
+const GRAVITY = 1;
+
 const COLLIDER_COLOR = 'red';
 const MENU_MUSIC_FILENAME = 'audio/Shadow 51';
 
@@ -59,7 +62,7 @@ const MAP_NAME = {
 const MAP_LAYER_NAME = {
 	Skybox:"Skybox",
 	BackgroundTiles:"BackgroundTiles",
-	Colliders:"Colliders",
+	EnvironmentColliders:"EnvironmentColliders",
 	CollisionTiles:"CollisionTiles",
 	Entities:"Entities",
 	ForegroundTiles:"ForegroundTiles"

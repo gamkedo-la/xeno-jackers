@@ -20,17 +20,10 @@ function Map(layers) {
             this.collisionTiles.tiles = layer.data;
             this.collisionTiles.widthInTiles = layer.width;
             this.collisionTiles.heightInTiles = layer.height;
-        } else if(layer.name === MAP_LAYER_NAME.Colliders) {
+        } else if(layer.name === MAP_LAYER_NAME.EnvironmentColliders) {
             for(let collider of layer.objects) {
-                const points = [
-                    {x:collider.x, y:collider.y}, 
-                    {x:collider.x + collider.width, y:collider.y},
-                    {x:collider.x  + collider.width, y:collider.y + collider.height},
-                    {x:collider.x, y:collider.y + collider.height}
-                ];
-                this.colliders.push(new EnvironmentCollider(points, {x:collider.x, y:collider.y}));
+                this.colliders.push(new EnvironmentCollider(collider.polygon, collider.polygon[0], collider.direction));
             }
-//            this.colliders = layer.objects;
         } else if(layer.name === MAP_LAYER_NAME.Entities) {
             this.entities = layer.objects;
         } else if(layer.name === MAP_LAYER_NAME.ForegroundTiles) {

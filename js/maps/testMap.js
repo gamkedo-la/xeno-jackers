@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("testMap",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -57,7 +57,7 @@
         {
          "draworder":"topdown",
          "id":4,
-         "name":"Interaction Objects",
+         "name":"EnvironmentColliders",
          "objects":[],
          "opacity":1,
          "type":"objectgroup",
@@ -81,7 +81,7 @@
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {

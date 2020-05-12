@@ -5,6 +5,7 @@ function Player(startX, startY) {
     const FRAME_WIDTH = 23;
     let currentAnimation;
     let position = {x:startX, y:startY};
+    let velocity = {x:0, y:0};
     
     let isBlocking = false;
     let isCrouching = false;
@@ -37,6 +38,10 @@ function Player(startX, startY) {
 
         processInput();
 
+        position.x += velocity.x;
+//        velocity.y += GRAVITY;
+        position.y += velocity.y; 
+
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(//this is complicated because the player moves the camera/canvas
             position.x + (startX - canvas.center.x), 
@@ -53,7 +58,10 @@ function Player(startX, startY) {
     };
 
     const processInput = function() {
-        if(heldButtons.length === 0) idle();
+        if(heldButtons.length === 0) {
+            idle();
+            velocity.x = 0;
+        }
 
         for(let i = 0; i < heldButtons.length; i++) {
             switch(heldButtons[i]) {
@@ -86,7 +94,8 @@ function Player(startX, startY) {
 
     const moveLeft = function() {
         flipped = true;
-        position.x -= WALK_SPEED;
+        velocity.x = -WALK_SPEED;
+//        position.x -= WALK_SPEED;
         currentAnimation = animations.walking;
         if(position.x < 0) {
             position.x = 0;
@@ -95,7 +104,8 @@ function Player(startX, startY) {
 
     const moveRight = function() {
         flipped = false;
-        position.x += WALK_SPEED;
+//        position.x += WALK_SPEED;
+        velocity.x = WALK_SPEED;
         currentAnimation = animations.walking;
         if(position.x + FRAME_WIDTH > levelWidth) {
             position.x = levelWidth;
@@ -155,6 +165,8 @@ function Player(startX, startY) {
             } else {
                 position.x += 15;
             }
+        } else if(isEnvironment(otherEntity)) {
+
         }
     };
 
