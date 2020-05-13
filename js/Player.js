@@ -1,7 +1,8 @@
 //Player
 function Player(startX, startY) {
     const SCALE = GAME_SCALE;
-    const WALK_SPEED = 1;
+    const WALK_SPEED = 65;
+    const KNOCKBACK_SPEED = 100;
     const FRAME_WIDTH = 23;
     let currentAnimation;
     let position = {x:startX, y:startY};
@@ -10,6 +11,7 @@ function Player(startX, startY) {
     let isBlocking = false;
     let isCrouching = false;
 
+    let wasKnockedBack = false;
     let isOnGround = true;
     let hasChainWeapon = false;
     let hasWheelWeapon = false;
@@ -36,17 +38,21 @@ function Player(startX, startY) {
     this.update = function(deltaTime) {
         currentAnimation.update(deltaTime);
 
+        if(wasKnockedBack) {
+            if(velocity.x > 0) {
+                velocity.x -= 2;
+            } else if(velocity.x < 0) {
+                velocity.x += 2;
+            }
+        }
+        position.x += Math.round(velocity.x * deltaTime / 1000);
+        velocity.y += Math.round(GRAVITY * deltaTime / 1000);
+        position.y += Math.round(velocity.y * deltaTime / 1000); 
+
         processInput();
 
-        position.x += velocity.x;
-//        velocity.y += GRAVITY;
-        position.y += velocity.y; 
-
         //keep collisionBody in synch with sprite
-        this.collisionBody.setPosition(//this is complicated because the player moves the camera/canvas
-            position.x + (startX - canvas.center.x), 
-            position.y + (startY - canvas.center.y)
-        );
+        updateCollisionBody(this.collisionBody);
     };
 
     this.setLevelWidth = function(newWidth) {
@@ -60,7 +66,9 @@ function Player(startX, startY) {
     const processInput = function() {
         if(heldButtons.length === 0) {
             idle();
-            velocity.x = 0;
+            if(!wasKnockedBack) {
+                velocity.x = 0;
+            }
         }
 
         for(let i = 0; i < heldButtons.length; i++) {
@@ -93,9 +101,10 @@ function Player(startX, startY) {
     };
 
     const moveLeft = function() {
+        if(wasKnockedBack) return;
+
         flipped = true;
         velocity.x = -WALK_SPEED;
-//        position.x -= WALK_SPEED;
         currentAnimation = animations.walking;
         if(position.x < 0) {
             position.x = 0;
@@ -103,8 +112,9 @@ function Player(startX, startY) {
     };
 
     const moveRight = function() {
+        if(wasKnockedBack) return;
+
         flipped = false;
-//        position.x += WALK_SPEED;
         velocity.x = WALK_SPEED;
         currentAnimation = animations.walking;
         if(position.x + FRAME_WIDTH > levelWidth) {
@@ -156,18 +166,37 @@ function Player(startX, startY) {
         this.collisionBody.draw();
     };
 
-    this.didCollideWith = function(otherEntity) {
+    this.didCollideWith = function(otherEntity, collisionData) {
         if(isEnemy(otherEntity)) {
             this.health--;
+            wasKnockedBack = true;
 
             if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
-                position.x -= 15;
+                velocity.x = -KNOCKBACK_SPEED;
             } else {
-                position.x += 15;
+                velocity.x = KNOCKBACK_SPEED;
             }
-        } else if(isEnvironment(otherEntity)) {
 
+            velocity.y = -85;
+        } else if(isEnvironment(otherEntity)) {
+            //Environment objects don't move, so need to move player the full amount of the overlap
+            if(velocity.y > 0) {
+                wasKnockedBack = false;
+            }
+
+            position.x -= Math.ceil(collisionData.magnitude * collisionData.x);
+            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
+            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
+            if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
+            updateCollisionBody(this.collisionBody);
         }
+    };
+
+    const updateCollisionBody = function(body) {
+        body.setPosition(//this is complicated because the player moves the camera/canvas
+            position.x + (startX - canvas.center.x), 
+            position.y + (startY - canvas.center.y)
+        );
     };
 
     const initializeAnimations = function() {

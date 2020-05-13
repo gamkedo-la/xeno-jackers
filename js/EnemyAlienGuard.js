@@ -86,7 +86,7 @@ function EnemyAlienGuard(posX, posY) {
         this.collisionBody.draw();
     };
 
-    this.didCollideWith = function(otherEntity) {
+    this.didCollideWith = function(otherEntity, collisionData) {
         if(otherEntity.type === EntityType.Player) {
             this.health--;
 
@@ -95,6 +95,17 @@ function EnemyAlienGuard(posX, posY) {
             } else {
                 position.x += 5;
             }
+        } else if(isEnvironment(otherEntity)) {
+            //Environment objects don't move, so need to move player the full amount of the overlap
+            if(velocity.y > 0) {
+                wasKnockedBack = false;
+            }
+
+            position.x -= Math.ceil(collisionData.magnitude * collisionData.x);
+            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
+            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
+            if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
+            updateCollisionBody(this.collisionBody);
         }
     };
 

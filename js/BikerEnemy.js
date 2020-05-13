@@ -3,6 +3,7 @@ function BikerEnemy(posX, posY) {
     const SCALE = GAME_SCALE;
     let currentAnimation;
     let position = {x:posX, y:posY};
+    let velocity = {x:0, y:0};
     
     let isBlocking = false;
     let isCrouching = false;
@@ -27,6 +28,10 @@ function BikerEnemy(posX, posY) {
         currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
+
+        position.x += Math.round(velocity.x * deltaTime / 1000);
+        velocity.y += Math.round(GRAVITY * deltaTime / 1000);
+        position.y += Math.round(velocity.y * deltaTime / 1000); 
 
         if(player.getPosition().x < position.x) {
             flipped = true;
@@ -86,7 +91,7 @@ function BikerEnemy(posX, posY) {
         this.collisionBody.draw();
     };
 
-    this.didCollideWith = function(otherEntity) {
+    this.didCollideWith = function(otherEntity, collisionData) {
         if(otherEntity.type === EntityType.Player) {
             this.health--;
 
@@ -95,6 +100,13 @@ function BikerEnemy(posX, posY) {
             } else {
                 position.x += 5;
             }
+        }  else if(isEnvironment(otherEntity)) {
+            //Environment objects don't move, so need to move player the full amount of the overlap
+            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
+            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
+            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
+            if(Math.abs(collisionData.y) > 0.01) velocity.y = 0;
+            this.collisionBody.setPosition(position.x, position.y);
         }
     };
 

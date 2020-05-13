@@ -58,7 +58,35 @@
          "draworder":"topdown",
          "id":4,
          "name":"EnvironmentColliders",
-         "objects":[],
+         "objects":[
+                {
+                 "height":0,
+                 "id":1,
+                 "name":"ground1",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":319.96875,
+                         "y":-0.03125
+                        }, 
+                        {
+                         "x":320,
+                         "y":7.9375
+                        }, 
+                        {
+                         "x":0.03125,
+                         "y":7.96875
+                        }],
+                 "rotation":0,
+                 "type":"ground",
+                 "visible":true,
+                 "width":0,
+                 "x":0,
+                 "y":120
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -78,7 +106,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":1,
+ "nextobjectid":2,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",

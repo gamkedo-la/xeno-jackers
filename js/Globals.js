@@ -7,7 +7,7 @@ let DEBUG = false;
 let CHEATS_ACTIVE = false;
 let DRAW_COLLIDERS = true;
 
-const GRAVITY = 1;
+const GRAVITY = 220;
 
 const COLLIDER_COLOR = 'red';
 const MENU_MUSIC_FILENAME = 'audio/Shadow 51';

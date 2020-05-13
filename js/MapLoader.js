@@ -22,7 +22,8 @@ function Map(layers) {
             this.collisionTiles.heightInTiles = layer.height;
         } else if(layer.name === MAP_LAYER_NAME.EnvironmentColliders) {
             for(let collider of layer.objects) {
-                this.colliders.push(new EnvironmentCollider(collider.polygon, collider.polygon[0], collider.direction));
+                
+                this.colliders.push(new EnvironmentCollider(collider.polygon, {x:collider.x, y:collider.y}, collider.direction));
             }
         } else if(layer.name === MAP_LAYER_NAME.Entities) {
             this.entities = layer.objects;

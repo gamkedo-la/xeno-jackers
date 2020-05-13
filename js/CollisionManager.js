@@ -8,11 +8,12 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 	this.type = type;
 	this.center = center;
 	this.radius = radius;
-	this.points = points;
- 	for(let i = 0; i < points.length; i++) {
-		this.points[i] = {x:points[i].x, y:points[i].y};
-	}
+	this.points = [...points];
+// 	for(let i = 0; i < points.length; i++) {
+//		this.points[i] = {x:points[i].x, y:points[i].y};
+//	}
 
+	this.normals = [];
 	this.position = position;
 	
 	this.findCenterAndRadiusOfPoints = function(points) {
@@ -38,10 +39,41 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 		//Divide by 0.707 (cos(45)) to account for worst case distance from center to a corner => polygon radii are ~30% too big (which is fine)
 		this.radius = Math.max(Math.abs(halfDeltaX / 0.707), Math.abs(halfDeltaY / 0.707));		
 	};
+
+	this.calculateNormals = function() {
+		for(let i = 0; i < this.points.length; i++) {
+			const start = this.points[i];
+			let end;
+			if(i === this.points.length - 1) {
+				end = this.points[0];
+			} else {
+				end = this.points[i + 1];
+			}
+
+			const vector1 = {x:end.x - start.x, y:end.y - start.y};
+			const magnitude = magnitudeOfVec(vector1);
+			//perpendicular is either {-y, x} or {y, -x}
+			const fromCenter = {x:start.x - this.center.x, y:start.y - this.center.y};
+			if(fromCenter.x >= 0) {
+				if(vector1.y >= 0) {
+					this.normals.push({x: vector1.y / magnitude, y:-vector1.x / magnitude});
+				} else {
+					this.normals.push({x: -vector1.y / magnitude, y:vector1.x / magnitude});
+				}
+			} else {
+				if(vector1.y >= 0) {
+					this.normals.push({x: -vector1.y / magnitude, y:vector1.x / magnitude});
+				} else {
+					this.normals.push({x: vector1.y / magnitude, y:-vector1.x / magnitude});
+				}
+			}
+		}
+	};
 		
 	if(this.type === ColliderType.Polygon) {
 		this.points = points;
 		this.findCenterAndRadiusOfPoints(this.points);
+		this.calculateNormals();
 	} else if(this.type === ColliderType.Circle) {
 		this.center = center;
 		this.radius = radius;
@@ -64,7 +96,7 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 		
 		this.position.x = newX;
 		this.position.y = newY;
-    };
+	};
     
     this.isOnscreen = function(canvas) {
         const left = canvas.center.x - canvas.width / 2;
@@ -75,7 +107,7 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
         if(this.type === ColliderType.Circle) {
             return isCircleOnScreen(left, top, right, bottom, this.position);
         } else {
-            return isPolygonOnScreen(left, top, right, bottom, this.points);
+            return isPolygonOnScreen(left, top, right, bottom, this.points);//Working here: this.points is all NaN
         }
     };
 	
@@ -101,7 +133,15 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 					break;
 			}
 		}
-    };
+	};
+	
+	this.getNormalForClosestEdge = function(otherBody) {
+		if(otherBody.type === ColliderType.Circle) {
+			return {x:this.center.x - otherBody.center.x, y:this.center.y - otherBody.center.y};
+		} else {
+
+		}
+	};
     
     const isCircleOnScreen = function(left, top, right, bottom, position) {
         if((position.x > left - this.radius) &&
@@ -200,19 +240,14 @@ function CollisionManager(player) {
 
 	this.addEntity = function(newEntity) {
         if(isEnemy(newEntity)) {
-            addEnemy(newEntity);
+            return addEnemy(newEntity);
         } else if(isEnemyWeapon(newEntity)) {
-			addEnemyWeapon(newEntity);
+			return addEnemyWeapon(newEntity);
 		} else if(isEnvironment(newEntity)) {
-			addEnvironment(newEntity);
+			return addEnvironment(newEntity);
 		} else if(isPlayerWeapon(newEntity)) {
-            addPlayerWeapon(newEntity);
+			return  addPlayerWeapon(newEntity);
         }
-
-		const beforeLength = enemies.size;
-		enemies.add(newEntity);
-
-		return (!(beforeLength === enemies.size));
     };
     
     const addEnemy = function(newEnemy) {
@@ -353,10 +388,23 @@ function CollisionManager(player) {
                 entity2.didCollideWith(entity1);
                 return;
             }
-            
-            if(checkCollisionBetween(entity1.collisionBody, entity2.collisionBody)) {
-                entity1.didCollideWith(entity2);
-                entity2.didCollideWith(entity1);
+			
+			const collisionResults = checkCollisionBetween(entity1.collisionBody, entity2.collisionBody);
+//            if(checkCollisionBetween(entity1.collisionBody, entity2.collisionBody)) {
+			if(collisionResults.magnitude > 0) {
+				if(collisionResults.isBody1Normal) {
+					entity2.didCollideWith(entity1, collisionResults);	
+					//reverse direction so entity1 moves toward itself (opposite it's normal)
+					collisionResults.x = -collisionResults.x;
+					collisionResults.y = -collisionResults.y;
+					entity1.didCollideWith(entity2, collisionResults);
+				} else {
+					entity1.didCollideWith(entity2, collisionResults);
+					//reverse direction so entity2 moves toward itself (opposite it's normal)
+					collisionResults.x = -collisionResults.x;
+					collisionResults.y = -collisionResults.y;
+					entity2.didCollideWith(entity1, collisionResults);	
+				}
             }
         }
     };
@@ -372,7 +420,8 @@ function CollisionManager(player) {
 	const checkCollisionBetween = function(body1, body2) {
 		if(body1.type === ColliderType.Polygon) {
 			if(body2.type === ColliderType.Polygon) {
-				return polygonVPolygon(body1, body2);
+//				return polygonVPolygon(body1, body2);
+				return getMagnitudeAndDirectionOfOverlap(body1, body2);
 			} else if(body2.type === ColliderType.Circle) {
 				return polygonVCircle(body1, body2);
 			}
@@ -487,7 +536,136 @@ function CollisionManager(player) {
 		}
 
 		return false;
-	}
+	};
+
+	const getMagnitudeAndDirectionOfOverlap = function(body1, body2) {
+		const result = {magnitude:0, x:0, y:0};
+		if(body1.type === ColliderType.Circle) {
+			if(body2.type === ColliderType.Circle) {
+				//circle vs circle
+				return separatingCircles(body1, body2);
+			} else {
+				//circle vs polygon
+				return separatingPolygonCircle(body2, body1);
+			}
+		} else {
+			if(body2.type === ColliderType.Circle) {
+				//polygon vs circle
+				return separatingPolygonCircle(body1, body2);
+			} else {
+				//polygon vs polygon
+				return separatingPolygons(body1, body2);
+			}
+		}
+	};
+
+	const checkedNormals = new Set();
+	const separatingPolygons = function(body1, body2) {
+		checkedNormals.clear();
+		let result = {magnitude:0, x:0, y:0, isBody1Normal:false};
+		for(let normal of body1.normals) {
+			if(checkedNormals.has(normal.x)) continue;//already checked along this normal
+			if(checkedNormals.has(-normal.x)) continue;//already checked this normal in the opposite direction
+
+			checkedNormals.add(normal.x);//add it to the set so we don't check it again
+			const body1MinMax = getMinMax(body1, normal);
+			const body2MinMax = getMinMax(body2, normal);
+
+			result = getOverlapData(body1MinMax, body2MinMax, normal, result, true);
+			if(result.magnitude === 0) return result;
+		}
+
+		for(let normal of body2.normals) {
+			if(checkedNormals.has(normal.x)) continue;//already checked along this normal
+			if(checkedNormals.has(-normal.x)) continue;//already checked this normal in the opposite direction
+
+			checkedNormals.add(normal.x);//add it to the set so we don't check it again
+			const body1MinMax = getMinMax(body1, normal);
+			const body2MinMax = getMinMax(body2, normal);
+
+			result = getOverlapData(body1MinMax, body2MinMax, normal, result, false);
+			if(result.magnitude === 0) return result;
+		}
+
+		return result;
+	};
+
+	const getOverlapData = function(body1MinMax, body2MinMax, normal, result, isBody1Normal) {
+		if(body1MinMax.centerValue <= body2MinMax.centerValue) {
+			if(body1MinMax.maxValue < body2MinMax.minValue) {
+				//no collision
+				result.magnitude = 0;
+				result.x = 0;
+				result.y = 0;
+				result.isBody1Normal = false;
+				return result;
+			} else {
+				//there may be a collision
+				const overlap = body1MinMax.maxValue - body2MinMax.minValue;
+				if(result.magnitude === 0) {
+					result.magnitude = overlap;
+					result.x = normal.x;
+					result.y = normal.y;
+					result.isBody1Normal = isBody1Normal;
+				} else if(overlap < result.magnitude) {
+					result.magnitude = overlap;
+					result.x = normal.x;
+					result.y = normal.y;
+					result.isBody1Normal = isBody1Normal;
+				}
+			}
+		} else {
+			if(body2MinMax.maxValue < body1MinMax.minValue) {
+				//no collision
+				result.magnitude = 0;
+				result.x = 0;
+				result.y = 0;
+				result.isBody1Normal = false;
+				return result;
+			} else {
+				//there may be a collision
+				const overlap = body2MinMax.maxValue - body1MinMax.minValue;
+				if(result.magnitude === 0) {
+					result.magnitude = overlap;
+					result.x = normal.x;
+					result.y = normal.y;
+					result.isBody1Normal = isBody1Normal;
+				} else if(overlap < result.magnitude) {
+					result.magnitude = overlap;
+					result.x = normal.x;
+					result.y = normal.y;
+					result.isBody1Normal = isBody1Normal;
+				}
+			}
+		}
+
+		
+		return result;
+	};
+
+	const getMinMax = function(body, normal) {
+		let minIndex = 0;
+		let maxIndex = 0;
+		let minValue;
+		let maxValue;
+		const centerValue = dotProduct(body.center, normal);
+		for(let i = 0; i < body.points.length; i++) {
+			const point = body.points[i];
+			const dot = dotProduct(point, normal);
+			if(i === 0) {
+				minValue = dot;
+				maxValue = dot;
+			} else if(dot < minValue) {
+				minValue = dot;
+				minIndex = i;
+			} else if(dot > maxValue) {
+				maxValue = dot;
+				maxIndex = i;
+			}
+		}
+
+		return {minIndex:minIndex, minValue:minValue, maxIndex:maxIndex, maxValue:maxValue, centerValue:centerValue};
+	};
 }
 
 function magnitudeOfVec(vector) {
