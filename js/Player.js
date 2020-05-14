@@ -3,6 +3,7 @@ function Player(startX, startY) {
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
+    const JUMP_SPEED = 130;
     const FRAME_WIDTH = 23;
     let currentAnimation;
     let position = {x:startX, y:startY};
@@ -129,6 +130,7 @@ function Player(startX, startY) {
     const jump = function() {
         if(isOnGround) {
             isOnGround = false;
+            velocity.y = -JUMP_SPEED;
 //            currentAnimation = animations.jumping;
             console.log("Need to jump now, also need some gravity to make you land");
         }
@@ -189,6 +191,7 @@ function Player(startX, startY) {
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);
             if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
             updateCollisionBody(this.collisionBody);
+            if(collisionData.y < -0.1) isOnGround = true;
         }
     };
 
