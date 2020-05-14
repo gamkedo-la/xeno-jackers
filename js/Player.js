@@ -52,6 +52,14 @@ function Player(startX, startY) {
 
         processInput();
 
+        if(!isOnGround) {
+            if(velocity.y < 0) {
+                currentAnimation = animations.jumping;
+            } else {
+                currentAnimation = animations.falling;
+            }
+        }
+        
         //keep collisionBody in synch with sprite
         updateCollisionBody(this.collisionBody);
     };
@@ -67,7 +75,7 @@ function Player(startX, startY) {
     const processInput = function() {
         if(heldButtons.length === 0) {
             idle();
-            if(!wasKnockedBack) {
+            if((!wasKnockedBack) && (isOnGround)) {
                 velocity.x = 0;
             }
         }
@@ -131,8 +139,6 @@ function Player(startX, startY) {
         if(isOnGround) {
             isOnGround = false;
             velocity.y = -JUMP_SPEED;
-//            currentAnimation = animations.jumping;
-            console.log("Need to jump now, also need some gravity to make you land");
         }
     };
 
@@ -209,10 +215,11 @@ function Player(startX, startY) {
         anims.idle.scale = SCALE;
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3, 4], FRAME_WIDTH, 33, [164], false, true);
         anims.walking.scale = SCALE;
-//        animations.jumping = ...
-//        animations.attacking = ...
-//        animations.blocking = ...
-//        animations.crouching = ...
+        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [5], FRAME_WIDTH, 33, [164], false, true);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [6], FRAME_WIDTH, 33, [164], false, true);
+//        anims.attacking = ...
+//        anims.blocking = ...
+//        anims.crouching = ...
 
         return anims;
     };
