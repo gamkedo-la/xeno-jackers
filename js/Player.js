@@ -62,6 +62,7 @@ function Player(startX, startY) {
         
         //keep collisionBody in synch with sprite
         updateCollisionBody(this.collisionBody);
+        this.collisionBody.calcOnscreen(canvas);
     };
 
     this.setLevelWidth = function(newWidth) {

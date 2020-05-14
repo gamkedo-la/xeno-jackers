@@ -9,9 +9,7 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 	this.center = center;
 	this.radius = radius;
 	this.points = [...points];
-// 	for(let i = 0; i < points.length; i++) {
-//		this.points[i] = {x:points[i].x, y:points[i].y};
-//	}
+	this.isOnScreen = true;
 
 	this.normals = [];
 	this.position = position;
@@ -98,18 +96,18 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 		this.position.y = newY;
 	};
     
-    this.isOnscreen = function(canvas) {
+    this.calcOnscreen = function(canvas) {
 		const left = 0;
 		const right = canvas.width;
         const top = 0;
         const bottom = canvas.height;
 
         if(this.type === ColliderType.Circle) {
-            return isCircleOnScreen(left, top, right, bottom, this.position);
+            this.isOnScreen = isCircleOnScreen(left, top, right, bottom, this.position);
         } else {
-            return isPolygonOnScreen(left, top, right, bottom, this.points);
+            this.isOnScreen = isPolygonOnScreen(left, top, right, bottom, this.points);
         }
-    };
+	};
 	
 	this.draw = function() {
 		if(DRAW_COLLIDERS) {
@@ -378,11 +376,11 @@ function CollisionManager(player) {
 
     const checkCollsionsForLists = function(list1, list2) {
         for(let entity1 of list1) {
-            if(!entity1.collisionBody.isOnscreen(canvas)) {
+            if(!entity1.collisionBody.isOnScreen) {
 				continue;//not on screen so bail early
 			} 
 			for(let entity2 of list2) {
-                if(!entity2.collisionBody.isOnscreen(canvas)) {
+                if(!entity2.collisionBody.isOnScreen) {
 					continue;//not on screen so bail early
 				}
                 actualCollisionCheck(entity1, entity2);

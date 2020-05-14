@@ -29,18 +29,21 @@ function BikerEnemy(posX, posY) {
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
 
-        position.x += Math.round(velocity.x * deltaTime / 1000);
-        velocity.y += Math.round(GRAVITY * deltaTime / 1000);
-        position.y += Math.round(velocity.y * deltaTime / 1000); 
+        if(this.collisionBody.isOnScreen) {
+            position.x += Math.round(velocity.x * deltaTime / 1000);
+            velocity.y += Math.round(GRAVITY * deltaTime / 1000);
+            position.y += Math.round(velocity.y * deltaTime / 1000); 
 
-        if(player.getPosition().x < position.x) {
-            flipped = true;
-        } else {
-            flipped = false;
+            if(player.getPosition().x < position.x) {
+                flipped = true;
+            } else {
+                flipped = false;
+            }
         }
 
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
     };
 
     const moveLeft = function() {
