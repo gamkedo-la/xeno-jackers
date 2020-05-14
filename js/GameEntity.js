@@ -19,6 +19,7 @@ const EntityType = {
 
     //Environment
     Ground:"ground",
+    Wall:"wall",
     Crate:"crate",
     Barrel:"barrel",
     Table:"table",

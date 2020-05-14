@@ -54,6 +54,9 @@ function MapLoader() {
             case MAP_NAME.Boss:
                 this.currentMap = loadBoss();
                 break;
+            case MAP_NAME.TestBar:
+                this.currentMap = loadTestBar();
+                break;
             default:
                 this.currentMap = loadTestMap();
                 break;
@@ -72,6 +75,9 @@ function MapLoader() {
                 break;
             case MAP_NAME.Boss:
                 this.currentMap = null;
+                break;
+            case MAP_NAME.TestBar:
+                this.currentMap = loadBar();
                 break;
             default:
                 this.currentMap = loadBar();
@@ -93,6 +99,11 @@ function MapLoader() {
         const layers = TileMaps.boss.layers;
         return new Map(layers);
     };
+
+    const loadTestBar = function() {
+        const layers = TileMaps.level_1b_bar.layers;
+        return new Map(layers);
+    }
     
     const loadTestMap = function() {
         const layers = TileMaps.testMap.layers;
