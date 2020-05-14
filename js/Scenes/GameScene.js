@@ -8,6 +8,8 @@ function GameScene() {
     let collisionManager = null;
 
     const enemies = [];
+    const environmentColliders = [];
+
     this.transitionIn = function() {
         if(mapLoader === null) {
             mapLoader = new MapLoader();
@@ -27,6 +29,7 @@ function GameScene() {
         }
 
         for(let collider of currentMap.colliders) {
+            environmentColliders.push(collider);
             collisionManager.addEntity(collider);
         }
 
@@ -45,7 +48,7 @@ function GameScene() {
         }
 
         if(enemies.length === 0) {
-            const anEnemy = new BikerEnemy(canvas.width / 4, canvas.height / 2 + 16);
+            const anEnemy = new BikerEnemy(3 * canvas.width / 8, canvas.height / 2 + 16);
             enemies.push(anEnemy);
             collisionManager.addEntity(anEnemy);
         }
@@ -96,7 +99,12 @@ function GameScene() {
     const update = function(deltaTime) {
         player.update(deltaTime);
         camera.update(player);
-        for(enemy of enemies) {
+
+        for(let env of environmentColliders) {
+            env.update(deltaTime);
+        }
+
+        for(let enemy of enemies) {
             enemy.update(deltaTime, player);
         }
 
@@ -121,6 +129,10 @@ function GameScene() {
 
 //        mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles, canvas.width / 2, canvas.height / 2);
         mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles, canvas.center.x, canvas.center.y);
+
+        for(let env of environmentColliders) {
+            env.draw();
+        }
 
         gameUI.draw(deltaTime);
     };

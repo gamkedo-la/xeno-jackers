@@ -267,7 +267,7 @@
  </layer>
  <objectgroup id="4" name="EnvironmentColliders">
   <object id="1" name="ground1" type="ground" x="0" y="120">
-   <polygon points="0,0 319.969,-0.03125 320,7.9375 0.03125,7.96875"/>
+   <polygon points="0,0 288.305,-0.03125 288.333,7.9375 0.0281576,7.96875"/>
   </object>
  </objectgroup>
  <layer id="5" name="ForegroundTiles" width="320" height="126">

@@ -99,15 +99,15 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 	};
     
     this.isOnscreen = function(canvas) {
-        const left = canvas.center.x - canvas.width / 2;
-        const right = canvas.center.x + canvas.width / 2;
-        const top = canvas.center.y - canvas.height / 2;
-        const bottom = canvas.center.y + canvas.height / 2;
+		const left = 0;
+		const right = canvas.width;
+        const top = 0;
+        const bottom = canvas.height;
 
         if(this.type === ColliderType.Circle) {
             return isCircleOnScreen(left, top, right, bottom, this.position);
         } else {
-            return isPolygonOnScreen(left, top, right, bottom, this.points);//Working here: this.points is all NaN
+            return isPolygonOnScreen(left, top, right, bottom, this.points);
         }
     };
 	
@@ -180,10 +180,10 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
     };
 
     const isPointOnScreen = function(left, top, right, bottom, point) {
-        if((point.x > left) && 
-            (point.x < right) && 
-            (point.y > top) && 
-            (point.y < bottom)) {
+        if((point.x >= left) && 
+            (point.x <= right) && 
+            (point.y >= top) && 
+            (point.y <= bottom)) {
             return true;
         }
 
@@ -236,6 +236,13 @@ function CollisionManager(player) {
         this.player = newPlayer;
         playerList = [newPlayer];
 		return true;
+	};
+
+	this.drawEnvironmentColliders = function() {
+		//This is a hack for debugging -- akkk!!!
+		for(let env of environment) {
+			env.collisionBody.draw();
+		}
 	};
 
 	this.addEntity = function(newEntity) {
@@ -366,14 +373,18 @@ function CollisionManager(player) {
         checkCollsionsForLists(enemyWeapons, environment);
 
         //Enemies vs Environment
-        checkCollsionsForLists(enemies, environment);
+		checkCollsionsForLists(enemies, environment);
     };
 
     const checkCollsionsForLists = function(list1, list2) {
         for(let entity1 of list1) {
-            if(!entity1.collisionBody.isOnscreen(canvas)) continue;//not on screen so bail early
+            if(!entity1.collisionBody.isOnscreen(canvas)) {
+				continue;//not on screen so bail early
+			} 
 			for(let entity2 of list2) {
-                if(!entity2.collisionBody.isOnscreen(canvas)) continue;//not on screen so bail early
+                if(!entity2.collisionBody.isOnscreen(canvas)) {
+					continue;//not on screen so bail early
+				}
                 actualCollisionCheck(entity1, entity2);
 			}
         }
