@@ -193,7 +193,7 @@ function Player(startX, startY) {
                 wasKnockedBack = false;
             }
 
-            position.x -= Math.ceil(collisionData.magnitude * collisionData.x);
+            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
             if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);
             if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;

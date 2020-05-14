@@ -596,6 +596,23 @@ function CollisionManager(player) {
 			if(result.magnitude === 0) return result;
 		}
 
+		//check if the normal points the wrong way and reverse it if it does
+		const center1ToCenter2 = {x:body2.center.x - body1.center.x, y:body2.center.y - body1.center.y};
+		if(result.isBody1Normal) {
+			if(dotProduct(center1ToCenter2, {x:result.x, y:result.y}) < 0) {
+				result.x = -result.x;
+				result.y = -result.y;
+			}
+		} else {
+			if(dotProduct(center1ToCenter2, {x:result.x, y:result.y}) > 0) {
+				result.x = -result.x;
+				result.y = -result.y;
+			}
+		}
+
+		result.x = (Math.round(result.x * 100)) / 100;
+		result.y = (Math.round(result.y * 100)) / 100;
+
 		return result;
 	};
 
