@@ -1,7 +1,8 @@
 //Map Object
 function Map(layers) {
     this.skybox = {};
-    this.backgroundTiles = {};
+    this.farBackgroundTiles = {};
+    this.nearBackgroundTiles = {};
     this.colliders = [];
     this.collisionTiles = {};
     this.entities = [];
@@ -12,17 +13,20 @@ function Map(layers) {
             this.skybox.image = getSkyboxForName(layer.image);
             this.skybox.x = layer.x;
             this.skybox.y = layer.y;
-        } else if(layer.name === MAP_LAYER_NAME.BackgroundTiles) {
-            this.backgroundTiles.tiles = layer.data;
-            this.backgroundTiles.widthInTiles = layer.width;
-            this.backgroundTiles.heightInTiles = layer.height;
+        } else if(layer.name === MAP_LAYER_NAME.FarBackgroundTiles) {
+            this.farBackgroundTiles.tiles = layer.data;
+            this.farBackgroundTiles.widthInTiles = layer.width;
+            this.farBackgroundTiles.heightInTiles = layer.height;
+        } else if(layer.name === MAP_LAYER_NAME.NearBackgroundTiles) {
+            this.nearBackgroundTiles.tiles = layer.data;
+            this.nearBackgroundTiles.widthInTiles = layer.width;
+            this.nearBackgroundTiles.heightInTiles = layer.height;
         } else if(layer.name === MAP_LAYER_NAME.CollisionTiles) {
             this.collisionTiles.tiles = layer.data;
             this.collisionTiles.widthInTiles = layer.width;
             this.collisionTiles.heightInTiles = layer.height;
         } else if(layer.name === MAP_LAYER_NAME.EnvironmentColliders) {
             for(let collider of layer.objects) {
-                
                 this.colliders.push(new EnvironmentCollider(collider.polygon, {x:collider.x, y:collider.y}, collider.direction));
             }
         } else if(layer.name === MAP_LAYER_NAME.Entities) {

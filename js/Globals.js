@@ -61,7 +61,8 @@ const MAP_NAME = {
 
 const MAP_LAYER_NAME = {
 	Skybox:"Skybox",
-	BackgroundTiles:"BackgroundTiles",
+	FarBackgroundTiles:"FarBackgroundTiles",
+	NearBackgroundTiles:"NearBackgroundTiles",
 	EnvironmentColliders:"EnvironmentColliders",
 	CollisionTiles:"CollisionTiles",
 	Entities:"Entities",

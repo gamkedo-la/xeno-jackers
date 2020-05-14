@@ -123,7 +123,7 @@ function beginLoadingImage(imgVar, fileName) {
 function loadImages() {
     const imageList = [
         // tiles
-        { imgName: tileSheet, theFile: "backgrounds/spritesheet_workshop.png" },
+        { imgName: tileSheet, theFile: "backgrounds/spritesheet_master.png" },
         { imgName: tileSheetRock, theFile: "backgrounds/spritesheet_grassyrock.png" },
         { imgName: tileSheetWorkshop, theFile: "backgrounds/spritesheet_workshop.png" },
         { imgName: tempGameSceneBG, theFile: "backgrounds/background_test.png" },

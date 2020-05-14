@@ -117,9 +117,8 @@ function GameScene() {
         drawRect(0, 0, canvas.width, canvas.height);
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
 
-//        mapRenderer.drawTileLayer(currentMap.backgroundTiles.tiles, currentMap.backgroundTiles.widthInTiles, canvas.width / 2, canvas.height/2);
-//        mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, canvas.width / 2, canvas.height / 2);
-        mapRenderer.drawTileLayer(currentMap.backgroundTiles.tiles, currentMap.backgroundTiles.widthInTiles, canvas.center.x, canvas.center.y);
+        mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles, canvas.center.x, canvas.center.y);
+        mapRenderer.drawTileLayer(currentMap.nearBackgroundTiles.tiles, currentMap.nearBackgroundTiles.widthInTiles, canvas.center.x, canvas.center.y);
         mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, canvas.center.x, canvas.center.y);
 
         player.draw(deltaTime);
@@ -127,7 +126,6 @@ function GameScene() {
             enemy.draw(deltaTime);
         }
 
-//        mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles, canvas.width / 2, canvas.height / 2);
         mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles, canvas.center.x, canvas.center.y);
 
         for(let env of environmentColliders) {
