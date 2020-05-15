@@ -6,6 +6,8 @@ function Player(startX, startY) {
     const JUMP_SPEED = 130;
     const MAX_JUMP_TIME = 170;
     const FRAME_WIDTH = 23;
+    const FRAME_HEIGHT = 33;
+    const SIZE = {width:FRAME_WIDTH, height:FRAME_HEIGHT};
     let currentAnimation;
     let position = {x:startX, y:startY};
     let velocity = {x:0, y:0};
@@ -38,6 +40,10 @@ function Player(startX, startY) {
 
     this.getPosition = function() {
         return {x:position.x, y:position.y};
+    };
+
+    this.getSize = function() {
+        return SIZE;
     };
 
     this.update = function(deltaTime) {
@@ -234,13 +240,13 @@ function Player(startX, startY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0], FRAME_WIDTH, 33, [256], false, true);
+        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0], FRAME_WIDTH, FRAME_HEIGHT, [256], false, true);
         anims.idle.scale = SCALE;
-        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3, 4], FRAME_WIDTH, 33, [164], false, true);
+        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3, 4], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
         anims.walking.scale = SCALE;
-        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [6], FRAME_WIDTH, 33, [164], false, false);
-        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [7], FRAME_WIDTH, 33, [164], false, false);
-        anims.landing = new SpriteAnimation('land', playerSpriteSheet, [8], FRAME_WIDTH, 33, [164], false, false);
+        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [6], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+        anims.landing = new SpriteAnimation('land', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
 //        anims.attacking = ...
 //        anims.blocking = ...
 //        anims.crouching = ...
