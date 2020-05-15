@@ -30,6 +30,14 @@ const Color = {
 //--------------Player-----------------//
 let player = null;
 
+const POINTS = {
+	EnemyBiker:100,
+	EnemyAlienGuard:150,
+	BikePart:500,
+	Boss:5000,
+	BeatGame:5000
+};
+
 //---------------Persistence-----------//
 const localStorageKey = {
 	MusicVolume:"xeno_jackers_musicVolume",

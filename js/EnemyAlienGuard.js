@@ -13,7 +13,7 @@ function EnemyAlienGuard(posX, posY) {
     let hasHandleBarWeapon = false;
     let flipped = false;
 
-    this.type = EntityType.EnemyBugBiker;
+    this.type = EntityType.EnemyAlienGuard;
     this.health = 5;
 
     this.collisionBody = new Collider(ColliderType.Polygon, [

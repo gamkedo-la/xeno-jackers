@@ -15,7 +15,7 @@ function BikerEnemy(posX, posY) {
     let flipped = false;
 
     this.type = EntityType.EnemyBiker;
-    this.health = 5;
+    this.health = 1;
 
     this.collisionBody = new Collider(ColliderType.Polygon, [
         {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
@@ -103,6 +103,8 @@ function BikerEnemy(posX, posY) {
             } else {
                 position.x += 5;
             }
+
+            if(this.health <= 0) SceneState.scenes[SCENE.GAME].removeMe(this);
         }  else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
             position.x += Math.ceil(collisionData.magnitude * collisionData.x);

@@ -10,6 +10,7 @@ function GameScene() {
     let remainingLives = 2;
 
     const enemies = [];
+    const enemiesToRemove = [];
     const environmentColliders = [];
 
     this.transitionIn = function() {
@@ -98,6 +99,11 @@ function GameScene() {
         return false;
     };
 
+    this.removeMe = function(entityToRemove) {
+        enemiesToRemove.push(entityToRemove);
+        score += pointsForType(entityToRemove.type);
+    };
+
     const update = function(deltaTime) {
         player.update(deltaTime);
         camera.update(player);
@@ -111,6 +117,12 @@ function GameScene() {
         }
 
         collisionManager.doCollisionChecks();
+
+        for(let enemyToRemove of enemiesToRemove) {
+            collisionManager.removeEntity(enemiesToRemove);
+            enemies.splice(enemies.indexOf(enemyToRemove), 1);
+        }
+        enemiesToRemove.length = 0;
 
         gameUI.update(deltaTime, player);
     };
@@ -135,5 +147,18 @@ function GameScene() {
         }
 
         gameUI.draw(deltaTime, score, remainingLives);
+    };
+
+    const pointsForType = function(type) {
+        switch(type) {
+            case EntityType.EnemyBiker:
+                return POINTS.EnemyBiker;
+            case EntityType.EnemyAlienGuard:
+                return POINTS.EnemyAlienGuard;
+            case EntityType.FinalBoss:
+                return POINTS.FinalBoss;
+            default:
+                return 0;
+        }
     };
 }
