@@ -51,9 +51,16 @@ function GameScene() {
         }
 
         if(enemies.length === 0) {
-            const anEnemy = new BikerEnemy(3 * canvas.width / 8, canvas.height / 2 + 16);
-            enemies.push(anEnemy);
-            collisionManager.addEntity(anEnemy);
+//            const anEnemy = new BikerEnemy(3 * canvas.width / 8, canvas.height / 2 + 16);
+            for(let entityData of currentMap.entities) {
+                if(entityData.type === EntityType.EnemyBiker) {
+                    const anEnemy = new BikerEnemy(entityData.x, entityData.y - 33);
+                    enemies.push(anEnemy);//33 is height of biker enemy
+                    collisionManager.addEntity(anEnemy);
+                }
+            }
+            
+            
         }
 
         if(mapRenderer === null) {

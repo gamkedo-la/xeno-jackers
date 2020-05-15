@@ -1,6 +1,9 @@
 //BikerEnemy.js
 function BikerEnemy(posX, posY) {
     const SCALE = GAME_SCALE;
+    const WIDTH = 23;
+    const HEIGHT = 33;
+    const SIZE = {width:WIDTH, height:HEIGHT};
     let currentAnimation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
@@ -23,6 +26,10 @@ function BikerEnemy(posX, posY) {
         {x:posX + 21, y:posY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
         {x:posX + 2, y:posY + 32} //bottom left +2/+32 makes collision box smaller than sprite
     ], {x:posX, y:posY});
+
+    this.getSize = function() {
+        return SIZE;
+    };
 
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
@@ -118,7 +125,7 @@ function BikerEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], 23, 33, [256], false, true);
+        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], WIDTH, HEIGHT, [256], false, true);
         anims.idle.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...

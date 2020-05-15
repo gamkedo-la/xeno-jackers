@@ -37,7 +37,7 @@ function Map(layers) {
                     this.playerSpawn.x = Math.round(entity.x);
                     this.playerSpawn.y = Math.round(entity.y);
                 } else {
-                    this.entities.push({x: entity.x, y:entity.y, type:entity.type});
+                    this.entities.push({x: Math.round(entity.x), y:Math.round(entity.y), type:entity.type});
                 }
             }
         } else if(layer.name === MAP_LAYER_NAME.ForegroundTiles) {

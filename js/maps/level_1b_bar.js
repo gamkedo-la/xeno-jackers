@@ -149,6 +149,30 @@
                  "width":21,
                  "x":392,
                  "y":120
+                }, 
+                {
+                 "gid":4098,
+                 "height":31,
+                 "id":6,
+                 "name":"biker1",
+                 "rotation":0,
+                 "type":"enemyBiker",
+                 "visible":true,
+                 "width":21,
+                 "x":220.25,
+                 "y":119.75
+                }, 
+                {
+                 "gid":4098,
+                 "height":31,
+                 "id":7,
+                 "name":"biker2",
+                 "rotation":0,
+                 "type":"enemyBiker",
+                 "visible":true,
+                 "width":21,
+                 "x":470,
+                 "y":120
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -169,7 +193,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":6,
+ "nextobjectid":8,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
