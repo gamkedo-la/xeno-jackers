@@ -3,7 +3,7 @@ function Player(startX, startY) {
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
-    const JUMP_SPEED = 130;
+    const MAX_Y_SPEED = 130;
     const MAX_JUMP_TIME = 170;
     const FRAME_WIDTH = 23;
     const FRAME_HEIGHT = 33;
@@ -58,6 +58,7 @@ function Player(startX, startY) {
         }
         position.x += Math.round(velocity.x * deltaTime / 1000);
         velocity.y += Math.round(GRAVITY * deltaTime / 1000);
+        if(velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
         position.y += Math.round(velocity.y * deltaTime / 1000); 
 
         processInput(deltaTime);
@@ -153,9 +154,9 @@ function Player(startX, startY) {
     const jump = function(deltaTime) {
         if(isOnGround) {
             isOnGround = false;
-            velocity.y = -JUMP_SPEED / 10;
+            velocity.y = -MAX_Y_SPEED / 10;
         } else {
-            velocity.y -= JUMP_SPEED / 10;
+            velocity.y -= MAX_Y_SPEED / 10;
             heldJumpTime += deltaTime;
         }
     };
