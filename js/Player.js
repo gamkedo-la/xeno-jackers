@@ -4,6 +4,7 @@ function Player(startX, startY) {
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
     const JUMP_SPEED = 130;
+    const MAX_JUMP_TIME = 170;
     const FRAME_WIDTH = 23;
     let currentAnimation;
     let position = {x:startX, y:startY};
@@ -16,6 +17,7 @@ function Player(startX, startY) {
     let isOnGround = true;
     let isFalling = false;
     let isLanding = false;
+    let heldJumpTime = 0;
     let hasChainWeapon = false;
     let hasWheelWeapon = false;
     let hasHandleBarWeapon = false;
@@ -52,7 +54,7 @@ function Player(startX, startY) {
         velocity.y += Math.round(GRAVITY * deltaTime / 1000);
         position.y += Math.round(velocity.y * deltaTime / 1000); 
 
-        processInput();
+        processInput(deltaTime);
 
         if(!isOnGround) {
             if(velocity.y < 0) {
@@ -64,7 +66,6 @@ function Player(startX, startY) {
                 currentAnimation.reset();
             }
         } else if(isLanding) {
-            console.log(`isFinished Landing: ${currentAnimation.getIsFinished()}`);
             if(currentAnimation.getIsFinished()) {
                 isLanding = false;
                 currentAnimation = animations.idle;
@@ -84,7 +85,7 @@ function Player(startX, startY) {
         levelHeight = newHeight;
     };
 
-    const processInput = function() {
+    const processInput = function(deltaTime) {
         if(heldButtons.length === 0) {
             if(!isLanding) {
                 idle();
@@ -104,14 +105,11 @@ function Player(startX, startY) {
                     moveRight();
                     break;
                 case ALIAS.JUMP:
-                    jump();
+                    if(heldJumpTime < MAX_JUMP_TIME) jump(deltaTime);
                     break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
                     block();
-                    break;
-                case ALIAS.ATTACK:
-                    attack();
                     break;
                 case ALIAS.CROUCH:
                     crouch();
@@ -146,10 +144,13 @@ function Player(startX, startY) {
         }
     };
 
-    const jump = function() {
+    const jump = function(deltaTime) {
         if(isOnGround) {
             isOnGround = false;
-            velocity.y = -JUMP_SPEED;
+            velocity.y = -JUMP_SPEED / 10;
+        } else {
+            velocity.y -= JUMP_SPEED / 10;
+            heldJumpTime += deltaTime;
         }
     };
 
@@ -215,6 +216,7 @@ function Player(startX, startY) {
                 if(isFalling) {
                     isFalling = false;
                     isLanding = true;
+                    heldJumpTime = 0;
                     currentAnimation = animations.landing;
                     currentAnimation.reset();
                 }

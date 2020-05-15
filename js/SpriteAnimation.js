@@ -90,9 +90,6 @@ function SpriteAnimation(name, //string identifier for this animation
                 isInReverse = false;
             } 
         } else {
-            if(name === "land") {
-                console.log("Just stopping");
-            }
             newFrameIndex = currentFrame + 1;
             if(newFrameIndex >= frames.length) {
                 if(reverses) {
