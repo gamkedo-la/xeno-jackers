@@ -216,8 +216,8 @@ function Player(startX, startY) {
         anims.idle.scale = SCALE;
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3, 4], FRAME_WIDTH, 33, [164], false, true);
         anims.walking.scale = SCALE;
-        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [5], FRAME_WIDTH, 33, [164], false, true);
-        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [6], FRAME_WIDTH, 33, [164], false, true);
+        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [6], FRAME_WIDTH, 33, [164], false, true);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [7], FRAME_WIDTH, 33, [164], false, true);
 //        anims.attacking = ...
 //        anims.blocking = ...
 //        anims.crouching = ...
