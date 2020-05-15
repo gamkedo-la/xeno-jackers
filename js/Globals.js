@@ -3,7 +3,7 @@
 let canvas;
 let canvasContext;
 
-let DEBUG = false;
+let DEBUG = true;
 let CHEATS_ACTIVE = false;
 let DRAW_COLLIDERS = false;
 

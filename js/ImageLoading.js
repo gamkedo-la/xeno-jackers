@@ -1,6 +1,8 @@
 //Image Loading
 let shouldShowTitleImage = false;
 let finishedLoading = false;
+let splashScreenTime = 3000;
+let blankScreenTime = 750;
 
 function showTitleImage() {
     if(shouldShowTitleImage) {
@@ -30,31 +32,21 @@ function loadGamkedoLogo() {
 let htgdLogoScale = 1.0;
 
 function animatedHTGDLogo() {
-
-    //Legacy
-    //const nowTime = Date.now();
-    //if(nowTime - startTime < 2500) {  //how many milliseconds to show HTGD Logo at start
-    //canvasContext.drawImage(gamkedoLogoPic, 0, 0, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width/2 - (htgdLogoScale * gamkedoLogoPic.width)/2, canvas.height/2 - (htgdLogoScale * gamkedoLogoPic.height)/2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
-    //htgdLogoScale += 0.003125;//not animating it anymore.
-    //requestAnimationFrame(animatedHTGDLogo);
-    //} else {
-    //showTitleImage();
-    //}
-    //}
-
     function drawFirstBlank() {
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
-        setTimeout(drawHTGDLogo, 750); //blank screen for 0.5 seconds, then draw Logo
+        if(DEBUG) blankScreenTime = 100;
+        setTimeout(drawHTGDLogo, blankScreenTime); //blank screen for 0.75 seconds, then draw Logo
     }
+
     function drawHTGDLogo() {
         canvasContext.drawImage(gamkedoLogoPic, 0, 0, gamkedoLogoPic.width, gamkedoLogoPic.height, canvas.width / 2 - (htgdLogoScale * gamkedoLogoPic.width) / 2, canvas.height / 2 - (htgdLogoScale * gamkedoLogoPic.height) / 2, (htgdLogoScale * gamkedoLogoPic.width), (htgdLogoScale * gamkedoLogoPic.height));
-        setTimeout(drawSecondBlank, 3000); //HTGD Logo for 2.5 seconds, then draw blank
-        //htgdLogoScale += 0.003125;//not animating it anymore.
-        //requestAnimationFrame(animatedHTGDLogo);
+        if(DEBUG) splashScreenTime = 100;
+        setTimeout(drawSecondBlank, splashScreenTime); //HTGD Logo for 3.0 seconds, then draw blank
     }
+    
     function drawSecondBlank() {
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
-        setTimeout(showTitleImage, 750); //blank screen for 0.5 seconds, then go to Title
+        setTimeout(showTitleImage, blankScreenTime); //blank screen for 0.75 seconds, then go to Title
     }
 
     drawFirstBlank();
