@@ -74,7 +74,7 @@ const TILE_WIDTH = 8;
 const TILE_HEIGHT = 8;
 
 let firstLoad = localStorage.getItem(localStorageKey.FirstLoad);
-let currentLevelName = "level_1b_bar";// MAP_NAME.TestMap;
+let currentLevelName =  MAP_NAME.TestMap;
 let timer;
 
 //------------Asset Management----------//

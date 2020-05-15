@@ -399,7 +399,6 @@ function CollisionManager(player) {
             }
 			
 			const collisionResults = checkCollisionBetween(entity1.collisionBody, entity2.collisionBody);
-//            if(checkCollisionBetween(entity1.collisionBody, entity2.collisionBody)) {
 			if(collisionResults.magnitude > 0) {
 				if(collisionResults.isBody1Normal) {
 					entity2.didCollideWith(entity1, collisionResults);	
@@ -429,7 +428,6 @@ function CollisionManager(player) {
 	const checkCollisionBetween = function(body1, body2) {
 		if(body1.type === ColliderType.Polygon) {
 			if(body2.type === ColliderType.Polygon) {
-//				return polygonVPolygon(body1, body2);
 				return getMagnitudeAndDirectionOfOverlap(body1, body2);
 			} else if(body2.type === ColliderType.Circle) {
 				return polygonVCircle(body1, body2);
@@ -438,76 +436,6 @@ function CollisionManager(player) {
 			if(body2.type === ColliderType.Polygon) {
 				return polygonVCircle(body2, body1);//reverse the order so polygon passed as first parameter
 			}
-		}
-	};
-
-	const polygonVPolygon = function(body1, body2) {
-		const body2Points = body2.points;
-		for(let i = 0; i < body2Points.length; i++) {
-			if(pointInPolygon(body2Points[i], body1.points)) {
-				//at least 1 point of polygon2 is inside polygon1 => collision occurred
-
-				return true;
-			}
-		}
-
-		const body1Points = body1.points;
-		for(let i = 0; i < body1Points.length; i++) {
-			if(pointInPolygon(body1Points[i], body2.points)) {
-				//at least 1 point of polygon2 is inside polygon1 => collision occurred
-
-				return true;
-			}
-		}
-
-		return false;
-	};
-
-	const pointInPolygon = function(target, polygon) {
-		let temp1;
-		let temp2;
-
-		// How many times the ray crosses a line-segment
-		let crossings = 0;
-
-		// Iterate through each line
-		for (let i = 0; i < polygon.length; i++) {
-			if(polygon[i].x < polygon[(i + 1) % polygon.length].x) {
-				temp1 = polygon[i].x;
-				temp2 = polygon[(i + 1) % polygon.length].x;
-			} else {
-				temp1 = polygon[(i + 1) % polygon.length].x;
-				temp2 = polygon[i].x;
-			}
-
-			//First check if the ray is possible to cross the line
-			if (target.x > temp1 && target.x <= temp2 && (target.y < polygon[i].y || target.y <= polygon[(i + 1) % polygon.length].y)) {
-				let eps = 0.000001;
-
-				//Calculate the equation of the line
-				let dx = polygon[(i + 1) % polygon.length].x - polygon[i].x;
-				let dy = polygon[(i + 1) % polygon.length].y - polygon[i].y;
-				let k;
-
-				if (Math.abs(dx) < eps) {
-					k = Number.MAX_VALUE;
-				} else {
-					k = dy / dx;
-				}
-
-				let m = polygon[i].y - k * polygon[i].x;
-				//Find if the ray crosses the line
-				let y2 = k * target.x + m;
-				if (target.y <= y2) {
-					crossings++;
-				}
-			}
-		}
-
-		if (crossings % 2 === 1) {
-			return true;
-		} else {
-			return false;
 		}
 	};
 
@@ -539,37 +467,25 @@ function CollisionManager(player) {
 
 				//if the magnitude of the rejection vector is less than the circle radius, there is a collision
 				if(magnitudeRejection <= circle.radius) {
-					return true;
+//					return true;
+					return {magnitude:circle.radius - magnitudeRejection,
+							x: polygon.normals[i].x,
+							y: polygon.normals[i].y,
+							isBody1Normal:true
+						};
 				}
 			}
 		}
-
-		return false;
-	};
-
-	const getMagnitudeAndDirectionOfOverlap = function(body1, body2) {
-		const result = {magnitude:0, x:0, y:0};
-		if(body1.type === ColliderType.Circle) {
-			if(body2.type === ColliderType.Circle) {
-				//circle vs circle
-				return separatingCircles(body1, body2);
-			} else {
-				//circle vs polygon
-				return separatingPolygonCircle(body2, body1);
-			}
-		} else {
-			if(body2.type === ColliderType.Circle) {
-				//polygon vs circle
-				return separatingPolygonCircle(body1, body2);
-			} else {
-				//polygon vs polygon
-				return separatingPolygons(body1, body2);
-			}
-		}
+//		  return false;
+		return {magnitude:0,
+				x: 0,
+				y: 0,
+				isBody1Normal:false
+		};
 	};
 
 	const checkedNormals = new Set();
-	const separatingPolygons = function(body1, body2) {
+	const getMagnitudeAndDirectionOfOverlap = function(body1, body2) {
 		checkedNormals.clear();
 		let result = {magnitude:0, x:0, y:0, isBody1Normal:false};
 		for(let normal of body1.normals) {
