@@ -25,7 +25,11 @@ function loadingDoneSoStartGame() {
 	if(finishedLoading) {
 		timer = new Chronogram();
 		fontRenderer = new FontBuilder();
-		SceneState.setState(SCENE.TITLE);
+		if(DEBUG) {
+			SceneState.setState(SCENE.GAME);
+		} else {
+			SceneState.setState(SCENE.TITLE);
+		}
 		requestAnimationFrame(update);
 	} else {
 		finishedLoading = true;
