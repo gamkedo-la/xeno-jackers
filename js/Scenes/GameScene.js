@@ -59,6 +59,8 @@ function GameScene() {
         if(mapRenderer === null) {
             mapRenderer = new MapRenderer(canvas, canvasContext, tileSheet);
         }
+
+        player.setPosition(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height);
     };
 
     this.transitionOut = function() {

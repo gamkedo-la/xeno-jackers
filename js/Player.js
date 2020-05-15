@@ -42,6 +42,14 @@ function Player(startX, startY) {
         return {x:position.x, y:position.y};
     };
 
+    this.setPosition = function(x, y) {
+        position.x = x;
+        position.y = y;
+        //keep collisionBody in synch with sprite
+        updateCollisionBody(this.collisionBody);
+        this.collisionBody.calcOnscreen(canvas);
+    };
+
     this.getSize = function() {
         return SIZE;
     };

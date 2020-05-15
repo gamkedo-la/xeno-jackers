@@ -7,6 +7,7 @@ function Map(layers) {
     this.collisionTiles = {};
     this.entities = [];
     this.foregroundTiles = {};
+    this.playerSpawn = null;
 
     for(let layer of layers) {
         if(layer.name === MAP_LAYER_NAME.Skybox) {
@@ -30,7 +31,15 @@ function Map(layers) {
                 this.colliders.push(new EnvironmentCollider(collider.polygon, {x:collider.x, y:collider.y}, collider.direction));
             }
         } else if(layer.name === MAP_LAYER_NAME.Entities) {
-            this.entities = layer.objects;
+            for(let entity of layer.objects) {
+                if(entity.type === EntityType.Player) {
+                    this.playerSpawn = {x:null, y:null};
+                    this.playerSpawn.x = Math.round(entity.x);
+                    this.playerSpawn.y = Math.round(entity.y);
+                } else {
+                    this.entities.push({x: entity.x, y:entity.y, type:entity.type});
+                }
+            }
         } else if(layer.name === MAP_LAYER_NAME.ForegroundTiles) {
             this.foregroundTiles.tiles = layer.data;
             this.foregroundTiles.widthInTiles = layer.width;
