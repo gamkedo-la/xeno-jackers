@@ -78,8 +78,8 @@ function loadStartImagePic() {
 //-----Load the rest of the game images----//
 //tiles
 const tileSheet = document.createElement("img");
-const tileSheetRock = document.createElement("img");
-const tileSheetWorkshop = document.createElement("img");
+//const tileSheetRock = document.createElement("img");
+//const tileSheetWorkshop = document.createElement("img");
 const tempGameSceneBG = document.createElement("img");
 
 //characters
@@ -101,6 +101,7 @@ const fontSheet2 = document.createElement("img");
 const fontSheet3 = document.createElement("img");
 const fontSheet4 = document.createElement("img");
 const fontSheetStroke = document.createElement("img");
+const fontSheetScore = document.createElement("img");
 const offMenuButton = document.createElement("img");
 const onMenuButton = document.createElement("img");
 const statusbarBase = document.createElement("img");
@@ -124,8 +125,8 @@ function loadImages() {
     const imageList = [
         // tiles
         { imgName: tileSheet, theFile: "backgrounds/spritesheet_master.png" },
-        { imgName: tileSheetRock, theFile: "backgrounds/spritesheet_grassyrock.png" },
-        { imgName: tileSheetWorkshop, theFile: "backgrounds/spritesheet_workshop.png" },
+//        { imgName: tileSheetRock, theFile: "backgrounds/spritesheet_grassyrock.png" },
+//        { imgName: tileSheetWorkshop, theFile: "backgrounds/spritesheet_workshop.png" },
         { imgName: tempGameSceneBG, theFile: "backgrounds/background_test.png" },
 
         // characters
@@ -151,6 +152,7 @@ function loadImages() {
         { imgName: fontSheet3, theFile: "interface/xjfont3.png" },
         { imgName: fontSheet4, theFile: "interface/xjfont4.png" },
         { imgName: fontSheetStroke, theFile: "interface/xjfont_stroke.png" },
+        { imgName: fontSheetScore, theFile: "interface/xjfont_score.png" },
         { imgName: offMenuButton, theFile: "interface/menu_button_off.png" },
         { imgName: onMenuButton, theFile: "interface/menu_button_on.png" },
         { imgName: statusbarBase, theFile: "interface/statusbar_base.png" },

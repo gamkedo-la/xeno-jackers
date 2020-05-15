@@ -29,7 +29,7 @@ const SceneState = {
 		this.scenes[this.currentScene].run(deltaTime);
 
 		if (isMuted) {
-			fontRenderer.drawString(canvasContext, 760, 10, "MUTED", 2);
+			fontRenderer.drawString(canvasContext, 760, 10, "MUTED", FONT.White, 2);
 		}
 	},
 	control: function(newKeyEvent, pressed, pressedKeys) {

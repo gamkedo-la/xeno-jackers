@@ -124,6 +124,6 @@ function HelpScene() {
     }
     
     const drawTitle = function() {
-        fontRenderer.drawString(canvasContext, canvas.width / 2, canvas.height / 3, "HELP", 2 * GAME_SCALE);
+        fontRenderer.drawString(canvasContext, canvas.width / 2, canvas.height / 3, "HELP", FONT.White, 2 * GAME_SCALE);
     }
 }

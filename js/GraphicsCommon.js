@@ -24,7 +24,3 @@ function getFontWeight(font) {
   
   return weight;
 }
-
-function getTextWidth(txt, font) {
-  return fontRenderer.getWidthOfText (txt, GAME_SCALE);
-}

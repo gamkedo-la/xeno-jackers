@@ -15,7 +15,7 @@ function OptionsScene() {
         const mainMenuY = canvas.height - 45;
         
         if(buttons.length === 0) {
-            const playButtonX = canvas.width - fontRenderer.getWidthOfText("PLAY", GAME_SCALE) - 20;
+            const playButtonX = canvas.width - fontRenderer.getWidthOfText("PLAY", GAME_SCALE, FONT.White) - 20;
             buttons.push(buildBackButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
             buttons.push(buildPlayButton(playButtonX, mainMenuY, buttonHeight, buttonTitlePadding));
         }
@@ -120,7 +120,7 @@ function OptionsScene() {
     }
     
     const drawTitle = function() {
-        const titleWidth = fontRenderer.getWidthOfText("OPTIONS", 2 * GAME_SCALE);
-        fontRenderer.drawString(canvasContext, canvas.width / 2 - titleWidth / 2, canvas.height / 4, "OPTIONS", 2 * GAME_SCALE);
+        const titleWidth = fontRenderer.getWidthOfText("OPTIONS", 2 * GAME_SCALE, FONT.White);
+        fontRenderer.drawString(canvasContext, canvas.width / 2 - titleWidth / 2, canvas.height / 4, "OPTIONS", FONT.White, 2 * GAME_SCALE);
     }
 }

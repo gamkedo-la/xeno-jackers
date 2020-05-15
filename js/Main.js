@@ -2,9 +2,7 @@
 window.onload = function() {
     canvas = document.getElementById("gameCanvas");// document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
-//    document.body.appendChild(canvas);
-//    canvas.width = 160;
-//    canvas.height = 144;
+
 	drawRect(0, 0, canvas.width, canvas.height, Color.Black);
 	
     colorText("L..O..A..D..I..N..G..", canvas.width / 2, canvas.height / 2, Color.White, Fonts.MainTitle, TextAlignment.Center, opacity = 1);
@@ -26,7 +24,7 @@ window.onload = function() {
 function loadingDoneSoStartGame() {
 	if(finishedLoading) {
 		timer = new Chronogram();
-		fontRenderer = new FontBuilder(fontSheet, CHAR_WIDTH, CHAR_HEIGHT);
+		fontRenderer = new FontBuilder();
 		SceneState.setState(SCENE.TITLE);
 		requestAnimationFrame(update);
 	} else {

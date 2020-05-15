@@ -6,7 +6,7 @@ function UIButton(title, x, y, height, padding = 2, onClick) {
     this.onClick = onClick;
 
     const setBounds = function(title, x, y, height, padding) {
-        bounds.width = getTextWidth(title, Fonts.ButtonTitle) + padding * 2;
+        bounds.width = fontRenderer.getWidthOfText(title, GAME_SCALE, FONT.White) + padding * 2;
         bounds.height = height;
         
         bounds.x = x;// - (bounds.width/2);
@@ -49,7 +49,7 @@ function UIButton(title, x, y, height, padding = 2, onClick) {
         const posX = bounds.x + padding;
         const posY = bounds.y + padding + fontOverhangAdjustment;
         
-        fontRenderer.drawString(canvasContext, x, y, title, GAME_SCALE);
+        fontRenderer.drawString(canvasContext, x, y, title, FONT.White, GAME_SCALE);
         
         if(DEBUG) { // draw bounds for buttons in semi-transparent colors
             const BGColor = Color.Aqua;

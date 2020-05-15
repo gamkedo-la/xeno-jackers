@@ -124,6 +124,6 @@ function CreditsScene() {
     }
     
     const drawTitle = function() {
-        fontRenderer.drawString(canvasContext, canvas.width / 2, canvas.height / 3, "CREDITS", 2 * GAME_SCALE);
+        fontRenderer.drawString(canvasContext, canvas.width / 2, canvas.height / 3, "CREDITS", FONT.White, 2 * GAME_SCALE);
     }
 }
