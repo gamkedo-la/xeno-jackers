@@ -128,7 +128,7 @@ function GameScene() {
         collisionManager.doCollisionChecks();
 
         for(let enemyToRemove of enemiesToRemove) {
-            collisionManager.removeEntity(enemiesToRemove);
+            collisionManager.removeEntity(enemyToRemove);
             enemies.splice(enemies.indexOf(enemyToRemove), 1);
         }
         enemiesToRemove.length = 0;
