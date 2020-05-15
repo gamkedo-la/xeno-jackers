@@ -8,19 +8,32 @@ function GameUI(canvas, context) {
         playerHealth = player.health;
     };
 
-    this.draw = function(deltaTime) {
+    this.draw = function(deltaTime, score, lives) {
         context.drawImage(statusbarBase, //image
             0, 0, //x, y to start clipping from image
             statusbarBase.width, statusbarBase.height, //width, height to clip from image
             0, TOP, //x, y for where to draw
-            statusbarBase.width * GAME_SCALE, statusbarBase.height * GAME_SCALE); //width, height for drawing
+            statusbarBase.width * GAME_SCALE, statusbarBase.height * GAME_SCALE //width, height for drawing
+        ); 
 
-            for(let i = 0; i < playerHealth; i++) {
-                context.drawImage(healthSegment, 
-                    0, 0, 
-                    healthSegment.width, healthSegment.height, 
-                    HEALTH_X + i * (healthSegment.width + 1) * GAME_SCALE, TOP + 2,
-                    healthSegment.width * GAME_SCALE, healthSegment.height * GAME_SCALE);
-            }
+        for(let i = 0; i < playerHealth; i++) {
+            context.drawImage(healthSegment, 
+                0, 0, 
+                healthSegment.width, healthSegment.height, 
+                HEALTH_X + i * (healthSegment.width + 1) * GAME_SCALE, TOP + 2,
+                healthSegment.width * GAME_SCALE, healthSegment.height * GAME_SCALE);
+        }
+
+        let scoreString = `${score}`;
+        while(scoreString.length < 7) {
+            scoreString = "0" + scoreString;
+        }
+
+        let livesString = `${lives}`;
+        while(livesString.length < 2) {
+            livesString = "0" + livesString;
+        }
+        fontRenderer.drawString(context, 0, TOP + 3, scoreString, FONT.LargeScore, GAME_SCALE);
+        fontRenderer.drawString(context, 123, TOP + 3, livesString, FONT.LargeScore, GAME_SCALE);
     };
 }

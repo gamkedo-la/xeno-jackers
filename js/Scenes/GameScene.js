@@ -6,6 +6,8 @@ function GameScene() {
     let mapRenderer = null;
     let camera = null;
     let collisionManager = null;
+    let score = 0;
+    let remainingLives = 2;
 
     const enemies = [];
     const environmentColliders = [];
@@ -132,6 +134,6 @@ function GameScene() {
             env.draw();
         }
 
-        gameUI.draw(deltaTime);
+        gameUI.draw(deltaTime, score, remainingLives);
     };
 }
