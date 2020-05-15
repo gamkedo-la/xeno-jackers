@@ -71,7 +71,7 @@ function BikerEnemy(posX, posY) {
     };
 
     const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
+        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
             return;
         } else {
             console.log("Biker Enemy is trying to attack.");

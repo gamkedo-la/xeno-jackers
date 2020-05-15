@@ -10,7 +10,10 @@ function SpriteAnimation(name, //string identifier for this animation
 
     this.name = name;
     this.scale = 1;
-    this.isFinished = false; //only becomes true if reverses is false and loops is false (i.e. does neither)
+    let isFinished = false; //only becomes true if reverses is false and loops is false (i.e. does neither)
+    this.getIsFinished = function() {
+        return isFinished;
+    };
 
     let times;
     let isInReverse = false;
@@ -18,6 +21,13 @@ function SpriteAnimation(name, //string identifier for this animation
     const framesPerRow = Math.round(image.width / frameWidth);
     
     let remainderTime = 0;
+
+    this.reset = function() {
+        isFinished = false;
+        isInReverse = false;
+        currentFrameIndex = 0;
+        remainderTime = 0;
+    };
     
     this.update = function(deltaTime) {
         if(times == null) {return;}
@@ -80,6 +90,9 @@ function SpriteAnimation(name, //string identifier for this animation
                 isInReverse = false;
             } 
         } else {
+            if(name === "land") {
+                console.log("Just stopping");
+            }
             newFrameIndex = currentFrame + 1;
             if(newFrameIndex >= frames.length) {
                 if(reverses) {
@@ -89,7 +102,7 @@ function SpriteAnimation(name, //string identifier for this animation
                     newFrameIndex = 0;
                 } else {
                     newFrameIndex = currentFrame;
-                    this.isFinished = true;
+                    isFinished = true;
                 }
             }
         }

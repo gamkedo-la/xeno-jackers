@@ -14,6 +14,8 @@ function Player(startX, startY) {
 
     let wasKnockedBack = false;
     let isOnGround = true;
+    let isFalling = false;
+    let isLanding = false;
     let hasChainWeapon = false;
     let hasWheelWeapon = false;
     let hasHandleBarWeapon = false;
@@ -55,8 +57,17 @@ function Player(startX, startY) {
         if(!isOnGround) {
             if(velocity.y < 0) {
                 currentAnimation = animations.jumping;
+                currentAnimation.reset();
             } else {
+                isFalling = true;
                 currentAnimation = animations.falling;
+                currentAnimation.reset();
+            }
+        } else if(isLanding) {
+            console.log(`isFinished Landing: ${currentAnimation.getIsFinished()}`);
+            if(currentAnimation.getIsFinished()) {
+                isLanding = false;
+                currentAnimation = animations.idle;
             }
         }
         
@@ -75,7 +86,10 @@ function Player(startX, startY) {
 
     const processInput = function() {
         if(heldButtons.length === 0) {
-            idle();
+            if(!isLanding) {
+                idle();
+            }
+
             if((!wasKnockedBack) && (isOnGround)) {
                 velocity.x = 0;
             }
@@ -132,10 +146,6 @@ function Player(startX, startY) {
         }
     };
 
-    const fall = function() {
-        
-    };
-
     const jump = function() {
         if(isOnGround) {
             isOnGround = false;
@@ -152,7 +162,7 @@ function Player(startX, startY) {
     };
 
     const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
+        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
             return;
         } else {
             console.log("Trying to attack");
@@ -198,7 +208,17 @@ function Player(startX, startY) {
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);
             if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
             updateCollisionBody(this.collisionBody);
-            if(collisionData.y < -0.1) isOnGround = true;
+            
+            if(collisionData.y < -0.1) {
+                isOnGround = true;
+
+                if(isFalling) {
+                    isFalling = false;
+                    isLanding = true;
+                    currentAnimation = animations.landing;
+                    currentAnimation.reset();
+                }
+            } 
         }
     };
 
@@ -216,8 +236,9 @@ function Player(startX, startY) {
         anims.idle.scale = SCALE;
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [1, 2, 3, 4], FRAME_WIDTH, 33, [164], false, true);
         anims.walking.scale = SCALE;
-        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [6], FRAME_WIDTH, 33, [164], false, true);
-        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [7], FRAME_WIDTH, 33, [164], false, true);
+        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [6], FRAME_WIDTH, 33, [164], false, false);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [7], FRAME_WIDTH, 33, [164], false, false);
+        anims.landing = new SpriteAnimation('land', playerSpriteSheet, [8], FRAME_WIDTH, 33, [164], false, false);
 //        anims.attacking = ...
 //        anims.blocking = ...
 //        anims.crouching = ...

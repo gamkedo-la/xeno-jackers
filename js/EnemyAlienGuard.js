@@ -70,7 +70,7 @@ function EnemyAlienGuard(posX, posY) {
     };
 
     const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.isFinished)) {
+        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
             return;
         } else {
             console.log("Enemy Alien Guard is trying to attack.");
