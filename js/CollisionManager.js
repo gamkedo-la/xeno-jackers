@@ -225,7 +225,7 @@ function CollisionManager(player) {
 	let enemies = new Set();
 	let enemyWeapons = new Set();
 	let environment = new Set();
-    let playerWeapons = new Set();
+    let playerTools = new Set();
     let playerList = [player];
 
     this.player = player;
@@ -250,7 +250,7 @@ function CollisionManager(player) {
 			return addEnemyWeapon(newEntity);
 		} else if(isEnvironment(newEntity)) {
 			return addEnvironment(newEntity);
-		} else if(isPlayerWeapon(newEntity)) {
+		} else if(isPlayerTool(newEntity)) {
 			return  addPlayerWeapon(newEntity);
         }
     };
@@ -276,11 +276,11 @@ function CollisionManager(player) {
 		return (!(beforeLength === environment.size));
     };
     
-    const addPlayerWeapon = function(newWeapon) {
-        const beforeLength = playerWeapons.size;
-		playerWeapons.add(newWeapon);
+    const addPlayerTool = function(newTool) {
+        const beforeLength = playerTools.size;
+		playerTools.add(newWeapon);
 
-		return (!(beforeLength === playerWeapons.size));
+		return (!(beforeLength === playerTools.size));
     };
 	
 	this.removeEntity = function(entityToRemove) {
@@ -290,7 +290,7 @@ function CollisionManager(player) {
 			removeEnemyWeapon(entityToRemove);
 		} else if(isEnvironment(entityToRemove)) {
 			removeEnvironment(entityToRemove);
-        } else if(isPlayerWeapon(entityToRemove)) {
+        } else if(isPlayerTool(entityToRemove)) {
             removePlayerWeapon(entityToRemove);
         }
         
@@ -332,8 +332,8 @@ function CollisionManager(player) {
     };
     
     const removePlayerWeapon = function(weaponToRemove) {
-        if(playerWeapons.has(weaponToRemove)) {
-			playerWeapons.delete(weaponToRemove);
+        if(playerTools.has(weaponToRemove)) {
+			playerTools.delete(weaponToRemove);
 
 			return true;
 		}
@@ -345,7 +345,7 @@ function CollisionManager(player) {
 		enemies.clear();
 		enemyWeapons.clear();
         environment.clear();
-//        playerWeapons.clear();//do we want this?
+//        playerTools.clear();//do we want this?
 	};
     
 	this.doCollisionChecks = function() {
@@ -359,13 +359,13 @@ function CollisionManager(player) {
         checkCollsionsForLists(playerList, environment);
 
         //Player Weapons vs Enemies
-        checkCollsionsForLists(playerWeapons, enemies);
+        checkCollsionsForLists(playerTools, enemies);
 
         //Player Weapons vs Enemy Weapons
-        checkCollsionsForLists(playerWeapons, enemyWeapons);
+        checkCollsionsForLists(playerTools, enemyWeapons);
 
         //Player Weapons vs Environment
-        checkCollsionsForLists(playerWeapons, environment);
+        checkCollsionsForLists(playerTools, environment);
 
         //Enemy Weapons vs Environment
         checkCollsionsForLists(enemyWeapons, environment);

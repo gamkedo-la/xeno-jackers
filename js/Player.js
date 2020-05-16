@@ -1,5 +1,5 @@
 //Player
-function Player(startX, startY) {
+function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
@@ -20,9 +20,6 @@ function Player(startX, startY) {
     let isFalling = false;
     let isLanding = false;
     let heldJumpTime = 0;
-    let hasChainWeapon = false;
-    let hasWheelWeapon = false;
-    let hasHandleBarWeapon = false;
     let flipped = false;
 
     let levelWidth = 0;
@@ -48,6 +45,34 @@ function Player(startX, startY) {
         //keep collisionBody in synch with sprite
         updateCollisionBody(this.collisionBody);
         this.collisionBody.calcOnscreen(canvas);
+    };
+
+    this.gotNewTool = function(newTool) {
+        switch(newTool) {
+            case PICKUP.Chain:
+                hasChainWeapon = true;
+            case PICKUP.Wheel:
+                hasWheelWeapon = treu;
+            case PICKUP.Handlebar:
+                hasHandlebar = true;
+            case PICKUP.Engine:
+                hasEngine = true;
+        }
+    }
+
+    this.reset = function() {
+        velocity.x = 0;
+        velocity.y = 0;
+        
+        isBlocking = false;
+        isCrouching = false;
+
+        wasKnockedBack = false;
+        isOnGround = true;
+        isFalling = false;
+        isLanding = false;
+        heldJumpTime = 0;
+        flipped = false;
     };
 
     this.getSize = function() {
@@ -170,7 +195,7 @@ function Player(startX, startY) {
     };
 
     const block = function() {
-        if(isOnGround && hasWheelWeapon && !isBlocking) {
+        if(isOnGround && !isBlocking) {
             console.log("I'm blocking now");
             isBlocking = true;
 //            currentAnimation = animations.blocking;
@@ -204,6 +229,12 @@ function Player(startX, startY) {
     this.didCollideWith = function(otherEntity, collisionData) {
         if(isEnemy(otherEntity)) {
             this.health--;
+
+            if(this.health <= 0) {
+                SceneState.scenes[SCENE.GAME].removeMe(this);
+                return;
+            } 
+
             wasKnockedBack = true;
 
             if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
@@ -213,6 +244,7 @@ function Player(startX, startY) {
             }
 
             velocity.y = -85;
+
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
             if(velocity.y > 0) {
@@ -236,6 +268,28 @@ function Player(startX, startY) {
                     currentAnimation.reset();
                 }
             } 
+        } else if(isPickup(otherEntity)) {
+            switch(otherEntity.type) {
+                case EntityType.Health:
+                    this.health++;
+                    break;
+                case EntityType.Chain:
+                    hasChain = true;
+                    SceneState.scenes[SCENE.GAME].gotChain();
+                    break;
+                case EntityType.Handlebar:
+                    hasHandleBar = true;
+                    SceneState.scenes[SCENE.GAME].gotHandlebar();
+                    break;
+                case EntityType.Wheel:
+                    hasWheel = true;
+                    SceneState.scenes[SCENE.GAME].gotWheel();
+                    break;
+                case EntityType.Engine:
+                    hasEngine = true;
+                    SceneState.scenes[SCENE.GAME].gotEngine();
+                    break;
+            }
         }
     };
 

@@ -6,17 +6,20 @@ const EntityType = {
     EnemyAlienGuard:"enemyAlienGuard",
     FinalBoss:"finalBoss",
 
-    //Weapons
+    //Tools
     Chain:"chain",
     Wheel:"wheel",
     Handlebar:"handlebar",
-    EnemyBullet:"enemyBullet",
-
-    //Powerups
     Engine:"engine",
+
+    //EnemyTools
+    EnemyBullet:"enemyBullet",
 
     //Pickups
     Health:"health",
+    ChainPickup:"chainPickup",
+    WheelPickup:"wheelPickup",
+    HandlebarPickup:"handlebarPickup",
 
     //Environment
     Ground:"ground",
@@ -37,11 +40,12 @@ function isEnemy(entity) {
     }
 }
 
-function isPlayerWeapon(entity) {
+function isPlayerTool(entity) {
     switch(entity.type) {
         case EntityType.Chain:
         case EntityType.Wheel:
         case EntityType.Handlebar:
+        case EntityType.Engine:
             return true;
         default:
             return false;
@@ -57,18 +61,12 @@ function isEnemyWeapon(entity) {
     }
 }
 
-function isPowerup(entity) {
-    switch(entity.type) {
-        case EntityType.Engine:
-            return true;
-        default:
-            return false;
-    }
-}
-
 function isPickup(entity) {
     switch(entity.type) {
         case EntityType.Health:
+        case EntityType.ChainPickup:
+        case EntityType.WheelPickup:
+        case EntityType.HandlebarPickup:
             return true;
         default:
             return false;

@@ -1,5 +1,6 @@
 //Game Play scene
 function GameScene() {
+    const TRANSITION_TIME = 300;
     let gameUI = null;
     let mapLoader = null;
     let currentMap = null;
@@ -8,10 +9,16 @@ function GameScene() {
     let collisionManager = null;
     let score = 0;
     let remainingLives = 2;
+    let reloading = false;
 
     const enemies = [];
     const enemiesToRemove = [];
     const environmentColliders = [];
+
+    let hasChain = false;
+    let hasWheel = false;
+    let hasHandlebar = false;
+    let hasEngine = false;
 
     this.transitionIn = function() {
         if(mapLoader === null) {
@@ -27,7 +34,7 @@ function GameScene() {
         let needToRepositionPlayer = false;
         if(player === null) {
             needToRepositionPlayer = true;
-            player = new Player(canvas.width / 2 + 8, canvas.height / 2 + 8);
+            player = new Player(canvas.width / 2 + 8, canvas.height / 2 + 8, hasChain, hasWheel, hasHandlebar, hasEngine);
         }
 
         player.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
@@ -58,8 +65,8 @@ function GameScene() {
             gameUI = new GameUI(canvas, canvasContext);
         }
 
-        if(enemies.length === 0) {
-//            const anEnemy = new BikerEnemy(3 * canvas.width / 8, canvas.height / 2 + 16);
+        if(loadedNewMap) {
+            enemies.length = 0;
             for(let entityData of currentMap.entities) {
                 if(entityData.type === EntityType.EnemyBiker) {
                     const anEnemy = new BikerEnemy(entityData.x, entityData.y - 33);
@@ -83,9 +90,10 @@ function GameScene() {
     };
 
     this.run = function(deltaTime) {
-        update(deltaTime);
-
-        draw(deltaTime);
+        if(update(deltaTime, this)) {
+            //Only draw the scene if this isn't a game over
+            draw(deltaTime);
+        }
     };
 
     this.control = function(newKeyEvent, pressed, pressedKeys) {
@@ -121,7 +129,61 @@ function GameScene() {
         score += pointsForType(entityToRemove.type);
     };
 
-    const update = function(deltaTime) {
+    this.gotChain = function() {
+        hasChain = true;
+    };
+
+    this.gotWheel = function() {
+        hasWheel = true;
+    };
+
+    this.gotHandlebar = function() {
+        hasHandlebar = true;
+    };
+
+    this.gotEngine = function() {
+        hasEngine = true;
+    };
+
+    const reset = function() {
+        mapLoader = null;
+        currentMap = null;
+        mapRenderer = null;
+        camera = null;
+        collisionManager = null;
+        player = null;
+        gameUI = null;
+
+        enemies.length = 0;
+        enemiesToRemove.length = 0;
+        environmentColliders.length = 0;
+        
+        reloading = false;
+    };
+
+    const reloadLevel = function(context) {
+        reloading = true;
+        drawRect(0, 0, canvas.width, canvas.height, '#252525');
+        setTimeout(() => {
+            reset();
+
+            context.transitionIn();
+        }, TRANSITION_TIME);
+    };
+
+    const transitionToGameOver = function() {
+        reloading = true;
+        drawRect(0, 0, canvas.width, canvas.height, '#252525');
+        setTimeout(() => {
+            reset();
+
+            SceneState.setState(SCENE.TITLE);//TODO: This should be game over
+        }, TRANSITION_TIME);
+    };
+
+    const update = function(deltaTime, context) {
+        if(reloading) return false;
+
         player.update(deltaTime);
         camera.update(player);
 
@@ -136,12 +198,24 @@ function GameScene() {
         collisionManager.doCollisionChecks();
 
         for(let enemyToRemove of enemiesToRemove) {
+            if(enemyToRemove === player) {
+                remainingLives--;
+                if(remainingLives < 0) {
+                    transitionToGameOver();
+                } else {
+                    player.setPosition(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height);
+                    reloadLevel(context);    
+                }
+                return false;
+            }
             collisionManager.removeEntity(enemyToRemove);
             enemies.splice(enemies.indexOf(enemyToRemove), 1);
         }
         enemiesToRemove.length = 0;
 
         gameUI.update(deltaTime, player);
+
+        return true;
     };
 
     const draw = function(deltaTime) {

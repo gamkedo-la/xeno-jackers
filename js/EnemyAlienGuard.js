@@ -8,9 +8,6 @@ function EnemyAlienGuard(posX, posY) {
     let isCrouching = false;
 
     let isOnGround = true;
-    let hasChainWeapon = false;
-    let hasWheelWeapon = false;
-    let hasHandleBarWeapon = false;
     let flipped = false;
 
     this.type = EntityType.EnemyAlienGuard;

@@ -38,6 +38,14 @@ const POINTS = {
 	BeatGame:5000
 };
 
+const PICKUP = {
+	Chain:"chain",
+	Wheel:"wheel",
+	Handlebar:"handlebar",
+	Engine:"engine",
+	Health:"health"
+};
+
 //---------------Persistence-----------//
 const localStorageKey = {
 	MusicVolume:"xeno_jackers_musicVolume",
