@@ -107,7 +107,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 currentAnimation.reset();
             }
         } else if(isLanding) {
-            if(currentAnimation.getIsFinished()) {
+            if((currentAnimation.getIsFinished()) || (currentAnimation != animations.landing)) {
                 isLanding = false;
                 currentAnimation = animations.idle;
             }
