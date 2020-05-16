@@ -18,9 +18,15 @@ function GameScene() {
             mapLoader = new MapLoader();
         }
 
-        currentMap = mapLoader.loadMap(currentLevelName);
+        let loadedNewMap = false;
+        if((currentMap === null) || (currentMap.name != currentLevelName)) {
+            loadedNewMap = true;
+            currentMap = mapLoader.loadMap(currentLevelName);
+        }
 
+        let needToRepositionPlayer = false;
         if(player === null) {
+            needToRepositionPlayer = true;
             player = new Player(canvas.width / 2 + 8, canvas.height / 2 + 8);
         }
 
@@ -31,9 +37,11 @@ function GameScene() {
             collisionManager = new CollisionManager(player);
         }
 
-        for(let collider of currentMap.colliders) {
-            environmentColliders.push(collider);
-            collisionManager.addEntity(collider);
+        if(loadedNewMap) {
+            for(let collider of currentMap.colliders) {
+                environmentColliders.push(collider);
+                collisionManager.addEntity(collider);
+            }
         }
 
         if(camera === null) {
@@ -59,15 +67,15 @@ function GameScene() {
                     collisionManager.addEntity(anEnemy);
                 }
             }
-            
-            
         }
 
         if(mapRenderer === null) {
             mapRenderer = new MapRenderer(canvas, canvasContext, tileSheet);
         }
 
-        player.setPosition(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height);
+        if(needToRepositionPlayer) {
+            player.setPosition(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height);
+        }
     };
 
     this.transitionOut = function() {

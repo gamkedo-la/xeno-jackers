@@ -1,5 +1,6 @@
 //Map Object
-function Map(layers) {
+function Map(layers, name) {
+    this.name = name;
     this.skybox = {};
     this.farBackgroundTiles = {};
     this.nearBackgroundTiles = {};
@@ -53,6 +54,11 @@ function MapLoader() {
     this.currentMap = null;
 
     this.loadMap = function(name) {
+        if((this.currentMap != null) && 
+        (this.currentMap.name === name)) {
+            return this.currentMap;
+        }
+
         switch(name) {
             case MAP_NAME.Bar:
                 this.currentMap = loadBar();
@@ -96,26 +102,26 @@ function MapLoader() {
     
     const loadBar = function() {
         const layers = TileMaps.bar.layers;
-        return new Map(layers);
+        return new Map(layers, MAP_NAME.Bar);
     };
     
     const loadHighway = function() {
         const layers = TileMaps.highway.layers;
-        return new Map(layers);
+        return new Map(layers, MAP_NAME.Highway);
     };
     
     const loadBoss = function() {
         const layers = TileMaps.boss.layers;
-        return new Map(layers);
+        return new Map(layers, MAP_NAME.Boss);
     };
 
     const loadTestBar = function() {
         const layers = TileMaps.level_1b_bar.layers;
-        return new Map(layers);
+        return new Map(layers, MAP_NAME.TestBar);
     }
     
     const loadTestMap = function() {
         const layers = TileMaps.testMap.layers;
-        return new Map(layers);
+        return new Map(layers, MAP_NAME.TestMap);
     };
 }
