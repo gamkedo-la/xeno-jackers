@@ -8,6 +8,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const FRAME_WIDTH = 23;
     const FRAME_HEIGHT = 33;
     const SIZE = {width:FRAME_WIDTH, height:FRAME_HEIGHT};
+
     let currentAnimation;
     let position = {x:startX, y:startY};
     let velocity = {x:0, y:0};
@@ -110,6 +111,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 isLanding = false;
                 currentAnimation = animations.idle;
             }
+        }
+
+        if(position.y > levelHeight) {
+            this.health = 0;
+            SceneState.scenes[SCENE.GAME].removeMe(this);
         }
         
         //keep collisionBody in synch with sprite
