@@ -169,31 +169,33 @@ function FontBuilder() {
             case '?':
                 return {x:84, y:18};
             case '!':
-                return {x:0, y:17};
+                return {x:0, y:27};
             case '@':
-                return {x:7, y:17};
+                return {x:7, y:27};
             case '#':
-                return {x:14, y:17};
+                return {x:14, y:27};
             case '$':
-                return {x:21, y:17};
+                return {x:21, y:27};
             case '%':
-                return {x:28, y:17};
+                return {x:28, y:27};
             case '^':
-                return {x:35, y:17};
+                return {x:35, y:27};
             case '&':
-                return {x:42, y:17};
+                return {x:42, y:27};
             case '*':
-                return {x:49, y:17};
+                return {x:49, y:27};
             case '(':
-                return {x:56, y:17};
+                return {x:56, y:27};
             case ')':
-                return {x:63, y:17};
+                return {x:63, y:27};
             case '-':
-                return {x:70, y:17};
+                return {x:70, y:27};
             case '+':
-                return {x:77, y:17};
+                return {x:77, y:27};
             case '=':
-                return {x:84, y:17};
+                return {x:84, y:27};
+            case ' ':
+                return {x:77, y:36};
         }
     };
 
@@ -329,6 +331,8 @@ function FontBuilder() {
                 return {x:99, y:33};
             case '=':
                 return {x:108, y:33};
+            case ' ':
+                return {x:0, y:55};
         }
     };
 

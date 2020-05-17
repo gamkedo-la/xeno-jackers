@@ -1,5 +1,5 @@
 //UIButton
-function UIButton(title, x, y, height, padding = 2, onClick) {
+function UIButton(title, x, y, height, padding = 2, onClick, BGColor = Color.Aqua) {
     const bounds = {};
     this.title = title;
     
@@ -45,15 +45,9 @@ function UIButton(title, x, y, height, padding = 2, onClick) {
     }
 
     this.draw = function() {
-        const fontOverhangAdjustment = (bounds.height - padding * 2) * fontOverhangRatio;
-        const posX = bounds.x + padding;
-        const posY = bounds.y + padding + fontOverhangAdjustment;
-        
         fontRenderer.drawString(canvasContext, x, y, title, FONT.White, GAME_SCALE);
         
-        if(DEBUG) { // draw bounds for buttons in semi-transparent colors
-            const BGColor = Color.Aqua;
-            
+        if(DEBUG) { // draw bounds for buttons in semi-transparent colors            
             const tempAlpha = canvasContext.globalAlpha;
             canvasContext.globalAlpha = 0.2;
             

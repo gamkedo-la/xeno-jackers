@@ -80,7 +80,6 @@ const enemyAlienGuardSheet = document.createElement("img");
 
 //screens
 const uiMenuBorderPic = document.createElement("img");
-const pauseScreenPic = document.createElement("img");
 
 //power ups
 
@@ -126,7 +125,6 @@ function loadImages() {
         { imgName: enemyAlienGuardSheet, theFile: "characters/enemy_alien_guard.png" },
 
         // screens
-        { imgName: pauseScreenPic, theFile: "screens/screen_pause.png" },
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
 
         // skyboxes

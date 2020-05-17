@@ -56,12 +56,8 @@ function TitleScene() {
                 }
                 return true;
             case ALIAS.SELECT1:
-                console.log("Activated the current button");
                 SceneState.setState(selections[selectorPositionsIndex]);
                 return true;
-            case ALIAS.SELECT2:
-                console.log("Selected the Play button");
-//                SceneState.setState(SCENE.GAME);
             case ALIAS.POINTER:
                 checkButtons();
                 return true;
@@ -76,7 +72,7 @@ function TitleScene() {
         }
 
         return new UIButton("START", x, y, height, padding, thisClick, Color.Red);
-    }
+    };
 
     const buildHelpButton = function(x, y, height, padding) {
         const thisClick = function() {
@@ -84,16 +80,15 @@ function TitleScene() {
         }
 
         return new UIButton("HELP", x, y, height, padding, thisClick, Color.Green);
-    }
+    };
 
     const buildOptionsButton = function(x, y, height, padding) {
         const thisClick = function() {
-            console.log("Clicked the Options Button");
             SceneState.setState(SCENE.OPTIONS);
         }
 
         return new UIButton("OPTIONS", x, y, height, padding, thisClick, Color.Aqua);
-    }
+    };
 
     const buildCreditsButton = function(x, y, height, padding) {
         const thisClick = function() {
@@ -101,7 +96,7 @@ function TitleScene() {
         }
 
         return new UIButton("CREDITS", x, y, height, padding, thisClick, Color.Purple);
-    }
+    };
 
     const checkButtons = function() {
         let wasClicked = false;
@@ -109,7 +104,7 @@ function TitleScene() {
             wasClicked = button.respondIfClicked(mouseX, mouseY);
             if(wasClicked) {break;}
         }
-    }
+    };
     
     const drawMenu = function() {
         for(let i = 0; i < buttons.length; i++) {
@@ -123,11 +118,11 @@ function TitleScene() {
                 canvasContext.drawImage(offMenuButton, 0, 0, offMenuButton.width, offMenuButton.height, buttonBounds.x - 5, buttonBounds.y + 2, GAME_SCALE * offMenuButton.width, GAME_SCALE * offMenuButton.height);
             }
         }
-	}
+	};
 	
 	const update = function(deltaTime) {
 
-	}
+	};
 	
 	const draw = function() {
 		// render the menu background
@@ -137,11 +132,11 @@ function TitleScene() {
         canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, mainMenuX - 8, mainMenuY - 2, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
 
         drawMenu();        
-	}
+	};
 	
 	const drawBG = function() {
         canvasContext.drawImage(titleScreenPic, 0, 0, canvas.width, canvas.height);
-    }
+    };
         
     return this;
 };

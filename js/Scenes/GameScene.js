@@ -246,7 +246,7 @@ function GameScene() {
     };
 
     const draw = function(deltaTime) {
-        drawRect(0, 0, canvas.width, canvas.height);
+        drawRect(0, 0, canvas.width, canvas.height, '#252525');
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
 
         mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles, canvas.center.x, canvas.center.y);
