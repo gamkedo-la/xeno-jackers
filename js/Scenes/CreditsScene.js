@@ -5,12 +5,15 @@ function CreditsScene() {
     const buttons = [];
     const SCROLL_SPEED = 20;
 
-    let isScrolling = true;
-    let movingUp = true;
     let timeMultiplier = 1;
     let textYPos = 0;
 
+    let gameCanvas;
     this.transitionIn = function() {
+        gameCanvas = document.getElementById("gameCanvas");
+        canvas.width = 640;
+        canvas.height = 576;
+
         textYPos = canvas.height / 2;
         let mainMenuX = Math.round(canvas.width - fontRenderer.getWidthOfText("MAIN MENU", 1, FONT.White) - 0);
         const mainMenuY = canvas.height - fontRenderer.getHeightOfText(1, FONT.White) + 0;
@@ -23,7 +26,8 @@ function CreditsScene() {
     };
 
     this.transitionOut = function() {
-
+        canvas.width = 160;
+        canvas.height = 144;
     };
 
     this.run = function(deltaTime) {
@@ -62,7 +66,7 @@ function CreditsScene() {
     const checkButtons = function() {
         let wasClicked = false;
         for(let i = 0; i < buttons.length; i++) {
-            wasClicked = buttons[i].respondIfClicked(mouseX, mouseY);
+            wasClicked = buttons[i].respondIfClicked(mouseX * (640/160), mouseY * (576/144));
             if(wasClicked) {break;}
         }
     };
@@ -106,9 +110,9 @@ function CreditsScene() {
     const drawCredits = function() {
         let drawOffset = 0;
         for(let person of credits) {
-            const nameWidth = fontRenderer.getWidthOfText(person.name, 1, FONT.White);
-            fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.White, 1);
-            drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.White));
+            const nameWidth = fontRenderer.getWidthOfText(person.name, 1, FONT.Stroked);
+            fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.Stroked, 1);
+            drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
 //            fontRenderer.drawString(canvasContext, 0, )
         }
     };
