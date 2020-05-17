@@ -123,6 +123,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         this.collisionBody.calcOnscreen(canvas);
     };
 
+    this.newKeyPressed = function(newKey) {
+        if(newKey === ALIAS.JUMP) {
+            if(isOnGround && !isLanding) {
+                if(heldJumpTime < MAX_JUMP_TIME) jump(0);
+            }
+        }
+    };
+
     this.setLevelWidth = function(newWidth) {
         levelWidth = newWidth;
     };
@@ -151,6 +159,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     moveRight();
                     break;
                 case ALIAS.JUMP:
+                    if(isOnGround) break;
                     if(heldJumpTime < MAX_JUMP_TIME) jump(deltaTime);
                     break;
                 case ALIAS.BLOCK:

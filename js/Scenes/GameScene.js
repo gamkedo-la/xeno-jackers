@@ -119,6 +119,10 @@ function GameScene() {
                 DEBUG = !DEBUG;
                 console.log("Debug? " + DEBUG);
                 return true;
+            default:
+                if(verifyNewKeyPressed(newKeyEvent, pressed, pressedKeys)) {
+                    player.newKeyPressed(newKeyEvent);
+                }
         }
         
         return false;
@@ -144,6 +148,18 @@ function GameScene() {
     this.gotEngine = function() {
         hasEngine = true;
     };
+
+    const verifyNewKeyPressed = function(newKeyEvent, pressed, pressedKeys) {
+        if(!pressed) return false;
+
+        for(let key of pressedKeys) {
+            if(key === newKeyEvent) {
+                return false
+            }
+        }
+
+        return true;
+    }
 
     const reset = function() {
         mapLoader = null;
