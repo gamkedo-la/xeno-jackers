@@ -190,6 +190,7 @@ function GameScene() {
                     break;
                 case EntityType.EnemyAlienGuard:
                     anEnemy = new EnemyAlienGuard(data.x, data.y - 33);
+                    break;
             }
 
             enemies.push(anEnemy);

@@ -30,10 +30,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.type = EntityType.Player;
 
     this.collisionBody = new Collider(ColliderType.Polygon, [
-        {x:startX + 2, y:startY + 3}, //top left +2/+3 to make collision box smaller than sprite
-        {x:startX + 21, y:startY + 3}, //top right +21/+3 makes collision box smaller than sprite
-        {x:startX + 21, y:startY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
-        {x:startX + 2, y:startY + 32} //bottom left +2/+32 makes collision box smaller than sprite
+        {x:startX + 4, y:startY + 4}, //top left +2/+3 to make collision box smaller than sprite
+        {x:startX + 17, y:startY + 4}, //top right +21/+3 makes collision box smaller than sprite
+        {x:startX + 17, y:startY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
+        {x:startX + 4, y:startY + 32} //bottom left +2/+32 makes collision box smaller than sprite
     ], {x:startX, y:startY});
 
     this.getPosition = function() {
@@ -266,6 +266,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 wasKnockedBack = false;
             }
 
+            if(dotProduct(velocity, {x:collisionData.x, y:collisionData.y}) > 0) {
+                return;
+            }
             position.x += Math.ceil(collisionData.magnitude * collisionData.x);
             if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);

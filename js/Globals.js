@@ -5,7 +5,7 @@ let canvasContext;
 
 let DEBUG = true;
 let CHEATS_ACTIVE = false;
-let DRAW_COLLIDERS = true;
+let DRAW_COLLIDERS = false;
 
 const GRAVITY = 220;
 
