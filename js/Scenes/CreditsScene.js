@@ -3,7 +3,7 @@ function CreditsScene() {
     const buttonHeight = 25;//TODO: Adjust this size based on custom font
     const buttonTitlePadding = 2;
     const buttons = [];
-    const SCROLL_SPEED = 100;
+    const SCROLL_SPEED = 20;
 
     let isScrolling = true;
     let movingUp = true;
@@ -11,7 +11,7 @@ function CreditsScene() {
     let textYPos = 0;
 
     this.transitionIn = function() {
-        textYPos = canvas.height;
+        textYPos = canvas.height / 2;
         let mainMenuX = Math.round(canvas.width - fontRenderer.getWidthOfText("MAIN MENU", 1, FONT.White) - 0);
         const mainMenuY = canvas.height - fontRenderer.getHeightOfText(1, FONT.White) + 0;
         
@@ -56,7 +56,7 @@ function CreditsScene() {
     };
 
     const update = function(deltaTime) {
-        textYPos += timeMultiplier * deltaTime * SCROLL_SPEED;
+        textYPos -= timeMultiplier * deltaTime * SCROLL_SPEED / 1000;
     };
 
     const checkButtons = function() {
@@ -106,9 +106,9 @@ function CreditsScene() {
     const drawCredits = function() {
         let drawOffset = 0;
         for(let person of credits) {
-            const nameWidth = fontRenderer.getWidthOfText(person.name, 1, FONT.Stroked);
-            fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.Stroked, 1);
-            drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
+            const nameWidth = fontRenderer.getWidthOfText(person.name, 1, FONT.White);
+            fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.White, 1);
+            drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.White));
 //            fontRenderer.drawString(canvasContext, 0, )
         }
     };
