@@ -1,41 +1,36 @@
 //Credits Scene
 function CreditsScene() {
-    const CREDITS_BG_COLOR = "#010139";
-
-    let selectorPositionsIndex = 0;
-    const selections = [
-        SCENE.TITLE,
-        SCENE.GAME
-    ];
     const buttonHeight = 25;//TODO: Adjust this size based on custom font
     const buttonTitlePadding = 2;
     const buttons = [];
+    const SCROLL_SPEED = 100;
 
+    let isScrolling = true;
+    let movingUp = true;
+    let timeMultiplier = 1;
+    let textYPos = 0;
 
     this.transitionIn = function() {
-        let mainMenuX = 0;
-        const mainMenuY = canvas.height - canvas.height / 20;
+        textYPos = canvas.height;
+        let mainMenuX = Math.round(canvas.width - fontRenderer.getWidthOfText("MAIN MENU", 1, FONT.White) - 0);
+        const mainMenuY = canvas.height - fontRenderer.getHeightOfText(1, FONT.White) + 0;
         
         if(buttons.length === 0) {
-            buttons.push(buildBackButton(canvas.width / 40, mainMenuY, buttonHeight, buttonTitlePadding));
-            buttons.push(buildPlayButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding));
-
-            mainMenuX = canvas.width - (buttons[1].getBounds().width + canvas.width / 40);
-            buttons[1].updateXPosition(mainMenuX);
+            buttons.push(buildMenuButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding, GAME_SCALE));
         } 
 
         selectorPositionsIndex = 0;
-    }
+    };
 
     this.transitionOut = function() {
 
-    }
+    };
 
     this.run = function(deltaTime) {
         update(deltaTime);
 
-        draw(deltaTime, buttons, selectorPositionsIndex);
-    }
+        draw();
+    };
 
     this.control = function(newKeyEvent, pressed, pressedKeys) {
         if (pressed) {//only act on key released events => prevent multiple changes on single press
@@ -44,37 +39,25 @@ function CreditsScene() {
         
         switch (newKeyEvent) {
             case ALIAS.UP:
-            case ALIAS.LEFT:
-                selectorPositionsIndex--;
-                if (selectorPositionsIndex < 0) {
-                    selectorPositionsIndex += selections.length;
-                }
+                timeMultiplier++;
                 return true;
             case ALIAS.DOWN:
-            case ALIAS.RIGHT:
-                selectorPositionsIndex++;
-                if (selectorPositionsIndex >= selections.length) {
-                    selectorPositionsIndex = 0;
-                }
+                timeMultiplier--;
                 return true;
-            case ALIAS.SELECT1:
-                console.log("Activated the current button");
-                SceneState.setState(selections[selectorPositionsIndex]);
-                return true;
-            case ALIAS.SELECT2:
-                console.log("Selected the Play button");
-                SceneState.setState(SCENE.GAME);
             case ALIAS.POINTER:
                 checkButtons();
+                return true;    
+            case KEY_SPACE:
+                timeMultiplier = 0;
                 return true;
         }
         
         return false;
-    }
+    };
 
     const update = function(deltaTime) {
-
-    }
+        textYPos += timeMultiplier * deltaTime * SCROLL_SPEED;
+    };
 
     const checkButtons = function() {
         let wasClicked = false;
@@ -82,48 +65,51 @@ function CreditsScene() {
             wasClicked = buttons[i].respondIfClicked(mouseX, mouseY);
             if(wasClicked) {break;}
         }
-    }
+    };
 
-    const buildPlayButton = function(x, y, height, padding) {
+    const buildMenuButton = function(x, y, height, padding, scale) {
         const thisClick = function() {
-            console.log("Clicked the Play Button");
-            SceneState.setState(SCENE.GAME);
-        }
-
-        return new UIButton("PLAY", x, y, height, padding, thisClick, Color.Aqua);
-    }
-
-    const buildBackButton = function(x, y, height, padding) {
-        const thisClick = function() {
-            console.log("Clicked the Back Button");
             SceneState.setState(SCENE.TITLE);
         }
 
-        return new UIButton("BACK", x, y, height, padding, thisClick, Color.Purple);
-    }
+        return new UIButton("MAIN MENU", x, y, height, padding, thisClick, Color.Aqua, scale);
+    };
 
-    const printNavigation = function(navItems) {
-        for(let i = 0; i < navItems.length; i++) {
-            navItems[i].draw();
+    const printNavigation = function() {
+        for(let button of buttons) {
+            button.draw();
         }
-	}
+	};
 
-    const draw = function(deltaTime, buttons, selectorPositionIndex) {
+    const draw = function() {
 		// render the menu background
         drawBG();
         
 		drawTitle();
 
         // render menu
-        printNavigation(buttons, selectorPositionIndex);        
-	}
+        printNavigation();
+
+        drawCredits();
+	};
 	
 	const drawBG = function() {
         // fill the background since there is no image for now
-        drawRect(0, 0, canvas.width, canvas.height, CREDITS_BG_COLOR);
-    }
+        drawRect(0, 0, canvas.width, canvas.height, '#252525');
+    };
     
     const drawTitle = function() {
-        fontRenderer.drawString(canvasContext, canvas.width / 2, canvas.height / 3, "CREDITS", FONT.White, 2 * GAME_SCALE);
-    }
+        const titleWidth = fontRenderer.getWidthOfText("CREDITS", 1, FONT.Stroked);
+        fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - titleWidth / 2), 10, "CREDITS", FONT.Stroked, 1);
+    };
+
+    const drawCredits = function() {
+        let drawOffset = 0;
+        for(let person of credits) {
+            const nameWidth = fontRenderer.getWidthOfText(person.name, 1, FONT.Stroked);
+            fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.Stroked, 1);
+            drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
+//            fontRenderer.drawString(canvasContext, 0, )
+        }
+    };
 }

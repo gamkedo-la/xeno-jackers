@@ -1,12 +1,12 @@
 //UIButton
-function UIButton(title, x, y, height, padding = 2, onClick, BGColor = Color.Aqua) {
+function UIButton(title, x, y, height, padding = 2, onClick, BGColor = Color.Aqua, scale = GAME_SCALE) {
     const bounds = {};
     this.title = title;
     
     this.onClick = onClick;
 
     const setBounds = function(title, x, y, height, padding) {
-        bounds.width = fontRenderer.getWidthOfText(title, GAME_SCALE, FONT.White) + padding * 2;
+        bounds.width = fontRenderer.getWidthOfText(title, scale, FONT.White) + padding * 2;
         bounds.height = height;
         
         bounds.x = x;// - (bounds.width/2);
@@ -45,7 +45,7 @@ function UIButton(title, x, y, height, padding = 2, onClick, BGColor = Color.Aqu
     }
 
     this.draw = function() {
-        fontRenderer.drawString(canvasContext, x, y, title, FONT.White, GAME_SCALE);
+        fontRenderer.drawString(canvasContext, x, y, title, FONT.White, scale);
         
         if(DEBUG) { // draw bounds for buttons in semi-transparent colors            
             const tempAlpha = canvasContext.globalAlpha;

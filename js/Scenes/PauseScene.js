@@ -74,7 +74,13 @@ function PauseScene() {
             case ALIAS.POINTER:
                 checkButtons();
                 return true;
-        }
+            case KEY_Q:
+                SceneState.setState(SCENE.TITLE);
+                return true;
+            case KEY_O:
+                SceneState.setState(SCENE.OPTIONS);
+                return true;
+            }
         
         return false;
     };

@@ -29,7 +29,7 @@ function FontBuilder() {
                 fontData.position.x, fontData.position.y, 
                 fontData.width, fontData.height, 
                 thisX, y, 
-                scale * fontData.width, scale * fontData.height
+                Math.round(scale * fontData.width), Math.round(scale * fontData.height)
             );
 
             thisX += (scale * fontData.width);
