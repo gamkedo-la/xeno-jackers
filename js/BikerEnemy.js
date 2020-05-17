@@ -4,6 +4,7 @@ function BikerEnemy(posX, posY) {
     const WIDTH = 23;
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
+    
     let currentAnimation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};

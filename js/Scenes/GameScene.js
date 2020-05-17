@@ -67,13 +67,7 @@ function GameScene() {
 
         if(loadedNewMap) {
             enemies.length = 0;
-            for(let entityData of currentMap.entities) {
-                if(entityData.type === EntityType.EnemyBiker) {
-                    const anEnemy = new BikerEnemy(entityData.x, entityData.y - 33);
-                    enemies.push(anEnemy);//33 is height of biker enemy
-                    collisionManager.addEntity(anEnemy);
-                }
-            }
+            loadEnemies(currentMap.entities);
         }
 
         if(mapRenderer === null) {
@@ -185,6 +179,22 @@ function GameScene() {
 
             context.transitionIn();
         }, TRANSITION_TIME);
+    };
+
+    const loadEnemies = function(enemyData) {
+        for(let data of enemyData) {
+            let anEnemy;
+            switch(data.type) {
+                case EntityType.EnemyBiker:
+                    anEnemy = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy
+                    break;
+                case EntityType.EnemyAlienGuard:
+                    anEnemy = new EnemyAlienGuard(data.x, data.y - 33);
+            }
+
+            enemies.push(anEnemy);
+            collisionManager.addEntity(anEnemy);
+        }
     };
 
     const transitionToGameOver = function() {

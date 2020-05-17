@@ -1,8 +1,13 @@
 //EnemyAlienGuard.js
 function EnemyAlienGuard(posX, posY) {
     const SCALE = GAME_SCALE;
+    const WIDTH = 23;
+    const HEIGHT = 33;
+    const SIZE = {width:WIDTH, height:HEIGHT};
+
     let currentAnimation;
     let position = {x:posX, y:posY};
+    let velocity = {x:0, y:0};
     
     let isBlocking = false;
     let isCrouching = false;
@@ -11,7 +16,7 @@ function EnemyAlienGuard(posX, posY) {
     let flipped = false;
 
     this.type = EntityType.EnemyAlienGuard;
-    this.health = 5;
+    this.health = 2;
 
     this.collisionBody = new Collider(ColliderType.Polygon, [
         {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
@@ -19,6 +24,10 @@ function EnemyAlienGuard(posX, posY) {
         {x:posX + 21, y:posY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
         {x:posX + 2, y:posY + 32} //bottom left +2/+32 makes collision box smaller than sprite
     ], {x:posX, y:posY});
+
+    this.getSize = function() {
+        return SIZE;
+    };
 
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
@@ -99,17 +108,15 @@ function EnemyAlienGuard(posX, posY) {
             } else {
                 position.x += 5;
             }
+
+            if(this.health <= 0) SceneState.scenes[SCENE.GAME].removeMe(this);
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
-            if(velocity.y > 0) {
-                wasKnockedBack = false;
-            }
-
-            position.x -= Math.ceil(collisionData.magnitude * collisionData.x);
+            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
             if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);
-            if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
-            updateCollisionBody(this.collisionBody);
+            if(Math.abs(collisionData.y) > 0.01) velocity.y = 0;
+            this.collisionBody.setPosition(position.x, position.y);
         }
     };
 

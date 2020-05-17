@@ -173,6 +173,18 @@
                  "width":21,
                  "x":470,
                  "y":120
+                }, 
+                {
+                 "gid":4099,
+                 "height":32,
+                 "id":8,
+                 "name":"alienGuard1",
+                 "rotation":0,
+                 "type":"enemyAlienGuard",
+                 "visible":true,
+                 "width":21,
+                 "x":298,
+                 "y":119.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -193,7 +205,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":8,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
