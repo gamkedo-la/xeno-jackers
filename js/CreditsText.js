@@ -17,7 +17,7 @@ const credits = [
         contributions:"Player Falling Animation"
     },
     {
-        name:"",
-        contributions:""
+        name:" ",
+        contributions:" "
     }
 ];
