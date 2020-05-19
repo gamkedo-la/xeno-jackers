@@ -10,7 +10,7 @@ let DRAW_COLLIDERS = false;
 const GRAVITY = 220;
 
 const COLLIDER_COLOR = 'red';
-const MENU_MUSIC_FILENAME = 'audio/Shadow 51';
+const MENU_MUSIC_FILENAME = 'audio/Shadow_51';
 
 const GAME_SCALE = 1;
 
