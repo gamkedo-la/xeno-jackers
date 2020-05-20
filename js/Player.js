@@ -126,7 +126,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.newKeyPressed = function(newKey) {
-        if(newKey === ALIAS.JUMP) {
+        if(newKey === ALIAS.JUMP || newKey === ALIAS.JUMP2) {
             if(isOnGround && !isLanding) {
                 if(heldJumpTime < MAX_JUMP_TIME) jump(0);
             }
@@ -155,12 +155,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         for(let i = 0; i < heldButtons.length; i++) {
             switch(heldButtons[i]) {
                 case ALIAS.WALK_LEFT:
-                    moveLeft();
+                case ALIAS.WALK_LEFT2:
+                        moveLeft();
                     break;
                 case ALIAS.WALK_RIGHT:
+                case ALIAS.WALK_RIGHT2:
                     moveRight();
                     break;
                 case ALIAS.JUMP:
+                case ALIAS.JUMP2:
                     if(isOnGround) break;
                     if(heldJumpTime < MAX_JUMP_TIME) jump(deltaTime);
                     break;
@@ -169,6 +172,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     block();
                     break;
                 case ALIAS.CROUCH:
+                case ALIAS.CROUCH2:
                     crouch();
                     break;
             }

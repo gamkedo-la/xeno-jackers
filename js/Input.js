@@ -4,10 +4,19 @@ const KEY_TAB = 9;
 const KEY_ENTER = 13;
 const KEY_ESCAPE = 27;
 const KEY_SPACE = 32;
+
+// arrow keys
 const KEY_LEFT = 37;
 const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
+
+// wasd
+const KEY_LEFT2 = 65;
+const KEY_UP2 = 87;
+const KEY_RIGHT2 = 68;
+const KEY_DOWN2 = 83;
+
 const DIGIT_0 = 48;
 const DIGIT_1 = 49;
 const DIGIT_2 = 50;
@@ -66,6 +75,10 @@ const ALIAS = {
 	ATTACK:KEY_ENTER,
 	JUMP:KEY_UP,
 	CROUCH:KEY_DOWN,
+	WALK_LEFT2:KEY_LEFT2,
+	WALK_RIGHT2:KEY_RIGHT2,
+	JUMP2:KEY_UP2,
+	CROUCH2:KEY_DOWN2,
 	BLOCK:KEY_SPACE,
 	SELECT1:KEY_ENTER,
 	SELECT2:KEY_SPACE,
@@ -79,7 +92,11 @@ const ALIAS = {
 	UP:KEY_UP,
 	DOWN:KEY_DOWN,
 	LEFT:KEY_LEFT,
-	RIGHT:KEY_RIGHT
+	RIGHT:KEY_RIGHT,
+	UP2:KEY_UP2,
+	DOWN2:KEY_DOWN2,
+	LEFT2:KEY_LEFT2,
+	RIGHT2:KEY_RIGHT2
 }
 
 function initializeInput() {
