@@ -32,8 +32,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.collisionBody = new Collider(ColliderType.Polygon, [
         {x:startX + 4, y:startY + 4}, //top left +2/+3 to make collision box smaller than sprite
         {x:startX + 17, y:startY + 4}, //top right +21/+3 makes collision box smaller than sprite
-        {x:startX + 17, y:startY + 35}, //bottom right +21/+32 makes collision box smaller than sprite
-        {x:startX + 4, y:startY + 35} //bottom left +2/+32 makes collision box smaller than sprite
+        {x:startX + 17, y:startY + FRAME_HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
+        {x:startX + 4, y:startY + FRAME_HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
     ], {x:startX, y:startY});
 
     this.getPosition = function() {
