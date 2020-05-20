@@ -2,6 +2,7 @@
 window.onload = function() {
     canvas = document.getElementById("gameCanvas");// document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
+    gamepad = new GamepadManager();
 
 	drawRect(0, 0, canvas.width, canvas.height, Color.Black);
 	
@@ -44,7 +45,8 @@ function updateButtonText() {
 
 function update() {
 	const deltaTime = timer.update();
-	SceneState.run(deltaTime);
+    SceneState.run(deltaTime);
+    if (gamepad) gamepad.update();
 	requestAnimationFrame(update);
 };
 

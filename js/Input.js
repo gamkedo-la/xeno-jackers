@@ -12,8 +12,9 @@ const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
 
 // wasd
-const KEY_LEFT2 = 65;
-const KEY_UP2 = 87;
+// TODO support ZQSD (for azerty keyboards)
+const KEY_LEFT2 = 65; // TODO: also support Q
+const KEY_UP2 = 87; // TODO: also support Z
 const KEY_RIGHT2 = 68;
 const KEY_DOWN2 = 83;
 
