@@ -3,6 +3,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
+    const KNOCKBACK_YSPEED = -85;
     const MAX_Y_SPEED = 130;
     const MAX_JUMP_TIME = 170;
     const FRAME_WIDTH = 24;
@@ -265,7 +266,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 velocity.x = KNOCKBACK_SPEED;
             }
 
-            velocity.y = -85;
+            velocity.y = KNOCKBACK_YSPEED;
 
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
