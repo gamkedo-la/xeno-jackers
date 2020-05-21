@@ -252,13 +252,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const thumbup = function() {
-        if(isOnGround && !isThumbUp) {
+        if(isOnGround && currentAnimation != animations.thumbup) {
             //console.log("Thumbs Up!");
             isThumbUp = true;
             currentAnimation = animations.thumbup;
-            //currentFrameIndex = 0;
-        } else {
-            isThumbUp = false;
+            currentAnimation.reset();
         }
     };
 
