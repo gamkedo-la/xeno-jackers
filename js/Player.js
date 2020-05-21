@@ -335,8 +335,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.idle.scale = SCALE;
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
         anims.walking.scale = SCALE;
-        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [10], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [10], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
 //        anims.attacking = ...
 //        anims.blocking = ...
