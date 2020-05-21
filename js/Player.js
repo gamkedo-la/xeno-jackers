@@ -16,6 +16,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     
     let isBlocking = false;
     let isCrouching = false;
+    let isThumbUp = false;
 
     let wasKnockedBack = false;
     let isOnGround = true;
@@ -68,6 +69,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         
         isBlocking = false;
         isCrouching = false;
+        isThumbUp = false;
 
         wasKnockedBack = false;
         isOnGround = true;
@@ -157,7 +159,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             switch(heldButtons[i]) {
                 case ALIAS.WALK_LEFT:
                 case ALIAS.WALK_LEFT2:
-                        moveLeft();
+                    moveLeft();
                     break;
                 case ALIAS.WALK_RIGHT:
                 case ALIAS.WALK_RIGHT2:
@@ -175,6 +177,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 case ALIAS.CROUCH:
                 case ALIAS.CROUCH2:
                     crouch();
+                    break;
+                case ALIAS.THUMBUP:
+                    thumbup();
                     break;
             }
         }
@@ -241,6 +246,17 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             currentAnimation = animations.crouching;
         } else {
             isCrouching = false;
+        }
+    };
+
+    const thumbup = function() {
+        if(isOnGround && !isThumbUp) {
+            //console.log("Thumbs Up!");
+            isThumbUp = true;
+            currentAnimation = animations.thumbup;
+            //currentFrameIndex = 0;
+        } else {
+            isThumbUp = false;
         }
     };
 
@@ -341,7 +357,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 //        anims.attacking = ...
 //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-	    anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19, 15], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400, 100], false, false);
+	    anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
 
         return anims;
     };

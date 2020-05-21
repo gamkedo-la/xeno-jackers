@@ -97,7 +97,8 @@ const ALIAS = {
 	UP2:KEY_UP2,
 	DOWN2:KEY_DOWN2,
 	LEFT2:KEY_LEFT2,
-	RIGHT2:KEY_RIGHT2
+	RIGHT2:KEY_RIGHT2,
+	THUMBUP:KEY_T
 }
 
 function initializeInput() {
