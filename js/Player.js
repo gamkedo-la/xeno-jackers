@@ -236,9 +236,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const crouch = function() {
         if(isOnGround && !isCrouching) {
-            console.log("I'm crouching now");
+            //console.log("I'm crouching now");
             isCrouching = true;
-//            currentAnimation = animations.crouching;
+            currentAnimation = animations.crouching;
+        } else {
+            isCrouching = false;
         }
     };
 
@@ -338,7 +340,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
 //        anims.attacking = ...
 //        anims.blocking = ...
-//        anims.crouching = ...
+        anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [11], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
 
         return anims;
     };

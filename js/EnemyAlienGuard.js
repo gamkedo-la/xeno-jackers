@@ -21,8 +21,8 @@ function EnemyAlienGuard(posX, posY) {
     this.collisionBody = new Collider(ColliderType.Polygon, [
         {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
         {x:posX + 21, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
-        {x:posX + 21, y:posY + 32}, //bottom right +21/+32 makes collision box smaller than sprite
-        {x:posX + 2, y:posY + 32} //bottom left +2/+32 makes collision box smaller than sprite
+        {x:posX + 21, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
+        {x:posX + 2, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
     ], {x:posX, y:posY});
 
     this.getSize = function() {
@@ -123,7 +123,7 @@ function EnemyAlienGuard(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', enemyAlienGuardSheet, [0, 1], 23, 34, [256], false, true);
+        anims.idle = new SpriteAnimation('idle', enemyAlienGuardSheet, [0, 1], 23, 34, [512], false, true);
         anims.idle.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...
