@@ -340,7 +340,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
 //        anims.attacking = ...
 //        anims.blocking = ...
-        anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [11], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+        anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
 
         return anims;
     };
