@@ -147,6 +147,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const processInput = function(deltaTime) {
+        let didRespond = false;
+
         if(heldButtons.length === 0) {
             if(!isLanding) {
                 idle();
@@ -162,33 +164,44 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 case ALIAS.WALK_LEFT:
                 case ALIAS.WALK_LEFT2:
                     moveLeft();
+                    didRespond = true;
                     break;
                 case ALIAS.WALK_RIGHT:
                 case ALIAS.WALK_RIGHT2:
                     moveRight();
+                    didRespond = true;
                     break;
                 case ALIAS.JUMP:
                 case ALIAS.JUMP2:
                     if(isOnGround) break;
                     if(heldJumpTime < MAX_JUMP_TIME) jump(deltaTime);
+                    didRespond = true;
                     break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
                     block();
+                    didRespond = true;
                     break;
                 case ALIAS.CROUCH:
                 case ALIAS.CROUCH2:
                     crouch();
+                    didRespond = true;
                     break;
                 case ALIAS.THUMBUP:
                     thumbup();
+                    didRespond = true;
                     break;
             }
+        }
+
+        if(!didRespond) {
+            idle();
         }
     }
 
     const idle = function() {
         currentAnimation = animations.idle;
+        velocity.x = 0;
     };
 
     const moveLeft = function() {
