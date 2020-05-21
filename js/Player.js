@@ -341,6 +341,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 //        anims.attacking = ...
 //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+	    anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19, 15], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400, 100], false, false);
 
         return anims;
     };
