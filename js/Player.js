@@ -342,21 +342,26 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else if(isPickup(otherEntity)) {
             switch(otherEntity.type) {
                 case EntityType.Health:
+                    playerPickup1.play();
                     this.health++;
                     break;
                 case EntityType.Chain:
+                    playerPickup2.play();
                     hasChain = true;
                     SceneState.scenes[SCENE.GAME].gotChain();
                     break;
                 case EntityType.Handlebar:
+                    playerPickup2.play();
                     hasHandleBar = true;
                     SceneState.scenes[SCENE.GAME].gotHandlebar();
                     break;
                 case EntityType.Wheel:
+                    playerPickup2.play();
                     hasWheel = true;
                     SceneState.scenes[SCENE.GAME].gotWheel();
                     break;
                 case EntityType.Engine:
+                    playerPickup2.play();
                     hasEngine = true;
                     SceneState.scenes[SCENE.GAME].gotEngine();
                     break;

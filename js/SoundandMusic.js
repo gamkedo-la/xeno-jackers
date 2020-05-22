@@ -10,6 +10,11 @@ let alienBossDeath;
 let alienCackle1;
 let alienGrowl2;
 let hurt1;
+let playerPickup1;
+let playerPickup2;
+let chainAttack1;
+let chainAttack2;
+let nodeActivate;
 let menuMusic = MENU_MUSIC_FILENAME;
 let musicVolume;
 let effectsVolume;
@@ -39,6 +44,11 @@ function loadAudio() {
 	alienCackle1 = new SoundOverlapsClass(assetPath.Audio + "alien_cackle1");
 	alienGrowl2 = new SoundOverlapsClass(assetPath.Audio + "alien_growl2");
 	hurt1 = new SoundOverlapsClass(assetPath.Audio + "hit_hurt1");
+	playerPickup1 = new SoundOverlapsClass(assetPath.Audio + "player_pickup1");
+	playerPickup2 = new SoundOverlapsClass(assetPath.Audio + "player_pickup2");
+	chainAttack1 = new SoundOverlapsClass(assetPath.Audio + "chain_attack1");
+	chainAttack2 = new SoundOverlapsClass(assetPath.Audio + "chain_attack2");
+	nodeActivate = new SoundOverlapsClass(assetPath.Audio + "node_activate");
 }
 
 function setFormat() {
