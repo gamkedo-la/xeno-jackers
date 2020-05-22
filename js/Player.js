@@ -14,7 +14,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let position = {x:startX, y:startY};
     let velocity = {x:0, y:0};
     
-    //let isWalking = false;
+    let isWalking = false;
     let isBlocking = false;
     let isCrouching = false;
     let isThumbUp = false;
@@ -71,7 +71,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isBlocking = false;
         isCrouching = false;
         isThumbUp = false;
-        //isWalking = false;
+        isWalking = false;
 
         wasKnockedBack = false;
         isOnGround = true;
@@ -148,16 +148,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const processInput = function(deltaTime) {
         let didRespond = false;
-
-        if(heldButtons.length === 0) {
-            if(!isLanding) {
-                idle();
-            }
-
-            if((!wasKnockedBack) && (isOnGround)) {
-                velocity.x = 0;
-            }
-        }
+        isWalking = false;
 
         for(let i = 0; i < heldButtons.length; i++) {
             switch(heldButtons[i]) {
@@ -195,18 +186,35 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 
         if(!didRespond) {
-            idle();
+            if(!isLanding) {
+                idle();
+            }
+
+            if((!wasKnockedBack) && (isOnGround)) {
+                velocity.x = 0;
+            }
         }
     }
 
     const idle = function() {
         currentAnimation = animations.idle;
         velocity.x = 0;
+        isBlocking = false;
+        isCrouching = false;
+        isThumbUp = false;
+        isFalling = false;
+        isLanding = false;
+        heldJumpTime = 0;    
     };
 
     const moveLeft = function() {
         if(wasKnockedBack) return;
-        //isWalking = true;
+        if(isLanding) return;
+        if(isThumbUp) {
+            isThumbUp = false;
+        };
+        
+        isWalking = true;
         flipped = true;
         velocity.x = -WALK_SPEED;
         currentAnimation = animations.walking;
@@ -217,7 +225,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const moveRight = function() {
         if(wasKnockedBack) return;
-        //isWalking = true;
+        if(isLanding) return;
+        if(isThumbUp) {
+            isThumbUp = false;
+        };
+        
+        isWalking = true;
         flipped = false;
         velocity.x = WALK_SPEED;
         currentAnimation = animations.walking;
@@ -233,7 +246,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else {
             velocity.y -= MAX_Y_SPEED / 10;
             heldJumpTime += deltaTime;
-            //console.log(heldJumpTime)
         }
     };
 
@@ -256,18 +268,17 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const crouch = function() {
         if(isOnGround && !isCrouching) {
-            //console.log("I'm crouching now");
             isCrouching = true;
             currentAnimation = animations.crouching;
-        } else {
-            isCrouching = false;
         }
     };
 
     const thumbup = function() {
+        if (isWalking) return;
+
         if(isOnGround && currentAnimation != animations.thumbup) {
-            //console.log("Thumbs Up!");
             isThumbUp = true;
+            velocity.x = 0;
             currentAnimation = animations.thumbup;
             currentAnimation.reset();
         }
