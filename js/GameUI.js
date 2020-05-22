@@ -33,7 +33,7 @@ function GameUI(canvas, context) {
         while(livesString.length < 2) {
             livesString = "0" + livesString;
         }
-        fontRenderer.drawString(context, 0, TOP + 3, scoreString, FONT.LargeScore, GAME_SCALE);
-        fontRenderer.drawString(context, 123, TOP + 3, livesString, FONT.LargeScore, GAME_SCALE);
+        fontRenderer.drawString(context, 0, TOP + 3, scoreString, FONT.Score, GAME_SCALE);
+        fontRenderer.drawString(context, 121, TOP + 1, livesString, FONT.Lives, GAME_SCALE);
     };
 }

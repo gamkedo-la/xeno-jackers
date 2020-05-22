@@ -93,6 +93,7 @@ const fontSheet3 = document.createElement("img");
 const fontSheet4 = document.createElement("img");
 const fontSheetStroke = document.createElement("img");
 const fontSheetScore = document.createElement("img");
+const fontSheetLives = document.createElement("img");
 const offMenuButton = document.createElement("img");
 const onMenuButton = document.createElement("img");
 const statusbarBase = document.createElement("img");
@@ -143,6 +144,7 @@ function loadImages() {
         { imgName: fontSheet4, theFile: "interface/xjfont4.png" },
         { imgName: fontSheetStroke, theFile: "interface/xjfont_stroke.png" },
         { imgName: fontSheetScore, theFile: "interface/xjfont_score.png" },
+        { imgName: fontSheetLives, theFile: "interface/xjfont_lives.png" },
         { imgName: offMenuButton, theFile: "interface/menu_button_off.png" },
         { imgName: onMenuButton, theFile: "interface/menu_button_on.png" },
         { imgName: statusbarBase, theFile: "interface/statusbar_base.png" },

@@ -4,8 +4,8 @@ const FONT = {
     DarkGrey:null,
     Black:null,
     Stroked:null,
-    SmallScore:null,
-    LargeScore:null
+    Score:null,
+    Lives:null
 };
 
 //FontBuilder.js
@@ -15,8 +15,8 @@ function FontBuilder() {
     FONT.DarkGrey = fontSheet3,
     FONT.Black = fontSheet4,
     FONT.Stroked = fontSheetStroke,
-    FONT.SmallScore = fontSheetScore,
-    FONT.LargeScore = fontSheetScore
+    FONT.Score = fontSheetScore,
+    FONT.Lives = fontSheetLives
 
     this.drawString = function(context, x, y, text, font = FONT.White, scale = 1) {
         let thisX = x;
@@ -55,10 +55,10 @@ function FontBuilder() {
                 return {position: getXYForChar(char), width:7, height:9};
             case FONT.Stroked:
                 return {position: getStrokedXYForChar(char), width:9, height:11};
-            case FONT.SmallScore:
-                return {position: getSmallScoreXYForChar(char), width:8, height:10};
-            case FONT.LargeScore:
-                return {position: getLargeScoreXYForChar(char), width:10, height:14};
+            case FONT.Score:
+                return {position: getScoreXYForChar(char), width:8, height:10};
+            case FONT.Lives:
+                return {position: getLivesXYForChar(char), width:10, height:14};
         }
     };
 
@@ -336,7 +336,7 @@ function FontBuilder() {
         }
     };
 
-    const getSmallScoreXYForChar = function(char) {
+    const getScoreXYForChar = function(char) {
         switch(char) {
             case '1':
                 return {x:0, y:0};
@@ -361,28 +361,28 @@ function FontBuilder() {
         }
     };
 
-    const getLargeScoreXYForChar = function(char) {
+    const getLivesXYForChar = function(char) {
         switch(char) {
             case '1':
-                return {x:0, y:10};
+                return {x:0, y:0};
             case '2':
-                return {x:10, y:10};
+                return {x:10, y:0};
             case '3':
-                return {x:20, y:10};
+                return {x:20, y:0};
             case '4':
-                return {x:30, y:10};
+                return {x:30, y:0};
             case '5':
-                return {x:40, y:10};
+                return {x:40, y:0};
             case '6':
-                return {x:50, y:10};
+                return {x:50, y:0};
             case '7':
-                return {x:60, y:10};
+                return {x:60, y:0};
             case '8':
-                return {x:70, y:10};
+                return {x:70, y:0};
             case '9':
-                return {x:80, y:10};
+                return {x:80, y:0};
             case '0':
-                return {x:90, y:10};
+                return {x:90, y:0};
         }
     };
 }
