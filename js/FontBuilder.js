@@ -341,7 +341,7 @@ function FontBuilder() {
             case '1':
                 return {x:0, y:0};
             case '2':
-                return {x:8, y:0};
+                return {x:9, y:0};
             case '3':
                 return {x:18, y:0};
             case '4':
