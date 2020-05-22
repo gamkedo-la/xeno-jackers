@@ -59,7 +59,7 @@ function TitleScene() {
                 return true;
             case ALIAS.SELECT1:
                 SceneState.setState(selections[selectorPositionsIndex]);
-//                menuSelect.play();
+                menuSelect.play();
                 return true;
             case ALIAS.POINTER:
                 checkButtons();
