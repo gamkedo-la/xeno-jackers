@@ -47,6 +47,7 @@ function TitleScene() {
                 if (selectorPositionsIndex < 0) {
                     selectorPositionsIndex += selections.length;
                 }
+                menuNav1.play();
                 return true;
             case KEY_DOWN:
             case KEY_RIGHT:
@@ -54,9 +55,11 @@ function TitleScene() {
                 if (selectorPositionsIndex >= selections.length) {
                     selectorPositionsIndex = 0;
                 }
+                menuNav1.play();
                 return true;
             case ALIAS.SELECT1:
                 SceneState.setState(selections[selectorPositionsIndex]);
+//                menuSelect.play();
                 return true;
             case ALIAS.POINTER:
                 checkButtons();
@@ -102,7 +105,10 @@ function TitleScene() {
         let wasClicked = false;
         for(let button of buttons) {
             wasClicked = button.respondIfClicked(mouseX, mouseY);
-            if(wasClicked) {break;}
+            if(wasClicked) {
+                menuSelect.play();
+                break;
+            }
         }
     };
     
