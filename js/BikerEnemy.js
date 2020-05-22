@@ -4,10 +4,14 @@ function BikerEnemy(posX, posY) {
     const WIDTH = 23;
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
+    const MIN_TIME_TO_CACKLE = 5000;
+    const MEDIAN_TIME_TO_CACLE = 5000;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
+
+    let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     
     let isBlocking = false;
     let isCrouching = false;
@@ -33,6 +37,12 @@ function BikerEnemy(posX, posY) {
         currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
+
+        timeToCackle -= deltaTime;
+        if(timeToCackle <= 0) {
+            alienCackle1.play();
+            timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
+        }
 
         if(this.collisionBody.isOnScreen) {
             position.x += Math.round(velocity.x * deltaTime / 1000);

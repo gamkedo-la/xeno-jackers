@@ -7,6 +7,7 @@ let menuSelect; //confirm any menu item
 let menuNav1; //up or down navigation through any menu
 let menuNav2; 
 let alienBossDeath;
+let alienCackle1;
 let alienGrowl2;
 let hurt1;
 let menuMusic = MENU_MUSIC_FILENAME;
@@ -35,6 +36,7 @@ function loadAudio() {
 	menuNav1 = new SoundOverlapsClass(assetPath.Audio + "menu_nav1");
 	menuNav2 = new SoundOverlapsClass(assetPath.Audio + "menu_nav2");
 	alienBossDeath = new SoundOverlapsClass(assetPath.Audio + "alien_boss_death");
+	alienCackle1 = new SoundOverlapsClass(assetPath.Audio + "alien_cackle1");
 	alienGrowl2 = new SoundOverlapsClass(assetPath.Audio + "alien_growl2");
 	hurt1 = new SoundOverlapsClass(assetPath.Audio + "hit_hurt1");
 }

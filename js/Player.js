@@ -297,8 +297,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
             if(this.health <= 0) {
                 SceneState.scenes[SCENE.GAME].removeMe(this);
+                //play death sound here?
                 return;
-            } 
+            } else {
+                hurt1.play();
+            }
 
             wasKnockedBack = true;
 
