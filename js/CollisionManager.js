@@ -225,8 +225,9 @@ function CollisionManager(player) {
 	let enemies = new Set();
 	let enemyWeapons = new Set();
 	let environment = new Set();
+	let gameObjects = new Set();
     let playerTools = new Set();
-    let playerList = [player];
+	let playerList = [player];
 
     this.player = player;
 
@@ -252,7 +253,9 @@ function CollisionManager(player) {
 			return addEnvironment(newEntity);
 		} else if(isPlayerTool(newEntity)) {
 			return  addPlayerWeapon(newEntity);
-        }
+        } else if(isPickup(newEntity)) {
+			return addGameObject(newEntity);
+		}
     };
     
     const addEnemy = function(newEnemy) {
@@ -281,6 +284,13 @@ function CollisionManager(player) {
 		playerTools.add(newWeapon);
 
 		return (!(beforeLength === playerTools.size));
+	};
+	
+	const addGameObject = function(newObject) {
+        const beforeLength = gameObjects.size;
+		gameObjects.add(newObject);
+
+		return (!(beforeLength === gameObjects.size));
     };
 	
 	this.removeEntity = function(entityToRemove) {
@@ -292,7 +302,9 @@ function CollisionManager(player) {
 			removeEnvironment(entityToRemove);
         } else if(isPlayerTool(entityToRemove)) {
             removePlayerWeapon(entityToRemove);
-        }
+        } else if(isPickup(entityToRemove)) {
+			removeGameObject(entityToRemove);
+		}
         
 		if(enemies.has(entityToRemove)) {
 			enemies.delete(entityToRemove);
@@ -339,12 +351,22 @@ function CollisionManager(player) {
 		}
 
 		return false;
+	};
+	
+	const removeGameObject = function(objectToRemove) {
+        if(gameObjects.has(objectToRemove)) {
+			gameObjects.delete(objectToRemove);
+			return true;
+		}
+
+		return false;
     };
 
 	this.clearWorldAndBullets = function() {
 		enemies.clear();
 		enemyWeapons.clear();
-        environment.clear();
+		environment.clear();
+		gameObjects.clear();
 //        playerTools.clear();//do we want this?
 	};
     
@@ -357,6 +379,9 @@ function CollisionManager(player) {
 
         //Player vs Environment
         checkCollsionsForLists(playerList, environment);
+
+		//Player vs Other Game Objects
+        checkCollsionsForLists(playerList, gameObjects);
 
         //Player Weapons vs Enemies
         checkCollsionsForLists(playerTools, enemies);
@@ -372,7 +397,10 @@ function CollisionManager(player) {
 
         //Enemies vs Environment
 		checkCollsionsForLists(enemies, environment);
-    };
+
+        //Other Game Objects vs Environment
+		checkCollsionsForLists(gameObjects, environment);
+	};
 
     const checkCollsionsForLists = function(list1, list2) {
         for(let entity1 of list1) {
@@ -397,7 +425,7 @@ function CollisionManager(player) {
                 entity2.didCollideWith(entity1);
                 return;
             }
-			
+
 			const collisionResults = checkCollisionBetween(entity1.collisionBody, entity2.collisionBody);
 			if(collisionResults.magnitude > 0) {
 				if(collisionResults.isBody1Normal) {

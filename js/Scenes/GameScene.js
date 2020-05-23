@@ -12,8 +12,9 @@ function GameScene() {
     let reloading = false;
 
     const enemies = [];
-    const enemiesToRemove = [];
+    const entitiesToRemove = [];
     const environmentColliders = [];
+    const otherEntities = [];
 
     let hasChain = false;
     let hasWheel = false;
@@ -123,8 +124,14 @@ function GameScene() {
     };
 
     this.removeMe = function(entityToRemove) {
-        enemiesToRemove.push(entityToRemove);
+        entitiesToRemove.push(entityToRemove);
         score += pointsForType(entityToRemove.type);
+    };
+
+    this.addHealthDrop = function(posX, posY) {
+        const newHealth = new health(posX, posY);
+        otherEntities.push(newHealth);
+        collisionManager.addEntity(newHealth);
     };
 
     this.gotChain = function() {
@@ -165,7 +172,7 @@ function GameScene() {
         gameUI = null;
 
         enemies.length = 0;
-        enemiesToRemove.length = 0;
+        entitiesToRemove.length = 0;
         environmentColliders.length = 0;
         
         reloading = false;
@@ -222,10 +229,14 @@ function GameScene() {
             enemy.update(deltaTime, player);
         }
 
+        for(let gameObject of otherEntities) {
+            gameObject.update(deltaTime, player);
+        }
+
         collisionManager.doCollisionChecks();
 
-        for(let enemyToRemove of enemiesToRemove) {
-            if(enemyToRemove === player) {
+        for(let entityToRemove of entitiesToRemove) {
+            if(entityToRemove === player) {
                 remainingLives--;
                 if(remainingLives < 0) {
                     transitionToGameOver();
@@ -235,10 +246,14 @@ function GameScene() {
                 }
                 return false;
             }
-            collisionManager.removeEntity(enemyToRemove);
-            enemies.splice(enemies.indexOf(enemyToRemove), 1);
+            collisionManager.removeEntity(entityToRemove);
+            if(isEnemy(entityToRemove)) {
+                enemies.splice(enemies.indexOf(entityToRemove), 1);
+            } else {
+                otherEntities.splice(otherEntities.indexOf(entityToRemove), 1);
+            }
         }
-        enemiesToRemove.length = 0;
+        entitiesToRemove.length = 0;
 
         gameUI.update(deltaTime, player);
 
@@ -254,8 +269,12 @@ function GameScene() {
         mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, canvas.center.x, canvas.center.y);
 
         player.draw(deltaTime);
-        for(enemy of enemies) {
+        for(let enemy of enemies) {
             enemy.draw(deltaTime);
+        }
+
+        for(let gameObject of otherEntities) {
+            gameObject.draw();
         }
 
         mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles, canvas.center.x, canvas.center.y);

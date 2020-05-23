@@ -8,6 +8,7 @@ let CHEATS_ACTIVE = false;
 let DRAW_COLLIDERS = false;
 
 const GRAVITY = 220;
+const MAX_Y_SPEED = 130;
 
 const COLLIDER_COLOR = 'red';
 const MENU_MUSIC_FILENAME = 'audio/Shadow_51';

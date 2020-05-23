@@ -6,6 +6,7 @@ function BikerEnemy(posX, posY) {
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_CACKLE = 5000;
     const MEDIAN_TIME_TO_CACLE = 5000;
+    const HEALTH_DROP_PROBABILITY = 100;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -119,9 +120,15 @@ function BikerEnemy(posX, posY) {
                 position.x += 5;
             }
 
-            if(this.health <= 0) SceneState.scenes[SCENE.GAME].removeMe(this);
-        }  else if(isEnvironment(otherEntity)) {
-            //Environment objects don't move, so need to move player the full amount of the overlap
+            if(this.health <= 0) {
+                const healthDropChance = 100 * Math.random();
+                if(healthDropChance < HEALTH_DROP_PROBABILITY) {
+                    SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
+                }
+                SceneState.scenes[SCENE.GAME].removeMe(this);
+            }
+        } else if(isEnvironment(otherEntity)) {
+            //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             position.x += Math.ceil(collisionData.magnitude * collisionData.x);
             if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);

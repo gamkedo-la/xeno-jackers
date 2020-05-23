@@ -4,7 +4,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
-    const MAX_Y_SPEED = 130;
     const MAX_JUMP_TIME = 170;
     const FRAME_WIDTH = 24;
     const FRAME_HEIGHT = 36;
@@ -29,7 +28,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let levelWidth = 0;
     let levelHeight = 0;
 
-    this.health = 10;
+    this.maxHealth = 10;
+    this.health = this.maxHealth;
     this.type = EntityType.Player;
 
     this.collisionBody = new Collider(ColliderType.Polygon, [
@@ -343,7 +343,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             switch(otherEntity.type) {
                 case EntityType.Health:
                     playerPickup1.play();
-                    this.health++;
+                    this.health += otherEntity.health;
+                    if(this.health > this.maxHealth) this.health = this.maxHealth;
                     break;
                 case EntityType.Chain:
                     playerPickup2.play();
