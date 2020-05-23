@@ -20,6 +20,7 @@ const EntityType = {
     ChainPickup:"chainPickup",
     WheelPickup:"wheelPickup",
     HandlebarPickup:"handlebarPickup",
+    EnginePickup:"enginePickup",
 
     //Environment
     Ground:"ground",
@@ -67,6 +68,7 @@ function isPickup(entity) {
         case EntityType.ChainPickup:
         case EntityType.WheelPickup:
         case EntityType.HandlebarPickup:
+        case EntityType.EnginePickup:
             return true;
         default:
             return false;

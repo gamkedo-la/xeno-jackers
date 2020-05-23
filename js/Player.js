@@ -51,19 +51,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         this.collisionBody.calcOnscreen(canvas);
     };
 
-    this.gotNewTool = function(newTool) {
-        switch(newTool) {
-            case PICKUP.Chain:
-                hasChainWeapon = true;
-            case PICKUP.Wheel:
-                hasWheelWeapon = true;
-            case PICKUP.Handlebar:
-                hasHandlebar = true;
-            case PICKUP.Engine:
-                hasEngine = true;
-        }
-    }
-
     this.reset = function() {
         velocity.x = 0;
         velocity.y = 0;
@@ -346,22 +333,22 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     this.health += otherEntity.health;
                     if(this.health > this.maxHealth) this.health = this.maxHealth;
                     break;
-                case EntityType.Chain:
+                case EntityType.ChainPickup:
                     playerPickup2.play();
                     hasChain = true;
                     SceneState.scenes[SCENE.GAME].gotChain();
                     break;
-                case EntityType.Handlebar:
+                case EntityType.HandlebarPickup:
                     playerPickup2.play();
                     hasHandleBar = true;
                     SceneState.scenes[SCENE.GAME].gotHandlebar();
                     break;
-                case EntityType.Wheel:
+                case EntityType.WheelPickup:
                     playerPickup2.play();
                     hasWheel = true;
                     SceneState.scenes[SCENE.GAME].gotWheel();
                     break;
-                case EntityType.Engine:
+                case EntityType.EnginePickup:
                     playerPickup2.play();
                     hasEngine = true;
                     SceneState.scenes[SCENE.GAME].gotEngine();

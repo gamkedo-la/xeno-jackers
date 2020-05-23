@@ -1,24 +1,50 @@
-//Health.js
-function health(posX, posY) {
+//UpgradePickup.js
+function UpgradePickup(type, posX, posY) {
     const WIDTH = 18;
     const HEIGHT = 18;
     const SIZE = {width:WIDTH, height:HEIGHT};
-    const FRAME_NUM = 0; //TODO: restore after testing complete
-    
-    let animation = new SpriteAnimation('idle', healthpickup, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], WIDTH, HEIGHT, [1024], false, true);
-    //TODO: Restore once we know which image we want
-//    let animation = new SpriteAnimation('idle', healthpickup, [FRAME_NUM], WIDTH, HEIGHT, [512], false, true);
+
+    let animation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
 
-    this.health = 2;
-    this.type = EntityType.Health;
+    this.type = type;
+    //TODO: Need the right animation sheet and frames
+
+    const getAnimationDataForType = function(type) {
+        const animationData = {
+            name:'idle',
+            sheet:chainPickup,
+            frames:[0],
+            width:18,
+            height:18,
+            times:[1024],
+            reverses:false,
+            loops:true
+        };
+
+        //TODO: Make changes to the default values as necessary
+        switch(type) {
+            case EntityType.ChainPickup:
+                break;
+            case EntityType.WheelPickup:
+                break;
+            case EntityType.HandlebarPickup:
+                break;
+            case EntityType.Engine:
+                break;
+                    }
+
+        return animationData;
+    };
+    const animationData = getAnimationDataForType(this.type);
+    animation = new SpriteAnimation(animationData.name, animationData.sheet, animationData.frames, animationData.width, animationData.height, animationData.times, animationData.reverses, animationData.loops);
 
     this.collisionBody = new Collider(ColliderType.Polygon, [
         {x:posX, y:posY}, 
-        {x:posX + WIDTH, y:posY}, 
-        {x:posX + WIDTH, y:posY + HEIGHT}, 
-        {x:posX, y:posY + HEIGHT} 
+        {x:posX + animationData.width, y:posY}, 
+        {x:posX + animationData.width, y:posY + animationData.height}, 
+        {x:posX, y:posY + animationData.height} 
     ], {x:posX, y:posY});
 
     this.update = function(deltaTime) {

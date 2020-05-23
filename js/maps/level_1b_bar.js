@@ -185,6 +185,18 @@
                  "width":21,
                  "x":648,
                  "y":120
+                }, 
+                {
+                 "gid":4100,
+                 "height":17,
+                 "id":11,
+                 "name":"Chain Pickup",
+                 "rotation":0,
+                 "type":"chainPickup",
+                 "visible":true,
+                 "width":16,
+                 "x":400.333333333333,
+                 "y":121
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -205,7 +217,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":11,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",

@@ -68,7 +68,7 @@ function GameScene() {
 
         if(loadedNewMap) {
             enemies.length = 0;
-            loadEnemies(currentMap.entities);
+            loadEntities(currentMap.entities);
         }
 
         if(mapRenderer === null) {
@@ -188,20 +188,25 @@ function GameScene() {
         }, TRANSITION_TIME);
     };
 
-    const loadEnemies = function(enemyData) {
+    const loadEntities = function(enemyData) {
         for(let data of enemyData) {
-            let anEnemy;
+            let anEntity;
             switch(data.type) {
                 case EntityType.EnemyBiker:
-                    anEnemy = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy
+                    anEntity = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy
+                    enemies.push(anEntity);
                     break;
                 case EntityType.EnemyAlienGuard:
-                    anEnemy = new EnemyAlienGuard(data.x, data.y - 33);
+                    anEntity = new EnemyAlienGuard(data.x, data.y - 33);
+                    enemies.push(anEntity);
+                    break;
+                case EntityType.ChainPickup:
+                    anEntity = new UpgradePickup(EntityType.ChainPickup, data.x, data.y - 16);
+                    otherEntities.push(anEntity);
                     break;
             }
 
-            enemies.push(anEnemy);
-            collisionManager.addEntity(anEnemy);
+            collisionManager.addEntity(anEntity);
         }
     };
 
