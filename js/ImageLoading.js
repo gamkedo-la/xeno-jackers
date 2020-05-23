@@ -82,6 +82,7 @@ const enemyAlienGuardSheet = document.createElement("img");
 const uiMenuBorderPic = document.createElement("img");
 
 //power ups
+const healthpickup = document.createElement("img");
 
 //player related
 const playerSpriteSheet = document.createElement("img");
@@ -132,7 +133,7 @@ function loadImages() {
 //        { imgName: workshopSkybox, theFile: "workshopSkybox.png" },
 
         // power ups
-//        { imgName: shieldPowerUpPic, theFile: "shieldPowerUp.png" },
+        { imgName: healthpickup, theFile: "interface/item_pickups.png" },
 
         // player related
         { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" },
