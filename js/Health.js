@@ -19,7 +19,9 @@ function health(posX, posY) {
         {x:posX, y:posY + HEIGHT} 
     ], {x:posX, y:posY});
 
-    animation = new SpriteAnimation('idle', healthpickup, [window.healthFrame], WIDTH, HEIGHT, [512], false, true);
+    animation = new SpriteAnimation('idle', healthpickup, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], WIDTH, HEIGHT, [1024], false, true);
+    //TODO: Restore once we know which image we want
+//    animation = new SpriteAnimation('idle', healthpickup, [FRAME_NUM], WIDTH, HEIGHT, [512], false, true);
 
     this.update = function(deltaTime) {
         animation.update(deltaTime);
