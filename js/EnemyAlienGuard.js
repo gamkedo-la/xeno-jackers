@@ -4,10 +4,15 @@ function EnemyAlienGuard(posX, posY) {
     const WIDTH = 23;
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
+    const MIN_TIME_TO_GROWL = 5000;
+    const MEDIAN_TIME_TO_GROWL = 5000;
+    const HEALTH_DROP_PROBABILITY = 100;
 
     let currentAnimation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
+
+    let timeToGrowl = MIN_TIME_TO_GROWL + MEDIAN_TIME_TO_GROWL * Math.random();
     
     let isBlocking = false;
     let isCrouching = false;
@@ -33,6 +38,13 @@ function EnemyAlienGuard(posX, posY) {
         currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
+
+        timeToGrowl -= deltaTime;
+        if(timeToGrowl <= 0) {
+            alienGrowl2.play();
+            timeToGrowl = MIN_TIME_TO_GROWL + MEDIAN_TIME_TO_GROWL * Math.random();
+        }
+
 
         if(this.collisionBody.isOnScreen) {
             position.x += Math.round(velocity.x * deltaTime / 1000);
@@ -109,7 +121,13 @@ function EnemyAlienGuard(posX, posY) {
                 position.x += 5;
             }
 
-            if(this.health <= 0) SceneState.scenes[SCENE.GAME].removeMe(this);
+            if(this.health <= 0) {
+                const healthDropChance = 100 * Math.random();
+                if(healthDropChance < HEALTH_DROP_PROBABILITY) {
+                    SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
+                }
+                SceneState.scenes[SCENE.GAME].removeMe(this);
+            }
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
             position.x += Math.ceil(collisionData.magnitude * collisionData.x);
