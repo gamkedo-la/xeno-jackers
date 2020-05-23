@@ -136,18 +136,22 @@ function GameScene() {
 
     this.gotChain = function() {
         hasChain = true;
+        gameUI.hasChain = true;
     };
 
     this.gotWheel = function() {
         hasWheel = true;
+        gameUI.hasWheel = true;
     };
 
     this.gotHandlebar = function() {
         hasHandlebar = true;
+        gameUI.hasHandlebar = true;
     };
 
     this.gotEngine = function() {
         hasEngine = true;
+        gameUI.hasEngine = true;
     };
 
     const verifyNewKeyPressed = function(newKeyEvent, pressed, pressedKeys) {

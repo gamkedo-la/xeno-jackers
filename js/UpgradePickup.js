@@ -15,10 +15,10 @@ function UpgradePickup(type, posX, posY) {
         const animationData = {
             name:'idle',
             sheet:chainPickup,
-            frames:[0],
-            width:18,
-            height:18,
-            times:[1024],
+            frames:[0, 1],
+            width:16,
+            height:16,
+            times:[512],
             reverses:false,
             loops:true
         };

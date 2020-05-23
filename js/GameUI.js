@@ -4,6 +4,11 @@ function GameUI(canvas, context) {
     const HEALTH_X = canvas.width * 0.35 + 5;
     const TOP = canvas.height - (GAME_SCALE * statusbarBase.height);
 
+    this.hasChain = false;
+    this.hasWheel = false;
+    this.hasHandlebar = false;
+    this.hasEngine = false;
+
     this.update = function(deltaTime, player) {
         playerHealth = player.health;
     };
@@ -17,7 +22,8 @@ function GameUI(canvas, context) {
         ); 
 
         for(let i = 0; i < playerHealth; i++) {
-            context.drawImage(healthSegment, 
+            context.drawImage(
+                healthSegment, 
                 0, 0, 
                 healthSegment.width, healthSegment.height, 
                 HEALTH_X + i * (healthSegment.width + 1) * GAME_SCALE, TOP + 2,
@@ -35,5 +41,14 @@ function GameUI(canvas, context) {
         }
         fontRenderer.drawString(context, 0, TOP + 3, scoreString, FONT.Score, GAME_SCALE);
         fontRenderer.drawString(context, 122, TOP + 1, livesString, FONT.Lives, GAME_SCALE);
+
+        if(this.hasChain) {
+            context.drawImage(
+                chainPickup, 
+                0, 0, 
+                chainPickup.width / 2, chainPickup.height, 
+                144, TOP,
+                Math.round((chainPickup.width / 2) * GAME_SCALE), Math.round(chainPickup.height * GAME_SCALE))
+        }
     };
 }
