@@ -98,7 +98,9 @@ const ALIAS = {
 	DOWN2:KEY_DOWN2,
 	LEFT2:KEY_LEFT2,
 	RIGHT2:KEY_RIGHT2,
-	THUMBUP:KEY_T
+	THUMBUP:KEY_T,
+	VOLUME_UP:KEY_PLUS,
+	VOLUME_DOWN:KEY_MINUS
 }
 
 function initializeInput() {
@@ -118,6 +120,14 @@ function notifyCurrentScene(newInput, pressed) {
 function keyPress(evt) {
 	evt.preventDefault();
 
+	if(evt.keyCode === KEY_PLUS) {
+		turnVolumeUp();
+		return;
+	} else if(evt.keyCode === KEY_MINUS) {
+		turnVolumeDown();
+		return;
+	}
+ 
 	let isNewKey = true;
 	for(let i = 0; i < heldButtons.length; i++) {
 		if(heldButtons[i] === evt.keyCode) {
