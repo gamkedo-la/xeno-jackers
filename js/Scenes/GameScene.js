@@ -303,6 +303,11 @@ function GameScene() {
                 return POINTS.EnemyAlienGuard;
             case EntityType.FinalBoss:
                 return POINTS.FinalBoss;
+            case EntityType.ChainPickup:
+            case EntityType.WheelPickup:
+            case EntityType.HandlebarPickup:
+            case EntityType.Engine:
+                return POINTS.BikePart;
             default:
                 return 0;
         }
