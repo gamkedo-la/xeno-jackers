@@ -38,6 +38,11 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 		this.radius = Math.max(Math.abs(halfDeltaX / 0.707), Math.abs(halfDeltaY / 0.707));		
 	};
 
+	this.setPoints = function(newPoints) {
+		this.points = newPoints;
+		this.calculateNormals();
+	}
+
 	this.calculateNormals = function() {
 		for(let i = 0; i < this.points.length; i++) {
 			const start = this.points[i];

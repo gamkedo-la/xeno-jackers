@@ -32,12 +32,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.health = this.maxHealth;
     this.type = EntityType.Player;
 
-    this.collisionBody = new Collider(ColliderType.Polygon, [
-        {x:startX + 4, y:startY + 4}, //top left +2/+3 to make collision box smaller than sprite
-        {x:startX + 17, y:startY + 4}, //top right +21/+3 makes collision box smaller than sprite
-        {x:startX + 17, y:startY + FRAME_HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
-        {x:startX + 4, y:startY + FRAME_HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
-    ], {x:startX, y:startY});
+    this.collisionBody = new Collider(ColliderType.Polygon,
+        [   {x:startX + 4, y:startY + 6}, //top left +2/+3 to make collision box smaller than sprite
+            {x:startX + 17, y:startY + 6}, //top right +21/+3 makes collision box smaller than sprite
+            {x:startX + 17, y:startY + FRAME_HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
+            {x:startX + 4, y:startY + FRAME_HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
+        ], {x:startX, y:startY});
 
     this.getPosition = function() {
         return {x:position.x, y:position.y};
@@ -89,7 +89,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         //console.log("Position Y", position.y);
 
-        processInput(deltaTime);
+        processInput(deltaTime, this.collisionBody);
 
         if(!isOnGround) {
             if(velocity.y < 0) {
@@ -133,9 +133,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         levelHeight = newHeight;
     };
 
-    const processInput = function(deltaTime) {
+    const processInput = function(deltaTime, body) {
         let didRespond = false;
         isWalking = false;
+        const wasCrouching = isCrouching;
+        isCrouching = false;
 
         for(let i = 0; i < heldButtons.length; i++) {
             switch(heldButtons[i]) {
@@ -172,6 +174,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             }
         }
 
+        if(wasCrouching !== isCrouching) {
+            switchToCrouchedPoints(body);
+        }
+
         if(!didRespond) {
             if(!isLanding) {
                 idle();
@@ -197,6 +203,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const moveLeft = function() {
         if(wasKnockedBack) return;
         if(isLanding) return;
+        if(isCrouching) return;
+
         if(isThumbUp) {
             isThumbUp = false;
         };
@@ -213,6 +221,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const moveRight = function() {
         if(wasKnockedBack) return;
         if(isLanding) return;
+        if(isCrouching) return;
+
         if(isThumbUp) {
             isThumbUp = false;
         };
@@ -254,6 +264,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const crouch = function() {
+        velocity.x = 0;
+
         if(isOnGround && !isCrouching) {
             isCrouching = true;
             currentAnimation = animations.crouching;
@@ -268,6 +280,24 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             velocity.x = 0;
             currentAnimation = animations.thumbup;
             currentAnimation.reset();
+        }
+    };
+
+    const switchToCrouchedPoints = function(body) {
+        if(!isCrouching) {
+            body.setPoints([
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 6}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 6}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
+            ]);
+        } else {
+            body.setPoints([
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 12}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 12}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
+            ]);
         }
     };
 
