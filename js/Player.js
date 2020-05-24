@@ -208,7 +208,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isThumbUp = false;
         isFalling = false;
         isLanding = false;
-        heldJumpTime = 0;    
+        if(!isOnGround) {
+            heldJumpTime = MAX_JUMP_TIME;
+        }
     };
 
     const moveLeft = function() {
