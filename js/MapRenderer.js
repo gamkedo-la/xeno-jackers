@@ -2,6 +2,9 @@
 function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_ImageHeight = 8, tile_RenderWidth = 8, tile_RenderHeight = 8) {
     let renderedTilesPerRow = Math.ceil(canvas.width / tile_RenderWidth) + 1;
     let renderedRowCount = Math.ceil(canvas.height / tile_RenderHeight);
+    const imagesPerRow = Math.round(tileSheet.width / tile_ImageWidth);
+
+    let tileManager = new AnimatedTileManager();
 
     this.drawSkybox = function(context, skybox) {
         const skyboxImage = getSkyboxForName(skybox.image);
@@ -10,7 +13,7 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         }
     };
 
-    this.drawTileLayer = function(tiles, mapWidthInTiles) {
+    this.drawTileLayer = function(tiles, mapWidthInTiles, deltaTime) {
         let leftEdge = canvas.center.x - canvas.width / 2;
         if(leftEdge < 0) leftEdge = 0;
         const topEdge = canvas.center.y - canvas.height / 2;
@@ -18,7 +21,7 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
 
         for(let j = 0; j < renderedRowCount; j++) {
             const index = getIndexForPixelPos(leftEdge, topEdge + j * tile_RenderHeight, mapWidthInTiles);
-            renderRowAtIndex(tiles, index, mapWidthInTiles);
+            renderRowAtIndex(tiles, index, mapWidthInTiles, deltaTime);
         }
     };
 
@@ -29,12 +32,12 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         return tileY * mapWidthInTiles + tileX;
     };
 
-    const renderRowAtIndex = function(tiles, index, mapWidthInTiles) {
+    const renderRowAtIndex = function(tiles, index, mapWidthInTiles, deltaTime) {
         let renderIndex = index - 1;
         for(let i = 0; i < renderedTilesPerRow; i++) {
             const renderPos = getPixelPosForIndex(++renderIndex, mapWidthInTiles);
             if(tiles[renderIndex] === 0) continue;
-            const texturePos = getTexturePosForGID(tiles[renderIndex]);
+            const texturePos = getTexturePosForGID(tiles[renderIndex], deltaTime);
             context.drawImage(
                 tileSheet, 
                 texturePos.x, texturePos.y, 
@@ -44,10 +47,9 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         }
     };
 
-    const getTexturePosForGID = function(GID) {
-        if(GID > 0) GID -= 1;
+    const getTexturePosForGID = function(GID, deltaTime) {
+        GID = tileManager.nextGIDForGID(GID, deltaTime);
 
-        const imagesPerRow = Math.round(tileSheet.width / tile_ImageWidth);
         const y = Math.floor(GID / imagesPerRow);
         const x = GID % imagesPerRow;
         return {x:x * tile_ImageWidth, y:y * tile_ImageHeight};
