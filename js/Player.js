@@ -20,6 +20,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     let wasKnockedBack = false;
     let isOnGround = true;
+    let wasOnGround = true;
     let isFalling = false;
     let isLanding = false;
     let heldJumpTime = 0;
@@ -174,6 +175,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             }
         }
 
+        if(isOnGround !== wasOnGround) {
+            switchToJumpingPoints(body);
+            wasOnGround = isOnGround;
+        }
+
         if(wasCrouching !== isCrouching) {
             switchToCrouchedPoints(body);
         }
@@ -297,6 +303,24 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 12}, 
                 {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
                 {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
+            ]);
+        }
+    };
+
+    const switchToJumpingPoints = function(body) {
+        if(isOnGround) {
+            body.setPoints([
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 6}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 6}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
+            ]);
+        } else {
+            body.setPoints([
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 4}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 4}, 
+                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT - 6}, 
+                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT - 6}
             ]);
         }
     };
