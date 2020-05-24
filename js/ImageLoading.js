@@ -138,7 +138,7 @@ function loadImages() {
         { imgName: chainPickup, theFile: "interface/ChainPickUp.png" },
 
         // player related
-        { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" },
+        { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet-old.png" },
 
         // UI
         { imgName: fontSheet, theFile: "interface/xjfont.png" },

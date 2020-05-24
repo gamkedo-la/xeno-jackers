@@ -5,7 +5,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
     const MAX_JUMP_TIME = 170;
-    const FRAME_WIDTH = 64;
+    const FRAME_WIDTH = 24; //old tile sheet = 24, new tile sheet = 64
     const FRAME_HEIGHT = 36;
     const SIZE = {width:FRAME_WIDTH, height:FRAME_HEIGHT};
 
@@ -214,6 +214,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const moveLeft = function() {
         if(wasKnockedBack) return;
         if(isLanding) return;
+        flipped = true;
         if(isCrouching) return;
 
         if(isThumbUp) {
@@ -221,7 +222,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         };
         
         isWalking = true;
-        flipped = true;
+        
         velocity.x = -WALK_SPEED;
         currentAnimation = animations.walking;
         if(position.x < 0) {
@@ -232,6 +233,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const moveRight = function() {
         if(wasKnockedBack) return;
         if(isLanding) return;
+        flipped = false;
         if(isCrouching) return;
 
         if(isThumbUp) {
@@ -239,7 +241,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         };
         
         isWalking = true;
-        flipped = false;
+        
         velocity.x = WALK_SPEED;
         currentAnimation = animations.walking;
         if(position.x + FRAME_WIDTH > levelWidth) {
@@ -275,10 +277,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const crouch = function() {
-        velocity.x = 0;
+        
 
         if(isOnGround && !isCrouching) {
             isCrouching = true;
+            velocity.x = 0;
             currentAnimation = animations.crouching;
         }
     };
