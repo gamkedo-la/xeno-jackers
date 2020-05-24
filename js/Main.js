@@ -75,6 +75,7 @@ function moveAll() {
 
 function windowOnFocus() {
 	if(SceneState.currentScene === SCENE.PAUSE) {
+		timer.skipToNow();
 		gameIsPaused = false;
 		resumeSound.play();
 		SceneState.setState(SCENE.GAME);

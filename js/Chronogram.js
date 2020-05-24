@@ -12,6 +12,10 @@ function Chronogram() {
 		lastUpdate = Date.now();
 		return (worldSpeed * (lastUpdate - previousLastUpdate));
 	};
+
+	this.skipToNow = function() {
+		lastUpdate = Date.now();
+	};
 	
 	this.timeSinceUpdate = function() {
 		let now = Date.now();
