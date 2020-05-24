@@ -5,7 +5,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
     const MAX_JUMP_TIME = 170;
-    const FRAME_WIDTH = 24;
+    const FRAME_WIDTH = 64;
     const FRAME_HEIGHT = 36;
     const SIZE = {width:FRAME_WIDTH, height:FRAME_HEIGHT};
 
@@ -17,6 +17,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let isBlocking = false;
     let isCrouching = false;
     let isThumbUp = false;
+    let isAttacking = false;
 
     let wasKnockedBack = false;
     let isOnGround = true;
@@ -163,6 +164,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     block();
                     didRespond = true;
                     break;
+                case ALIAS.ATTACK:
+                    attack();
+                    didRespond = true;
+                    break;
                 case ALIAS.CROUCH:
                 case ALIAS.CROUCH2:
                     crouch();
@@ -261,11 +266,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
-            return;
-        } else {
-            console.log("Trying to attack");
-//            currentAnimation = animations.attacking;
+        if(isOnGround && currentAnimation != animations.attacking) {
+            isAttacking = true;
+            velocity.x = 0;
+            currentAnimation = animations.attacking;
+            currentAnimation.reset();
         }
     };
 
@@ -428,7 +433,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false);
         anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
-//        anims.attacking = ...
+        anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
 //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
 	    anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
