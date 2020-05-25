@@ -5,7 +5,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
     const MAX_JUMP_TIME = 170;
-    const FRAME_WIDTH = 24; //old tile sheet = 24, new tile sheet = 64
+    const FRAME_WIDTH = 64; //old tile sheet = 24, new tile sheet = 64
     const FRAME_HEIGHT = 36;
     const SIZE = {width:FRAME_WIDTH, height:FRAME_HEIGHT};
 
@@ -25,6 +25,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let isFalling = false;
     let isLanding = false;
     let heldJumpTime = 0;
+    let lastJumpKeyTime = 0;
     let flipped = false;
 
     let levelWidth = 0;
@@ -34,12 +35,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.health = this.maxHealth;
     this.type = EntityType.Player;
 
+    const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
         [   {x:startX + 4, y:startY + 6}, //top left +2/+3 to make collision box smaller than sprite
             {x:startX + 17, y:startY + 6}, //top right +21/+3 makes collision box smaller than sprite
             {x:startX + 17, y:startY + FRAME_HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
             {x:startX + 4, y:startY + FRAME_HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
         ], {x:startX, y:startY});
+    colliderManager.setBody(this.collisionBody);
 
     this.getPosition = function() {
         return {x:position.x, y:position.y};
@@ -48,8 +51,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.setPosition = function(x, y) {
         position.x = x;
         position.y = y;
-        //keep collisionBody in synch with sprite
-        updateCollisionBody(this.collisionBody);
+        colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
 
@@ -75,6 +77,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.update = function(deltaTime) {
+        if(colliderManager.state === null) {
+            colliderManager.setPointsForState(PlayerState.IdleRight, position);
+        }
+
         currentAnimation.update(deltaTime);
 
         if(wasKnockedBack) {
@@ -95,16 +101,37 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         if(!isOnGround) {
             if(velocity.y < 0) {
+                if(currentAnimation !== animations.jumping) {
+                    if(flipped) {
+                        colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+                    } else {
+                        colliderManager.setPointsForState(PlayerState.JumpRight, position);
+                    }
+                }
                 currentAnimation = animations.jumping;
                 currentAnimation.reset();
             } else {
                 isFalling = true;
+                if(currentAnimation !== animations.falling) {
+                    if(flipped) {
+                        colliderManager.setPointsForState(PlayerState.FallingLeft, position);
+                    } else {
+                        colliderManager.setPointsForState(PlayerState.FallingRight, position);
+                    }
+                }
                 currentAnimation = animations.falling;
                 currentAnimation.reset();
             }
         } else if(isLanding) {
             if((currentAnimation.getIsFinished()) || (currentAnimation != animations.landing)) {
                 isLanding = false;
+                if(currentAnimation !== animations.idle) {
+                    if(flipped) {
+                        colliderManager.setPointsForState(PlayerState.IdleLeft, position);
+                    } else {
+                        colliderManager.setPointsForState(PlayerState.IdleRight, position);
+                    }
+                }
                 currentAnimation = animations.idle;
             }
         }
@@ -115,12 +142,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
         
         //keep collisionBody in synch with sprite
-        updateCollisionBody(this.collisionBody);
+//        updateCollisionBody(this.collisionBody);
+        colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
 
     this.newKeyPressed = function(newKey) {
         if(newKey === ALIAS.JUMP || newKey === ALIAS.JUMP2) {
+            lastJumpKeyTime = timer.getCurrentTime();
             if(isOnGround && !isLanding) {
                 if(heldJumpTime < MAX_JUMP_TIME) jump(0);
             }
@@ -180,15 +209,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             }
         }
 
-        if(isOnGround !== wasOnGround) {
-            switchToJumpingPoints(body);
-            wasOnGround = isOnGround;
-        }
-
-        if(wasCrouching !== isCrouching) {
-            switchToCrouchedPoints(body);
-        }
-
         if(!didRespond) {
             if(!isLanding) {
                 idle();
@@ -201,6 +221,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     const idle = function() {
+        if(currentAnimation !== animations.idle) {
+            if(flipped) {
+                colliderManager.setPointsForState(PlayerState.IdleRight, position);
+            } else {
+                colliderManager.setPointsForState(PlayerState.IdleLeft, position);
+            }
+        }
         currentAnimation = animations.idle;
         velocity.x = 0;
         isBlocking = false;
@@ -216,6 +243,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const moveLeft = function() {
         if(wasKnockedBack) return;
         if(isLanding) return;
+
+        if((currentAnimation !== animations.walking) || (!flipped)) {
+            colliderManager.setPointsForState(PlayerState.WalkLeft, position);
+        }
+
         flipped = true;
         if(isCrouching) return;
 
@@ -235,6 +267,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const moveRight = function() {
         if(wasKnockedBack) return;
         if(isLanding) return;
+
+        if((currentAnimation !== animations.walking) || (flipped)) {
+            colliderManager.setPointsForState(PlayerState.WalkRight, position);
+        }
+
         flipped = false;
         if(isCrouching) return;
 
@@ -273,17 +310,29 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if(isOnGround && currentAnimation != animations.attacking) {
             isAttacking = true;
             velocity.x = 0;
+            if(currentAnimation !== animations.attacking) {
+                if(flipped) {
+                    colliderManager.setPointsForState(PlayerState.AttackRight, position);
+                } else {
+                    colliderManager.setPointsForState(PlayerState.AttackLeft, position);
+                }
+            }
             currentAnimation = animations.attacking;
             currentAnimation.reset();
         }
     };
 
     const crouch = function() {
-        
-
         if(isOnGround && !isCrouching) {
             isCrouching = true;
             velocity.x = 0;
+            if(currentAnimation !== animations.idle) {
+                if(flipped) {
+                    colliderManager.setPointsForState(PlayerState.CrouchRight, position);
+                } else {
+                    colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
+                }
+            }
             currentAnimation = animations.crouching;
         }
     };
@@ -294,49 +343,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if(isOnGround && currentAnimation != animations.thumbup) {
             isThumbUp = true;
             velocity.x = 0;
+            if(currentAnimation !== animations.thumbup) {
+                if(flipped) {
+                    colliderManager.setPointsForState(PlayerState.Thumb, position);
+                } else {
+                    colliderManager.setPointsForState(PlayerState.Thumb, position);
+                }
+            }
             currentAnimation = animations.thumbup;
             currentAnimation.reset();
         }
     };
 
-    const switchToCrouchedPoints = function(body) {
-        if(!isCrouching) {
-            body.setPoints([
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 6}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 6}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
-            ]);
-        } else {
-            body.setPoints([
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 12}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 12}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
-            ]);
-        }
-    };
-
-    const switchToJumpingPoints = function(body) {
-        if(isOnGround) {
-            body.setPoints([
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 6}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 6}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}, 
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT}
-            ]);
-        } else {
-            body.setPoints([
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + 4}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + 4}, 
-                {x:position.x + (startX - canvas.center.x) + 17, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT - 6}, 
-                {x:position.x + (startX - canvas.center.x) + 4, y:position.y + (startY - canvas.center.y) + FRAME_HEIGHT - 6}
-            ]);
-        }
-    };
-
     this.draw = function(deltaTime) {
-        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped);
+        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
@@ -377,7 +397,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);
             if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
-            updateCollisionBody(this.collisionBody);
+            colliderManager.updateCollider(position.x, position.y);
+//            updateCollisionBody(this.collisionBody);
             
             if(collisionData.y < -0.1) {
                 isOnGround = true;
@@ -386,6 +407,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     isFalling = false;
                     isLanding = true;
                     heldJumpTime = 0;
+                    if(currentAnimation !== animations.landing) {
+                        if(flipped) {
+                            colliderManager.setPointsForState(PlayerState.LandingLeft, position);
+                        } else {
+                            colliderManager.setPointsForState(PlayerState.LandingRight, position);
+                        }
+                    }
                     currentAnimation = animations.landing;
                     currentAnimation.reset();
                 }
@@ -421,12 +449,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
     };
 
-    const updateCollisionBody = function(body) {
+/*    const updateCollisionBody = function(body) {
         body.setPosition(//this is complicated because the player moves the camera/canvas
             position.x + (startX - canvas.center.x), 
             position.y + (startY - canvas.center.y)
         );
-    };
+    };*/
 
     const initializeAnimations = function() {
         const anims = {};

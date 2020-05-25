@@ -39,7 +39,7 @@ function SpriteAnimation(name, //string identifier for this animation
         }
     }
 
-    this.drawAt = function(x = 0, y = 0, flipped = false) {
+    this.drawAt = function(x = 0, y = 0, flipped = false, offset = 0) {
         const thisFrameRect = getCurrentFrameRect();
 		
 		canvasContext.save();
@@ -54,7 +54,7 @@ function SpriteAnimation(name, //string identifier for this animation
 		}
 
         canvasContext.drawImage(image, 
-            thisFrameRect.x, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
+            thisFrameRect.x + offset, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
             drawPosX, drawPosY, thisFrameRect.width * this.scale, thisFrameRect.height * this.scale);
 
             canvasContext.restore();

@@ -21,7 +21,10 @@ function AnimatedTileManager() {
         return GIDData.GIDs[GIDData.currentFrame];
     };
 
+    tiles[268] = {GIDs:[268, 270], frameTime:128, currentFrame:0};
+    tiles[269] = {GIDs:[269, 271], frameTime:128, currentFrame:0};
+    tiles[332] = {GIDs:[332, 334], frameTime:128, currentFrame:0};
+    tiles[333] = {GIDs:[333, 335], frameTime:128, currentFrame:0};
     tiles[458] = {GIDs:[458, 590, 718, 846, 844, 1102], frameTime:128, currentFrame:0};
     tiles[459] = {GIDs:[459, 591, 719, 847, 845, 1103], frameTime:128, currentFrame:0};
-    //tiles[457] = {GIDs:[62, 63], frameTime:128, currentFrame:0};
 }
