@@ -205,3 +205,21 @@ function mouseInside(x, y, width, height) {
 function pointInside(pointX, pointY, x, y, width, height) {
 	return pointX > x && pointX < x + width && pointY > y && pointY < y + height;
 }
+
+function getKeyChecker(keys) {
+	const keyChecker = function() {
+		for (let i=0; i<heldButtons.length; i++) {
+			for (let j=0; j<keys.length; j++) {
+				if (heldButtons[i] == keys[j]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+	return keyChecker;
+}
+
+function checkForPressedKeys(keys) {
+	return getKeyChecker(keys)();
+}

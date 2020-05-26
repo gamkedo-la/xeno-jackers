@@ -35,6 +35,83 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.health = this.maxHealth;
     this.type = EntityType.Player;
 
+	const fsm = new FSM(initial='idle');
+	fsm.addState('idle', enterIdle, updateIdle, exitIdle);
+	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
+	fsm.addState('walkingRight', enterWalkingRight, updateWalking, exitWalking);
+	fsm.addTransition('idle', 'walkingLeft', getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+	fsm.addTransition('idle', 'walkingRight', getKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	fsm.addTransition('walkingLeft', 'idle', releasedWalkKey);
+	fsm.addTransition('walkingRight', 'idle', releasedWalkKey);
+	fsm.addTransition('walkingLeft', 'walkingRight', getKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	fsm.addTransition('walkingRight', 'walkingLeft', getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+
+	function enterIdle(deltaTime) {
+		if(currentAnimation !== animations.idle) {
+            if(flipped) {
+                colliderManager.setPointsForState(PlayerState.IdleRight, position);
+            } else {
+                colliderManager.setPointsForState(PlayerState.IdleLeft, position);
+            }
+        }
+        currentAnimation = animations.idle;
+        velocity.x = 0;
+        isBlocking = false;
+        isCrouching = false;
+        isThumbUp = false;
+        isFalling = false;
+        isLanding = false;
+        if(!isOnGround) {
+            heldJumpTime = MAX_JUMP_TIME;
+        }
+	};
+
+	function updateIdle(deltaTime) {
+	}
+
+	function exitIdle(deltaTime) {
+	}
+
+	function enterWalkingRight(deltaTime) {
+		isWalking = true; // TODO: remove this line after all states are in the FSM
+		velocity.x = WALK_SPEED;
+		flipped = false;
+		colliderManager.setPointsForState(PlayerState.WalkRight, position);
+		currentAnimation = animations.walking;
+	}
+
+	function enterWalkingLeft(deltaTime) {
+		isWalking = true; // TODO: remove this line after all states are in the FSM
+		velocity.x = -WALK_SPEED;
+		colliderManager.setPointsForState(PlayerState.WalkLeft, position);
+        flipped = true;
+		currentAnimation = animations.walking;
+	}
+
+	function updateWalking(deltaTime) {
+		if(position.x < 0) {
+            position.x = 0;
+        }
+		if(position.x + FRAME_WIDTH > levelWidth) {
+            position.x = levelWidth;
+        }
+	}
+
+	function exitWalking(player) {
+		isWalking = false;
+	}
+
+	function pressedWalkKey() {
+		return checkForPressedKeys([
+			ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2,
+			ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2,
+		]);
+	};
+
+	function releasedWalkKey() {
+		return !pressedWalkKey();
+	}
+
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
         [   {x:startX + 4, y:startY + 6}, //top left +2/+3 to make collision box smaller than sprite
@@ -98,6 +175,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         //console.log("Position Y", position.y);
 
         processInput(deltaTime, this.collisionBody);
+		fsm.update(deltaTime);
 
         if(!isOnGround) {
             if(velocity.y < 0) {
@@ -166,7 +244,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const processInput = function(deltaTime, body) {
         let didRespond = false;
-        isWalking = false;
         const wasCrouching = isCrouching;
         isCrouching = false;
 
@@ -174,12 +251,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             switch(heldButtons[i]) {
                 case ALIAS.WALK_LEFT:
                 case ALIAS.WALK_LEFT2:
-                    moveLeft();
                     didRespond = true;
                     break;
                 case ALIAS.WALK_RIGHT:
                 case ALIAS.WALK_RIGHT2:
-                    moveRight();
                     didRespond = true;
                     break;
                 case ALIAS.JUMP:
@@ -211,80 +286,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         if(!didRespond) {
             if(!isLanding) {
-                idle();
+                enterIdle(); // FIXME: replace with call to FSM, like fsm.forceStateSwich('idle') or something
             }
 
             if((!wasKnockedBack) && (isOnGround)) {
                 velocity.x = 0;
             }
-        }
-    }
-
-    const idle = function() {
-        if(currentAnimation !== animations.idle) {
-            if(flipped) {
-                colliderManager.setPointsForState(PlayerState.IdleRight, position);
-            } else {
-                colliderManager.setPointsForState(PlayerState.IdleLeft, position);
-            }
-        }
-        currentAnimation = animations.idle;
-        velocity.x = 0;
-        isBlocking = false;
-        isCrouching = false;
-        isThumbUp = false;
-        isFalling = false;
-        isLanding = false;
-        if(!isOnGround) {
-            heldJumpTime = MAX_JUMP_TIME;
-        }
-    };
-
-    const moveLeft = function() {
-        if(wasKnockedBack) return;
-        if(isLanding) return;
-
-        if((currentAnimation !== animations.walking) || (!flipped)) {
-            colliderManager.setPointsForState(PlayerState.WalkLeft, position);
-        }
-
-        flipped = true;
-        if(isCrouching) return;
-
-        if(isThumbUp) {
-            isThumbUp = false;
-        };
-        
-        isWalking = true;
-        
-        velocity.x = -WALK_SPEED;
-        currentAnimation = animations.walking;
-        if(position.x < 0) {
-            position.x = 0;
-        }
-    };
-
-    const moveRight = function() {
-        if(wasKnockedBack) return;
-        if(isLanding) return;
-
-        if((currentAnimation !== animations.walking) || (flipped)) {
-            colliderManager.setPointsForState(PlayerState.WalkRight, position);
-        }
-
-        flipped = false;
-        if(isCrouching) return;
-
-        if(isThumbUp) {
-            isThumbUp = false;
-        };
-        
-        isWalking = true;
-        
-        velocity.x = WALK_SPEED;
-        currentAnimation = animations.walking;
-        if(position.x + FRAME_WIDTH > levelWidth) {
-            position.x = levelWidth;
         }
     };
 
