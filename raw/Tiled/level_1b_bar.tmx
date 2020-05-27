@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="27">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="54">
  <editorsettings>
   <export target="../../js/maps/level_1b_bar.js" format="js"/>
  </editorsettings>
@@ -398,34 +398,19 @@
  </layer>
  <objectgroup id="7" name="EnvironmentColliders">
   <object id="1" name="ground1" type="ground" x="0" y="120.092">
-   <polygon points="0,0 1072.06,0 1071.81,15.7542 0,16.0043"/>
+   <polygon points="0,0 1044.15,0 1043.91,9.29158 0,9.43908"/>
   </object>
   <object id="2" name="leftWall" type="wall" x="0" y="0">
    <polygon points="0,0 16,-0.125 16.125,119.625 0,119.625"/>
   </object>
-  <object id="12" name="stairs1" type="ground" x="1072.18" y="128.727">
-   <polygon points="-0.18,-0.727 111.82,111.273 103.82,111.273 -0.18,7.273"/>
-  </object>
-  <object id="13" name="ground2" type="ground" x="1175.82" y="240.545">
-   <polygon points="0,0 0,15.6364 104,15.4545 104,-0.363636"/>
+  <object id="13" name="ground2" type="ground" x="1175.82" y="240.179">
+   <polygon points="0,0 0,16.0029 75.5455,15.8167 75.5455,-0.372159"/>
   </object>
   <object id="15" name="rightWall" type="wall" x="1456.18" y="216">
    <polygon points="0,0 -0.181818,96.3636 15.8182,96.3636 15.6364,0.181818"/>
   </object>
-  <object id="16" name="ground3" type="ground" x="1344.36" y="312.727">
-   <polygon points="0,0 0,15.6364 111.818,15.4545 111.818,-0.363636"/>
-  </object>
-  <object id="19" name="stair-part" type="ground" x="1344" y="304.375">
-   <polygon points="0,-0.375 -8,-0.375 -8,7.625 0,7.625"/>
-  </object>
-  <object id="20" name="stair-part" type="ground" x="1336" y="296">
-   <polygon points="0,-0.375 -8,-0.375 -8,7.625 0,7.625"/>
-  </object>
-  <object id="21" name="stair-part" type="ground" x="1288" y="248">
-   <polygon points="0,-0.375 -8,-0.375 -8,7.625 0,7.625"/>
-  </object>
-  <object id="22" name="stair-part" type="ground" x="1296" y="256">
-   <polygon points="0,-0.375 -8,-0.375 -8,7.625 0,7.625"/>
+  <object id="16" name="ground3" type="ground" x="1342.36" y="312.194">
+   <polygon points="0,0 0,16.1695 113.818,15.9814 113.818,-0.376033"/>
   </object>
   <object id="23" name="box" type="ground" x="1416" y="280">
    <polygon points="0,0 0,16 16,16 16,0"/>
@@ -439,13 +424,85 @@
   <object id="26" name="box" type="ground" x="1416" y="296">
    <polygon points="0,0 0,16 16,16 16,0"/>
   </object>
+  <object id="27" name="stair-part" type="ground" x="1080" y="129.159">
+   <polygon points="0,-0.28418 -27.875,-0.28418 -27.875,5.77832 0,5.77832"/>
+  </object>
+  <object id="28" name="stair-part" type="ground" x="1088" y="137.159">
+   <polygon points="0,-0.28418 -27.7273,-0.28418 -27.7273,5.77832 0,5.77832"/>
+  </object>
+  <object id="29" name="stair-part" type="ground" x="1096" y="145.344">
+   <polygon points="0,-0.28125 -27.6648,-0.28125 -27.6648,5.71875 0,5.71875"/>
+  </object>
+  <object id="30" name="stair-part" type="ground" x="1103.94" y="153.2">
+   <polygon points="0,-0.325195 -27.6591,-0.325195 -27.6591,6.6123 0,6.6123"/>
+  </object>
+  <object id="31" name="stair-part" type="ground" x="1112" y="161.144">
+   <polygon points="0,-0.331055 -27.7841,-0.331055 -27.7841,6.73145 0,6.73145"/>
+  </object>
+  <object id="32" name="stair-part" type="ground" x="1120" y="169.209">
+   <polygon points="0,-0.333984 -27.6023,-0.333984 -27.6023,6.79102 0,6.79102"/>
+  </object>
+  <object id="33" name="stair-part" type="ground" x="1128.06" y="177.274">
+   <polygon points="0,-0.336914 -27.7898,-0.336914 -27.7898,6.85059 0,6.85059"/>
+  </object>
+  <object id="34" name="stair-part" type="ground" x="1136" y="185.266">
+   <polygon points="0,-0.328125 -27.875,-0.328125 -27.875,6.67188 0,6.67188"/>
+  </object>
+  <object id="35" name="stair-part" type="ground" x="1144" y="193.149">
+   <polygon points="0,-0.336914 -27.875,-0.336914 -27.875,6.85059 0,6.85059"/>
+  </object>
+  <object id="36" name="stair-part" type="ground" x="1152" y="201.212">
+   <polygon points="0,-0.336914 -27.8182,-0.336914 -27.8182,6.85059 0,6.85059"/>
+  </object>
+  <object id="37" name="stair-part" type="ground" x="1159.94" y="209.155">
+   <polygon points="0,-0.342773 -27.6648,-0.342773 -27.6648,6.96973 0,6.96973"/>
+  </object>
+  <object id="38" name="stair-part" type="ground" x="1168" y="217.206">
+   <polygon points="0,-0.331055 -27.9886,-0.331055 -27.9886,6.73145 0,6.73145"/>
+  </object>
+  <object id="39" name="stair-part" type="ground" x="1176" y="225.152">
+   <polygon points="0,-0.339844 -28.0341,-0.339844 -28.0341,6.91016 0,6.91016"/>
+  </object>
+  <object id="40" name="stair-part" type="ground" x="1184.06" y="233.379">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="42" name="stair-part" type="ground" x="1072" y="120.411">
+   <polygon points="0,-0.331055 -27.875,-0.331055 -27.875,6.73144 0,6.73144"/>
+  </object>
+  <object id="44" name="stair-part" type="ground" x="1280.09" y="240.165">
+   <polygon points="0,-0.305487 -28.6932,-0.305487 -28.6932,6.21156 0,6.21156"/>
+  </object>
+  <object id="45" name="stair-part" type="ground" x="1287.82" y="248.455">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="46" name="stair-part" type="ground" x="1295.91" y="256.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="47" name="stair-part" type="ground" x="1304" y="264.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="48" name="stair-part" type="ground" x="1312" y="272.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="49" name="stair-part" type="ground" x="1320.09" y="280.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="50" name="stair-part" type="ground" x="1327.91" y="288.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="52" name="stair-part" type="ground" x="1336.09" y="296.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
+  <object id="53" name="stair-part" type="ground" x="1344.09" y="304.273">
+   <polygon points="0,-0.322532 -28.6932,-0.322532 -28.6932,6.55815 0,6.55815"/>
+  </object>
  </objectgroup>
  <objectgroup id="10" name="Entities">
-  <object id="5" name="PlayerSpawn" type="player" gid="4097" x="297" y="120" width="21" height="30"/>
   <object id="6" name="biker1" type="enemyBiker" gid="4098" x="160" y="120" width="21" height="31"/>
   <object id="7" name="biker2" type="enemyBiker" gid="4098" x="470" y="120" width="21" height="31"/>
   <object id="8" name="alienGuard1" type="enemyAlienGuard" gid="4099" x="648" y="120" width="21" height="32"/>
   <object id="11" name="Chain Pickup" type="chainPickup" gid="4100" x="400.333" y="121" width="16" height="17"/>
+  <object id="43" name="PlayerSpawn" type="player" gid="4097" x="1008.05" y="119.727" width="21" height="30"/>
  </objectgroup>
  <layer id="5" name="ForegroundTiles" width="320" height="126">
   <data encoding="csv">
