@@ -220,6 +220,24 @@ function getKeyChecker(keys) {
 	return keyChecker;
 }
 
+function getExclusiveKeyChecker(keys) {
+	const keysSet = new Set(keys)
+	const exclusiveKeyChecker = function() {
+		if (heldButtons.length != 1) {
+			return false;
+		}
+		const heldSet = new Set(heldButtons);
+		for (let key of keysSet) {
+			heldSet.delete(key);
+			if (heldSet.size == 0) {
+				break;
+			}
+		}
+		return heldSet.size == 0;
+	};
+	return exclusiveKeyChecker;
+}
+
 function checkForPressedKeys(keys) {
 	return getKeyChecker(keys)();
 }

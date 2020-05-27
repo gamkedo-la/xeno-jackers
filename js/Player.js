@@ -39,12 +39,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addState('idle', enterIdle, updateIdle, exitIdle);
 	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
 	fsm.addState('walkingRight', enterWalkingRight, updateWalking, exitWalking);
-	fsm.addTransition('idle', 'walkingLeft', getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
-	fsm.addTransition('idle', 'walkingRight', getKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	fsm.addTransition('idle', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+	fsm.addTransition('idle', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
 	fsm.addTransition('walkingLeft', 'idle', releasedWalkKey);
 	fsm.addTransition('walkingRight', 'idle', releasedWalkKey);
-	fsm.addTransition('walkingLeft', 'walkingRight', getKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
-	fsm.addTransition('walkingRight', 'walkingLeft', getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+	fsm.addTransition('walkingLeft', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	fsm.addTransition('walkingRight', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {
