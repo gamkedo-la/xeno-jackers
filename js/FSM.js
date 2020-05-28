@@ -1,4 +1,4 @@
-function FSM(initialState) {
+function FSM(initial) {
 	const NOSTATE = 'none';
 	let currentState = NOSTATE;
 	const states = {};
@@ -22,7 +22,7 @@ function FSM(initialState) {
 
 	this.update = function(deltaTime) {
 		if (currentState == NOSTATE) {
-			currentState = initialState;
+			currentState = initial;
 			states[currentState].enter(deltaTime);
 		}
 		states[currentState].update(deltaTime);
