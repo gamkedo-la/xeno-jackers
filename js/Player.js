@@ -15,7 +15,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     
     let isWalking = false;
     let isBlocking = false;
-    let isCrouching = false;
     let isThumbUp = false;
     let isAttacking = false;
 
@@ -37,6 +36,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function releasedJumpKeyOrMaxedTimer(deltaTime) {
 		return !pressedJumpKey() || heldJumpTime >= MAX_JUMP_TIME;
 	}
+	const pressedCrouchKey = getKeyChecker([ALIAS.CROUCH, ALIAS.CROUCH2]);
+	function releasedCrouchKey() {
+		return !pressedCrouchKey();
+	}
 	const fsm = new FSM(initial='idle');
 	fsm.addState('idle', enterIdle, updateIdle, exitIdle);
 	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
@@ -44,6 +47,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addState('jumping', enterJumping, updateJumping, exitJumping);
 	fsm.addState('falling', enterFalling, updateFalling, exitFalling);
 	fsm.addState('landing', enterLanding, updateLanding, exitLanding);
+	fsm.addState('crouching', enterCrouching, updateCrouching, exitCrouching);
 	fsm.addTransition('idle', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	fsm.addTransition('idle', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
 	fsm.addTransition('walkingLeft', 'idle', releasedWalkKey);
@@ -58,6 +62,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addTransition('walkingRight', 'jumping', getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]));
 	fsm.addTransition('falling', 'landing', collidedWithWalkable);
 	fsm.addTransition('landing', 'idle', finishedLandingAnimation);
+	fsm.addTransition('idle', 'crouching', pressedCrouchKey);
+	fsm.addTransition('crouching', 'idle', releasedCrouchKey);
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {
@@ -70,7 +76,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         currentAnimation = animations.idle;
         velocity.x = 0;
         isBlocking = false;
-        isCrouching = false;
         isThumbUp = false;
         if(!isOnGround) {
             heldJumpTime = MAX_JUMP_TIME;
@@ -185,6 +190,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		return currentAnimation.getIsFinished() || currentAnimation != animations.landing;
 	}
 
+	function enterCrouching(deltaTime) {
+		velocity.x = 0;
+        currentAnimation = animations.crouching;
+	}
+
+	function updateCrouching(deltaTime) {}
+
+	function exitCrouching(deltaTime) {}
+
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
         [   {x:startX + 4, y:startY + 6}, //top left +2/+3 to make collision box smaller than sprite
@@ -210,7 +224,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         velocity.y = 0;
         
         isBlocking = false;
-        isCrouching = false;
         isThumbUp = false;
         isWalking = false;
 
@@ -271,8 +284,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const processInput = function(deltaTime, body) {
         let didRespond = false;
-        const wasCrouching = isCrouching;
-        isCrouching = false;
 
         for(let i = 0; i < heldButtons.length; i++) {
             switch(heldButtons[i]) {
@@ -299,7 +310,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     break;
                 case ALIAS.CROUCH:
                 case ALIAS.CROUCH2:
-                    crouch();
                     didRespond = true;
                     break;
                 case ALIAS.THUMBUP:
@@ -337,21 +347,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             }
             currentAnimation = animations.attacking;
             currentAnimation.reset();
-        }
-    };
-
-    const crouch = function() {
-        if(isOnGround && !isCrouching) {
-            isCrouching = true;
-            velocity.x = 0;
-            if(currentAnimation !== animations.idle) {
-                if(flipped) {
-                    colliderManager.setPointsForState(PlayerState.CrouchRight, position);
-                } else {
-                    colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
-                }
-            }
-            currentAnimation = animations.crouching;
         }
     };
 
