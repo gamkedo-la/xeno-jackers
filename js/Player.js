@@ -22,8 +22,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let wasKnockedBack = false;
     let isOnGround = true;
     let wasOnGround = true;
-    let isFalling = false;
-    let isLanding = false;
     let heldJumpTime = 0;
     let lastJumpKeyTime = 0;
     let flipped = false;
@@ -35,16 +33,31 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.health = this.maxHealth;
     this.type = EntityType.Player;
 
+	const pressedJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
+	function releasedJumpKeyOrMaxedTimer(deltaTime) {
+		return !pressedJumpKey() || heldJumpTime >= MAX_JUMP_TIME;
+	}
 	const fsm = new FSM(initial='idle');
 	fsm.addState('idle', enterIdle, updateIdle, exitIdle);
 	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
 	fsm.addState('walkingRight', enterWalkingRight, updateWalking, exitWalking);
+	fsm.addState('jumping', enterJumping, updateJumping, exitJumping);
+	fsm.addState('falling', enterFalling, updateFalling, exitFalling);
+	fsm.addState('landing', enterLanding, updateLanding, exitLanding);
 	fsm.addTransition('idle', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	fsm.addTransition('idle', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
 	fsm.addTransition('walkingLeft', 'idle', releasedWalkKey);
 	fsm.addTransition('walkingRight', 'idle', releasedWalkKey);
 	fsm.addTransition('walkingLeft', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
 	fsm.addTransition('walkingRight', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+	fsm.addTransition('idle', 'jumping', pressedJumpKey);
+	fsm.addTransition('jumping', 'falling', function() {
+		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
+	});
+	fsm.addTransition('walkingLeft', 'jumping', getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]));
+	fsm.addTransition('walkingRight', 'jumping', getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]));
+	fsm.addTransition('falling', 'landing', collidedWithWalkable);
+	fsm.addTransition('landing', 'idle', finishedLandingAnimation);
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {
@@ -59,8 +72,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isBlocking = false;
         isCrouching = false;
         isThumbUp = false;
-        isFalling = false;
-        isLanding = false;
         if(!isOnGround) {
             heldJumpTime = MAX_JUMP_TIME;
         }
@@ -97,7 +108,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 	}
 
-	function exitWalking(player) {
+	function exitWalking(deltaTime) {
 		isWalking = false;
 	}
 
@@ -110,6 +121,68 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function releasedWalkKey() {
 		return !pressedWalkKey();
+	}
+
+	function enterJumping(deltaTime) {
+		isOnGround = false;
+		heldJumpTime = 0;
+		if(flipped) {
+            colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.JumpRight, position);
+        }
+		currentAnimation = animations.jumping;
+        currentAnimation.reset();
+	}
+
+	function updateJumping(deltaTime) {
+		velocity.y -= MAX_Y_SPEED / 10;
+		heldJumpTime += deltaTime;
+	}
+
+	function exitJumping(deltaTime) {
+	}
+
+	function enterFalling(deltaTime) {
+		if(flipped) {
+            colliderManager.setPointsForState(PlayerState.FallingLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.FallingRight, position);
+        }
+		currentAnimation = animations.falling;
+        currentAnimation.reset();
+	}
+
+	function updateFalling(deltaTime) {
+	}
+
+	function exitFalling(deltaTime) {
+		isOnGround = true;
+		heldJumpTime = 0;
+	}
+
+	function enterLanding(deltaTime) {
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.LandingLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.LandingRight, position);
+        }
+        currentAnimation = animations.landing;
+        currentAnimation.reset();
+	}
+
+	function updateLanding(deltaTime) {
+	}
+
+	function exitLanding(deltaTime) {
+	}
+
+	function collidedWithWalkable(deltaTime) {
+		return isOnGround;
+	}
+
+	function finishedLandingAnimation(deltaTime) {
+		return currentAnimation.getIsFinished() || currentAnimation != animations.landing;
 	}
 
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
@@ -143,8 +216,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         wasKnockedBack = false;
         isOnGround = true;
-        isFalling = false;
-        isLanding = false;
         heldJumpTime = 0;
         flipped = false;
     };
@@ -177,43 +248,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         processInput(deltaTime, this.collisionBody);
 		fsm.update(deltaTime);
 
-        if(!isOnGround) {
-            if(velocity.y < 0) {
-                if(currentAnimation !== animations.jumping) {
-                    if(flipped) {
-                        colliderManager.setPointsForState(PlayerState.JumpLeft, position);
-                    } else {
-                        colliderManager.setPointsForState(PlayerState.JumpRight, position);
-                    }
-                }
-                currentAnimation = animations.jumping;
-                currentAnimation.reset();
-            } else {
-                isFalling = true;
-                if(currentAnimation !== animations.falling) {
-                    if(flipped) {
-                        colliderManager.setPointsForState(PlayerState.FallingLeft, position);
-                    } else {
-                        colliderManager.setPointsForState(PlayerState.FallingRight, position);
-                    }
-                }
-                currentAnimation = animations.falling;
-                currentAnimation.reset();
-            }
-        } else if(isLanding) {
-            if((currentAnimation.getIsFinished()) || (currentAnimation != animations.landing)) {
-                isLanding = false;
-                if(currentAnimation !== animations.idle) {
-                    if(flipped) {
-                        colliderManager.setPointsForState(PlayerState.IdleLeft, position);
-                    } else {
-                        colliderManager.setPointsForState(PlayerState.IdleRight, position);
-                    }
-                }
-                currentAnimation = animations.idle;
-            }
-        }
-
         if(position.y > levelHeight) {
             this.health = 0;
             SceneState.scenes[SCENE.GAME].removeMe(this);
@@ -225,14 +259,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         this.collisionBody.calcOnscreen(canvas);
     };
 
-    this.newKeyPressed = function(newKey) {
-        if(newKey === ALIAS.JUMP || newKey === ALIAS.JUMP2) {
-            lastJumpKeyTime = timer.getCurrentTime();
-            if(isOnGround && !isLanding) {
-                if(heldJumpTime < MAX_JUMP_TIME) jump(0);
-            }
-        }
-    };
+    this.newKeyPressed = function(newKey) {};
 
     this.setLevelWidth = function(newWidth) {
         levelWidth = newWidth;
@@ -259,9 +286,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     break;
                 case ALIAS.JUMP:
                 case ALIAS.JUMP2:
-                    if(isOnGround) break;
-                    if(heldJumpTime < MAX_JUMP_TIME) jump(deltaTime);
-                    didRespond = true;
+				    didRespond = didRespond || !isOnGround;
                     break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
@@ -285,23 +310,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 
         if(!didRespond) {
-            if(!isLanding) {
-                enterIdle(); // FIXME: replace with call to FSM, like fsm.forceStateSwich('idle') or something
-            }
-
             if((!wasKnockedBack) && (isOnGround)) {
                 velocity.x = 0;
             }
-        }
-    };
-
-    const jump = function(deltaTime) {
-        if(isOnGround) {
-            isOnGround = false;
-            velocity.y = -MAX_Y_SPEED / 10;
-        } else {
-            velocity.y -= MAX_Y_SPEED / 10;
-            heldJumpTime += deltaTime;
         }
     };
 
@@ -409,21 +420,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             
             if(collisionData.y < -0.1) {
                 isOnGround = true;
-
-                if(isFalling) {
-                    isFalling = false;
-                    isLanding = true;
-                    heldJumpTime = 0;
-                    if(currentAnimation !== animations.landing) {
-                        if(flipped) {
-                            colliderManager.setPointsForState(PlayerState.LandingLeft, position);
-                        } else {
-                            colliderManager.setPointsForState(PlayerState.LandingRight, position);
-                        }
-                    }
-                    currentAnimation = animations.landing;
-                    currentAnimation.reset();
-                }
             } 
         } else if(isPickup(otherEntity)) {
             switch(otherEntity.type) {
