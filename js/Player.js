@@ -48,22 +48,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addState('falling', enterFalling, updateFalling, exitFalling);
 	fsm.addState('landing', enterLanding, updateLanding, exitLanding);
 	fsm.addState('crouching', enterCrouching, updateCrouching, exitCrouching);
-	fsm.addTransition('idle', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
-	fsm.addTransition('idle', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
-	fsm.addTransition('walkingLeft', 'idle', releasedWalkKey);
-	fsm.addTransition('walkingRight', 'idle', releasedWalkKey);
-	fsm.addTransition('walkingLeft', 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
-	fsm.addTransition('walkingRight', 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
-	fsm.addTransition('idle', 'jumping', pressedJumpKey);
-	fsm.addTransition('jumping', 'falling', function() {
+
+	fsm.addTransition(['idle'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+	fsm.addTransition(['idle'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	fsm.addTransition(['walkingLeft', 'walkingRight'], 'idle', releasedWalkKey);
+	fsm.addTransition(['walkingLeft'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	fsm.addTransition(['walkingRight'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
+	fsm.addTransition(['idle', 'walkingLeft', 'walkingRight'], 'jumping', pressedJumpKey);
+	fsm.addTransition(['jumping'], 'falling', function() {
 		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
 	});
-	fsm.addTransition('walkingLeft', 'jumping', getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]));
-	fsm.addTransition('walkingRight', 'jumping', getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]));
-	fsm.addTransition('falling', 'landing', collidedWithWalkable);
-	fsm.addTransition('landing', 'idle', finishedLandingAnimation);
-	fsm.addTransition('idle', 'crouching', pressedCrouchKey);
-	fsm.addTransition('crouching', 'idle', releasedCrouchKey);
+	fsm.addTransition(['falling'], 'landing', collidedWithWalkable);
+	fsm.addTransition(['landing'], 'idle', finishedLandingAnimation);
+	fsm.addTransition(['idle'], 'crouching', pressedCrouchKey);
+	fsm.addTransition(['crouching'], 'idle', releasedCrouchKey);
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {

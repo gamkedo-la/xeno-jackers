@@ -12,9 +12,9 @@ function FSM(initial) {
 		};
 	};
 
-	this.addTransition = function(stateFrom, stateTo, conditionFunc) {
+	this.addTransition = function(statesFrom, stateTo, conditionFunc) {
 		transitions.push({
-			from: stateFrom,
+			from: statesFrom,
 			to: stateTo,
 			cond: conditionFunc,
 		});
@@ -26,13 +26,14 @@ function FSM(initial) {
 			states[currentState].enter(deltaTime);
 		}
 		states[currentState].update(deltaTime);
-		for (i=0; i<transitions.length; i++) {
-			let transition = transitions[i];
-			if (transition.from == currentState && transition.cond()) {
-				states[currentState].exit(deltaTime);
-				currentState = transition.to;
-				states[currentState].enter(deltaTime);
-				break;
+		for (let transition of transitions) {
+			for (let fromState of transition.from) {
+				if (fromState == currentState && transition.cond()) {
+					states[currentState].exit(deltaTime);
+					currentState = transition.to;
+					states[currentState].enter(deltaTime);
+					return;
+				}
 			}
 		}
 	};
