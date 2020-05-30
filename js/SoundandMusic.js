@@ -19,6 +19,7 @@ let menuMusic = MENU_MUSIC_FILENAME;
 let musicVolume;
 let effectsVolume;
 let currentBackgroundMusic;
+let playerJump;
 const VOLUME_INCREMENT = 0.05;
 const VOLUME_MUSIC = 1.0;
 
@@ -50,6 +51,7 @@ function loadAudio() {
 	chainAttack1 = new SoundOverlapsClass(assetPath.Audio + "chain_attack1");
 	chainAttack2 = new SoundOverlapsClass(assetPath.Audio + "chain_attack2");
 	nodeActivate = new SoundOverlapsClass(assetPath.Audio + "node_activate");
+	playerJump = new SoundOverlapsClass(assetPath.Audio + "jumpUp");
 }
 
 function setFormat() {
