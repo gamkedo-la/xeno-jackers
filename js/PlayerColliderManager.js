@@ -142,81 +142,11 @@ function PlayerColliderManager(startX, startY, size) {
     };
 
     this.processEnvironmentCollision = function(playerPos, playerVel, otherEntity, collisionData) {
-        const envPoint = otherEntity.collisionBody.points[collisionData.body2Index];
-
-        if(collisionData.body1Index === 0) {
-            //upper left corner collision
-            const deltaX = Math.round(collisionData.magnitude * collisionData.x);
-            const deltaY = Math.round(collisionData.magnitude * collisionData.y);
-            if(Math.abs(deltaX) > 0) {
-                //need to move player right
-                playerPos.x += deltaX;
-                playerVel.x = 0;
-            } else if(Math.abs(deltaY) > 0) {
-                //need to move player down
-                playerPos.y += deltaY;
-                playerVel.y = 0;
-            }
-        } else if(collisionData.body1Index === 1) {
-            //upper right corner collision
-            const deltaX = Math.round(collisionData.magnitude * collisionData.x);
-            const deltaY = Math.round(collisionData.magnitude * collisionData.y);
-            if(Math.abs(deltaX) > 0) {
-                //need to move player left
-                playerPos.x += deltaX;
-                playerVel.x = 0;
-            } else if(Math.abs(deltaY) > 0) {
-                //need to move player down
-                playerPos.y += deltaY;
-                playerVel.y = 0;
-            }
-        } else if(collisionData.body1Index === 2) {
-            //lower right corner collision
-            const deltaX = Math.round(collisionData.magnitude * collisionData.x);
-            const deltaY = Math.round(collisionData.magnitude * collisionData.y);
-            if(Math.abs(deltaX) > 0) {
-                //need to move player left
-                playerPos.x += deltaX;
-                playerVel.x = 0;
-            } else if(Math.abs(deltaY) > 0) {
-                //need to move player up
-                playerPos.y += deltaY;
-                playerVel.y = 0;
-            }
-        } else if(collisionData.body1Index === 3) {
-            //lower left corner collision
-            const deltaX = Math.round(collisionData.magnitude * collisionData.x);
-            const deltaY = Math.round(collisionData.magnitude * collisionData.y);
-            if(Math.abs(deltaX) > 0) {
-                //need to move player right
-                playerPos.x += deltaX;
-                playerVel.x = 0;
-            } else if(Math.abs(deltaY) > 0) {
-                //need to move player up
-                playerPos.y += deltaY;
-                playerVel.y = 0;
-            }
-        }
+        if (Math.abs(collisionData.x) > 0.01) playerVel.x = 0;
+        playerPos.y += Math.ceil(collisionData.magnitude * collisionData.y);
+        if ((Math.abs(collisionData.y) > 0.01) && (playerVel.y > 0)) playerVel.y = 0;
 
         this.updateCollider(playerPos.x, playerPos.y);
-
-
-
-
-
-
-
-        /*if(Math.abs(collisionData.x) > 0.01) {
-            playerVel.x = 0;
-            playerPos.x += Math.round(collisionData.magnitude * collisionData.x);
-        }
-
-        if((Math.abs(collisionData.y) > 0.01)) {
-            playerVel.y = 0;
-            playerPos.y += Math.round(collisionData.magnitude * collisionData.y);
-        }
-
-        this.updateCollider(playerPos.x, playerPos.y);*/
     };
 
     this.setPointsForState = function(state, position) {
