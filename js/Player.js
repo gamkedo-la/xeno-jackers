@@ -37,10 +37,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
-        [{ x: startX + 4, y: startY + 6 }, //top left +2/+3 to make collision box smaller than sprite
-        { x: startX + 17, y: startY + 6 }, //top right +21/+3 makes collision box smaller than sprite
-        { x: startX + 17, y: startY + FRAME_HEIGHT }, //bottom right +21/+32 makes collision box smaller than sprite
-        { x: startX + 4, y: startY + FRAME_HEIGHT } //bottom left +2/+32 makes collision box smaller than sprite
+        [{ x: startX + 10, y: startY + 6 }, //top left +2/+3 to make collision box smaller than sprite
+        { x: startX + 23, y: startY + 6 }, //top right +21/+3 makes collision box smaller than sprite
+        { x: startX + 23, y: startY + FRAME_HEIGHT }, //bottom right +21/+32 makes collision box smaller than sprite
+        { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +2/+32 makes collision box smaller than sprite
         ], { x: startX, y: startY });
     colliderManager.setBody(this.collisionBody);
 
@@ -399,12 +399,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             }
 
             colliderManager.processEnvironmentCollision(position, velocity, otherEntity, collisionData);
-/*            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
-            if (Math.abs(collisionData.x) > 0.01) velocity.x = 0;
-            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
-            if ((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
-            colliderManager.updateCollider(position.x, position.y);*/
-            //            updateCollisionBody(this.collisionBody);
 
             if (collisionData.y < -0.1) {
                 isOnGround = true;

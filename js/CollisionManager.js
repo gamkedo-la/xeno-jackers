@@ -39,9 +39,10 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 	};
 
 	this.setPoints = function(newPoints) {
-		this.points = newPoints;
+		this.points = [...newPoints];
+		this.findCenterAndRadiusOfPoints(this.points);
 		this.calculateNormals();
-	}
+	};
 
 	this.calculateNormals = function() {
 		for(let i = 0; i < this.points.length; i++) {
@@ -62,7 +63,7 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 	};
 		
 	if(this.type === ColliderType.Polygon) {
-		this.points = points;
+//		this.points = points;
 		this.findCenterAndRadiusOfPoints(this.points);
 		this.calculateNormals();
 	} else if(this.type === ColliderType.Circle) {
