@@ -520,7 +520,7 @@ function CollisionManager(player) {
 	const checkedNormals = new Set();
 	const getMagnitudeAndDirectionOfOverlap = function(body1, body2) {
 		checkedNormals.clear();
-		let result = {magnitude:0, x:0, y:0, isBody1Normal:false};
+		let result = {magnitude:0, x:0, y:0, isBody1Normal:false, body1Index:0, body2Index:0};
 		for(let normal of body1.normals) {
 			if(checkedNormals.has(normal.x)) continue;//already checked along this normal
 			if(checkedNormals.has(-normal.x)) continue;//already checked this normal in the opposite direction
@@ -582,11 +582,15 @@ function CollisionManager(player) {
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
+					result.body1Index = body1MinMax.maxIndex;
+					result.body2Index = body2MinMax.minIndex;
 				} else if(overlap < result.magnitude) {
 					result.magnitude = overlap;
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
+					result.body1Index = body1MinMax.maxIndex;
+					result.body2Index = body2MinMax.minIndex;
 				}
 			}
 		} else {
@@ -605,16 +609,19 @@ function CollisionManager(player) {
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
+					result.body1Index = body1MinMax.minIndex;
+					result.body2Index = body2MinMax.maxIndex;
 				} else if(overlap < result.magnitude) {
 					result.magnitude = overlap;
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
+					result.body1Index = body1MinMax.minIndex;
+					result.body2Index = body2MinMax.maxIndex;
 				}
 			}
 		}
 
-		
 		return result;
 	};
 
@@ -624,7 +631,7 @@ function CollisionManager(player) {
 		let minValue;
 		let maxValue;
 		const centerValue = dotProduct(body.center, normal);
-		for(let i = 0; i < body.points.length; i++) {
+ 		for(let i = 0; i < body.points.length; i++) {
 			const point = body.points[i];
 			const dot = dotProduct(point, normal);
 			if(i === 0) {
@@ -649,4 +656,9 @@ function magnitudeOfVec(vector) {
 
 function dotProduct(vec1, vec2) {
 	return (vec1.x * vec2.x) + (vec1.y * vec2.y);
+}
+
+function normalize(vector) {
+	const magnitude = magnitudeOfVec(vector);
+	return {x:vector.x / magnitude, y:vector.y / magnitude};
 }

@@ -397,11 +397,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             if (dotProduct(velocity, { x: collisionData.x, y: collisionData.y }) > 0) {
                 return;
             }
-            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
+
+            colliderManager.processEnvironmentCollision(position, velocity, otherEntity, collisionData);
+/*            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
             if (Math.abs(collisionData.x) > 0.01) velocity.x = 0;
             position.y += Math.ceil(collisionData.magnitude * collisionData.y);
             if ((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
-            colliderManager.updateCollider(position.x, position.y);
+            colliderManager.updateCollider(position.x, position.y);*/
             //            updateCollisionBody(this.collisionBody);
 
             if (collisionData.y < -0.1) {

@@ -33,8 +33,8 @@ function Camera(canvas) {
         
         const oldY = canvas.center.y;
 
-        if(playerPos.y > canvas.center.y + DEAD_ZONE_Y) {
-            canvas.center.y = playerPos.y - DEAD_ZONE_Y;
+        if(playerPos.y > canvas.center.y) {
+            canvas.center.y = playerPos.y;
         } else if(playerPos.y < canvas.center.y - DEAD_ZONE_Y) {
             canvas.center.y = playerPos.y + DEAD_ZONE_Y;
         }
