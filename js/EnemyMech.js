@@ -372,10 +372,14 @@ function EnemyMech(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) 
 
     this.draw = function (deltaTime) {
 
-        //$CTK 
-        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
+        //$CTK FIXME - does not work?
+        //currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
+        currentAnimation.drawAt(position.x, position.y);//, flipped); //$CTK hmm where did we go?
+        // it draws at 80,80 not anywhere near 1352,279 as in level data - hmmmmm
         
-        //currentAnimation.drawAt(position.x, position.y, flipped); //$CTK hmm where did we go?
+        // fake hack to test sprite - no idea why this works - camera offset????
+        // still not visible. meh.
+        currentAnimation.drawAt(player.getPosition().x+20,player.getPosition().y);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
