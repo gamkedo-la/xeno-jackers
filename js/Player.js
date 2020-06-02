@@ -18,12 +18,16 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let isThumbUp = false;
     let isAttacking = false;
 
-    let wasKnockedBack = false;
     let isOnGround = true;
     let wasOnGround = true;
     let heldJumpTime = 0;
     let lastJumpKeyTime = 0;
     let flipped = false;
+	let didCollideWithEnvironment = false;
+	let didCollideWithEnemy = false;
+	let lastCollidedEntity;
+	let lastCollidedEnemy;
+	let getThisPlayer = () => { return this };
 
     let levelWidth = 0;
     let levelHeight = 0;
@@ -48,6 +52,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addState('falling', enterFalling, updateFalling, exitFalling);
 	fsm.addState('landing', enterLanding, updateLanding, exitLanding);
 	fsm.addState('crouching', enterCrouching, updateCrouching, exitCrouching);
+	fsm.addState('knockback', enterKnockBack, updateKnockBack, exitKnockBack);
+	fsm.addState('gettingHurt', enterGettingHurt, updateGettingHurt, exitGettingHurt);
+	fsm.addState('dying', enterDying, updateDying, exitDying);
 
 	fsm.addTransition(['idle'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	fsm.addTransition(['idle'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
@@ -62,6 +69,18 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addTransition(['landing'], 'idle', finishedLandingAnimation);
 	fsm.addTransition(['idle'], 'crouching', pressedCrouchKey);
 	fsm.addTransition(['crouching'], 'idle', releasedCrouchKey);
+	fsm.addTransition([
+		'idle',
+		'walkingLeft',
+		'walkingRight',
+		'jumping',
+		'falling',
+		'landing',
+		'crouching',
+	], 'gettingHurt', collidedWithEnemy);
+	fsm.addTransition(['gettingHurt'], 'dying', healthDepleted);
+	fsm.addTransition(['gettingHurt'], 'knockback', healthRemaining);
+	fsm.addTransition(['knockback'], 'idle', collidedWithEnvironmentWhileFalling);
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {
@@ -197,6 +216,67 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function exitCrouching(deltaTime) {}
 
+	function collidedWithEnemy(deltaTime) {
+		return typeof(lastCollidedEntity) != 'undefined' && isEnemy(lastCollidedEntity);
+	}
+
+	function collidedWithEnvironmentWhileFalling(deltaTime) {
+		return typeof(lastCollidedEntity) != 'undefined' && isEnvironment(lastCollidedEntity) && velocity.y > 0;
+	}
+
+	function healthDepleted(deltaTime) {
+		return getThisPlayer().health <= 0;
+	}
+
+	function healthRemaining(deltaTime) {
+		return !healthDepleted(deltaTime);
+	}
+
+	function enterGettingHurt(deltaTime) {
+		lastCollidedEnemy = lastCollidedEntity;
+		getThisPlayer().health--;
+		hurt1.play();
+	}
+
+	function updateGettingHurt(deltaTime) {
+	}
+
+	function exitGettingHurt(deltaTime) {
+	}
+
+	function enterDying(deltaTime) {
+		// Play death animation?
+		SceneState.scenes[SCENE.GAME].removeMe(this);
+	}
+
+	function updateDying(deltaTime) {
+	}
+
+	function exitDying(deltaTime) {
+	}
+
+	function enterKnockBack(deltaTime) {
+		let thisPlayer = getThisPlayer();
+		if(lastCollidedEnemy.collisionBody.center.x > thisPlayer.collisionBody.center.x) {
+            velocity.x = -KNOCKBACK_SPEED;
+        } else {
+            velocity.x = KNOCKBACK_SPEED;
+        }
+		velocity.y = KNOCKBACK_YSPEED;
+	}
+
+	function updateKnockBack(deltaTime) {
+		if(velocity.x > 0) {
+            velocity.x -= 2;
+        } else if(velocity.x < 0) {
+            velocity.x += 2;
+        }
+	}
+
+	function exitKnockBack(deltaTime) {
+		velocity.x = 0;
+	}
+
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
         [   {x:startX + 4, y:startY + 6}, //top left +2/+3 to make collision box smaller than sprite
@@ -225,7 +305,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isThumbUp = false;
         isWalking = false;
 
-        wasKnockedBack = false;
         isOnGround = true;
         heldJumpTime = 0;
         flipped = false;
@@ -242,13 +321,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         currentAnimation.update(deltaTime);
 
-        if(wasKnockedBack) {
-            if(velocity.x > 0) {
-                velocity.x -= 2;
-            } else if(velocity.x < 0) {
-                velocity.x += 2;
-            }
-        }
         position.x += Math.round(velocity.x * deltaTime / 1000);
         velocity.y += Math.round(GRAVITY * deltaTime / 1000);
         if(velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
@@ -316,12 +388,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     break;
             }
         }
-
-        if(!didRespond) {
-            if((!wasKnockedBack) && (isOnGround)) {
-                velocity.x = 0;
-            }
-        }
     };
 
     const block = function() {
@@ -374,33 +440,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        if(isEnemy(otherEntity)) {
-            this.health--;
-
-            if(this.health <= 0) {
-                SceneState.scenes[SCENE.GAME].removeMe(this);
-                //play death sound here?
-                return;
-            } else {
-                hurt1.play();
-            }
-
-            wasKnockedBack = true;
-
-            if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
-                velocity.x = -KNOCKBACK_SPEED;
-            } else {
-                velocity.x = KNOCKBACK_SPEED;
-            }
-
-            velocity.y = KNOCKBACK_YSPEED;
-
-        } else if(isEnvironment(otherEntity)) {
+		lastCollidedEntity = otherEntity;
+		fsm.update(0);
+		if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
-            if(velocity.y > 0) {
-                wasKnockedBack = false;
-            }
-
             if(dotProduct(velocity, {x:collisionData.x, y:collisionData.y}) > 0) {
                 return;
             }
