@@ -205,7 +205,6 @@ function GameScene() {
                     enemies.push(anEntity);
                     break;
                 case EntityType.EnemyMech:
-                    console.log("Spawning a mech!");//$CTK
                     anEntity = new EnemyMech(data.x, data.y - 33);
                     enemies.push(anEntity);
                     break;

@@ -6,6 +6,9 @@
 ////////////////////////////////////////////
 
 function EnemyMech(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) { //$CTK
+    
+    console.log("Spawning a mech at "+startX+","+startY);//$CTK
+
     const SCALE = GAME_SCALE;
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
@@ -368,7 +371,11 @@ function EnemyMech(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) 
     };
 
     this.draw = function (deltaTime) {
+
+        //$CTK 
         currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
+        
+        //currentAnimation.drawAt(position.x, position.y, flipped); //$CTK hmm where did we go?
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
