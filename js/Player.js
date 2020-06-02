@@ -7,12 +7,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const MAX_JUMP_TIME = 170;
     const FRAME_WIDTH = 64; //old tile sheet = 24, new tile sheet = 64
     const FRAME_HEIGHT = 36;
-    const SIZE = {width:FRAME_WIDTH, height:FRAME_HEIGHT};
+    const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
 
     let currentAnimation;
-    let position = {x:startX, y:startY};
-    let velocity = {x:0, y:0};
-    
+    let position = { x: startX, y: startY };
+    let velocity = { x: 0, y: 0 };
+
     let isWalking = false;
     let isBlocking = false;
     let isThumbUp = false;
@@ -155,6 +155,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 		currentAnimation = animations.jumping;
         currentAnimation.reset();
+		playerJump.play();
 	}
 
 	function updateJumping(deltaTime) {
@@ -266,9 +267,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function updateKnockBack(deltaTime) {
-		if(velocity.x > 0) {
+        if (velocity.x > 0) {
             velocity.x -= 2;
-        } else if(velocity.x < 0) {
+        } else if (velocity.x < 0) {
             velocity.x += 2;
         }
 	}
@@ -279,28 +280,28 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
-        [   {x:startX + 4, y:startY + 6}, //top left +2/+3 to make collision box smaller than sprite
-            {x:startX + 17, y:startY + 6}, //top right +21/+3 makes collision box smaller than sprite
-            {x:startX + 17, y:startY + FRAME_HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
-            {x:startX + 4, y:startY + FRAME_HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
-        ], {x:startX, y:startY});
+        [{ x: startX + 10, y: startY + 6 }, //top left +2/+3 to make collision box smaller than sprite
+        { x: startX + 23, y: startY + 6 }, //top right +21/+3 makes collision box smaller than sprite
+        { x: startX + 23, y: startY + FRAME_HEIGHT }, //bottom right +21/+32 makes collision box smaller than sprite
+        { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +2/+32 makes collision box smaller than sprite
+        ], { x: startX, y: startY });
     colliderManager.setBody(this.collisionBody);
 
-    this.getPosition = function() {
-        return {x:position.x, y:position.y};
+    this.getPosition = function () {
+        return { x: position.x, y: position.y };
     };
 
-    this.setPosition = function(x, y) {
+    this.setPosition = function (x, y) {
         position.x = x;
         position.y = y;
         colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
 
-    this.reset = function() {
+    this.reset = function () {
         velocity.x = 0;
         velocity.y = 0;
-        
+
         isBlocking = false;
         isThumbUp = false;
         isWalking = false;
@@ -310,12 +311,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         flipped = false;
     };
 
-    this.getSize = function() {
+    this.getSize = function () {
         return SIZE;
     };
 
-    this.update = function(deltaTime) {
-        if(colliderManager.state === null) {
+    this.update = function (deltaTime) {
+        if (colliderManager.state === null) {
             colliderManager.setPointsForState(PlayerState.IdleRight, position);
         }
 
@@ -323,40 +324,39 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         position.x += Math.round(velocity.x * deltaTime / 1000);
         velocity.y += Math.round(GRAVITY * deltaTime / 1000);
-        if(velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
-        position.y += Math.round(velocity.y * deltaTime / 1000); 
+        if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
+        position.y += Math.round(velocity.y * deltaTime / 1000);
 
         //console.log("Position Y", position.y);
 
         processInput(deltaTime, this.collisionBody);
 		fsm.update(deltaTime);
-
-        if(position.y > levelHeight) {
+        if (position.y > levelHeight) {
             this.health = 0;
             SceneState.scenes[SCENE.GAME].removeMe(this);
         }
-        
+
         //keep collisionBody in synch with sprite
-//        updateCollisionBody(this.collisionBody);
+        //        updateCollisionBody(this.collisionBody);
         colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
 
     this.newKeyPressed = function(newKey) {};
 
-    this.setLevelWidth = function(newWidth) {
+    this.setLevelWidth = function (newWidth) {
         levelWidth = newWidth;
     };
 
-    this.setLevelHeight = function(newHeight) {
+    this.setLevelHeight = function (newHeight) {
         levelHeight = newHeight;
     };
 
-    const processInput = function(deltaTime, body) {
+    const processInput = function (deltaTime, body) {
         let didRespond = false;
 
-        for(let i = 0; i < heldButtons.length; i++) {
-            switch(heldButtons[i]) {
+        for (let i = 0; i < heldButtons.length; i++) {
+            switch (heldButtons[i]) {
                 case ALIAS.WALK_LEFT:
                 case ALIAS.WALK_LEFT2:
                     didRespond = true;
@@ -388,22 +388,23 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     break;
             }
         }
+
     };
 
-    const block = function() {
-        if(isOnGround && !isBlocking) {
+    const block = function () {
+        if (isOnGround && !isBlocking) {
             console.log("I'm blocking now");
             isBlocking = true;
-//            currentAnimation = animations.blocking;
+            //            currentAnimation = animations.blocking;
         }
     };
 
-    const attack = function() {
-        if(isOnGround && currentAnimation != animations.attacking) {
+    const attack = function () {
+        if (isOnGround && currentAnimation != animations.attacking) {
             isAttacking = true;
             velocity.x = 0;
-            if(currentAnimation !== animations.attacking) {
-                if(flipped) {
+            if (currentAnimation !== animations.attacking) {
+                if (flipped) {
                     colliderManager.setPointsForState(PlayerState.AttackRight, position);
                 } else {
                     colliderManager.setPointsForState(PlayerState.AttackLeft, position);
@@ -417,11 +418,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const thumbup = function() {
         if (isWalking) return;
 
-        if(isOnGround && currentAnimation != animations.thumbup) {
+        if (isOnGround && currentAnimation != animations.thumbup) {
             isThumbUp = true;
             velocity.x = 0;
-            if(currentAnimation !== animations.thumbup) {
-                if(flipped) {
+            if (currentAnimation !== animations.thumbup) {
+                if (flipped) {
                     colliderManager.setPointsForState(PlayerState.Thumb, position);
                 } else {
                     colliderManager.setPointsForState(PlayerState.Thumb, position);
@@ -432,37 +433,32 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
     };
 
-    this.draw = function(deltaTime) {
+    this.draw = function (deltaTime) {
         currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
     };
 
-    this.didCollideWith = function(otherEntity, collisionData) {
+    this.didCollideWith = function (otherEntity, collisionData) {
 		lastCollidedEntity = otherEntity;
 		fsm.update(0);
-		if(isEnvironment(otherEntity)) {
-            //Environment objects don't move, so need to move player the full amount of the overlap
-            if(dotProduct(velocity, {x:collisionData.x, y:collisionData.y}) > 0) {
+		if (isEnvironment(otherEntity)) {
+            if (dotProduct(velocity, { x: collisionData.x, y: collisionData.y }) > 0) {
                 return;
             }
-            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
-            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
-            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
-            if((Math.abs(collisionData.y) > 0.01) && (velocity.y > 0)) velocity.y = 0;
-            colliderManager.updateCollider(position.x, position.y);
-//            updateCollisionBody(this.collisionBody);
-            
-            if(collisionData.y < -0.1) {
+
+            colliderManager.processEnvironmentCollision(position, velocity, otherEntity, collisionData);
+
+            if (collisionData.y < -0.1) {
                 isOnGround = true;
             } 
         } else if(isPickup(otherEntity)) {
-            switch(otherEntity.type) {
+            switch (otherEntity.type) {
                 case EntityType.Health:
                     playerPickup1.play();
                     this.health += otherEntity.health;
-                    if(this.health > this.maxHealth) this.health = this.maxHealth;
+                    if (this.health > this.maxHealth) this.health = this.maxHealth;
                     break;
                 case EntityType.ChainPickup:
                     playerPickup2.play();
@@ -479,7 +475,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     hasWheel = true;
                     SceneState.scenes[SCENE.GAME].gotWheel();
                     break;
-                case EntityType.EnginePickup:
+                case EpntityType.EnginePickup:
                     playerPickup2.play();
                     hasEngine = true;
                     SceneState.scenes[SCENE.GAME].gotEngine();
@@ -488,14 +484,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
     };
 
-/*    const updateCollisionBody = function(body) {
-        body.setPosition(//this is complicated because the player moves the camera/canvas
-            position.x + (startX - canvas.center.x), 
-            position.y + (startY - canvas.center.y)
-        );
-    };*/
+    /*    const updateCollisionBody = function(body) {
+            body.setPosition(//this is complicated because the player moves the camera/canvas
+                position.x + (startX - canvas.center.x), 
+                position.y + (startY - canvas.center.y)
+            );
+        };*/
 
-    const initializeAnimations = function() {
+    const initializeAnimations = function () {
         const anims = {};
 
         anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true);
@@ -506,20 +502,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
         anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
-//        anims.blocking = ...
+        //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-	    anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
+        anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
 
         return anims;
     };
     const animations = initializeAnimations();
     currentAnimation = animations.idle;
 
-    const isHoldingLeft = function() {
-        for(let i = 0; i < heldButtons.length; i++) {
-            if(heldButtons[i] === ALIAS.WALK_LEFT) {
+    const isHoldingLeft = function () {
+        for (let i = 0; i < heldButtons.length; i++) {
+            if (heldButtons[i] === ALIAS.WALK_LEFT) {
                 return true;
-            } else if(heldButtons[i] === ALIAS.WALK_RIGHT) {
+            } else if (heldButtons[i] === ALIAS.WALK_RIGHT) {
                 return true;
             }
         }

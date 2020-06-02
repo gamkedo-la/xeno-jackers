@@ -141,6 +141,14 @@ function PlayerColliderManager(startX, startY, size) {
         );
     };
 
+    this.processEnvironmentCollision = function(playerPos, playerVel, otherEntity, collisionData) {
+        if (Math.abs(collisionData.x) > 0.01) playerVel.x = 0;
+        playerPos.y += Math.ceil(collisionData.magnitude * collisionData.y);
+        if ((Math.abs(collisionData.y) > 0.01) && (playerVel.y > 0)) playerVel.y = 0;
+
+        this.updateCollider(playerPos.x, playerPos.y);
+    };
+
     this.setPointsForState = function(state, position) {
         let theseOffsets;
         switch(state) {

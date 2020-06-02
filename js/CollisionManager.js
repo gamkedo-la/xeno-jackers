@@ -39,9 +39,10 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 	};
 
 	this.setPoints = function(newPoints) {
-		this.points = newPoints;
+		this.points = [...newPoints];
+		this.findCenterAndRadiusOfPoints(this.points);
 		this.calculateNormals();
-	}
+	};
 
 	this.calculateNormals = function() {
 		for(let i = 0; i < this.points.length; i++) {
@@ -56,25 +57,13 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 			const vector1 = {x:end.x - start.x, y:end.y - start.y};
 			const magnitude = magnitudeOfVec(vector1);
 			//perpendicular is either {-y, x} or {y, -x}
-			const fromCenter = {x:start.x - this.center.x, y:start.y - this.center.y};
-			if(fromCenter.x >= 0) {
-				if(vector1.y >= 0) {
-					this.normals.push({x: vector1.y / magnitude, y:-vector1.x / magnitude});
-				} else {
-					this.normals.push({x: -vector1.y / magnitude, y:vector1.x / magnitude});
-				}
-			} else {
-				if(vector1.y >= 0) {
-					this.normals.push({x: -vector1.y / magnitude, y:vector1.x / magnitude});
-				} else {
-					this.normals.push({x: vector1.y / magnitude, y:-vector1.x / magnitude});
-				}
-			}
+			//we assume clockwise winding, so always use {y, -x}
+			this.normals.push({x: vector1.y / magnitude, y: -vector1.x / magnitude});
 		}
 	};
 		
 	if(this.type === ColliderType.Polygon) {
-		this.points = points;
+//		this.points = points;
 		this.findCenterAndRadiusOfPoints(this.points);
 		this.calculateNormals();
 	} else if(this.type === ColliderType.Circle) {
@@ -500,7 +489,6 @@ function CollisionManager(player) {
 
 				//if the magnitude of the rejection vector is less than the circle radius, there is a collision
 				if(magnitudeRejection <= circle.radius) {
-//					return true;
 					return {magnitude:circle.radius - magnitudeRejection,
 							x: polygon.normals[i].x,
 							y: polygon.normals[i].y,
@@ -509,7 +497,6 @@ function CollisionManager(player) {
 				}
 			}
 		}
-//		  return false;
 		return {magnitude:0,
 				x: 0,
 				y: 0,
@@ -520,23 +507,22 @@ function CollisionManager(player) {
 	const checkedNormals = new Set();
 	const getMagnitudeAndDirectionOfOverlap = function(body1, body2) {
 		checkedNormals.clear();
-		let result = {magnitude:0, x:0, y:0, isBody1Normal:false};
+		let result = {magnitude:0, x:0, y:0, isBody1Normal:false, body1Index:0, body2Index:0};
+		let leftOverlap = 0;
+		
 		for(let normal of body1.normals) {
-			if(checkedNormals.has(normal.x)) continue;//already checked along this normal
-			if(checkedNormals.has(-normal.x)) continue;//already checked this normal in the opposite direction
-
 			checkedNormals.add(normal.x);//add it to the set so we don't check it again
 			const body1MinMax = getMinMax(body1, normal);
 			const body2MinMax = getMinMax(body2, normal);
 
 			result = getOverlapData(body1MinMax, body2MinMax, normal, result, true);
+			if(normal.x < -0.9) {
+				leftOverlap = result.magnitude;
+			}
 			if(result.magnitude === 0) return result;
 		}
 
 		for(let normal of body2.normals) {
-			if(checkedNormals.has(normal.x)) continue;//already checked along this normal
-			if(checkedNormals.has(-normal.x)) continue;//already checked this normal in the opposite direction
-
 			checkedNormals.add(normal.x);//add it to the set so we don't check it again
 			const body1MinMax = getMinMax(body1, normal);
 			const body2MinMax = getMinMax(body2, normal);
@@ -545,16 +531,14 @@ function CollisionManager(player) {
 			if(result.magnitude === 0) return result;
 		}
 
-		//check if the normal points the wrong way and reverse it if it does
+ 		//check if the normal points the wrong way and reverse it if it does
 		const center1ToCenter2 = {x:body2.center.x - body1.center.x, y:body2.center.y - body1.center.y};
 		if(result.isBody1Normal) {
 			if(dotProduct(center1ToCenter2, {x:result.x, y:result.y}) < 0) {
-				result.x = -result.x;
 				result.y = -result.y;
 			}
 		} else {
 			if(dotProduct(center1ToCenter2, {x:result.x, y:result.y}) > 0) {
-				result.x = -result.x;
 				result.y = -result.y;
 			}
 		}
@@ -567,7 +551,7 @@ function CollisionManager(player) {
 
 	const getOverlapData = function(body1MinMax, body2MinMax, normal, result, isBody1Normal) {
 		if(body1MinMax.centerValue <= body2MinMax.centerValue) {
-			if(body1MinMax.maxValue < body2MinMax.minValue) {
+			if(body1MinMax.maxValue <= body2MinMax.minValue) {
 				//no collision
 				result.magnitude = 0;
 				result.x = 0;
@@ -576,21 +560,25 @@ function CollisionManager(player) {
 				return result;
 			} else {
 				//there may be a collision
-				const overlap = body1MinMax.maxValue - body2MinMax.minValue;
+				const overlap = Math.round(body1MinMax.maxValue - Math.max(body1MinMax.minValue, body2MinMax.minValue));
 				if(result.magnitude === 0) {
 					result.magnitude = overlap;
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
-				} else if(overlap < result.magnitude) {
+					result.body1Index = body1MinMax.maxIndex;
+					result.body2Index = body2MinMax.minIndex;
+				} else if(overlap <= result.magnitude) {
 					result.magnitude = overlap;
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
+					result.body1Index = body1MinMax.maxIndex;
+					result.body2Index = body2MinMax.minIndex;
 				}
 			}
 		} else {
-			if(body2MinMax.maxValue < body1MinMax.minValue) {
+			if(body2MinMax.maxValue <= body1MinMax.minValue) {
 				//no collision
 				result.magnitude = 0;
 				result.x = 0;
@@ -599,22 +587,25 @@ function CollisionManager(player) {
 				return result;
 			} else {
 				//there may be a collision
-				const overlap = body2MinMax.maxValue - body1MinMax.minValue;
+				const overlap = body2MinMax.maxValue - Math.max(body2MinMax.minValue, body1MinMax.minValue);
 				if(result.magnitude === 0) {
 					result.magnitude = overlap;
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
-				} else if(overlap < result.magnitude) {
+					result.body1Index = body1MinMax.minIndex;
+					result.body2Index = body2MinMax.maxIndex;
+				} else if(overlap <= result.magnitude) {
 					result.magnitude = overlap;
 					result.x = normal.x;
 					result.y = normal.y;
 					result.isBody1Normal = isBody1Normal;
+					result.body1Index = body1MinMax.minIndex;
+					result.body2Index = body2MinMax.maxIndex;
 				}
 			}
 		}
 
-		
 		return result;
 	};
 
@@ -624,9 +615,9 @@ function CollisionManager(player) {
 		let minValue;
 		let maxValue;
 		const centerValue = dotProduct(body.center, normal);
-		for(let i = 0; i < body.points.length; i++) {
+ 		for(let i = 0; i < body.points.length; i++) {
 			const point = body.points[i];
-			const dot = dotProduct(point, normal);
+			const dot = Math.round(dotProduct(point, normal));
 			if(i === 0) {
 				minValue = dot;
 				maxValue = dot;
@@ -649,4 +640,9 @@ function magnitudeOfVec(vector) {
 
 function dotProduct(vec1, vec2) {
 	return (vec1.x * vec2.x) + (vec1.y * vec2.y);
+}
+
+function normalize(vector) {
+	const magnitude = magnitudeOfVec(vector);
+	return {x:vector.x / magnitude, y:vector.y / magnitude};
 }
