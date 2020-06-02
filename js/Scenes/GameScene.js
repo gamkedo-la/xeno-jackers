@@ -204,6 +204,11 @@ function GameScene() {
                     anEntity = new EnemyAlienGuard(data.x, data.y - 33);
                     enemies.push(anEntity);
                     break;
+                case EntityType.EnemyMech:
+                    console.log("Spawning a mech!");//$CTK
+                    anEntity = new EnemyMech(data.x, data.y - 33);
+                    enemies.push(anEntity);
+                    break;
                 case EntityType.ChainPickup:
                     anEntity = new UpgradePickup(EntityType.ChainPickup, data.x, data.y - 16);
                     otherEntities.push(anEntity);
