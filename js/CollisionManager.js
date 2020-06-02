@@ -115,6 +115,7 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 					}
 					canvasContext.lineTo(this.points[0].x, this.points[0].y);
 					canvasContext.stroke();
+					canvasContext.lineWidth = 1;
 					break;
 				case ColliderType.Circle:
 					canvasContext.beginPath();
