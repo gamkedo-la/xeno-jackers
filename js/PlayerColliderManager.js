@@ -142,7 +142,17 @@ function PlayerColliderManager(startX, startY, size) {
     };
 
     this.processEnvironmentCollision = function(playerPos, playerVel, otherEntity, collisionData) {
-        if (Math.abs(collisionData.x) > 0.01) playerVel.x = 0;
+        if((playerVel.x > 0) && (otherEntity.collisionBody.center.x > body.center.x)) {
+            playerVel.x = 0;
+        }
+        if(playerVel.x < 0) {
+            if(otherEntity.collisionBody.center.x - canvas.center.x < body.center.x) {
+                playerVel.x = 0;
+            } else {
+                console.log("Just stopping");
+            }
+        }
+//        if (Math.abs(collisionData.x) > 0.01) playerVel.x = 0;
         playerPos.y += Math.ceil(collisionData.magnitude * collisionData.y);
         if ((Math.abs(collisionData.y) > 0.01) && (playerVel.y > 0)) playerVel.y = 0;
 
