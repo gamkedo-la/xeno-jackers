@@ -464,20 +464,20 @@ function EnemyMech(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) 
             );
         };*/
 
-    const initializeAnimations = function () {
+    const initializeAnimations = function () { //$CTK changed to enemyMechSpriteSheet
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true);
+        anims.idle = new SpriteAnimation('idle', enemyMechSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true);
         anims.idle.scale = SCALE;
-        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
+        anims.walking = new SpriteAnimation('walk', enemyMechSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
         anims.walking.scale = SCALE;
-        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false);
-        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-        anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
-        anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
+        anims.jumping = new SpriteAnimation('jump', enemyMechSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false);
+        anims.falling = new SpriteAnimation('fall', enemyMechSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+        anims.landing = new SpriteAnimation('land', enemyMechSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
+        anims.attacking = new SpriteAnimation('attack', enemyMechSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
         //        anims.blocking = ...
-        anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-        anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
+        anims.crouching = new SpriteAnimation('crouch', enemyMechSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
+        anims.thumbup = new SpriteAnimation('thumbup', enemyMechSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
 
         return anims;
     };
