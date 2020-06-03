@@ -6,8 +6,9 @@ function SpriteAnimation(name, //string identifier for this animation
                    frameHeight = 32, //height of each frame
                    frameTimes = [64],//array of milliseconds to show each frame
                    reverses = false, //boolean indicates if animation reverses (true)
-                   loops = false) { //boolean indicates if animation loops (true) 
-
+                   loops = false, //boolean indicates if animation loops (true)
+                   frameOffsetH = [0]) { //array of pixels to offset each frame (0)
+                    
     this.name = name;
     this.scale = 1;
     let isFinished = false; //only becomes true if reverses is false and loops is false (i.e. does neither)
@@ -42,7 +43,7 @@ function SpriteAnimation(name, //string identifier for this animation
     this.drawAt = function(x = 0, y = 0, flipped = false, offset = 0) {
         const thisFrameRect = getCurrentFrameRect();
 		
-		canvasContext.save();
+        canvasContext.save();
 		
 		let drawPosX = x;
 		let drawPosY = y;
@@ -80,6 +81,20 @@ function SpriteAnimation(name, //string identifier for this animation
         return newFrameTimes;
     }
     times = initializeFrameTimes(frameTimes, frames);//need to call this function now that it is defined
+
+    const initializeFrameOffsetH = function(frameOffsetH, frames) {  //duplicated from FrameTimes const above.
+        let newFrameOffsetH = [];
+        if(frameOffsetH.length != frames.length) {
+            for(let i = 0; i < frames.length; i++) {
+                newFrameOffsetH.push(frameOffsetH[0]);
+            }
+        } else {
+            newFrameOffsetH = frameOffsetH;
+        }
+
+        return newFrameOffsetH;
+    }
+    offsets = initializeFrameOffsetH(frameOffsetH, frames);//need to call this function now that it is defined
 
     const nextFrameIndex = function(currentFrame, frames) {
         let newFrameIndex;
