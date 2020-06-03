@@ -37,4 +37,5 @@ function FSM(initial) {
 			}
 		}
 	};
+	this.noop = function() {};
 }

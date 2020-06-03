@@ -45,17 +45,17 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		return !pressedCrouchKey();
 	}
 	const fsm = new FSM(initial='idle');
-	fsm.addState('idle', enterIdle, updateIdle, exitIdle);
+	fsm.addState('idle', enterIdle, fsm.noop, fsm.noop);
 	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
 	fsm.addState('walkingRight', enterWalkingRight, updateWalking, exitWalking);
-	fsm.addState('jumping', enterJumping, updateJumping, exitJumping);
-	fsm.addState('falling', enterFalling, updateFalling, exitFalling);
-	fsm.addState('landing', enterLanding, updateLanding, exitLanding);
-	fsm.addState('crouching', enterCrouching, updateCrouching, exitCrouching);
+	fsm.addState('jumping', enterJumping, updateJumping, fsm.noop);
+	fsm.addState('falling', enterFalling, fsm.noop, exitFalling);
+	fsm.addState('landing', enterLanding, fsm.noop, fsm.noop);
+	fsm.addState('crouching', enterCrouching, fsm.noop, fsm.noop);
 	fsm.addState('knockback', enterKnockBack, updateKnockBack, exitKnockBack);
-	fsm.addState('gettingHurt', enterGettingHurt, updateGettingHurt, exitGettingHurt);
-	fsm.addState('dying', enterDying, updateDying, exitDying);
-	fsm.addState('thumbup', enterThumbUp, updateThumbUp, exitThumbUp);
+	fsm.addState('gettingHurt', enterGettingHurt, fsm.noop, fsm.noop);
+	fsm.addState('dying', enterDying, fsm.noop, fsm.noop);
+	fsm.addState('thumbup', enterThumbUp, fsm.noop, fsm.noop);
 
 	fsm.addTransition(['idle'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	fsm.addTransition(['idle'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
@@ -101,12 +101,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             heldJumpTime = MAX_JUMP_TIME;
         }
 	};
-
-	function updateIdle(deltaTime) {
-	}
-
-	function exitIdle(deltaTime) {
-	}
 
 	function enterWalkingRight(deltaTime) {
 		isWalking = true; // TODO: remove this line after all states are in the FSM
@@ -166,9 +160,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		heldJumpTime += deltaTime;
 	}
 
-	function exitJumping(deltaTime) {
-	}
-
 	function enterFalling(deltaTime) {
 		if(flipped) {
             colliderManager.setPointsForState(PlayerState.FallingLeft, position);
@@ -177,9 +168,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 		currentAnimation = animations.falling;
         currentAnimation.reset();
-	}
-
-	function updateFalling(deltaTime) {
 	}
 
 	function exitFalling(deltaTime) {
@@ -197,12 +185,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         currentAnimation.reset();
 	}
 
-	function updateLanding(deltaTime) {
-	}
-
-	function exitLanding(deltaTime) {
-	}
-
 	function collidedWithWalkable(deltaTime) {
 		return isOnGround;
 	}
@@ -215,10 +197,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		velocity.x = 0;
         currentAnimation = animations.crouching;
 	}
-
-	function updateCrouching(deltaTime) {}
-
-	function exitCrouching(deltaTime) {}
 
 	function collidedWithEnemy(deltaTime) {
 		return typeof(lastCollidedEntity) != 'undefined' && isEnemy(lastCollidedEntity);
@@ -242,21 +220,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		hurt1.play();
 	}
 
-	function updateGettingHurt(deltaTime) {
-	}
-
-	function exitGettingHurt(deltaTime) {
-	}
-
 	function enterDying(deltaTime) {
 		// Play death animation?
 		SceneState.scenes[SCENE.GAME].removeMe(this);
-	}
-
-	function updateDying(deltaTime) {
-	}
-
-	function exitDying(deltaTime) {
 	}
 
 	function enterKnockBack(deltaTime) {
@@ -292,12 +258,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
         currentAnimation = animations.thumbup;
         currentAnimation.reset();
-	}
-
-	function updateThumbUp(deltaTime) {
-	}
-
-	function exitThumbUp(deltaTime) {
 	}
 
 	function finishedThumbUpAnimation() {
