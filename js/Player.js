@@ -15,7 +15,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     let isWalking = false;
     let isBlocking = false;
-    let isThumbUp = false;
     let isAttacking = false;
     let isAttackCrouch = false;
 
@@ -56,6 +55,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addState('knockback', enterKnockBack, updateKnockBack, exitKnockBack);
 	fsm.addState('gettingHurt', enterGettingHurt, updateGettingHurt, exitGettingHurt);
 	fsm.addState('dying', enterDying, updateDying, exitDying);
+	fsm.addState('thumbup', enterThumbUp, updateThumbUp, exitThumbUp);
 
 	fsm.addTransition(['idle'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	fsm.addTransition(['idle'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
@@ -78,10 +78,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		'falling',
 		'landing',
 		'crouching',
+		'thumbup',
 	], 'gettingHurt', collidedWithEnemy);
 	fsm.addTransition(['gettingHurt'], 'dying', healthDepleted);
 	fsm.addTransition(['gettingHurt'], 'knockback', healthRemaining);
 	fsm.addTransition(['knockback'], 'idle', collidedWithEnvironmentWhileFalling);
+	fsm.addTransition(['idle'], 'thumbup', getKeyChecker([ALIAS.THUMBUP]));
+	fsm.addTransition(['thumbup'], 'idle', finishedThumbUpAnimation);
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {
@@ -94,7 +97,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         currentAnimation = animations.idle;
         velocity.x = 0;
         isBlocking = false;
-        isThumbUp = false;
         if(!isOnGround) {
             heldJumpTime = MAX_JUMP_TIME;
         }
@@ -279,6 +281,29 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		velocity.x = 0;
 	}
 
+	function enterThumbUp(deltaTime) {
+		velocity.x = 0;
+        if (currentAnimation !== animations.thumbup) {
+            if (flipped) {
+                colliderManager.setPointsForState(PlayerState.Thumb, position);
+            } else {
+                colliderManager.setPointsForState(PlayerState.Thumb, position);
+            }
+        }
+        currentAnimation = animations.thumbup;
+        currentAnimation.reset();
+	}
+
+	function updateThumbUp(deltaTime) {
+	}
+
+	function exitThumbUp(deltaTime) {
+	}
+
+	function finishedThumbUpAnimation() {
+		return currentAnimation == animations.thumbup && currentAnimation.getIsFinished();
+	}
+
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
         [{ x: startX + 10, y: startY + 6 }, //top left +10/+6 to make collision box smaller than sprite
@@ -304,7 +329,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         velocity.y = 0;
 
         isBlocking = false;
-        isThumbUp = false;
         isWalking = false;
 
         isOnGround = true;
@@ -383,10 +407,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 case ALIAS.CROUCH2:
                     didRespond = true;
                     break;
-                case ALIAS.THUMBUP:
-                    thumbup();
-                    didRespond = true;
-                    break;
             }
         }
 
@@ -412,24 +432,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 }
             }
             currentAnimation = animations.attacking;
-            currentAnimation.reset();
-        }
-    };
-
-    const thumbup = function() {
-        if (isWalking) return;
-
-        if (isOnGround && currentAnimation != animations.thumbup) {
-            isThumbUp = true;
-            velocity.x = 0;
-            if (currentAnimation !== animations.thumbup) {
-                if (flipped) {
-                    colliderManager.setPointsForState(PlayerState.Thumb, position);
-                } else {
-                    colliderManager.setPointsForState(PlayerState.Thumb, position);
-                }
-            }
-            currentAnimation = animations.thumbup;
             currentAnimation.reset();
         }
     };
