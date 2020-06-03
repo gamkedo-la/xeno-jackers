@@ -381,7 +381,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
             wasKnockedBack = true;
 
-            if (otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
+            if (otherEntity.collisionBody.center.x - canvas.center.x >= this.collisionBody.center.x) {
                 velocity.x = -KNOCKBACK_SPEED;
             } else {
                 velocity.x = KNOCKBACK_SPEED;
