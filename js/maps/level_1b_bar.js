@@ -1219,18 +1219,6 @@
                  "y":312
                 }, 
                 {
-                 "gid":4099,
-                 "height":32,
-                 "id":62,
-                 "name":"enemyMech",
-                 "rotation":0,
-                 "type":"enemyMech",
-                 "visible":true,
-                 "width":21,
-                 "x":1352,
-                 "y":312
-                }, 
-                {
                  "gid":4097,
                  "height":30,
                  "id":63,
@@ -1241,6 +1229,18 @@
                  "width":21,
                  "x":720.5,
                  "y":117.125
+                }, 
+                {
+                 "gid":4101,
+                 "height":34,
+                 "id":64,
+                 "name":"enemyMech",
+                 "rotation":0,
+                 "type":"enemyMech",
+                 "visible":true,
+                 "width":25,
+                 "x":1352,
+                 "y":312
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1261,7 +1261,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":64,
+ "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
