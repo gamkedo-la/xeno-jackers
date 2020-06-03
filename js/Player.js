@@ -17,6 +17,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let isBlocking = false;
     let isThumbUp = false;
     let isAttacking = false;
+    let isAttackCrouch = false;
 
     let isOnGround = true;
     let wasOnGround = true;
@@ -280,10 +281,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
-        [{ x: startX + 10, y: startY + 6 }, //top left +2/+3 to make collision box smaller than sprite
-        { x: startX + 23, y: startY + 6 }, //top right +21/+3 makes collision box smaller than sprite
-        { x: startX + 23, y: startY + FRAME_HEIGHT }, //bottom right +21/+32 makes collision box smaller than sprite
-        { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +2/+32 makes collision box smaller than sprite
+        [{ x: startX + 10, y: startY + 6 }, //top left +10/+6 to make collision box smaller than sprite
+        { x: startX + 23, y: startY + 6 }, //top right +23/+6 makes collision box smaller than sprite
+        { x: startX + 23, y: startY + FRAME_HEIGHT }, //bottom right +23/+32 makes collision box smaller than sprite
+        { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +10/+32 makes collision box smaller than sprite
         ], { x: startX, y: startY });
     colliderManager.setBody(this.collisionBody);
 
@@ -502,6 +503,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
         anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
+        anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
         //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);

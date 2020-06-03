@@ -1,6 +1,6 @@
 //Camera.js
 function Camera(canvas) {
-    const DEAD_ZONE_X = 24;
+    const DEAD_ZONE_X = 16; //was 24
     const DEAD_ZONE_Y = 16;
     canvas.center.x = canvas.width / 2;
     canvas.center.y = canvas.height / 2;
@@ -19,6 +19,8 @@ function Camera(canvas) {
         const playerPos = player.getPosition();
         const playerSize = player.getSize();
         const oldX = canvas.center.x;
+
+        console.log (playerPos);
 
         if(playerPos.x + playerSize.width/2 > canvas.center.x + DEAD_ZONE_X) {
             canvas.center.x = Math.round(playerPos.x + playerSize.width/2 - DEAD_ZONE_X);
