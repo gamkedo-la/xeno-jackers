@@ -14,6 +14,9 @@ const PlayerState = {
     LandingRight:'landingRight',
     AttackLeft:'attackLeft',
     AttackRight:'attackRight',
+	KnockBack: 'knockback',
+	Hurt: 'gettingHurt',
+	Dead: 'dead',
     Thumb:'thumb'
 }
 

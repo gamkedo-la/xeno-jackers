@@ -43,48 +43,81 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function releasedCrouchKey() {
 		return !pressedCrouchKey();
 	}
-	const fsm = new FSM(initial='idle');
-	// addState takes the state id, enter state function, update state function, and exit state function
-	fsm.addState('idle', enterIdle, doNothing, doNothing);
-	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
-	fsm.addState('walkingRight', enterWalkingRight, updateWalking, exitWalking);
-	fsm.addState('jumping', enterJumping, updateJumping, doNothing);
-	fsm.addState('falling', enterFalling, doNothing, exitFalling);
-	fsm.addState('landing', enterLanding, doNothing, doNothing);
-	fsm.addState('crouching', enterCrouching, doNothing, doNothing);
-	fsm.addState('knockback', enterKnockBack, updateKnockBack, exitKnockBack);
-	fsm.addState('gettingHurt', enterGettingHurt, doNothing, doNothing);
-	fsm.addState('dying', enterDying, doNothing, doNothing);
-	fsm.addState('thumbup', enterThumbUp, doNothing, doNothing);
 
-	fsm.addTransition(['idle'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
-	fsm.addTransition(['idle'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
-	fsm.addTransition(['walkingLeft', 'walkingRight'], 'idle', releasedWalkKey);
-	fsm.addTransition(['walkingLeft'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
-	fsm.addTransition(['walkingRight'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
-	fsm.addTransition(['idle', 'walkingLeft', 'walkingRight'], 'jumping', pressedJumpKey);
-	fsm.addTransition(['jumping'], 'falling', function() {
+	const pressedWalkLeftKey = getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]);
+	const pressedWalkRightKey = getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]);
+	function pressedWalkKey() {
+		return checkForPressedKeys([
+			ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2,
+			ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2,
+		]);
+	};
+	function releasedWalkKey() {
+		return !pressedWalkKey();
+	}
+
+	const fsm = new FSM(initial=PlayerState.IdleRight);
+	// addState takes the state id, enter state function, update state function, and exit state function
+	fsm.addState(PlayerState.IdleLeft, enterIdle, doNothing, doNothing);
+	fsm.addState(PlayerState.IdleRight, enterIdle, doNothing, doNothing);
+	fsm.addState(PlayerState.WalkLeft, enterWalkingLeft, updateWalking, doNothing);
+	fsm.addState(PlayerState.WalkRight, enterWalkingRight, updateWalking, doNothing);
+	fsm.addState(PlayerState.JumpLeft, enterJumping, updateJumping, doNothing);
+	fsm.addState(PlayerState.JumpRight, enterJumping, updateJumping, doNothing);
+	fsm.addState(PlayerState.FallingLeft, enterFalling, doNothing, exitFalling);
+	fsm.addState(PlayerState.FallingRight, enterFalling, doNothing, exitFalling);
+	fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
+	fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
+	fsm.addState(PlayerState.CrouchLeft, enterCrouching, doNothing, doNothing);
+	fsm.addState(PlayerState.CrouchRight, enterCrouching, doNothing, doNothing);
+	fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
+	fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
+	fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
+	fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
+
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkRight, pressedWalkRightKey);
+	fsm.addTransition([PlayerState.WalkLeft], PlayerState.IdleLeft, releasedWalkKey);
+	fsm.addTransition([PlayerState.WalkRight], PlayerState.IdleRight, releasedWalkKey);
+	fsm.addTransition([PlayerState.WalkLeft], PlayerState.WalkRight, pressedWalkRightKey);
+	fsm.addTransition([PlayerState.WalkRight], PlayerState.WalkLeft, pressedWalkLeftKey);
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.WalkLeft], PlayerState.JumpLeft, pressedJumpKey);
+	fsm.addTransition([PlayerState.IdleRight, PlayerState.WalkRight], PlayerState.JumpRight, pressedJumpKey);
+	fsm.addTransition([PlayerState.JumpLeft], PlayerState.FallingLeft, function() {
 		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
 	});
-	fsm.addTransition(['falling'], 'landing', collidedWithWalkable);
-	fsm.addTransition(['landing'], 'idle', finishedLandingAnimation);
-	fsm.addTransition(['idle'], 'crouching', pressedCrouchKey);
-	fsm.addTransition(['crouching'], 'idle', releasedCrouchKey);
+	fsm.addTransition([PlayerState.JumpRight], PlayerState.FallingRight, function() {
+		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
+	});
+	fsm.addTransition([PlayerState.FallingLeft], PlayerState.LandingLeft, collidedWithWalkable);
+	fsm.addTransition([PlayerState.FallingRight], PlayerState.LandingRight, collidedWithWalkable);
+	fsm.addTransition([PlayerState.LandingLeft], PlayerState.IdleLeft, finishedLandingAnimation);
+	fsm.addTransition([PlayerState.LandingRight], PlayerState.IdleRight, finishedLandingAnimation);
+	fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+	fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
+	fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
+	fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
 	fsm.addTransition([
-		'idle',
-		'walkingLeft',
-		'walkingRight',
-		'jumping',
-		'falling',
-		'landing',
-		'crouching',
-		'thumbup',
-	], 'gettingHurt', collidedWithEnemy);
-	fsm.addTransition(['gettingHurt'], 'dying', healthDepleted);
-	fsm.addTransition(['gettingHurt'], 'knockback', healthRemaining);
-	fsm.addTransition(['knockback'], 'idle', collidedWithEnvironmentWhileFalling);
-	fsm.addTransition(['idle'], 'thumbup', getKeyChecker([ALIAS.THUMBUP]));
-	fsm.addTransition(['thumbup'], 'idle', finishedThumbUpAnimation);
+		PlayerState.IdleLeft,
+		PlayerState.IdleRight,
+		PlayerState.WalkLeft,
+		PlayerState.WalkRight,
+		PlayerState.JumpLeft,
+		PlayerState.JumpRight,
+		PlayerState.FallingLeft,
+		PlayerState.FallingRight,
+		PlayerState.LandingLeft,
+		PlayerState.LandingRight,
+		PlayerState.CrouchLeft,
+		PlayerState.CrouchRight,
+		PlayerState.Thumb,
+	], PlayerState.Hurt, collidedWithEnemy);
+	fsm.addTransition([PlayerState.Hurt], PlayerState.Dead, healthDepleted);
+	fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
+	fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingLeft);
+	fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
+	fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
 
 	function doNothing(deltaTime) {}
 
@@ -125,20 +158,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		if(position.x + FRAME_WIDTH > levelWidth) {
             position.x = levelWidth;
         }
-	}
-
-	function exitWalking(deltaTime) {
-	}
-
-	function pressedWalkKey() {
-		return checkForPressedKeys([
-			ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2,
-			ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2,
-		]);
-	};
-
-	function releasedWalkKey() {
-		return !pressedWalkKey();
 	}
 
 	function enterJumping(deltaTime) {
@@ -205,6 +224,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		return typeof(lastCollidedEntity) != 'undefined' && isEnvironment(lastCollidedEntity) && velocity.y > 0;
 	}
 
+	function collidedWithEnvironmentWhileFallingLeft(deltaTime) {
+		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x < 0;
+	}
+
+	function collidedWithEnvironmentWhileFallingRight(deltaTime) {
+		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x > 0;
+	}
+
 	function healthDepleted(deltaTime) {
 		return getThisPlayer().health <= 0;
 	}
@@ -219,7 +246,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		hurt1.play();
 	}
 
-	function enterDying(deltaTime) {
+	function enterDead(deltaTime) {
 		// Play death animation?
 		SceneState.scenes[SCENE.GAME].removeMe(this);
 		//play death sound here?
