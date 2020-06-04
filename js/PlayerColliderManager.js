@@ -31,108 +31,108 @@ function PlayerColliderManager(startX, startY, size) {
     };
 
     const idleRightOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const idleLeftOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const walkRightOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const walkLeftOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
     
     const crouchRightOffsets = [
-        {x:25, y:10},
-        {x:38, y:10},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-20}, //top right corner
+        {x:size.width/2-6, y:size.height-20}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const crouchLeftOffsets = [
-        {x:25, y:10},
-        {x:38, y:10},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height - 20}, //top right corner
+        {x:size.width/2-6, y:size.height - 20}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const jumpRightOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height - 6},
-        {x:25, y:size.height - 6}
+        {x:size.width/2+6, y:size.height - 29}, //top right corner
+        {x:size.width/2-6, y:size.height - 29}, //top left corner
+        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
+        {x:size.width/2+6, y:size.height - 6} //bottom left corner
     ];
 
     const jumpLeftOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height - 6},
-        {x:25, y:size.height - 6}
+        {x:size.width/2+6, y:size.height - 29}, //top right corner
+        {x:size.width/2-6, y:size.height - 29}, //top left corner
+        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
+        {x:size.width/2+6, y:size.height - 6} //bottom left corner
     ];
 
     const fallingRightOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height - 6},
-        {x:25, y:size.height - 6}
+        {x:size.width/2+6, y:size.height - 29}, //top right corner
+        {x:size.width/2-6, y:size.height - 29}, //top left corner
+        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
+        {x:size.width/2+6, y:size.height - 6} //bottom left corner
     ];
 
     const fallingLeftOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height - 6},
-        {x:25, y:size.height - 6}
+        {x:size.width/2+6, y:size.height - 29}, //top right corner
+        {x:size.width/2-6, y:size.height - 29}, //top left corner
+        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
+        {x:size.width/2+6, y:size.height - 6} //bottom left corner
     ];
 
     const landingRightOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height - 29}, //top right corner
+        {x:size.width/2-6, y:size.height - 29}, //top left corner
+        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
+        {x:size.width/2+6, y:size.height - 6} //bottom left corner
     ];
 
     const landingLeftOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height - 29}, //top right corner
+        {x:size.width/2-6, y:size.height - 29}, //top left corner
+        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
+        {x:size.width/2+6, y:size.height - 6} //bottom left corner
     ];
 
     const attackRightOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const attackLeftOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const thumbOffsets = [
-        {x:25, y:6},
-        {x:38, y:6},
-        {x:38, y:size.height},
-        {x:25, y:size.height}
+        {x:size.width/2+6, y:size.height-29}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     let currentOffsets = idleRightOffsets;
