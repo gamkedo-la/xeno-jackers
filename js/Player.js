@@ -13,21 +13,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let position = { x: startX, y: startY };
     let velocity = { x: 0, y: 0 };
 
-    let isWalking = false;
     let isBlocking = false;
-    let isCrouching = false;
-    let isThumbUp = false;
     let isAttacking = false;
     let isAttackCrouch = false;
 
-    let wasKnockedBack = false;
     let isOnGround = true;
     let wasOnGround = true;
-    let isFalling = false;
-    let isLanding = false;
     let heldJumpTime = 0;
     let lastJumpKeyTime = 0;
     let flipped = false;
+	let didCollideWithEnvironment = false;
+	let didCollideWithEnemy = false;
+	let lastCollidedEntity;
+	let lastCollidedEnemy;
+	let getThisPlayer = () => { return this };
 
     let levelWidth = 0;
     let levelHeight = 0;
@@ -35,6 +34,263 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.maxHealth = 10;
     this.health = this.maxHealth;
     this.type = EntityType.Player;
+
+	const pressedJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
+	function releasedJumpKeyOrMaxedTimer(deltaTime) {
+		return !pressedJumpKey() || heldJumpTime >= MAX_JUMP_TIME;
+	}
+	const pressedCrouchKey = getKeyChecker([ALIAS.CROUCH, ALIAS.CROUCH2]);
+	function releasedCrouchKey() {
+		return !pressedCrouchKey();
+	}
+
+	const pressedWalkLeftKey = getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]);
+	const pressedWalkRightKey = getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]);
+	function pressedWalkKey() {
+		return checkForPressedKeys([
+			ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2,
+			ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2,
+		]);
+	};
+	function releasedWalkKey() {
+		return !pressedWalkKey();
+	}
+
+	const fsm = new FSM(initial=PlayerState.IdleRight);
+	// fsm.addState takes the state id, enter state function, update state function, and exit state function
+	fsm.addState(PlayerState.IdleLeft, enterIdle, doNothing, doNothing);
+	fsm.addState(PlayerState.IdleRight, enterIdle, doNothing, doNothing);
+	fsm.addState(PlayerState.WalkLeft, enterWalkingLeft, updateWalking, doNothing);
+	fsm.addState(PlayerState.WalkRight, enterWalkingRight, updateWalking, doNothing);
+	fsm.addState(PlayerState.JumpLeft, enterJumping, updateJumping, doNothing);
+	fsm.addState(PlayerState.JumpRight, enterJumping, updateJumping, doNothing);
+	fsm.addState(PlayerState.FallingLeft, enterFalling, doNothing, exitFalling);
+	fsm.addState(PlayerState.FallingRight, enterFalling, doNothing, exitFalling);
+	fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
+	fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
+	fsm.addState(PlayerState.CrouchLeft, enterCrouching, doNothing, doNothing);
+	fsm.addState(PlayerState.CrouchRight, enterCrouching, doNothing, doNothing);
+	fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
+	fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
+	fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
+	fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
+
+	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkRight, pressedWalkRightKey);
+	fsm.addTransition([PlayerState.WalkLeft], PlayerState.IdleLeft, releasedWalkKey);
+	fsm.addTransition([PlayerState.WalkRight], PlayerState.IdleRight, releasedWalkKey);
+	fsm.addTransition([PlayerState.WalkLeft], PlayerState.WalkRight, pressedWalkRightKey);
+	fsm.addTransition([PlayerState.WalkRight], PlayerState.WalkLeft, pressedWalkLeftKey);
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.WalkLeft], PlayerState.JumpLeft, pressedJumpKey);
+	fsm.addTransition([PlayerState.IdleRight, PlayerState.WalkRight], PlayerState.JumpRight, pressedJumpKey);
+	fsm.addTransition([PlayerState.JumpLeft], PlayerState.FallingLeft, function() {
+		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
+	});
+	fsm.addTransition([PlayerState.JumpRight], PlayerState.FallingRight, function() {
+		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
+	});
+	fsm.addTransition([PlayerState.FallingLeft], PlayerState.LandingLeft, collidedWithWalkable);
+	fsm.addTransition([PlayerState.FallingRight], PlayerState.LandingRight, collidedWithWalkable);
+	fsm.addTransition([PlayerState.LandingLeft], PlayerState.IdleLeft, finishedLandingAnimation);
+	fsm.addTransition([PlayerState.LandingRight], PlayerState.IdleRight, finishedLandingAnimation);
+	fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+	fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
+	fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
+	fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
+	fsm.addTransition([
+		PlayerState.IdleLeft,
+		PlayerState.IdleRight,
+		PlayerState.WalkLeft,
+		PlayerState.WalkRight,
+		PlayerState.JumpLeft,
+		PlayerState.JumpRight,
+		PlayerState.FallingLeft,
+		PlayerState.FallingRight,
+		PlayerState.LandingLeft,
+		PlayerState.LandingRight,
+		PlayerState.CrouchLeft,
+		PlayerState.CrouchRight,
+		PlayerState.Thumb,
+	], PlayerState.Hurt, collidedWithEnemy);
+	fsm.addTransition([PlayerState.Hurt], PlayerState.Dead, healthDepleted);
+	fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
+	fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingLeft);
+	fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
+	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
+	fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
+
+	function doNothing(deltaTime) {}
+
+	function enterIdle(deltaTime) {
+		if(currentAnimation !== animations.idle) {
+            if(flipped) {
+                colliderManager.setPointsForState(PlayerState.IdleRight, position);
+            } else {
+                colliderManager.setPointsForState(PlayerState.IdleLeft, position);
+            }
+        }
+        currentAnimation = animations.idle;
+        velocity.x = 0;
+        isBlocking = false;
+        if(!isOnGround) {
+            heldJumpTime = MAX_JUMP_TIME;
+        }
+	};
+
+	function enterWalkingRight(deltaTime) {
+		velocity.x = WALK_SPEED;
+		flipped = false;
+		colliderManager.setPointsForState(PlayerState.WalkRight, position);
+		currentAnimation = animations.walking;
+	}
+
+	function enterWalkingLeft(deltaTime) {
+		velocity.x = -WALK_SPEED;
+		colliderManager.setPointsForState(PlayerState.WalkLeft, position);
+        flipped = true;
+		currentAnimation = animations.walking;
+	}
+
+	function updateWalking(deltaTime) {
+		if(position.x < 0) {
+            position.x = 0;
+        }
+		if(position.x + FRAME_WIDTH > levelWidth) {
+            position.x = levelWidth;
+        }
+	}
+
+	function enterJumping(deltaTime) {
+		isOnGround = false;
+		heldJumpTime = 0;
+		if(flipped) {
+            colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.JumpRight, position);
+        }
+		currentAnimation = animations.jumping;
+        currentAnimation.reset();
+		playerJump.play();
+	}
+
+	function updateJumping(deltaTime) {
+		velocity.y -= MAX_Y_SPEED / 10;
+		heldJumpTime += deltaTime;
+	}
+
+	function enterFalling(deltaTime) {
+		if(flipped) {
+            colliderManager.setPointsForState(PlayerState.FallingLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.FallingRight, position);
+        }
+		currentAnimation = animations.falling;
+        currentAnimation.reset();
+	}
+
+	function exitFalling(deltaTime) {
+		isOnGround = true;
+		heldJumpTime = 0;
+	}
+
+	function enterLanding(deltaTime) {
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.LandingLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.LandingRight, position);
+        }
+        currentAnimation = animations.landing;
+        currentAnimation.reset();
+	}
+
+	function collidedWithWalkable(deltaTime) {
+		return isOnGround;
+	}
+
+	function finishedLandingAnimation(deltaTime) {
+		return currentAnimation.getIsFinished() || currentAnimation != animations.landing;
+	}
+
+	function enterCrouching(deltaTime) {
+		velocity.x = 0;
+        currentAnimation = animations.crouching;
+	}
+
+	function collidedWithEnemy(deltaTime) {
+		return typeof(lastCollidedEntity) != 'undefined' && isEnemy(lastCollidedEntity);
+	}
+
+	function collidedWithEnvironmentWhileFalling(deltaTime) {
+		return typeof(lastCollidedEntity) != 'undefined' && isEnvironment(lastCollidedEntity) && velocity.y > 0;
+	}
+
+	function collidedWithEnvironmentWhileFallingLeft(deltaTime) {
+		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x < 0;
+	}
+
+	function collidedWithEnvironmentWhileFallingRight(deltaTime) {
+		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x > 0;
+	}
+
+	function healthDepleted(deltaTime) {
+		return getThisPlayer().health <= 0;
+	}
+
+	function healthRemaining(deltaTime) {
+		return !healthDepleted(deltaTime);
+	}
+
+	function enterGettingHurt(deltaTime) {
+		lastCollidedEnemy = lastCollidedEntity;
+		getThisPlayer().health--;
+		hurt1.play();
+	}
+
+	function enterDead(deltaTime) {
+		// Play death animation?
+		SceneState.scenes[SCENE.GAME].removeMe(this);
+		//play death sound here?
+	}
+
+	function enterKnockBack(deltaTime) {
+		let thisPlayer = getThisPlayer();
+		if (lastCollidedEnemy.collisionBody.center.x - canvas.center.x >= thisPlayer.collisionBody.center.x) {			
+            velocity.x = -KNOCKBACK_SPEED;
+        } else {
+            velocity.x = KNOCKBACK_SPEED;
+        }
+		velocity.y = KNOCKBACK_YSPEED;
+	}
+
+	function updateKnockBack(deltaTime) {
+        if (velocity.x > 0) {
+            velocity.x -= 2;
+        } else if (velocity.x < 0) {
+            velocity.x += 2;
+        }
+	}
+
+	function exitKnockBack(deltaTime) {
+		velocity.x = 0;
+	}
+
+	function enterThumbUp(deltaTime) {
+		velocity.x = 0;
+        if (currentAnimation !== animations.thumbup) {
+            if (flipped) {
+                colliderManager.setPointsForState(PlayerState.Thumb, position);
+            } else {
+                colliderManager.setPointsForState(PlayerState.Thumb, position);
+            }
+        }
+        currentAnimation = animations.thumbup;
+        currentAnimation.reset();
+	}
+
+	function finishedThumbUpAnimation() {
+		return currentAnimation == animations.thumbup && currentAnimation.getIsFinished();
+	}
 
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
     this.collisionBody = new Collider(ColliderType.Polygon,
@@ -61,14 +317,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         velocity.y = 0;
 
         isBlocking = false;
-        isCrouching = false;
-        isThumbUp = false;
-        isWalking = false;
 
-        wasKnockedBack = false;
         isOnGround = true;
-        isFalling = false;
-        isLanding = false;
         heldJumpTime = 0;
         flipped = false;
     };
@@ -84,13 +334,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         currentAnimation.update(deltaTime);
 
-        if (wasKnockedBack) {
-            if (velocity.x > 0) {
-                velocity.x -= 2;
-            } else if (velocity.x < 0) {
-                velocity.x += 2;
-            }
-        }
         position.x += Math.round(velocity.x * deltaTime / 1000);
         velocity.y += Math.round(GRAVITY * deltaTime / 1000);
         if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
@@ -99,44 +342,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         //console.log("Position Y", position.y);
 
         processInput(deltaTime, this.collisionBody);
-
-        if (!isOnGround) {
-            if (velocity.y < 0) {
-                if (currentAnimation !== animations.jumping) {
-                    if (flipped) {
-                        colliderManager.setPointsForState(PlayerState.JumpLeft, position);
-                    } else {
-                        colliderManager.setPointsForState(PlayerState.JumpRight, position);
-                    }
-                }
-                currentAnimation = animations.jumping;
-                currentAnimation.reset();
-            } else {
-                isFalling = true;
-                if (currentAnimation !== animations.falling) {
-                    if (flipped) {
-                        colliderManager.setPointsForState(PlayerState.FallingLeft, position);
-                    } else {
-                        colliderManager.setPointsForState(PlayerState.FallingRight, position);
-                    }
-                }
-                currentAnimation = animations.falling;
-                currentAnimation.reset();
-            }
-        } else if (isLanding) {
-            if ((currentAnimation.getIsFinished()) || (currentAnimation != animations.landing)) {
-                isLanding = false;
-                if (currentAnimation !== animations.idle) {
-                    if (flipped) {
-                        colliderManager.setPointsForState(PlayerState.IdleLeft, position);
-                    } else {
-                        colliderManager.setPointsForState(PlayerState.IdleRight, position);
-                    }
-                }
-                currentAnimation = animations.idle;
-            }
-        }
-
+		fsm.update(deltaTime);
         if (position.y > levelHeight) {
             this.health = 0;
             SceneState.scenes[SCENE.GAME].removeMe(this);
@@ -148,18 +354,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         this.collisionBody.calcOnscreen(canvas);
     };
 
-    this.newKeyPressed = function (newKey) {
-        if (newKey === ALIAS.JUMP || newKey === ALIAS.JUMP2) {
-            lastJumpKeyTime = timer.getCurrentTime();
-            if (isOnGround && !isLanding) {
-                if (heldJumpTime < MAX_JUMP_TIME) {
-                    playerJump.play();
-                    jump(0);
-                }
-
-            }
-        }
-    };
+    this.newKeyPressed = function(newKey) {};
 
     this.setLevelWidth = function (newWidth) {
         levelWidth = newWidth;
@@ -171,27 +366,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const processInput = function (deltaTime, body) {
         let didRespond = false;
-        isWalking = false;
-        const wasCrouching = isCrouching;
-        isCrouching = false;
 
         for (let i = 0; i < heldButtons.length; i++) {
             switch (heldButtons[i]) {
                 case ALIAS.WALK_LEFT:
                 case ALIAS.WALK_LEFT2:
-                    moveLeft();
                     didRespond = true;
                     break;
                 case ALIAS.WALK_RIGHT:
                 case ALIAS.WALK_RIGHT2:
-                    moveRight();
                     didRespond = true;
                     break;
                 case ALIAS.JUMP:
                 case ALIAS.JUMP2:
-                    if (isOnGround) break;
-                    if (heldJumpTime < MAX_JUMP_TIME) jump(deltaTime);
-                    didRespond = true;
+				    didRespond = didRespond || !isOnGround;
                     break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
@@ -204,103 +392,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     break;
                 case ALIAS.CROUCH:
                 case ALIAS.CROUCH2:
-                    crouch();
-                    didRespond = true;
-                    break;
-                case ALIAS.THUMBUP:
-                    thumbup();
                     didRespond = true;
                     break;
             }
         }
 
-        if (!didRespond) {
-            if (!isLanding) {
-                idle();
-            }
-
-            if ((!wasKnockedBack) && (isOnGround)) {
-                velocity.x = 0;
-            }
-        }
-    }
-
-    const idle = function () {
-        if (currentAnimation !== animations.idle) {
-            if (flipped) {
-                colliderManager.setPointsForState(PlayerState.IdleRight, position);
-            } else {
-                colliderManager.setPointsForState(PlayerState.IdleLeft, position);
-            }
-        }
-        currentAnimation = animations.idle;
-        velocity.x = 0;
-        isBlocking = false;
-        isCrouching = false;
-        isThumbUp = false;
-        isFalling = false;
-        isLanding = false;
-        if (!isOnGround) {
-            heldJumpTime = MAX_JUMP_TIME;
-        }
-    };
-
-    const moveLeft = function () {
-        if (wasKnockedBack) return;
-        if (isLanding) return;
-
-        if ((currentAnimation !== animations.walking) || (!flipped)) {
-            colliderManager.setPointsForState(PlayerState.WalkLeft, position);
-        }
-
-        flipped = true;
-        if (isCrouching) return;
-
-        if (isThumbUp) {
-            isThumbUp = false;
-        };
-
-        isWalking = true;
-
-        velocity.x = -WALK_SPEED;
-        currentAnimation = animations.walking;
-        if (position.x < 0) {
-            position.x = 0;
-        }
-    };
-
-    const moveRight = function () {
-        if (wasKnockedBack) return;
-        if (isLanding) return;
-
-        if ((currentAnimation !== animations.walking) || (flipped)) {
-            colliderManager.setPointsForState(PlayerState.WalkRight, position);
-        }
-
-        flipped = false;
-        if (isCrouching) return;
-
-        if (isThumbUp) {
-            isThumbUp = false;
-        };
-
-        isWalking = true;
-
-        velocity.x = WALK_SPEED;
-        currentAnimation = animations.walking;
-        if (position.x + FRAME_WIDTH > levelWidth) {
-            position.x = levelWidth;
-        }
-    };
-
-    const jump = function (deltaTime) {
-        if (isOnGround) {
-            isOnGround = false;
-            velocity.y = -MAX_Y_SPEED / 10;
-        } else {
-            velocity.y -= MAX_Y_SPEED / 10;
-            heldJumpTime += deltaTime;
-        }
     };
 
     const block = function () {
@@ -327,39 +423,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
     };
 
-    const crouch = function () {
-        if (isOnGround && !isCrouching) {
-            isCrouching = true;
-            velocity.x = 0;
-            if (currentAnimation !== animations.idle) {
-                if (flipped) {
-                    colliderManager.setPointsForState(PlayerState.CrouchRight, position);
-                } else {
-                    colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
-                }
-            }
-            currentAnimation = animations.crouching;
-        }
-    };
-
-    const thumbup = function () {
-        if (isWalking) return;
-
-        if (isOnGround && currentAnimation != animations.thumbup) {
-            isThumbUp = true;
-            velocity.x = 0;
-            if (currentAnimation !== animations.thumbup) {
-                if (flipped) {
-                    colliderManager.setPointsForState(PlayerState.Thumb, position);
-                } else {
-                    colliderManager.setPointsForState(PlayerState.Thumb, position);
-                }
-            }
-            currentAnimation = animations.thumbup;
-            currentAnimation.reset();
-        }
-    };
-
     this.draw = function (deltaTime) {
         currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
 
@@ -368,33 +431,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.didCollideWith = function (otherEntity, collisionData) {
-        if (isEnemy(otherEntity)) {
-            this.health--;
-
-            if (this.health <= 0) {
-                SceneState.scenes[SCENE.GAME].removeMe(this);
-                //play death sound here?
-                return;
-            } else {
-                hurt1.play();
-            }
-
-            wasKnockedBack = true;
-
-            if (otherEntity.collisionBody.center.x - canvas.center.x >= this.collisionBody.center.x) {
-                velocity.x = -KNOCKBACK_SPEED;
-            } else {
-                velocity.x = KNOCKBACK_SPEED;
-            }
-
-            velocity.y = KNOCKBACK_YSPEED;
-
-        } else if (isEnvironment(otherEntity)) {
-            //Environment objects don't move, so need to move player the full amount of the overlap
-            if (velocity.y > 0) {
-                wasKnockedBack = false;
-            }
-
+		lastCollidedEntity = otherEntity;
+		fsm.update(0);
+		if (isEnvironment(otherEntity)) {
             if (dotProduct(velocity, { x: collisionData.x, y: collisionData.y }) > 0) {
                 return;
             }
@@ -403,23 +442,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
             if (collisionData.y < -0.1) {
                 isOnGround = true;
-
-                if (isFalling) {
-                    isFalling = false;
-                    isLanding = true;
-                    heldJumpTime = 0;
-                    if (currentAnimation !== animations.landing) {
-                        if (flipped) {
-                            colliderManager.setPointsForState(PlayerState.LandingLeft, position);
-                        } else {
-                            colliderManager.setPointsForState(PlayerState.LandingRight, position);
-                        }
-                    }
-                    currentAnimation = animations.landing;
-                    currentAnimation.reset();
-                }
-            }
-        } else if (isPickup(otherEntity)) {
+            } 
+        } else if(isPickup(otherEntity)) {
             switch (otherEntity.type) {
                 case EntityType.Health:
                     playerPickup1.play();
@@ -441,7 +465,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     hasWheel = true;
                     SceneState.scenes[SCENE.GAME].gotWheel();
                     break;
-                case EntityType.EnginePickup:
+                case EpntityType.EnginePickup:
                     playerPickup2.play();
                     hasEngine = true;
                     SceneState.scenes[SCENE.GAME].gotEngine();

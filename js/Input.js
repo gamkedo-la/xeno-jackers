@@ -208,3 +208,39 @@ function mouseInside(x, y, width, height) {
 function pointInside(pointX, pointY, x, y, width, height) {
 	return pointX > x && pointX < x + width && pointY > y && pointY < y + height;
 }
+
+function getKeyChecker(keys) {
+	const keyChecker = function() {
+		for (let i=0; i<heldButtons.length; i++) {
+			for (let j=0; j<keys.length; j++) {
+				if (heldButtons[i] == keys[j]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+	return keyChecker;
+}
+
+function getExclusiveKeyChecker(keys) {
+	const keysSet = new Set(keys)
+	const exclusiveKeyChecker = function() {
+		if (heldButtons.length != 1) {
+			return false;
+		}
+		const heldSet = new Set(heldButtons);
+		for (let key of keysSet) {
+			heldSet.delete(key);
+			if (heldSet.size == 0) {
+				break;
+			}
+		}
+		return heldSet.size == 0;
+	};
+	return exclusiveKeyChecker;
+}
+
+function checkForPressedKeys(keys) {
+	return getKeyChecker(keys)();
+}
