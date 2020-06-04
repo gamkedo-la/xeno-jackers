@@ -29,6 +29,9 @@ function FSM(initial) {
 		for (let transition of transitions) {
 			for (let fromState of transition.from) {
 				if (fromState == currentState && transition.cond()) {
+					if (DEBUG) {
+						console.log('FSM: switch from', fromState, 'to', transition.to);
+					}
 					states[currentState].exit(deltaTime);
 					currentState = transition.to;
 					states[currentState].enter(deltaTime);
