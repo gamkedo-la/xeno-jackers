@@ -5,7 +5,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
     const MAX_JUMP_TIME = 170;
-    const FRAME_WIDTH = 64; //old tile sheet = 24, new tile sheet = 64
+    const FRAME_WIDTH = 83; //old tile sheet = 24, new tile sheet = 64
     const FRAME_HEIGHT = 36;
     const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
 
@@ -424,7 +424,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.draw = function (deltaTime) {
-        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, -11);
+        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, 0);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
