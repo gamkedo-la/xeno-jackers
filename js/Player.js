@@ -223,11 +223,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterDying(deltaTime) {
 		// Play death animation?
 		SceneState.scenes[SCENE.GAME].removeMe(this);
+		//play death sound here?
 	}
 
 	function enterKnockBack(deltaTime) {
 		let thisPlayer = getThisPlayer();
-		if(lastCollidedEnemy.collisionBody.center.x > thisPlayer.collisionBody.center.x) {
+		if (lastCollidedEnemy.collisionBody.center.x - canvas.center.x >= thisPlayer.collisionBody.center.x) {			
             velocity.x = -KNOCKBACK_SPEED;
         } else {
             velocity.x = KNOCKBACK_SPEED;
@@ -457,7 +458,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const initializeAnimations = function () {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true);
+        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true, [8, 8, 8, 8]);
         anims.idle.scale = SCALE;
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
         anims.walking.scale = SCALE;

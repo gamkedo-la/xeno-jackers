@@ -1,7 +1,8 @@
 //Collider
 const ColliderType = {
 	Polygon:"polygon",
-	Circle:"circle"
+	Circle:"circle",
+	AABB:"aabb"
 };
 
 function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0}, radius = 1) {
@@ -61,15 +62,44 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 			this.normals.push({x: vector1.y / magnitude, y: -vector1.x / magnitude});
 		}
 	};
+
+	this.calcAABBNormals = function() {
+		for(let i = 0; i < this.points.length; i++) {
+			const start = this.points[i];
+			let end;
+			if(i === this.points.length - 1) {
+				end = this.points[0];
+			} else {
+				end = this.points[i + 1];
+			}
+
+			if(end.x - start.x > 0.01) {
+				this.normals.push({x:0, y:-1});
+			} else if(end.x - start.x < -0.01) {
+				this.normals.push({x: 0, y:1});
+			} else if(end.y - start.y > 0.01) {
+				this.normals.push({x:-1, y:0});
+			} else if(end.y - start.y < -0.01) {
+				this.normals.push({x:1, y:0});
+			}
+			const vector1 = {x:end.x - start.x, y:end.y - start.y};
+			const magnitude = magnitudeOfVec(vector1);
+			//perpendicular is either {-y, x} or {y, -x}
+			//we assume clockwise winding, so always use {y, -x}
+			this.normals.push({x: vector1.y / magnitude, y: -vector1.x / magnitude});
+		}
+	};
 		
 	if(this.type === ColliderType.Polygon) {
-//		this.points = points;
 		this.findCenterAndRadiusOfPoints(this.points);
 		this.calculateNormals();
 	} else if(this.type === ColliderType.Circle) {
 		this.center = center;
 		this.radius = radius;
 		this.points = null;
+	} else if(this.type === ColliderType.AABB) {
+		this.findCenterAndRadiusOfPoints(this.points);
+		this.calcAABBNormals();
 	}
 	
 	this.setPosition = function(newX, newY) {

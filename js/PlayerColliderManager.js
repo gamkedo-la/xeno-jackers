@@ -148,8 +148,6 @@ function PlayerColliderManager(startX, startY, size) {
         if(playerVel.x < 0) {
             if(otherEntity.collisionBody.center.x - canvas.center.x < body.center.x) {
                 playerVel.x = 0;
-            } else {
-                console.log("Just stopping");
             }
         }
 //        if (Math.abs(collisionData.x) > 0.01) playerVel.x = 0;

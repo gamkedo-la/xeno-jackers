@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1221,24 +1221,24 @@
                 {
                  "gid":4097,
                  "height":30,
-                 "id":61,
+                 "id":63,
                  "name":"PlayerSpawn",
                  "rotation":0,
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":1208.83,
-                 "y":182.333
+                 "x":720.5,
+                 "y":117.125
                 }, 
                 {
-                 "gid":4099,
-                 "height":32,
-                 "id":62,
+                 "gid":4101,
+                 "height":34,
+                 "id":64,
                  "name":"enemyMech",
                  "rotation":0,
                  "type":"enemyMech",
                  "visible":true,
-                 "width":21,
+                 "width":25,
                  "x":1352,
                  "y":312
                 }],
@@ -1261,10 +1261,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":63,
+ "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {
