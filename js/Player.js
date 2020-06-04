@@ -57,7 +57,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	const fsm = new FSM(initial=PlayerState.IdleRight);
-	// addState takes the state id, enter state function, update state function, and exit state function
+	// fsm.addState takes the state id, enter state function, update state function, and exit state function
 	fsm.addState(PlayerState.IdleLeft, enterIdle, doNothing, doNothing);
 	fsm.addState(PlayerState.IdleRight, enterIdle, doNothing, doNothing);
 	fsm.addState(PlayerState.WalkLeft, enterWalkingLeft, updateWalking, doNothing);
@@ -75,6 +75,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
 	fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
 
+	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
 	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
 	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkRight, pressedWalkRightKey);
 	fsm.addTransition([PlayerState.WalkLeft], PlayerState.IdleLeft, releasedWalkKey);
