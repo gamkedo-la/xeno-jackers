@@ -45,17 +45,18 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		return !pressedCrouchKey();
 	}
 	const fsm = new FSM(initial='idle');
-	fsm.addState('idle', enterIdle, fsm.noop, fsm.noop);
+	// addState takes the state id, enter state function, update state function, and exit state function
+	fsm.addState('idle', enterIdle, doNothing, doNothing);
 	fsm.addState('walkingLeft', enterWalkingLeft, updateWalking, exitWalking);
 	fsm.addState('walkingRight', enterWalkingRight, updateWalking, exitWalking);
-	fsm.addState('jumping', enterJumping, updateJumping, fsm.noop);
-	fsm.addState('falling', enterFalling, fsm.noop, exitFalling);
-	fsm.addState('landing', enterLanding, fsm.noop, fsm.noop);
-	fsm.addState('crouching', enterCrouching, fsm.noop, fsm.noop);
+	fsm.addState('jumping', enterJumping, updateJumping, doNothing);
+	fsm.addState('falling', enterFalling, doNothing, exitFalling);
+	fsm.addState('landing', enterLanding, doNothing, doNothing);
+	fsm.addState('crouching', enterCrouching, doNothing, doNothing);
 	fsm.addState('knockback', enterKnockBack, updateKnockBack, exitKnockBack);
-	fsm.addState('gettingHurt', enterGettingHurt, fsm.noop, fsm.noop);
-	fsm.addState('dying', enterDying, fsm.noop, fsm.noop);
-	fsm.addState('thumbup', enterThumbUp, fsm.noop, fsm.noop);
+	fsm.addState('gettingHurt', enterGettingHurt, doNothing, doNothing);
+	fsm.addState('dying', enterDying, doNothing, doNothing);
+	fsm.addState('thumbup', enterThumbUp, doNothing, doNothing);
 
 	fsm.addTransition(['idle'], 'walkingLeft', getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	fsm.addTransition(['idle'], 'walkingRight', getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
@@ -85,6 +86,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addTransition(['knockback'], 'idle', collidedWithEnvironmentWhileFalling);
 	fsm.addTransition(['idle'], 'thumbup', getKeyChecker([ALIAS.THUMBUP]));
 	fsm.addTransition(['thumbup'], 'idle', finishedThumbUpAnimation);
+
+	function doNothing(deltaTime) {}
 
 	function enterIdle(deltaTime) {
 		if(currentAnimation !== animations.idle) {
