@@ -13,7 +13,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let position = { x: startX, y: startY };
     let velocity = { x: 0, y: 0 };
 
-    let isWalking = false;
     let isBlocking = false;
     let isAttacking = false;
     let isAttackCrouch = false;
@@ -106,7 +105,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	};
 
 	function enterWalkingRight(deltaTime) {
-		isWalking = true; // TODO: remove this line after all states are in the FSM
 		velocity.x = WALK_SPEED;
 		flipped = false;
 		colliderManager.setPointsForState(PlayerState.WalkRight, position);
@@ -114,7 +112,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function enterWalkingLeft(deltaTime) {
-		isWalking = true; // TODO: remove this line after all states are in the FSM
 		velocity.x = -WALK_SPEED;
 		colliderManager.setPointsForState(PlayerState.WalkLeft, position);
         flipped = true;
@@ -131,7 +128,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function exitWalking(deltaTime) {
-		isWalking = false;
 	}
 
 	function pressedWalkKey() {
@@ -293,7 +289,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         velocity.y = 0;
 
         isBlocking = false;
-        isWalking = false;
 
         isOnGround = true;
         heldJumpTime = 0;
