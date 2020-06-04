@@ -93,7 +93,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addTransition([PlayerState.FallingLeft], PlayerState.LandingLeft, collidedWithWalkable);
 	fsm.addTransition([PlayerState.FallingRight], PlayerState.LandingRight, collidedWithWalkable);
 	fsm.addTransition([PlayerState.LandingLeft], PlayerState.IdleLeft, finishedLandingAnimation);
-	fsm.addTransition([PlayerState.LandingRight], PlayerState.IdleRight, finishedLandingAnimation);
+    fsm.addTransition([PlayerState.LandingRight], PlayerState.IdleRight, finishedLandingAnimation);
+    fsm.addTransition([PlayerState.WalkLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+    fsm.addTransition([PlayerState.WalkRight], PlayerState.CrouchRight, pressedCrouchKey);
+    fsm.addTransition([PlayerState.LandingLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+    fsm.addTransition([PlayerState.LandingRight], PlayerState.CrouchRight, pressedCrouchKey);
 	fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
 	fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
 	fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
