@@ -168,6 +168,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterJumping(deltaTime) {
 		isOnGround = false;
 		heldJumpTime = 0;
+		if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+			flipped = false;
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+			flipped = true;
+		}
 		if(flipped) {
             colliderManager.setPointsForState(PlayerState.JumpLeft, position);
         } else {
