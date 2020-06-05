@@ -203,6 +203,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function exitFalling(deltaTime) {
 		isOnGround = true;
 		heldJumpTime = 0;
+		velocity.x = 0;
 	}
 
 	function enterLanding(deltaTime) {
