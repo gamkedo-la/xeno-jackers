@@ -376,34 +376,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const processInput = function (deltaTime, body) {
-        let didRespond = false;
-
         for (let i = 0; i < heldButtons.length; i++) {
             switch (heldButtons[i]) {
-                case ALIAS.WALK_LEFT:
-                case ALIAS.WALK_LEFT2:
-                    didRespond = true;
-                    break;
-                case ALIAS.WALK_RIGHT:
-                case ALIAS.WALK_RIGHT2:
-                    didRespond = true;
-                    break;
-                case ALIAS.JUMP:
-                case ALIAS.JUMP2:
-				    didRespond = didRespond || !isOnGround;
-                    break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
                     block();
-                    didRespond = true;
                     break;
                 case ALIAS.ATTACK:
                     attack();
-                    didRespond = true;
-                    break;
-                case ALIAS.CROUCH:
-                case ALIAS.CROUCH2:
-                    didRespond = true;
                     break;
             }
         }
