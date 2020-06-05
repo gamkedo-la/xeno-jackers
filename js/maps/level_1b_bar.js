@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -1234,13 +1234,25 @@
                  "gid":4101,
                  "height":34,
                  "id":64,
-                 "name":"enemyMech",
+                 "name":"mech2",
                  "rotation":0,
                  "type":"enemyMech",
                  "visible":true,
                  "width":25,
                  "x":1352,
                  "y":312
+                }, 
+                {
+                 "gid":4101,
+                 "height":34,
+                 "id":66,
+                 "name":"mech1",
+                 "rotation":0,
+                 "type":"enemyMech",
+                 "visible":true,
+                 "width":25,
+                 "x":992,
+                 "y":120
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1261,10 +1273,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":66,
+ "nextobjectid":67,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"1.3.1",
  "tileheight":8,
  "tilesets":[
         {
