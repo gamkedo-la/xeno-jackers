@@ -718,8 +718,8 @@ function CollisionManager(player) {
 
         //directions are opposite for body2
         result.body2.deltaX = -result.body1.deltaX;
-        result.body2.deltaY = -result.body2.deltaY;
-
+		result.body2.deltaY = -result.body2.deltaY;
+		
         return result;
 	};
 

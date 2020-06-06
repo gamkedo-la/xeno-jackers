@@ -5,10 +5,10 @@ let canvasContext;
 let gamepad;
 let DEBUG = true;
 let CHEATS_ACTIVE = false;
-let DRAW_COLLIDERS = true;
+let DRAW_COLLIDERS = false;
 
 const GRAVITY = 220;
-const MAX_Y_SPEED = 130;
+const MAX_Y_SPEED = 65;
 
 const COLLIDER_COLOR = 'aqua';
 const MENU_MUSIC_FILENAME = 'audio/Shadow_51';
