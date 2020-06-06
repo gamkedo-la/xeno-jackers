@@ -87,7 +87,10 @@ function GameScene() {
 
             for(let enemy of enemies) {
                 enemy.setSpawnPoint(enemy.collisionBody.position.x - deltaX, enemy.collisionBody.position.y - deltaY);
-//                console.log(`Spawn:(${enemy.collisionBody.position.x - deltaX}, ${enemy.collisionBody.position.y - deltaY})`);
+            }
+
+            for(let other of otherEntities) {
+                other.setSpawnPoint(other.collisionBody.position.x - deltaX, other.collisionBody.position.y - deltaY)
             }
         }
     };

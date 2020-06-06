@@ -318,7 +318,8 @@ function AABBCollider(points) {
 
         for(let point of this.points) {
             if(isPointOnScreen(left, top, right, bottom, point)) {
-                return true;
+				this.isOnScreen = true;
+				return true;
             }
 		}
 		
@@ -333,11 +334,13 @@ function AABBCollider(points) {
 				point2 = this.points[i + 1];
 			}
 			if(lineIsOnScreen(left, top, right, bottom, point1, point2)) {
+				this.isOnScreen = true;
 				return true;
 			}
 		}
 
-        return false;
+		this.isOnScreen = false;
+		return false;
     };
     
     const isPointOnScreen = function(left, top, right, bottom, point) {

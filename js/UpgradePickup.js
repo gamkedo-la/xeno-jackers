@@ -47,6 +47,13 @@ function UpgradePickup(type, posX, posY) {
         {x:posX, y:posY + animationData.height} 
     ]);
 
+    this.setSpawnPoint = function(x, y) {
+        position.x = x;
+        position.y = y;
+        this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
+    };
+
     this.update = function(deltaTime) {
         animation.update(deltaTime);
         
@@ -76,10 +83,15 @@ function UpgradePickup(type, posX, posY) {
             SceneState.scenes[SCENE.GAME].removeMe(this);
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move health object the full amount of the overlap
-            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
-            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
-            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
-            if(Math.abs(collisionData.y) > 0.01) velocity.y = 0;
+            if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
+                position.x += collisionData.deltaX;
+            } else {
+                position.y += collisionData.deltaY;
+                if(collisionData.deltaY < 0) {
+                    velocity.y = 0;
+                }
+            }
+
             this.collisionBody.setPosition(position.x, position.y);
         }
     };

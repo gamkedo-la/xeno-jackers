@@ -14,12 +14,6 @@ function health(posX, posY) {
     this.health = 2;
     this.type = EntityType.Health;
 
-/*    this.collisionBody = new Collider(ColliderType.Polygon, [
-        {x:posX, y:posY}, 
-        {x:posX + WIDTH, y:posY}, 
-        {x:posX + WIDTH, y:posY + HEIGHT}, 
-        {x:posX, y:posY + HEIGHT} 
-    ], {x:posX, y:posY});*/
     this.collisionBody = new AABBCollider([
         {x:posX, y:posY}, 
         {x:posX + WIDTH, y:posY}, 
@@ -60,6 +54,9 @@ function health(posX, posY) {
                 position.x += collisionData.deltaX;
             } else {
                 position.y += collisionData.deltaY;
+                if(collisionData.deltaY < 0) {
+                    velocity.y = 0;
+                }
             }
 
             this.collisionBody.setPosition(position.x, position.y);

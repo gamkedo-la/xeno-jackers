@@ -24,11 +24,17 @@ function EnemyMech(startX, startY) {
     ]);
 
     this.setSpawnPoint = function(x, y) {
-        //temp to prevent crashes
+        position.x = x;
+        position.y = y;
+        this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
     };
 
     this.update = function (deltaTime, player) {
         currentAnimation.update(deltaTime); // without this the animation is stuck
+
+        position.x -= canvas.deltaX;
+        position.y -= canvas.deltaY;
     };
 
     this.draw = function (deltaTime) {
@@ -45,5 +51,9 @@ function EnemyMech(startX, startY) {
         }
         currentAnimation.drawAt(position.x-cameraOffsetX, position.y-cameraOffsetY, lookingRight);
         //this.collisionBody.draw();
+    };
+
+    this.didCollideWith = function(otherEntity) {
+
     };
 }

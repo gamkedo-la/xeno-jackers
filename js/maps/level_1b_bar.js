@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1219,18 +1219,6 @@
                  "y":312
                 }, 
                 {
-                 "gid":4097,
-                 "height":30,
-                 "id":66,
-                 "name":"PlayerSpawn",
-                 "rotation":0,
-                 "type":"player",
-                 "visible":true,
-                 "width":21,
-                 "x":720.5,
-                 "y":117.125
-                }, 
-                {
                  "gid":4101,
                  "height":34,
                  "id":64,
@@ -1253,6 +1241,18 @@
                  "width":25,
                  "x":992,
                  "y":120
+                }, 
+                {
+                 "gid":4097,
+                 "height":30,
+                 "id":67,
+                 "name":"PlayerSpawn",
+                 "rotation":0,
+                 "type":"player",
+                 "visible":true,
+                 "width":21,
+                 "x":454.833333333333,
+                 "y":117.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1273,10 +1273,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":67,
+ "nextobjectid":68,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {

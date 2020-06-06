@@ -10,7 +10,6 @@ function BikerEnemy(posX, posY) {
     
     let currentAnimation;
     let position = {x:posX, y:posY};
-    let spawn = {x:0, y:0};
     let velocity = {x:0, y:0};
 
     let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
@@ -36,8 +35,6 @@ function BikerEnemy(posX, posY) {
     };
 
     this.setSpawnPoint = function(x, y) {
-        spawn.x = x - canvas.width / 2;
-        spawn.y = y - canvas.height / 2;
         position.x = x;
         position.y = y;
         this.collisionBody.setPosition(position.x, position.y);
