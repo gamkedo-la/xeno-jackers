@@ -24,15 +24,12 @@ function EnemyMech(startX, startY) {
     };
 
     this.draw = function (deltaTime) {
-        // canvasContext.drawImage(enemyMechSpriteSheet,0,0,64,36,startX-canvas.center.x+canvas.width/2-42,startY-canvas.center.y+canvas.height/2-2,64,36);
-
-        // this is offset in a very strange way - FIXME YUCK - WHY???
-        // apparently biker entity x,y are changed when camera scrolls?!
-        var cameraOffsetX = canvas.center.x+canvas.width/2;
-        var cameraOffsetY = canvas.center.y+canvas.height/2;
-        currentAnimation.drawAt(position.x-cameraOffsetX, position.y-cameraOffsetY, flipped);
-        
+        // note: positions are offset in a very strange way
+        var cameraOffsetX = canvas.center.x-canvas.width/2;
+        var cameraOffsetY = canvas.center.y-canvas.height/2;
+        var playerX = player.getPosition().x; // ??
+        var lookingRight = playerX > position.x - 36; // FIXME hardcoded offset is a guess
+        currentAnimation.drawAt(position.x-cameraOffsetX, position.y-cameraOffsetY, lookingRight);
         //this.collisionBody.draw();
-
     };
 }

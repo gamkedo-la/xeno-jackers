@@ -206,7 +206,7 @@ function GameScene() {
                     enemies.push(anEntity);
                     break;
                 case EntityType.EnemyMech:
-                    anEntity = new EnemyMech(data.x-18, data.y-36); // sprite is 36x36
+                    anEntity = new EnemyMech(data.x-12, data.y-36); // sprite is 36x36
                     enemies.push(anEntity);
                     break;
                 case EntityType.ChainPickup:
