@@ -5,8 +5,13 @@ function EnemyMech(startX, startY) {
     
     let w = 36;
     let h = 36;
+    let attackDistance = 30;
     let flipped = false;
-    let currentAnimation = new SpriteAnimation('idle', enemyMechSpriteSheet, [0,1,2,3,4,5,6,7,8,9], w, h, [100], false, true);
+    let anims = {
+        idle: new SpriteAnimation('idle', enemyMechSpriteSheet, [0,1,2,3,4,5,6,7,8,9], w, h, [100], false, true),
+        punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], w, h, [100], false, true),
+    };
+    let currentAnimation = anims.idle; 
     let position = {x:startX,y:startY};
     this.type = EntityType.EnemyMech;
     this.health = 1;
@@ -28,7 +33,13 @@ function EnemyMech(startX, startY) {
         var cameraOffsetX = canvas.center.x-canvas.width/2;
         var cameraOffsetY = canvas.center.y-canvas.height/2;
         var playerX = player.getPosition().x; // ??
-        var lookingRight = playerX > position.x - 36; // FIXME hardcoded offset is a guess
+        var lookingRight = playerX > position.x - 36; // FIXME hardcoded offset
+        var dist = Math.abs(playerX - position.x + 36);
+        if (dist < attackDistance) {
+            currentAnimation = anims.punch;
+        } else {
+            currentAnimation = anims.idle;
+        }
         currentAnimation.drawAt(position.x-cameraOffsetX, position.y-cameraOffsetY, lookingRight);
         //this.collisionBody.draw();
     };
