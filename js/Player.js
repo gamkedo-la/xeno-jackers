@@ -170,6 +170,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterJumping(deltaTime) {
 		isOnGround = false;
 		heldJumpTime = 0;
+		if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+			flipped = false;
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+			flipped = true;
+		}
 		if(flipped) {
             colliderManager.setPointsForState(PlayerState.JumpLeft, position);
         } else {
@@ -198,6 +205,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function exitFalling(deltaTime) {
 		isOnGround = true;
 		heldJumpTime = 0;
+		velocity.x = 0;
 	}
 
 	function enterLanding(deltaTime) {
@@ -388,34 +396,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const processInput = function (deltaTime, body) {
-        let didRespond = false;
-
         for (let i = 0; i < heldButtons.length; i++) {
             switch (heldButtons[i]) {
-                case ALIAS.WALK_LEFT:
-                case ALIAS.WALK_LEFT2:
-                    didRespond = true;
-                    break;
-                case ALIAS.WALK_RIGHT:
-                case ALIAS.WALK_RIGHT2:
-                    didRespond = true;
-                    break;
-                case ALIAS.JUMP:
-                case ALIAS.JUMP2:
-				    didRespond = didRespond || !isOnGround;
-                    break;
                 case ALIAS.BLOCK:
                     stillBlocking = true;
                     block();
-                    didRespond = true;
                     break;
                 case ALIAS.ATTACK:
                     attack();
-                    didRespond = true;
-                    break;
-                case ALIAS.CROUCH:
-                case ALIAS.CROUCH2:
-                    didRespond = true;
                     break;
             }
         }

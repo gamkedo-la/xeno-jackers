@@ -410,6 +410,10 @@ function CollisionManager(player) {
 	};
 
 	this.addEntity = function(newEntity) {
+        if (!newEntity) {
+            console.log("Attempting to add an undefined entity!");
+            return;
+        }
         if(isEnemy(newEntity)) {
             return addEnemy(newEntity);
         } else if(isEnemyWeapon(newEntity)) {

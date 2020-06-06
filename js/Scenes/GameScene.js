@@ -207,6 +207,7 @@ function GameScene() {
     const loadEntities = function(enemyData) {
         for(let data of enemyData) {
             let anEntity;
+            console.log("new entity: "+data.type);
             switch(data.type) {
                 case EntityType.EnemyBiker:
                     anEntity = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy
@@ -217,7 +218,7 @@ function GameScene() {
                     enemies.push(anEntity);
                     break;
                 case EntityType.EnemyMech:
-                    anEntity = new EnemyMech(data.x, data.y - 33);
+                    anEntity = new EnemyMech(data.x-12, data.y-36); // sprite is 36x36
                     enemies.push(anEntity);
                     break;
                 case EntityType.ChainPickup:

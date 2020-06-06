@@ -36,6 +36,7 @@ function isEnemy(entity) {
     switch(entity.type) {
         case EntityType.EnemyBiker:
         case EntityType.EnemyAlienGuard:
+        case EntityType.EnemyMech:
             return true;
         default:
             return false;
