@@ -14,12 +14,18 @@ function health(posX, posY) {
     this.health = 2;
     this.type = EntityType.Health;
 
-    this.collisionBody = new Collider(ColliderType.Polygon, [
+/*    this.collisionBody = new Collider(ColliderType.Polygon, [
         {x:posX, y:posY}, 
         {x:posX + WIDTH, y:posY}, 
         {x:posX + WIDTH, y:posY + HEIGHT}, 
         {x:posX, y:posY + HEIGHT} 
-    ], {x:posX, y:posY});
+    ], {x:posX, y:posY});*/
+    this.collisionBody = new AABBCollider([
+        {x:posX, y:posY}, 
+        {x:posX + WIDTH, y:posY}, 
+        {x:posX + WIDTH, y:posY + HEIGHT}, 
+        {x:posX, y:posY + HEIGHT} 
+    ]);
 
     this.update = function(deltaTime) {
         animation.update(deltaTime);
@@ -50,10 +56,12 @@ function health(posX, posY) {
             SceneState.scenes[SCENE.GAME].removeMe(this);
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move health object the full amount of the overlap
-            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
-            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
-            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
-            if(Math.abs(collisionData.y) > 0.01) velocity.y = 0;
+            if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
+                position.x += collisionData.deltaX;
+            } else {
+                position.y += collisionData.deltaY;
+            }
+
             this.collisionBody.setPosition(position.x, position.y);
         }
     };

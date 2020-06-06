@@ -20,7 +20,7 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
     this.drawTileLayer = function(tiles, mapWidthInTiles) {
         let leftEdge = canvas.center.x - canvas.width / 2;
         if(leftEdge < 0) leftEdge = 0;
-        const topEdge = canvas.center.y - canvas.height / 2;
+        let topEdge = canvas.center.y - canvas.height / 2;
         if(topEdge < 0) topEdge = 0;
 
         for(let j = 0; j < renderedRowCount; j++) {

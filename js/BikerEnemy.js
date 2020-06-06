@@ -10,6 +10,7 @@ function BikerEnemy(posX, posY) {
     
     let currentAnimation;
     let position = {x:posX, y:posY};
+    let spawn = {x:0, y:0};
     let velocity = {x:0, y:0};
 
     let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
@@ -23,15 +24,31 @@ function BikerEnemy(posX, posY) {
     this.type = EntityType.EnemyBiker;
     this.health = 1;
 
-    this.collisionBody = new Collider(ColliderType.Polygon, [
+    this.collisionBody = new AABBCollider([
         {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
         {x:posX + 21, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
         {x:posX + 21, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
         {x:posX + 2, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
-    ], {x:posX, y:posY});
+    ]);
 
     this.getSize = function() {
         return SIZE;
+    };
+
+    this.setSpawnPoint = function(x, y) {
+        spawn.x = x - canvas.width / 2;
+        spawn.y = y - canvas.height / 2;
+        position.x = x;
+        position.y = y;
+        this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
+    };
+
+    this.setPosition = function (x, y) {
+        position.x = x;
+        position.y = y;
+        this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
     };
 
     this.update = function(deltaTime, player) {
@@ -46,9 +63,13 @@ function BikerEnemy(posX, posY) {
         }
 
         if(this.collisionBody.isOnScreen) {
-            position.x += Math.round(velocity.x * deltaTime / 1000);
-            velocity.y += Math.round(GRAVITY * deltaTime / 1000);
-            position.y += Math.round(velocity.y * deltaTime / 1000); 
+            const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
+
+            velocity.y += GRAVITY * deltaTime / 1000;
+            if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
+            const yPos = position.y + Math.round(velocity.y * deltaTime / 1000);
+
+            this.setPosition(xPos, yPos);
 
             if(player.getPosition().x < position.x) {
                 flipped = true;
@@ -129,10 +150,16 @@ function BikerEnemy(posX, posY) {
             }
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
-            position.x += Math.ceil(collisionData.magnitude * collisionData.x);
-            if(Math.abs(collisionData.x) > 0.01) velocity.x = 0;
-            position.y += Math.ceil(collisionData.magnitude * collisionData.y);
-            if(Math.abs(collisionData.y) > 0.01) velocity.y = 0;
+            if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
+                this.setPosition(position.x + collisionData.deltaX, position.y);
+            } else {
+                this.setPosition(position.x, position.y + collisionData.deltaY);
+                if(collisionData.deltaY < 0) {
+                    isOnGround = true;
+                    velocity.y = 0;
+                }
+            }
+
             this.collisionBody.setPosition(position.x, position.y);
         }
     };

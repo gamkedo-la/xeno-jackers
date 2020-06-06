@@ -10,8 +10,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
 
     let currentAnimation;
-    let position = { x: startX, y: startY };
-    let velocity = { x: 0, y: 0 };
+    let position = {x:startX, y:startY};
+    let spawn = {x:0, y:0};
+    let drawPosition = {x:0, y:0};
+    let velocity = {x:0, y:0};
 
     let isBlocking = false;
     let isAttacking = false;
@@ -297,21 +299,34 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
     const colliderManager = new PlayerColliderManager(startX, startY, SIZE);
-    this.collisionBody = new Collider(ColliderType.Polygon,
-        [{ x: startX + 10, y: startY + 6 }, //top left +10/+6 to make collision box smaller than sprite
+    this.collisionBody = new AABBCollider([
+        { x: startX + 10, y: startY + 6 }, //top left +10/+6 to make collision box smaller than sprite
         { x: startX + 23, y: startY + 6 }, //top right +23/+6 makes collision box smaller than sprite
         { x: startX + 23, y: startY + FRAME_HEIGHT }, //bottom right +23/+32 makes collision box smaller than sprite
         { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +10/+32 makes collision box smaller than sprite
-        ], { x: startX, y: startY });
+    ]);
     colliderManager.setBody(this.collisionBody);
 
     this.getPosition = function () {
         return { x: position.x, y: position.y };
     };
 
+    this.setSpawnPoint = function(x, y) {
+        spawn.x = x - canvas.width / 2;
+        spawn.y = y - canvas.height / 2;
+        position.x = x;
+        position.y = y;
+        drawPosition.x = position.x - spawn.x - 26;
+        drawPosition.y = position.y - spawn.y + 2;
+        colliderManager.updateCollider(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
+    };
+
     this.setPosition = function (x, y) {
         position.x = x;
         position.y = y;
+        drawPosition.x = position.x - spawn.x - 26 - canvas.offsetX;
+        drawPosition.y = position.y - spawn.y + 2 - canvas.offsetY;
         colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
@@ -331,6 +346,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         return SIZE;
     };
 
+    this.getDrawPosition = function() {
+        return drawPosition;
+    };
+
     this.update = function (deltaTime) {
         if (colliderManager.state === null) {
             colliderManager.setPointsForState(PlayerState.IdleRight, position);
@@ -338,12 +357,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         currentAnimation.update(deltaTime);
 
-        position.x += Math.round(velocity.x * deltaTime / 1000);
-        velocity.y += Math.round(GRAVITY * deltaTime / 1000);
-        if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
-        position.y += Math.round(velocity.y * deltaTime / 1000);
+        const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
 
-        //console.log("Position Y", position.y);
+        velocity.y += GRAVITY * deltaTime / 1000;
+        if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
+        const yPos = position.y + Math.round(velocity.y * deltaTime / 1000);
+
+        this.setPosition(xPos, yPos);
 
         processInput(deltaTime, this.collisionBody);
 		fsm.update(deltaTime);
@@ -353,7 +373,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 
         //keep collisionBody in synch with sprite
-        //        updateCollisionBody(this.collisionBody);
         colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
@@ -407,7 +426,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if (isOnGround && !isBlocking) {
             console.log("I'm blocking now");
             isBlocking = true;
-            //            currentAnimation = animations.blocking;
+            //currentAnimation = animations.blocking;
         }
     };
 
@@ -428,7 +447,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.draw = function (deltaTime) {
-        currentAnimation.drawAt(position.x + (startX - canvas.center.x), position.y + (startY - canvas.center.y), flipped, 0);
+        currentAnimation.drawAt(drawPosition.x, drawPosition.y - canvas.deltaY, flipped, 0);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
@@ -438,15 +457,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		lastCollidedEntity = otherEntity;
 		fsm.update(0);
 		if (isEnvironment(otherEntity)) {
-            if (dotProduct(velocity, { x: collisionData.x, y: collisionData.y }) > 0) {
-                return;
+            if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
+                this.setPosition(position.x + collisionData.deltaX, position.y);
+            } else {
+                this.setPosition(position.x, position.y + collisionData.deltaY);
+                if(collisionData.deltaY < 0) {
+                    isOnGround = true;
+                }
             }
-
-            colliderManager.processEnvironmentCollision(position, velocity, otherEntity, collisionData);
-
-            if (collisionData.y < -0.1) {
-                isOnGround = true;
-            } 
         } else if(isPickup(otherEntity)) {
             switch (otherEntity.type) {
                 case EntityType.Health:
@@ -477,13 +495,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             }
         }
     };
-
-    /*    const updateCollisionBody = function(body) {
-            body.setPosition(//this is complicated because the player moves the camera/canvas
-                position.x + (startX - canvas.center.x), 
-                position.y + (startY - canvas.center.y)
-            );
-        };*/
 
     const initializeAnimations = function () {
         const anims = {};

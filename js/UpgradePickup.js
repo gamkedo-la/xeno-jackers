@@ -40,12 +40,12 @@ function UpgradePickup(type, posX, posY) {
     const animationData = getAnimationDataForType(this.type);
     animation = new SpriteAnimation(animationData.name, animationData.sheet, animationData.frames, animationData.width, animationData.height, animationData.times, animationData.reverses, animationData.loops);
 
-    this.collisionBody = new Collider(ColliderType.Polygon, [
+    this.collisionBody = new AABBCollider([
         {x:posX, y:posY}, 
         {x:posX + animationData.width, y:posY}, 
         {x:posX + animationData.width, y:posY + animationData.height}, 
         {x:posX, y:posY + animationData.height} 
-    ], {x:posX, y:posY});
+    ]);
 
     this.update = function(deltaTime) {
         animation.update(deltaTime);

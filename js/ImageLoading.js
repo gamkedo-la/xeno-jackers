@@ -120,8 +120,6 @@ function loadImages() {
     const imageList = [
         // tiles
         { imgName: tileSheet, theFile: "backgrounds/spritesheet_master.png" },
-//        { imgName: tileSheetRock, theFile: "backgrounds/spritesheet_grassyrock.png" },
-//        { imgName: tileSheetWorkshop, theFile: "backgrounds/spritesheet_workshop.png" },
         { imgName: tempGameSceneBG, theFile: "backgrounds/background_test.png" },
 
         // characters
@@ -132,15 +130,12 @@ function loadImages() {
         // screens
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
 
-        // skyboxes
-//        { imgName: workshopSkybox, theFile: "workshopSkybox.png" },
-
         // power ups
         { imgName: healthpickup, theFile: "interface/item_pickups.png" },
         { imgName: chainPickup, theFile: "interface/ChainPickUp.png" },
 
         // player related
-        { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" },
+        { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet_clean.png" },
 
         // UI
         { imgName: fontSheet, theFile: "interface/xjfont.png" },

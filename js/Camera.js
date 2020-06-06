@@ -15,33 +15,34 @@ function Camera(canvas) {
         levelHeight = newHeight;
     };
 
+    this.setStartPos = function(x, y) {
+        canvas.center.x = x;
+        canvas.center.y = y;
+        canvas.offsetX = 0;
+        canvas.offsetY = 0;
+    };
+
     this.update = function(player) {
-        const playerPos = player.getPosition();
-        const playerSize = player.getSize();
         const oldX = canvas.center.x;
-
-        if(playerPos.x + playerSize.width/2 > canvas.center.x) {
-            canvas.center.x = Math.round(playerPos.x + playerSize.width/2);
-        } else if(playerPos.x + playerSize.width/2 < canvas.center.x - DEAD_ZONE_X) {
-            canvas.center.x = Math.round(playerPos.x + playerSize.width/2 + DEAD_ZONE_X);
-        }
-
-        if(canvas.center.x - canvas.width / 2 < 0) canvas.center.x = canvas.width / 2;
-        if(canvas.center.x + canvas.width / 2 > levelWidth) canvas.center.x = levelWidth - canvas.width / 2;
-
-        canvas.deltaX = canvas.center.x - oldX;
-        
         const oldY = canvas.center.y;
 
-        if(playerPos.y > canvas.center.y) {
-            canvas.center.y = playerPos.y;
+        const playerPos = player.getPosition();
+
+        if(playerPos.x > canvas.center.x + DEAD_ZONE_X) {
+            canvas.center.x = playerPos.x - DEAD_ZONE_X;
+        } else if(playerPos.x < canvas.center.x - DEAD_ZONE_X) {
+            canvas.center.x = playerPos.x + DEAD_ZONE_X;
+        }
+
+        if(playerPos.y > canvas.center.y + DEAD_ZONE_Y) {
+            canvas.center.y = playerPos.y - DEAD_ZONE_Y;
         } else if(playerPos.y < canvas.center.y - DEAD_ZONE_Y) {
             canvas.center.y = playerPos.y + DEAD_ZONE_Y;
         }
-        
-        if(canvas.center.y - canvas.height / 2 < 0) canvas.center.y = canvas.height / 2;
-        if(canvas.center.y + canvas.height / 2 > levelHeight) canvas.center.y = levelHeight - canvas.height / 2;
 
+        canvas.deltaX = canvas.center.x - oldX;
         canvas.deltaY = canvas.center.y - oldY;
+        canvas.offsetX += canvas.deltaX;
+        canvas.offsetY += canvas.deltaY;
     };
 }

@@ -76,7 +76,19 @@ function GameScene() {
         }
 
         if(needToRepositionPlayer) {
-            player.setPosition(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height);
+            player.setSpawnPoint(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height)
+            const playerPos = player.getPosition();
+            camera.setStartPos(playerPos.x, playerPos.y);
+            const deltaX = playerPos.x - canvas.width / 2;
+            const deltaY = playerPos.y - canvas.height / 2;
+            for(let env of environmentColliders) {
+                env.setSpawnPoint(env.collisionBody.position.x - deltaX, env.collisionBody.position.y - deltaY);
+            }
+
+            for(let enemy of enemies) {
+                enemy.setSpawnPoint(enemy.collisionBody.position.x - deltaX, enemy.collisionBody.position.y - deltaY);
+                console.log(`Spawn:(${enemy.collisionBody.position.x - deltaX}, ${enemy.collisionBody.position.y - deltaY})`);
+            }
         }
     };
 

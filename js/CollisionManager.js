@@ -230,20 +230,160 @@ function Collider(type, points = [], position = {x:0, y:0}, center = {x:0, y:0},
 
 		return false;
 	};
-
-	const lineVLineCollision = function(line1x1, line1y1, line1x2, line1y2, line2x1, line2y1, line2x2, line2y2) {
-		const denominator = ((line1x2 - line1x1) * (line2y2 - line2y1)) - ((line1y2 - line1y1) * (line2x2 - line2x1));
-		const numerator1 = ((line1y1 - line2y1) * (line2x2 - line2x1)) - ((line1x1 - line2x1) * (line2y2 - line2y1));
-		const numerator2 = ((line1y1 - line2y1) * (line1x2 - line1x1)) - ((line1x1 - line2x1) * (line1y2 - line1y1));
-	
-		if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
-	
-		const r = numerator1 / denominator;
-		const s = numerator2 / denominator;
-	
-		return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
-	};
 }
+
+function AABBCollider(points) {
+	this.type = ColliderType.AABB;
+    this.points = [...points];
+    this.isOnScreen = true;
+    this.radius = 1;
+    this.center = {x:0, y:0};
+    this.position = {x:0, y:0};
+
+    this.top = {left:0, right:0, y:0, normal:{x:0, y:-1}};
+    this.bottom = {left:0, right:0, y:0, normal:{x:0, y:1}};
+    this.left = {top:0, bottom:0, x:0, normal:{x:-1, y:0}};
+    this.right = {top:0, bottom:0, x:0, normal:{x:1, y:0}};
+
+    this.width = 0;
+    this.height = 0;
+
+    this.findCenterAndRadiusOfPoints = function() {
+		let minX = this.points[0].x;
+		let maxX = this.points[0].x; 
+		let minY = this.points[0].y; 
+		let maxY = this.points[0].y;
+		
+		for(let i = 1; i < this.points.length; i++) {
+			minX = Math.min(minX, this.points[i].x);
+			maxX = Math.max(maxX, this.points[i].x);
+			minY = Math.min(minY, this.points[i].y);
+			maxY = Math.max(maxY, this.points[i].y);
+		}
+		
+		const halfDeltaX = (maxX - minX) / 2;
+		const centerX = minX + (halfDeltaX);
+		const halfDeltaY = (maxY - minY) / 2;
+        const centerY = minY + (halfDeltaY);
+        
+        this.width = maxX - minX;
+        this.height = maxY - minY;
+		
+        this.center = {x: centerX, y: centerY};
+        this.position.x = minX;
+        this.position.y = minY;
+
+        this.left.x = minX;
+        this.left.top = minY;
+        this.left.bottom = maxY;
+        this.right.x = maxX;
+        this.right.top = minY;
+        this.right.bottom = maxY;
+        this.top.y = minY;
+        this.top.left = minX;
+        this.top.right = maxX;
+        this.bottom.y = maxY;
+        this.bottom.left = minX;
+        this.bottom.right = maxX;
+		
+		//Divide by 0.707 (cos(45)) to account for worst case distance from center to a corner => polygon radii are ~30% too big (which is fine)
+		this.radius = Math.max(Math.abs(halfDeltaX / 0.707), Math.abs(halfDeltaY / 0.707));		
+    };
+    this.findCenterAndRadiusOfPoints();
+
+    this.setPosition = function(newX, newY) {
+        this.points[0].x = newX;
+        this.points[0].y = newY;
+
+        this.points[1].x = newX + this.width;
+        this.points[1].y = newY;
+
+        this.points[2].x = newX + this.width;
+        this.points[2].y = newY + this.height;
+
+        this.points[3].x = newX;
+        this.points[3].y = newY + this.height;
+
+        this.center.x = newX + this.width / 2;
+        this.center.y = newY + this.height / 2;
+		
+		this.findCenterAndRadiusOfPoints();
+    };
+    
+    this.calcOnscreen = function(canvas) {
+		const left = 0;
+		const right = canvas.width;
+        const top = 0;
+        const bottom = canvas.height;
+
+        for(let point of this.points) {
+            if(isPointOnScreen(left, top, right, bottom, point)) {
+                return true;
+            }
+		}
+		
+		for(let i = 0; i < this.points.length; i++) {
+			//Large objects (like the ground) might cross the screen, but have no points onscreen
+			//Look for pairs of points that cause lines to cross the screen
+			const point1 = this.points[i];
+			let point2;
+			if(i === this.points.length - 1) {
+				point2 = this.points[0];
+			} else {
+				point2 = this.points[i + 1];
+			}
+			if(lineIsOnScreen(left, top, right, bottom, point1, point2)) {
+				return true;
+			}
+		}
+
+        return false;
+    };
+    
+    const isPointOnScreen = function(left, top, right, bottom, point) {
+        if((point.x >= left) && 
+            (point.x <= right) && 
+            (point.y >= top) && 
+            (point.y <= bottom)) {
+            return true;
+        }
+
+        return false;
+	};
+	
+	const lineIsOnScreen = function(left, top, right, bottom, point1, point2) {
+		//check left edge of screen
+		if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, left, top, left, bottom)) {
+			return true;
+		//check bottom of screen
+		} else if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, left, bottom, right, bottom)) {
+			return true;
+		//check right edge of screen
+		} else if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, right, top, right, bottom)) {
+			return true;
+		//check top of screen
+		} else if(lineVLineCollision(point1.x, point1.y, point2.x, point2.y, left, top, right, top)) {
+			return true;
+		}
+
+		return false;
+    };
+    
+    this.draw = function() {
+		if(DRAW_COLLIDERS) {
+			canvasContext.beginPath();
+            canvasContext.strokeStyle = COLLIDER_COLOR;
+            canvasContext.moveTo(this.points[0].x, this.points[0].y);
+            for(let i = 0; i < this.points.length; i++) {
+                canvasContext.lineTo(this.points[i].x, this.points[i].y);
+            }
+            
+            canvasContext.lineTo(this.points[0].x, this.points[0].y);
+            canvasContext.stroke();
+            canvasContext.lineWidth = 1;
+        }
+    }
+};
 
 //Collision Manager
 function CollisionManager(player) {
@@ -451,22 +591,32 @@ function CollisionManager(player) {
                 return;
             }
 
-			const collisionResults = checkCollisionBetween(entity1.collisionBody, entity2.collisionBody);
-			if(collisionResults.magnitude > 0) {
-				if(collisionResults.isBody1Normal) {
-					entity2.didCollideWith(entity1, collisionResults);	
-					//reverse direction so entity1 moves toward itself (opposite it's normal)
-					collisionResults.x = -collisionResults.x;
-					collisionResults.y = -collisionResults.y;
-					entity1.didCollideWith(entity2, collisionResults);
-				} else {
-					entity1.didCollideWith(entity2, collisionResults);
-					//reverse direction so entity2 moves toward itself (opposite it's normal)
-					collisionResults.x = -collisionResults.x;
-					collisionResults.y = -collisionResults.y;
-					entity2.didCollideWith(entity1, collisionResults);	
+			let collisionResults;
+			if((entity1.collisionBody.type === ColliderType.AABB) &&
+			   (entity2.collisionBody.type === ColliderType.AABB)) {
+					collisionResults = checkAABBCollisionBetween(entity1.collisionBody, entity2.collisionBody);
+					if(collisionResults.collision) {
+						entity1.didCollideWith(entity2, collisionResults.body1);
+						entity2.didCollideWith(entity1, collisionResults.body2);
+					}
+			   } else {
+					collisionResults = checkCollisionBetween(entity1.collisionBody, entity2.collisionBody);
+				   	if(collisionResults.magnitude > 0) {
+						if(collisionResults.isBody1Normal) {
+							entity2.didCollideWith(entity1, collisionResults);	
+							//reverse direction so entity1 moves toward itself (opposite it's normal)
+							collisionResults.x = -collisionResults.x;
+							collisionResults.y = -collisionResults.y;
+							entity1.didCollideWith(entity2, collisionResults);
+						} else {
+							entity1.didCollideWith(entity2, collisionResults);
+							//reverse direction so entity2 moves toward itself (opposite it's normal)
+							collisionResults.x = -collisionResults.x;
+							collisionResults.y = -collisionResults.y;
+							entity2.didCollideWith(entity1, collisionResults);	
+						}
+					}
 				}
-            }
         }
     };
     
@@ -490,6 +640,80 @@ function CollisionManager(player) {
 				return polygonVCircle(body2, body1);//reverse the order so polygon passed as first parameter
 			}
 		}
+	};
+
+	const checkAABBCollisionBetween = function(body1, body2) {
+		const result = {collision:false, body1:{deltaX:0, deltaY:0}, body2:{deltaX:0, deltaY:0}};
+		
+        const body1Right_vs_body2Top = lineVLineCollision(
+            body1.right.x, body1.right.top,
+            body1.right.x, body1.right.bottom,
+            body2.top.left, body2.top.y,
+            body2.top.right, body2.top.y
+        );
+
+        const body1Left_vs_body2Top = lineVLineCollision(
+            body1.left.x, body1.left.top,
+            body1.left.x, body1.left.bottom,
+            body2.top.left, body2.top.y,
+            body2.top.right, body2.top.y
+        );
+
+        const body1Right_vs_body2Bottom = lineVLineCollision(
+            body1.right.x, body1.right.top,
+            body1.right.x, body1.right.bottom,
+            body2.bottom.left, body2.bottom.y,
+            body2.bottom.right, body2.bottom.y
+        );
+
+        const body1Left_vs_body2Bottom = lineVLineCollision(
+            body1.left.x, body1.left.top,
+            body1.left.x, body1.left.bottom,
+            body2.bottom.left, body2.bottom.y,
+            body2.bottom.right, body2.bottom.y
+        );
+
+		if(body1Left_vs_body2Top && body1Right_vs_body2Top) {
+			//collision is all along the bottom of body1
+			result.collision = true;
+			result.body1.deltaX = Number.MAX_SAFE_INTEGER;
+			result.body1.deltaY = Math.round(body2.top.y - body1.right.bottom);
+		} else if(body1Left_vs_body2Bottom && body1Right_vs_body2Bottom) {
+			//collision is all along the top of body1
+			result.collision = true;
+			result.body1.deltaX = Number.MAX_SAFE_INTEGER;
+			result.body1.deltaY = Math.round(body2.bottom.y - body1.right.top);
+		} else if(body1Right_vs_body2Top) {
+            //collision point is at body1Right at the bottom: {x:body1.right.x, y:body1.right.bottom}
+            //collision point is at body2Top at the left: {x:body2.top.left, y:body2.top.y}
+            result.collision = true;
+            result.body1.deltaX = Math.round(body2.top.left - body1.right.x);
+            result.body1.deltaY = Math.round(body2.top.y - body1.right.bottom);
+        } else if(body1Left_vs_body2Top) {
+            //collision point is at body1Left at the bottom: {x:body1.left.x, y:body1.left.bottom}
+            //collision point is at body2Top at the right: {x:body2.top.right, y:body2.top.y}
+            result.collision = true;
+            result.body1.deltaX = Math.round(body2.top.right - body1.left.x);
+            result.body1.deltaY = Math.round(body2.top.y - body1.left.bottom);
+        } else if(body1Right_vs_body2Bottom) {
+            //collision point is at body1Right at the top: {x:body1.right.x, y:body1.right.top}
+            //collision point is at body2Bottom at the left: {x:body2.bottom.left, y:body2.bottom.y}
+            result.collision = true;
+            result.body1.deltaX = Math.round(body2.bottom.left - body1.right.x);
+            result.body1.deltaY = Math.round(body2.bottom.y - body1.right.top);
+        } else if(body1Left_vs_body2Bottom) {
+            //collision point is at body1Left at the top: {x:body1.left.x, y:body1.left.top}
+            //collision point is at body2Bottom at the right: {x:body2.bottom.right, y:body2.bottom.y}
+            result.collision = true;
+            result.body1.deltaX = Math.round(body2.bottom.right - body1.left.x);
+            result.body1.deltaY = Math.round(body2.bottom.y - body1.left.top);
+        } 
+
+        //directions are opposite for body2
+        result.body2.deltaX = -result.body1.deltaX;
+        result.body2.deltaY = -result.body2.deltaY;
+
+        return result;
 	};
 
 	const polygonVCircle = function(polygon, circle) {
@@ -677,3 +901,16 @@ function normalize(vector) {
 	const magnitude = magnitudeOfVec(vector);
 	return {x:vector.x / magnitude, y:vector.y / magnitude};
 }
+
+function lineVLineCollision(line1x1, line1y1, line1x2, line1y2, line2x1, line2y1, line2x2, line2y2) {
+	const denominator = ((line1x2 - line1x1) * (line2y2 - line2y1)) - ((line1y2 - line1y1) * (line2x2 - line2x1));
+	const numerator1 = ((line1y1 - line2y1) * (line2x2 - line2x1)) - ((line1x1 - line2x1) * (line2y2 - line2y1));
+	const numerator2 = ((line1y1 - line2y1) * (line1x2 - line1x1)) - ((line1x1 - line2x1) * (line1y2 - line1y1));
+
+	if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
+
+	const r = numerator1 / denominator;
+	const s = numerator2 / denominator;
+
+	return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
+};
