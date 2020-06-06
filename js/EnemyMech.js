@@ -15,14 +15,17 @@ function EnemyMech(startX, startY) {
     let position = {x:startX,y:startY};
     this.type = EntityType.EnemyMech;
     this.health = 1;
-    
-    // FIXME this is horrid and about to be replaced
-    this.collisionBody = new Collider(ColliderType.Polygon, [
+
+    this.collisionBody = new AABBCollider([
         {x:startX + 2, y:startY + 3},
         {x:startX + 21, y:startY + 3},
         {x:startX + 21, y:startY + h},
         {x:startX + 2, y:startY + h}
-    ], {x:startX, y:startY});
+    ]);
+
+    this.setSpawnPoint = function(x, y) {
+        //temp to prevent crashes
+    };
 
     this.update = function (deltaTime, player) {
         currentAnimation.update(deltaTime); // without this the animation is stuck

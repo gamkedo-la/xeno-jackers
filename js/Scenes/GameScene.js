@@ -87,7 +87,7 @@ function GameScene() {
 
             for(let enemy of enemies) {
                 enemy.setSpawnPoint(enemy.collisionBody.position.x - deltaX, enemy.collisionBody.position.y - deltaY);
-                console.log(`Spawn:(${enemy.collisionBody.position.x - deltaX}, ${enemy.collisionBody.position.y - deltaY})`);
+//                console.log(`Spawn:(${enemy.collisionBody.position.x - deltaX}, ${enemy.collisionBody.position.y - deltaY})`);
             }
         }
     };
@@ -207,7 +207,7 @@ function GameScene() {
     const loadEntities = function(enemyData) {
         for(let data of enemyData) {
             let anEntity;
-            console.log("new entity: "+data.type);
+//            console.log("new entity: "+data.type);
             switch(data.type) {
                 case EntityType.EnemyBiker:
                     anEntity = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy
