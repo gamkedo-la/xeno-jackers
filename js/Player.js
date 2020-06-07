@@ -103,7 +103,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
 	fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
 	fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
-	fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
+    fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
+    fsm.addTransition([PlayerState.CrouchLeft], PlayerState.CrouchRight, pressedWalkLeftKey);
+	fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchLeft, pressedCrouchKey && pressedWalkRightKey);
 	fsm.addTransition([
 		PlayerState.IdleLeft,
 		PlayerState.IdleRight,
