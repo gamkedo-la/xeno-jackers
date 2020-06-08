@@ -462,14 +462,14 @@ function CollisionManager(player) {
 			result.body1.deltaX = Number.MAX_SAFE_INTEGER;
 			result.body1.deltaY = Math.round(body2.bottom.y - body1.right.top);
 		} else if((body1Bottom_vs_body2Left) && (body1Bottom_vs_body2Right)) {
-			//collision is all along the top of body2 (i.e. only in the bottom of bopy1)
+			//collision is all along the top of body2 (i.e. only in the bottom of body1)
 			result.collision = true;
 			result.body1.deltaX = Number.MAX_SAFE_INTEGER;
 			result.body1.deltaY = Math.round(body2.top.y - body1.right.bottom);
-/*		} else if((body1Right_vs_body2Top) && (body1Right_vs_body2Bottom)) {
+		} else if((body1Right_vs_body2Top) && (body1Right_vs_body2Bottom)) {
 			//collision is all along the left side of body2 (i.e. only in body1's right side)
 			result.collision = true;
-			result.body1.deltaX = Math.round(body2.top.left - body1.left.x);
+			result.body1.deltaX = Math.round(body2.top.left - body1.right.x);
 			result.body1.deltaY = Number.MAX_SAFE_INTEGER;
 		} else if((body1Left_vs_body2Top) && (body1Left_vs_body2Bottom)) {
 			//collision is all along the right side of body2 (i.e. only in body1's left side)
@@ -485,7 +485,7 @@ function CollisionManager(player) {
 			//collision is all along body1's left side
 			result.collision = true;
 			result.body1.deltaX = Math.round(body2.right.x - body1.type.left);
-			result.body1.deltaY = Number.MAX_SAFE_INTEGER;*/
+			result.body1.deltaY = Number.MAX_SAFE_INTEGER;
 		} else if(body1Right_vs_body2Top) {
             //collision point is at body1Right at the bottom: {x:body1.right.x, y:body1.right.bottom}
             //collision point is at body2Top at the left: {x:body2.top.left, y:body2.top.y}
@@ -514,7 +514,7 @@ function CollisionManager(player) {
 
         //directions are opposite for body2
         result.body2.deltaX = -result.body1.deltaX;
-		result.body2.deltaY = -result.body2.deltaY;
+		result.body2.deltaY = -result.body1.deltaY;
 		
         return result;
 	};
