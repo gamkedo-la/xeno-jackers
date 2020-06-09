@@ -27,8 +27,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	let didCollideWithEnvironment = false;
 	let didCollideWithEnemy = false;
 	let lastCollidedEnemy = null;
-	let justCollidedWithEnvironment = false;
-	let getThisPlayer = () => { return this };
+    let justCollidedWithEnvironment = false;
+    const self = this;
 
     let levelWidth = 0;
     let levelHeight = 0;
@@ -274,7 +274,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function healthDepleted(deltaTime) {
-		return getThisPlayer().health <= 0;
+		return self.health <= 0;
 	}
 
 	function healthRemaining(deltaTime) {
@@ -282,7 +282,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function enterGettingHurt(deltaTime) {
-		getThisPlayer().health--;
+		self.health--;
 		hurt1.play();
 	}
 
@@ -293,8 +293,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function enterKnockBack(deltaTime) {
-		let thisPlayer = getThisPlayer();
-		if (lastCollidedEnemy.collisionBody.center.x >= thisPlayer.collisionBody.center.x) {
+		if (lastCollidedEnemy.collisionBody.center.x >= self.collisionBody.center.x) {
             velocity.x = -KNOCKBACK_SPEED;
         } else {
             velocity.x = KNOCKBACK_SPEED;
