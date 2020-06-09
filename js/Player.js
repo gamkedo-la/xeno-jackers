@@ -26,8 +26,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let flipped = false;
 	let didCollideWithEnvironment = false;
 	let didCollideWithEnemy = false;
-	let lastCollidedEntity;
-	let lastCollidedEnemy;
+	let lastCollidedEnemy = null;
+	let justCollidedWithEnvironment = false;
 	let getThisPlayer = () => { return this };
 
     let levelWidth = 0;
@@ -58,55 +58,55 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		return !pressedWalkKey();
 	}
 
-	const fsm = new FSM(initial=PlayerState.IdleRight);
+	this.fsm = new FSM(initial=PlayerState.IdleRight);
 	// fsm.addState takes the state id, enter state function, update state function, and exit state function
-	fsm.addState(PlayerState.IdleLeft, enterIdle, doNothing, doNothing);
-	fsm.addState(PlayerState.IdleRight, enterIdle, doNothing, doNothing);
-	fsm.addState(PlayerState.WalkLeft, enterWalkingLeft, updateWalking, doNothing);
-	fsm.addState(PlayerState.WalkRight, enterWalkingRight, updateWalking, doNothing);
-	fsm.addState(PlayerState.JumpLeft, enterJumping, updateJumping, doNothing);
-	fsm.addState(PlayerState.JumpRight, enterJumping, updateJumping, doNothing);
-	fsm.addState(PlayerState.FallingLeft, enterFalling, doNothing, exitFalling);
-	fsm.addState(PlayerState.FallingRight, enterFalling, doNothing, exitFalling);
-	fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
-	fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
-	fsm.addState(PlayerState.CrouchLeft, enterCrouching, doNothing, doNothing);
-	fsm.addState(PlayerState.CrouchRight, enterCrouching, doNothing, doNothing);
-	fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
-	fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
-	fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
-	fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
+	this.fsm.addState(PlayerState.IdleLeft, enterIdle, doNothing, doNothing);
+	this.fsm.addState(PlayerState.IdleRight, enterIdle, doNothing, doNothing);
+	this.fsm.addState(PlayerState.WalkLeft, enterWalkingLeft, updateWalking, doNothing);
+	this.fsm.addState(PlayerState.WalkRight, enterWalkingRight, updateWalking, doNothing);
+	this.fsm.addState(PlayerState.JumpLeft, enterJumping, updateJumping, doNothing);
+	this.fsm.addState(PlayerState.JumpRight, enterJumping, updateJumping, doNothing);
+	this.fsm.addState(PlayerState.FallingLeft, enterFalling, doNothing, exitFalling);
+	this.fsm.addState(PlayerState.FallingRight, enterFalling, doNothing, exitFalling);
+	this.fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
+	this.fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
+	this.fsm.addState(PlayerState.CrouchLeft, enterCrouching, doNothing, doNothing);
+	this.fsm.addState(PlayerState.CrouchRight, enterCrouching, doNothing, doNothing);
+	this.fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
+	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
+	this.fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
+	this.fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
 
 	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
-	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
-	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkRight, pressedWalkRightKey);
-	fsm.addTransition([PlayerState.WalkLeft], PlayerState.IdleLeft, releasedWalkKey);
-	fsm.addTransition([PlayerState.WalkRight], PlayerState.IdleRight, releasedWalkKey);
-	fsm.addTransition([PlayerState.WalkLeft], PlayerState.WalkRight, pressedWalkRightKey);
-	fsm.addTransition([PlayerState.WalkRight], PlayerState.WalkLeft, pressedWalkLeftKey);
-	fsm.addTransition([PlayerState.IdleLeft, PlayerState.WalkLeft], PlayerState.JumpLeft, pressedJumpKey);
-	fsm.addTransition([PlayerState.IdleRight, PlayerState.WalkRight], PlayerState.JumpRight, pressedJumpKey);
-	fsm.addTransition([PlayerState.JumpLeft], PlayerState.FallingLeft, function() {
+	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
+	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkRight, pressedWalkRightKey);
+	this.fsm.addTransition([PlayerState.WalkLeft], PlayerState.IdleLeft, releasedWalkKey);
+	this.fsm.addTransition([PlayerState.WalkRight], PlayerState.IdleRight, releasedWalkKey);
+	this.fsm.addTransition([PlayerState.WalkLeft], PlayerState.WalkRight, pressedWalkRightKey);
+	this.fsm.addTransition([PlayerState.WalkRight], PlayerState.WalkLeft, pressedWalkLeftKey);
+	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.WalkLeft], PlayerState.JumpLeft, pressedJumpKey);
+	this.fsm.addTransition([PlayerState.IdleRight, PlayerState.WalkRight], PlayerState.JumpRight, pressedJumpKey);
+	this.fsm.addTransition([PlayerState.JumpLeft], PlayerState.FallingLeft, function() {
 		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
 	});
-	fsm.addTransition([PlayerState.JumpRight], PlayerState.FallingRight, function() {
+	this.fsm.addTransition([PlayerState.JumpRight], PlayerState.FallingRight, function() {
 		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
 	});
-	fsm.addTransition([PlayerState.FallingLeft], PlayerState.LandingLeft, collidedWithWalkable);
-	fsm.addTransition([PlayerState.FallingRight], PlayerState.LandingRight, collidedWithWalkable);
-	fsm.addTransition([PlayerState.LandingLeft], PlayerState.IdleLeft, finishedLandingAnimation);
-    fsm.addTransition([PlayerState.LandingRight], PlayerState.IdleRight, finishedLandingAnimation);
-    fsm.addTransition([PlayerState.WalkLeft], PlayerState.CrouchLeft, pressedCrouchKey);
-    fsm.addTransition([PlayerState.WalkRight], PlayerState.CrouchRight, pressedCrouchKey);
-    fsm.addTransition([PlayerState.LandingLeft], PlayerState.CrouchLeft, pressedCrouchKey);
-    fsm.addTransition([PlayerState.LandingRight], PlayerState.CrouchRight, pressedCrouchKey);
-	fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
-	fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
-	fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
-    fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
-    fsm.addTransition([PlayerState.CrouchLeft], PlayerState.CrouchRight, pressedWalkLeftKey);
-	fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchLeft, pressedCrouchKey && pressedWalkRightKey);
-	fsm.addTransition([
+	this.fsm.addTransition([PlayerState.FallingLeft], PlayerState.LandingLeft, collidedWithWalkable);
+	this.fsm.addTransition([PlayerState.FallingRight], PlayerState.LandingRight, collidedWithWalkable);
+	this.fsm.addTransition([PlayerState.LandingLeft], PlayerState.IdleLeft, finishedLandingAnimation);
+    this.fsm.addTransition([PlayerState.LandingRight], PlayerState.IdleRight, finishedLandingAnimation);
+    this.fsm.addTransition([PlayerState.WalkLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+    this.fsm.addTransition([PlayerState.WalkRight], PlayerState.CrouchRight, pressedCrouchKey);
+    this.fsm.addTransition([PlayerState.LandingLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+    this.fsm.addTransition([PlayerState.LandingRight], PlayerState.CrouchRight, pressedCrouchKey);
+	this.fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
+	this.fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
+	this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
+    this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
+    this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.CrouchRight, pressedWalkLeftKey);
+	this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchLeft, pressedCrouchKey && pressedWalkRightKey);
+	this.fsm.addTransition([
 		PlayerState.IdleLeft,
 		PlayerState.IdleRight,
 		PlayerState.WalkLeft,
@@ -121,16 +121,18 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		PlayerState.CrouchRight,
 		PlayerState.Thumb,
 	], PlayerState.Hurt, collidedWithEnemy);
-	fsm.addTransition([PlayerState.Hurt], PlayerState.Dead, healthDepleted);
-	fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
-	fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingLeft);
-	fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
-	fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
-	fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
+	this.fsm.addTransition([PlayerState.Hurt], PlayerState.Dead, healthDepleted);
+	this.fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
+	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingLeft);
+	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
+	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
+	this.fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
 
 	function doNothing(deltaTime) {}
 
 	function enterIdle(deltaTime) {
+		justCollidedWithEnvironment = false;
+		lastCollidedEnemy = null;
 		if(currentAnimation !== animations.idle) {
             if(flipped) {
                 colliderManager.setPointsForState(PlayerState.IdleRight, position);
@@ -234,11 +236,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function collidedWithEnemy(deltaTime) {
-		return typeof(lastCollidedEntity) != 'undefined' && isEnemy(lastCollidedEntity);
+		return lastCollidedEnemy !== null;
 	}
 
 	function collidedWithEnvironmentWhileFalling(deltaTime) {
-		return typeof(lastCollidedEntity) != 'undefined' && isEnvironment(lastCollidedEntity) && velocity.y > 0;
+		return justCollidedWithEnvironment && velocity.y > 0;
 	}
 
 	function collidedWithEnvironmentWhileFallingLeft(deltaTime) {
@@ -258,7 +260,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function enterGettingHurt(deltaTime) {
-		lastCollidedEnemy = lastCollidedEntity;
 		getThisPlayer().health--;
 		hurt1.play();
 	}
@@ -271,7 +272,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function enterKnockBack(deltaTime) {
 		let thisPlayer = getThisPlayer();
-		if (lastCollidedEnemy.collisionBody.center.x - canvas.center.x >= thisPlayer.collisionBody.center.x) {			
+		if (lastCollidedEnemy.collisionBody.center.x - canvas.center.x >= thisPlayer.collisionBody.center.x) {
             velocity.x = -KNOCKBACK_SPEED;
         } else {
             velocity.x = KNOCKBACK_SPEED;
@@ -289,6 +290,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function exitKnockBack(deltaTime) {
 		velocity.x = 0;
+		lastCollidedEnemy = null;
 	}
 
 	function enterThumbUp(deltaTime) {
@@ -376,7 +378,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         this.setPosition(xPos, yPos);
 
         processInput(deltaTime, this.collisionBody);
-		fsm.update(deltaTime);
         if (position.y > levelHeight) {
             this.health = 0;
             SceneState.scenes[SCENE.GAME].removeMe(this);
@@ -444,8 +445,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.didCollideWith = function (otherEntity, collisionData) {
-		lastCollidedEntity = otherEntity;
-		fsm.update(0);
+		if (isEnemy(otherEntity)) {
+			lastCollidedEnemy = otherEntity;
+		}
 		if (isEnvironment(otherEntity)) {
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
                 this.setPosition(position.x + collisionData.deltaX, position.y);
@@ -455,6 +457,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     isOnGround = true;
                 }
             }
+			justCollidedWithEnvironment = true;
         } else if(isPickup(otherEntity)) {
             switch (otherEntity.type) {
                 case EntityType.Health:
