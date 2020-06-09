@@ -265,11 +265,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function collidedWithEnvironmentWhileFallingLeft(deltaTime) {
-		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x < 0;
+		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x <= 0;
 	}
 
 	function collidedWithEnvironmentWhileFallingRight(deltaTime) {
-		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x > 0;
+		return collidedWithEnvironmentWhileFalling(deltaTime) && velocity.x >= 0;
 	}
 
 	function healthDepleted(deltaTime) {
