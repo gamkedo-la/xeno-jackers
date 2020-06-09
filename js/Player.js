@@ -4,7 +4,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
-    const MAX_JUMP_TIME = 170;
+    const MAX_JUMP_TIME = 425;
     const FRAME_WIDTH = 83; //old tile sheet = 24, new tile sheet = 64
     const FRAME_HEIGHT = 36;
     const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
@@ -172,27 +172,29 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		heldJumpTime = 0;
 		if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
 			velocity.x = WALK_SPEED;
-			flipped = false;
+            flipped = false;
+            colliderManager.setPointsForState(PlayerState.JumpRight, position);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
-			flipped = true;
-		}
-		if(flipped) {
+            flipped = true;
             colliderManager.setPointsForState(PlayerState.JumpLeft, position);
-        } else {
-            colliderManager.setPointsForState(PlayerState.JumpRight, position);
         }
+        
+        velocity.y = -MAX_Y_SPEED;
+
 		currentAnimation = animations.jumping;
         currentAnimation.reset();
 		playerJump.play();
 	}
 
 	function updateJumping(deltaTime) {
-		velocity.y -= MAX_Y_SPEED / 10;
+		velocity.y = -MAX_Y_SPEED;
 		heldJumpTime += deltaTime;
 	}
 
 	function enterFalling(deltaTime) {
+        if(velocity.y < 0) velocity.y = 0;
+
 		if(flipped) {
             colliderManager.setPointsForState(PlayerState.FallingLeft, position);
         } else {
@@ -442,8 +444,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.didCollideWith = function (otherEntity, collisionData) {
 		if (isEnemy(otherEntity)) {
 			lastCollidedEnemy = otherEntity;
-		}
-		if (isEnvironment(otherEntity)) {
+		} else if (isEnvironment(otherEntity)) {
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
                 this.setPosition(position.x + collisionData.deltaX, position.y);
             } else {
