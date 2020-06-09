@@ -545,7 +545,7 @@
   <object id="60" name="alienGuard1" type="enemyAlienGuard" gid="4099" x="1872" y="312" width="21" height="32"/>
   <object id="64" name="mech2" type="enemyMech" gid="4101" x="1352" y="312" width="25" height="34"/>
   <object id="66" name="mech1" type="enemyMech" gid="4101" x="992" y="120" width="25" height="34"/>
-  <object id="67" name="PlayerSpawn" type="player" gid="4097" x="454.833" y="117.667" width="21" height="30"/>
+  <object id="67" name="PlayerSpawn" type="player" gid="4097" x="748.166" y="113.667" width="21" height="30"/>
  </objectgroup>
  <layer id="5" name="ForegroundTiles" width="320" height="126">
   <data encoding="csv">

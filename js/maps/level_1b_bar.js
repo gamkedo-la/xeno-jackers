@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1314,22 +1314,22 @@
                         }, 
                         {
                          "x":0,
-                         "y":8.18566954558067
+                         "y":8.18567
                         }, 
                         {
                          "x":40,
-                         "y":8.0904455472181
+                         "y":8.09045
                         }, 
                         {
                          "x":40,
-                         "y":-0.190363454419329
+                         "y":-0.190363
                         }],
                  "rotation":0,
                  "type":"ground",
                  "visible":true,
                  "width":0,
                  "x":1944,
-                 "y":231.814330454419
+                 "y":231.814
                 }, 
                 {
                  "height":0,
@@ -1342,15 +1342,15 @@
                         }, 
                         {
                          "x":0,
-                         "y":8.18566954558067
+                         "y":8.18567
                         }, 
                         {
                          "x":40,
-                         "y":8.0904455472181
+                         "y":8.09045
                         }, 
                         {
                          "x":40,
-                         "y":-0.190363454419329
+                         "y":-0.190363
                         }],
                  "rotation":0,
                  "type":"ground",
@@ -1475,8 +1475,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":454.833,
-                 "y":117.667
+                 "x":748.166333333333,
+                 "y":113.667
                 }],
          "opacity":1,
          "type":"objectgroup",

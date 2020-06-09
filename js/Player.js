@@ -294,7 +294,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function enterKnockBack(deltaTime) {
 		let thisPlayer = getThisPlayer();
-		if (lastCollidedEnemy.collisionBody.center.x - canvas.center.x >= thisPlayer.collisionBody.center.x) {
+		if (lastCollidedEnemy.collisionBody.center.x >= thisPlayer.collisionBody.center.x) {
             velocity.x = -KNOCKBACK_SPEED;
         } else {
             velocity.x = KNOCKBACK_SPEED;
