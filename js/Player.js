@@ -86,12 +86,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.WalkRight], PlayerState.WalkLeft, pressedWalkLeftKey);
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.WalkLeft], PlayerState.JumpLeft, pressedJumpKey);
 	this.fsm.addTransition([PlayerState.IdleRight, PlayerState.WalkRight], PlayerState.JumpRight, pressedJumpKey);
-	this.fsm.addTransition([PlayerState.JumpLeft], PlayerState.FallingLeft, function() {
-		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
-	});
-	this.fsm.addTransition([PlayerState.JumpRight], PlayerState.FallingRight, function() {
-		return !pressedJumpKey || heldJumpTime >= MAX_JUMP_TIME;
-	});
+	this.fsm.addTransition([PlayerState.JumpLeft], PlayerState.FallingLeft, releasedJumpKeyOrMaxedTimer);
+	this.fsm.addTransition([PlayerState.JumpRight], PlayerState.FallingRight, releasedJumpKeyOrMaxedTimer);
 	this.fsm.addTransition([PlayerState.FallingLeft], PlayerState.LandingLeft, collidedWithWalkable);
 	this.fsm.addTransition([PlayerState.FallingRight], PlayerState.LandingRight, collidedWithWalkable);
 	this.fsm.addTransition([PlayerState.LandingLeft], PlayerState.IdleLeft, finishedLandingAnimation);
@@ -207,7 +203,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function exitFalling(deltaTime) {
-		isOnGround = true;
 		heldJumpTime = 0;
 		velocity.x = 0;
 	}
