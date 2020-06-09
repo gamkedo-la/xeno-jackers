@@ -14,7 +14,8 @@ const PlayerState = {
     LandingRight:'landingRight',
     AttackLeft:'attackLeft',
     AttackRight:'attackRight',
-	KnockBack: 'knockback',
+	KnockBackLeft: 'knockbackLeft',
+	KnockBackRight: 'knockbackRight',
 	Hurt: 'gettingHurt',
 	Dead: 'dead',
     Thumb:'thumb'
@@ -135,6 +136,20 @@ function PlayerColliderManager(startX, startY, size) {
         {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
+    const knockbackRightOffsets = [
+        {x:size.width/2+6, y:size.height-20}, //top right corner
+        {x:size.width/2-6, y:size.height-20}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
+    ];
+
+    const knockbackLeftOffsets = [
+        {x:size.width/2+6, y:size.height - 20}, //top right corner
+        {x:size.width/2-6, y:size.height - 20}, //top left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
+    ];
+
     let currentOffsets = idleRightOffsets;
 
     this.updateCollider = function(x, y) {
@@ -204,6 +219,12 @@ function PlayerColliderManager(startX, startY, size) {
                 break;
             case PlayerState.Thumb:
                 theseOffsets = thumbOffsets;
+                break;
+            case PlayerState.KnockBackLeft:
+                theseOffsets = knockbackLeftOffsets;
+                break;
+            case PlayerState.KnockBackRight:
+                theseOffsets = knockbackRightOffsets;
                 break;
             }
 

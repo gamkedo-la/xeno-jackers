@@ -127,7 +127,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function doNothing(deltaTime) {}
 
 	function enterIdle(deltaTime) {
-		justCollidedWithEnvironment = false;
 		lastCollidedEnemy = null;
 		if(currentAnimation !== animations.idle) {
             if(flipped) {
@@ -298,7 +297,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else {
             velocity.x = KNOCKBACK_SPEED;
         }
-		velocity.y = KNOCKBACK_YSPEED;
+        velocity.y = KNOCKBACK_YSPEED;
+
+        if (flipped) {
+            colliderManager.setPointsForState(PlayerState.KnockBackLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.KnockBackRight, position);
+        }
+        
+        currentAnimation = animations.knockback;
 	}
 
 	function updateKnockBack(deltaTime) {
@@ -387,6 +394,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if (colliderManager.state === null) {
             colliderManager.setPointsForState(PlayerState.IdleRight, position);
         }
+
+        justCollidedWithEnvironment = false;
 
         currentAnimation.update(deltaTime);
 
@@ -477,6 +486,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     isOnGround = true;
                 }
             }
+
 			justCollidedWithEnvironment = true;
         } else if(isPickup(otherEntity)) {
             switch (otherEntity.type) {
@@ -525,6 +535,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
+        anims.knockback = new SpriteAnimation('knockedback', playerSpriteSheet, [12], FRAME_WIDTH, FRAME_HEIGHT, [125], false, false);
 
         return anims;
     };
