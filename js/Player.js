@@ -66,8 +66,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.WalkRight, enterWalkingRight, updateWalking, doNothing);
 	this.fsm.addState(PlayerState.JumpLeft, enterJumping, updateJumping, doNothing);
 	this.fsm.addState(PlayerState.JumpRight, enterJumping, updateJumping, doNothing);
-	this.fsm.addState(PlayerState.FallingLeft, enterFalling, doNothing, exitFalling);
-	this.fsm.addState(PlayerState.FallingRight, enterFalling, doNothing, exitFalling);
+	this.fsm.addState(PlayerState.FallingLeft, enterFalling, updateFalling, exitFalling);
+	this.fsm.addState(PlayerState.FallingRight, enterFalling, updateFalling, exitFalling);
 	this.fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
 	this.fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
 	this.fsm.addState(PlayerState.CrouchLeft, enterCrouching, doNothing, doNothing);
@@ -189,20 +189,45 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function updateJumping(deltaTime) {
 		velocity.y = -MAX_Y_SPEED;
-		heldJumpTime += deltaTime;
+        heldJumpTime += deltaTime;
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+            colliderManager.setPointsForState(PlayerState.JumpRight, position);
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+        }
 	}
 
 	function enterFalling(deltaTime) {
         if(velocity.y < 0) velocity.y = 0;
 
-		if(flipped) {
-            colliderManager.setPointsForState(PlayerState.FallingLeft, position);
-        } else {
+		if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
             colliderManager.setPointsForState(PlayerState.FallingRight, position);
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            colliderManager.setPointsForState(PlayerState.FallingLeft, position);
         }
 		currentAnimation = animations.falling;
         currentAnimation.reset();
-	}
+    }
+    
+    function updateFalling(deltaTime) {
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+            colliderManager.setPointsForState(PlayerState.FallingRight, position);
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            colliderManager.setPointsForState(PlayerState.FallingLeft, position);
+        }
+    };
 
 	function exitFalling(deltaTime) {
 		heldJumpTime = 0;
