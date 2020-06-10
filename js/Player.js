@@ -77,8 +77,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.FallingRight, enterFalling, updateFalling, exitFalling);
 	this.fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
 	this.fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
-	this.fsm.addState(PlayerState.CrouchLeft, enterCrouching, doNothing, doNothing);
-	this.fsm.addState(PlayerState.CrouchRight, enterCrouching, doNothing, doNothing);
+	this.fsm.addState(PlayerState.CrouchLeft, enterCrouchingLeft, doNothing, doNothing);
+	this.fsm.addState(PlayerState.CrouchRight, enterCrouchingRight, doNothing, doNothing);
 	this.fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
 	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
@@ -107,10 +107,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.fsm.addTransition([PlayerState.LandingRight], PlayerState.CrouchRight, pressedCrouchKey);
 	this.fsm.addTransition([PlayerState.IdleLeft], PlayerState.CrouchLeft, pressedCrouchKey);
 	this.fsm.addTransition([PlayerState.IdleRight], PlayerState.CrouchRight, pressedCrouchKey);
+	this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.CrouchRight, getKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]));
+	this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchLeft, getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
     this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
-    this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.CrouchRight, pressedWalkLeftKey);
-	this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchLeft, pressedCrouchKey && pressedWalkRightKey);
 	this.fsm.addTransition([
 		PlayerState.IdleLeft,
 		PlayerState.IdleRight,
@@ -309,6 +309,16 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterCrouching(deltaTime) {
 		velocity.x = 0;
         currentAnimation = animations.crouching;
+	}
+
+	function enterCrouchingLeft(deltaTime) {
+		enterCrouching(deltaTime);
+		flipped = true;
+	}
+
+	function enterCrouchingRight(deltaTime) {
+		enterCrouching(deltaTime);
+		flipped = false;
 	}
 
 	function collidedWithEnemy(deltaTime) {
