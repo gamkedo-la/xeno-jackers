@@ -44,7 +44,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	const pressedCrouchKey = getKeyChecker([ALIAS.CROUCH, ALIAS.CROUCH2]);
 	function releasedCrouchKey() {
 		return !pressedCrouchKey();
-	}
+    }
+    
+    const pressedAttackKey = getKeyChecker([ALIAS.ATTACK]);
 
 	const pressedWalkLeftKey = getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]);
 	const pressedWalkRightKey = getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]);
@@ -76,6 +78,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
+	this.fsm.addState(PlayerState.AttackLeft, enterAttacking, doNothing, doNothing);
+	this.fsm.addState(PlayerState.AttackRight, enterAttacking, doNothing, doNothing);
 
 	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
@@ -115,7 +119,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		PlayerState.LandingRight,
 		PlayerState.CrouchLeft,
 		PlayerState.CrouchRight,
-		PlayerState.Thumb,
+        PlayerState.Thumb,
+        PlayerState.AttackLeft,
+        PlayerState.AttackRight,
 	], PlayerState.Hurt, collidedWithEnemy);
 	this.fsm.addTransition([PlayerState.Hurt], PlayerState.Dead, healthDepleted);
 	this.fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
@@ -123,6 +129,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
 	this.fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
+	this.fsm.addTransition([PlayerState.AttackLeft], PlayerState.IdleLeft, finishedAttackingAnimation);
+	this.fsm.addTransition([PlayerState.AttackRight], PlayerState.IdleRight, finishedAttackingAnimation);
+    this.fsm.addTransition([PlayerState.WalkLeft, PlayerState.IdleLeft], PlayerState.AttackLeft, pressedAttackKey);
+    this.fsm.addTransition([PlayerState.WalkRight, PlayerState.IdleRight], PlayerState.AttackRight, pressedAttackKey);
 
 	function doNothing(deltaTime) {}
 
@@ -241,6 +251,21 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
         currentAnimation = animations.landing;
         currentAnimation.reset();
+    }
+    
+    function enterAttacking(deltaTime) {
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.AttackLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.AttackRight, position);
+        }
+        isAttacking = true;
+        currentAnimation = animations.attacking;
+        currentAnimation.reset();
+    }
+
+    function finishedAttackingAnimation(deltaTime) {
+		return currentAnimation.getIsFinished() || currentAnimation != animations.attacking;
 	}
 
 	function collidedWithWalkable(deltaTime) {
