@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1463,8 +1463,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":748.166,
-                 "y":113.667
+                 "x":162.832666666667,
+                 "y":119.000333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1488,7 +1488,7 @@
  "nextobjectid":76,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {

@@ -143,6 +143,14 @@ function GameScene() {
         score += pointsForType(entityToRemove.type);
     };
 
+    this.addCollisionEntity = function(entity) {
+        collisionManager.addEntity(entity);
+    };
+
+    this.removeCollisionEntity = function(entity) {
+        collisionManager.removeEntity(entity);
+    };
+
     this.addHealthDrop = function(posX, posY) {
         const newHealth = new health(posX, posY);
         otherEntities.push(newHealth);

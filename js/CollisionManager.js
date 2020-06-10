@@ -197,7 +197,7 @@ function CollisionManager(player) {
 		} else if(isEnvironment(newEntity)) {
 			return addEnvironment(newEntity);
 		} else if(isPlayerTool(newEntity)) {
-			return  addPlayerWeapon(newEntity);
+			return addPlayerTool(newEntity);
         } else if(isPickup(newEntity)) {
 			return addGameObject(newEntity);
 		}
@@ -226,7 +226,7 @@ function CollisionManager(player) {
     
     const addPlayerTool = function(newTool) {
         const beforeLength = playerTools.size;
-		playerTools.add(newWeapon);
+		playerTools.add(newTool);
 
 		return (!(beforeLength === playerTools.size));
 	};
@@ -329,13 +329,13 @@ function CollisionManager(player) {
         checkCollsionsForLists(playerList, gameObjects);
 
         //Player Weapons vs Enemies
-        checkCollsionsForLists(playerTools, enemies);
+        checkCollsionsForLists(enemies, playerTools);
 
         //Player Weapons vs Enemy Weapons
-        checkCollsionsForLists(playerTools, enemyWeapons);
+        checkCollsionsForLists(enemyWeapons, playerTools);
 
         //Player Weapons vs Environment
-        checkCollsionsForLists(playerTools, environment);
+        checkCollsionsForLists(environment, playerTools);
 
         //Enemy Weapons vs Environment
         checkCollsionsForLists(enemyWeapons, environment);

@@ -37,6 +37,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.health = this.maxHealth;
     this.type = EntityType.Player;
 
+    let chain = new ChainWhip();
+
 	const pressedJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
 	function releasedJumpKeyOrMaxedTimer(deltaTime) {
 		return !pressedJumpKey() || heldJumpTime >= MAX_JUMP_TIME;
@@ -81,8 +83,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
-	this.fsm.addState(PlayerState.AttackLeft, enterAttacking, doNothing, doNothing);
-	this.fsm.addState(PlayerState.AttackRight, enterAttacking, doNothing, doNothing);
+	this.fsm.addState(PlayerState.AttackLeft, enterAttacking, updateAttacking, exitAttacking);
+	this.fsm.addState(PlayerState.AttackRight, enterAttacking, updateAttacking, exitAttacking);
 
 	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
@@ -147,6 +149,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             } else {
                 colliderManager.setPointsForState(PlayerState.IdleLeft, position);
             }
+            colliderManager.updateCollider(position.x, position.y);
         }
         currentAnimation = animations.idle;
         velocity.x = 0;
@@ -159,13 +162,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterWalkingRight(deltaTime) {
 		velocity.x = WALK_SPEED;
 		flipped = false;
-		colliderManager.setPointsForState(PlayerState.WalkRight, position);
+        colliderManager.setPointsForState(PlayerState.WalkRight, position);
+        colliderManager.updateCollider(position.x, position.y);
 		currentAnimation = animations.walking;
 	}
 
 	function enterWalkingLeft(deltaTime) {
 		velocity.x = -WALK_SPEED;
-		colliderManager.setPointsForState(PlayerState.WalkLeft, position);
+        colliderManager.setPointsForState(PlayerState.WalkLeft, position);
+        colliderManager.updateCollider(position.x, position.y);
         flipped = true;
 		currentAnimation = animations.walking;
 	}
@@ -186,12 +191,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 			velocity.x = WALK_SPEED;
             flipped = false;
             colliderManager.setPointsForState(PlayerState.JumpRight, position);
+            colliderManager.updateCollider(position.x, position.y);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
             colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+            colliderManager.updateCollider(position.x, position.y);
         }
-        
+
         velocity.y = -MAX_Y_SPEED;
 
 		currentAnimation = animations.jumping;
@@ -206,10 +213,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 			velocity.x = WALK_SPEED;
             flipped = false;
             colliderManager.setPointsForState(PlayerState.JumpRight, position);
+            colliderManager.updateCollider(position.x, position.y);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
             colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+            colliderManager.updateCollider(position.x, position.y);
         }
 	}
 
@@ -220,10 +229,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 			velocity.x = WALK_SPEED;
             flipped = false;
             colliderManager.setPointsForState(PlayerState.FallingRight, position);
+            colliderManager.updateCollider(position.x, position.y);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
             colliderManager.setPointsForState(PlayerState.FallingLeft, position);
+            colliderManager.updateCollider(position.x, position.y);
         }
 		currentAnimation = animations.falling;
         currentAnimation.reset();
@@ -234,10 +245,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 			velocity.x = WALK_SPEED;
             flipped = false;
             colliderManager.setPointsForState(PlayerState.FallingRight, position);
+            colliderManager.updateCollider(position.x, position.y);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
             colliderManager.setPointsForState(PlayerState.FallingLeft, position);
+            colliderManager.updateCollider(position.x, position.y);
         }
     };
 
@@ -252,6 +265,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else {
             colliderManager.setPointsForState(PlayerState.LandingRight, position);
         }
+        colliderManager.updateCollider(position.x, position.y);
         currentAnimation = animations.landing;
         currentAnimation.reset();
     }
@@ -262,9 +276,22 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else {
             colliderManager.setPointsForState(PlayerState.AttackRight, position);
         }
+        colliderManager.updateCollider(position.x, position.y);
+        velocity.x = 0;
         isAttacking = true;
         currentAnimation = animations.attacking;
         currentAnimation.reset();
+    }
+
+    function updateAttacking(deltaTime) {
+//        console.log(`Current Frame Index: ${currentAnimation.getCurrentFrameIndex()}`)
+        if(currentAnimation.getCurrentFrameIndex() === 2) {
+            chain.activate(position.x + FRAME_WIDTH, position.y + 5);
+        }
+    }
+
+    function exitAttacking(deltaTime) {
+        chain.deactivate();
     }
 
     function finishedAttackingAnimation(deltaTime) {
@@ -332,6 +359,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else {
             colliderManager.setPointsForState(PlayerState.KnockBackRight, position);
         }
+        colliderManager.updateCollider(position.x, position.y);
         
         currentAnimation = animations.knockback;
 	}
@@ -357,6 +385,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             } else {
                 colliderManager.setPointsForState(PlayerState.Thumb, position);
             }
+            colliderManager.updateCollider(position.x, position.y);
         }
         currentAnimation = animations.thumbup;
         currentAnimation.reset();
@@ -374,6 +403,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +10/+32 makes collision box smaller than sprite
     ]);
     colliderManager.setBody(this.collisionBody);
+    const collBody = this.collisionBody;
 
     this.getPosition = function () {
         return { x: position.x, y: position.y };
@@ -489,6 +519,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 } else {
                     colliderManager.setPointsForState(PlayerState.AttackLeft, position);
                 }
+                colliderManager.updateCollider(position.x, position.y);
             }
             currentAnimation = animations.attacking;
             currentAnimation.reset();
@@ -500,6 +531,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
+        chain.draw();
     };
 
     this.didCollideWith = function (otherEntity, collisionData) {

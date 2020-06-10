@@ -120,13 +120,13 @@ function EnemyAlienGuard(posX, posY) {
 
     this.didCollideWith = function(otherEntity, collisionData) {
         if(otherEntity.type === EntityType.Player) {
-            this.health--;
-
             if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
                 position.x -= 5;
             } else {
                 position.x += 5;
             }
+        } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
+            this.health--;
 
             if(this.health <= 0) {
                 const healthDropChance = 100 * Math.random();

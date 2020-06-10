@@ -29,6 +29,10 @@ function SpriteAnimation(name, //string identifier for this animation
         currentFrameIndex = 0;
         remainderTime = 0;
     };
+
+    this.getCurrentFrameIndex = function() {
+        return currentFrameIndex;
+    };
     
     this.update = function(deltaTime) {
         if(times == null) {return;}
