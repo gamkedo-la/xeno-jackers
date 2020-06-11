@@ -1,11 +1,12 @@
 //ChainWhip.js
+// anchored to Player.js in "function updateAttacking(deltaTime)"
 function ChainWhip() {
     this.type = EntityType.Chain;
     this.points = [
-        {x: 0, y: 0},
-        {x: 53, y: 0},
-        {x: 53, y: 7},
-        {x: 0, y: 7},
+        {x: 0, y: 0},// 0,0
+        {x: 53, y: 0},// 53,0
+        {x: 53, y: 7},// 53,7
+        {x: 0, y: 7},// 0,7
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
     this.isActive = false;

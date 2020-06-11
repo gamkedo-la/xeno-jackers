@@ -4,8 +4,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
-    const MAX_JUMP_TIME = 425;
-    const FRAME_WIDTH = 83; //old tile sheet = 24, new tile sheet = 64
+    const MAX_JUMP_TIME = 320;//225 - how long you can hold the jump key and still go up
+    const FRAME_WIDTH = 83; //old tile sheet = 24, then = 64, now 83
     const FRAME_HEIGHT = 36;
     const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
 
@@ -286,8 +286,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     function updateAttacking(deltaTime) {
 //        console.log(`Current Frame Index: ${currentAnimation.getCurrentFrameIndex()}`)
         if(currentAnimation.getCurrentFrameIndex() === 2) {
-            chain.activate(position.x + FRAME_WIDTH, position.y + 5);
+            if(flipped) {
+                chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+            } else {
+                chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
         }
+    }
     }
 
     function exitAttacking(deltaTime) {
@@ -601,7 +605,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
         anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
         anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
-        //anims.attackjump = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
+        //anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
         //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
