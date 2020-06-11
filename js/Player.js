@@ -85,6 +85,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
 	this.fsm.addState(PlayerState.AttackLeft, enterAttacking, updateAttacking, exitAttacking);
 	this.fsm.addState(PlayerState.AttackRight, enterAttacking, updateAttacking, exitAttacking);
+	this.fsm.addState(PlayerState.CrouchAttackLeft, enterCrouchAttacking, updateCrouchAttacking, exitCrouchAttacking);
+	this.fsm.addState(PlayerState.CrouchAttackRight, enterCrouchAttacking, updateCrouchAttacking, exitCrouchAttacking);
 
 	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
@@ -111,6 +113,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchLeft, getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]));
 	this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.IdleLeft, releasedCrouchKey);
     this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.IdleRight, releasedCrouchKey);
+	this.fsm.addTransition([PlayerState.CrouchLeft], PlayerState.CrouchAttackLeft, canAttack);
+    this.fsm.addTransition([PlayerState.CrouchRight], PlayerState.CrouchAttackRight, canAttack);
+	this.fsm.addTransition([PlayerState.CrouchAttackLeft], PlayerState.CrouchLeft, finishedCrouchAttackAnimation);
+    this.fsm.addTransition([PlayerState.CrouchAttackRight], PlayerState.CrouchRight, finishedCrouchAttackAnimation);
 	this.fsm.addTransition([
 		PlayerState.IdleLeft,
 		PlayerState.IdleRight,
@@ -284,23 +290,53 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     function updateAttacking(deltaTime) {
-//        console.log(`Current Frame Index: ${currentAnimation.getCurrentFrameIndex()}`)
         if(currentAnimation.getCurrentFrameIndex() === 2) {
             if(flipped) {
                 chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
             } else {
                 chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+            }
         }
-    }
     }
 
     function exitAttacking(deltaTime) {
         chain.deactivate();
     }
 
+    function enterCrouchAttacking(deltaTime) {
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.CrouchRight, position);
+        }
+        colliderManager.updateCollider(position.x, position.y);
+        velocity.x = 0;
+        isAttacking = true;
+        currentAnimation = animations.attackcrouch;
+        currentAnimation.reset();
+    }
+
+    function updateCrouchAttacking(deltaTime) {
+        if(currentAnimation.getCurrentFrameIndex() === 2) {
+            if(flipped) {
+                chain.activate(position.x + FRAME_WIDTH -28, position.y + 12); 
+            } else {
+                chain.activate(position.x + FRAME_WIDTH, position.y + 12);
+            }
+        }
+    }
+
+    function exitCrouchAttacking(deltaTime) {
+        chain.deactivate();
+    }
+
     function finishedAttackingAnimation(deltaTime) {
 		return currentAnimation.getIsFinished() || currentAnimation != animations.attacking;
-	}
+    }
+    
+    function finishedCrouchAttackAnimation(deltaTime) {
+        return currentAnimation.getIsFinished() || currentAnimation != animations.attackcrouch;
+    }
 
 	function collidedWithWalkable(deltaTime) {
 		return isOnGround;
