@@ -5,7 +5,7 @@ function health(posX, posY) {
     const SIZE = {width:WIDTH, height:HEIGHT};
     const FRAME_NUM = 0; //TODO: restore after testing complete
     
-    let animation = new SpriteAnimation('idle', healthpickup, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], WIDTH, HEIGHT, [1024], false, true);
+    let animation = new SpriteAnimation('idle', healthpickup, [8, 4, 6], WIDTH, HEIGHT, [1024], false, true);
     //TODO: Restore once we know which image we want
 //    let animation = new SpriteAnimation('idle', healthpickup, [FRAME_NUM], WIDTH, HEIGHT, [512], false, true);
     let position = {x:posX, y:posY};
