@@ -1,7 +1,7 @@
 //Camera.js
 function Camera(canvas) {
-    const DEAD_ZONE_X = 16;
-    const DEAD_ZONE_Y = 16;
+    const DEAD_ZONE_X = 0; //16
+    const DEAD_ZONE_Y = 8; //16
     canvas.center.x = canvas.width / 2;
     canvas.center.y = canvas.height / 2;
     let levelWidth = 0;
