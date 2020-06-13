@@ -64,6 +64,10 @@ function GameScene() {
 
         if(gameUI === null) {
             gameUI = new GameUI(canvas, canvasContext);
+            gameUI.hasChain = hasChain;
+            gameUI.hasWheel = hasWheel;
+            gameUI.hasHandlebar = hasHandlebar;
+            gameUI.hasEngine = hasEngine;
         }
 
         if(loadedNewMap) {
@@ -233,8 +237,28 @@ function GameScene() {
                     enemies.push(anEntity);
                     break;
                 case EntityType.ChainPickup:
-                    anEntity = new UpgradePickup(EntityType.ChainPickup, data.x, data.y - 16);
-                    otherEntities.push(anEntity);
+                    if(!hasChain) {
+                        anEntity = new UpgradePickup(EntityType.ChainPickup, data.x, data.y - 16);
+                        otherEntities.push(anEntity);
+                    }
+                    break;
+                case EntityType.WheelPickup:
+                    if(!hasWheel) {
+                        anEntity = new UpgradePickup(EntityType.WheelPickup, data.x, data.y - 16);
+                        otherEntities.push(anEntity);
+                    }
+                    break;
+                case EntityType.HandlebarPickup:
+                    if(!hasHandlebar) {
+                        anEntity = new UpgradePickup(EntityType.HandlebarPickup, data.x, data.y - 16);
+                        otherEntities.push(anEntity);
+                    }
+                    break;
+                case EntityType.EnginePickup:
+                    if(!hasEngine) {
+                        anEntity = new UpgradePickup(EntityType.EnginePickup, data.x, data.y - 16);
+                        otherEntities.push(anEntity);
+                    }
                     break;
             }
 
