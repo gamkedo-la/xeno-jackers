@@ -4,8 +4,8 @@ function EnemyAlienGuard(posX, posY) {
     const WIDTH = 23;
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
-    const MIN_TIME_TO_GROWL = 5000;
-    const MEDIAN_TIME_TO_GROWL = 5000;
+    const MIN_TIME_TO_GROWL = 1000;
+    const MEDIAN_TIME_TO_GROWL = 500;
     const HEALTH_DROP_PROBABILITY = 100;
 
     let currentAnimation;
@@ -46,14 +46,13 @@ function EnemyAlienGuard(posX, posY) {
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
 
-        timeToGrowl -= deltaTime;
-        if(timeToGrowl <= 0) {
-            alienGrowl2.play();
-            timeToGrowl = MIN_TIME_TO_GROWL + MEDIAN_TIME_TO_GROWL * Math.random();
-        }
-
-
         if(this.collisionBody.isOnScreen) {
+            timeToGrowl -= deltaTime;
+            if(timeToGrowl <= 0) {
+                alienGrowl2.play();
+                timeToGrowl = MIN_TIME_TO_GROWL + MEDIAN_TIME_TO_GROWL * Math.random();
+            }
+
             position.x += Math.round(velocity.x * deltaTime / 1000);
             velocity.y += Math.round(GRAVITY * deltaTime / 1000);
             position.y += Math.round(velocity.y * deltaTime / 1000); 
