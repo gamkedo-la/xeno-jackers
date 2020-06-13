@@ -6,7 +6,7 @@ function EnemyAlienGuard(posX, posY) {
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_GROWL = 1000;
     const MEDIAN_TIME_TO_GROWL = 500;
-    const HEALTH_DROP_PROBABILITY = 100;
+    const HEALTH_DROP_PROBABILITY = 50;
 
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -21,7 +21,7 @@ function EnemyAlienGuard(posX, posY) {
     let flipped = false;
 
     this.type = EntityType.EnemyAlienGuard;
-    this.health = 2;
+    this.health = 12;
 
     this.collisionBody = new AABBCollider([
         {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite

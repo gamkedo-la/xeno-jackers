@@ -6,7 +6,7 @@ function BikerEnemy(posX, posY) {
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_CACKLE = 1000;
     const MEDIAN_TIME_TO_CACLE = 500;
-    const HEALTH_DROP_PROBABILITY = 100;
+    const HEALTH_DROP_PROBABILITY = 30;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
