@@ -1,6 +1,6 @@
 //Camera.js
 function Camera(canvas) {
-    const DEAD_ZONE_X = 0; //16
+    const DEAD_ZONE_X = 8; //16
     const DEAD_ZONE_Y = 8; //16
     canvas.center.x = canvas.width / 2;
     canvas.center.y = canvas.height / 2;
@@ -28,16 +28,16 @@ function Camera(canvas) {
 
         const playerPos = player.getPosition();
 
-        if(playerPos.x > canvas.center.x + DEAD_ZONE_X) {
-            canvas.center.x = playerPos.x - DEAD_ZONE_X;
-        } else if(playerPos.x < canvas.center.x - DEAD_ZONE_X) {
-            canvas.center.x = playerPos.x + DEAD_ZONE_X;
+        if(playerPos.x + 6 > canvas.center.x + DEAD_ZONE_X) {
+            canvas.center.x = playerPos.x + 6 - DEAD_ZONE_X;
+        } else if(playerPos.x + 6 < canvas.center.x - DEAD_ZONE_X) {
+            canvas.center.x = playerPos.x + 6 + DEAD_ZONE_X;
         }
 
-        if(playerPos.y > canvas.center.y + DEAD_ZONE_Y) {
-            canvas.center.y = playerPos.y - DEAD_ZONE_Y;
-        } else if(playerPos.y < canvas.center.y - DEAD_ZONE_Y) {
-            canvas.center.y = playerPos.y + DEAD_ZONE_Y;
+        if(playerPos.y + 14 > canvas.center.y + DEAD_ZONE_Y) {
+            canvas.center.y = playerPos.y + 14 - DEAD_ZONE_Y;
+        } else if(playerPos.y + 14 < canvas.center.y - DEAD_ZONE_Y) {
+            canvas.center.y = playerPos.y + 14 + DEAD_ZONE_Y;
         }
 
         canvas.deltaX = canvas.center.x - oldX;
