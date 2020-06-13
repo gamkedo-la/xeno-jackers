@@ -273,7 +273,8 @@ function GameScene() {
         }
 
         collisionManager.doCollisionChecks();
-		player.fsm.update(deltaTime);
+        player.fsm.update(deltaTime);
+        newlyPressed.length = 0;
 
         for(let entityToRemove of entitiesToRemove) {
             if(entityToRemove === player) {

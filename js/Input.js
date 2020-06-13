@@ -69,6 +69,7 @@ const RIGHT_MOUSE_BUTTON = 'RightMouseButton';
 let didInteract = false;
 
 const heldButtons = [];
+const newlyPressed = [];
 const ALIAS = {
 	//	CLIMB:KEY_UP,
 	WALK_LEFT: KEY_LEFT,
@@ -143,6 +144,7 @@ function keyPress(evt) {
 
 	if (isNewKey) {
 		heldButtons.push(evt.keyCode);
+		newlyPressed.push(evt.keyCode);
 	}
 }
 
@@ -239,6 +241,21 @@ function getExclusiveKeyChecker(keys) {
 		return heldSet.size == 0;
 	};
 	return exclusiveKeyChecker;
+}
+
+function getNewKeyChecker(keys) {
+	const keyChecker = function() {
+		console.log(newlyPressed.length);
+		for (let i=0; i<newlyPressed.length; i++) {
+			for (let j=0; j<keys.length; j++) {
+				if (newlyPressed[i] == keys[j]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+	return keyChecker;
 }
 
 function checkForPressedKeys(keys) {

@@ -39,16 +39,17 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     let chain = new ChainWhip();
 
-	const pressedJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
+    const pressedJumpKey = getNewKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
+    const heldJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
 	function releasedJumpKeyOrMaxedTimer(deltaTime) {
-		return !pressedJumpKey() || heldJumpTime >= MAX_JUMP_TIME;
+		return !heldJumpKey() || heldJumpTime >= MAX_JUMP_TIME;
 	}
 	const pressedCrouchKey = getKeyChecker([ALIAS.CROUCH, ALIAS.CROUCH2]);
 	function releasedCrouchKey() {
 		return !pressedCrouchKey();
     }
     
-    const pressedAttackKey = getKeyChecker([ALIAS.ATTACK]);
+    const pressedAttackKey = getNewKeyChecker([ALIAS.ATTACK]);
     const canAttack = function() {
         return (hasChain && pressedAttackKey());
     };
