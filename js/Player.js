@@ -34,7 +34,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let levelHeight = 0;
 
     this.maxHealth = 10;
-    this.health = this.maxHealth;
+    this.health = this.maxHealth / 2;
     this.type = EntityType.Player;
 
     let chain = new ChainWhip();

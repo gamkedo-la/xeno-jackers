@@ -245,7 +245,6 @@ function getExclusiveKeyChecker(keys) {
 
 function getNewKeyChecker(keys) {
 	const keyChecker = function() {
-		console.log(newlyPressed.length);
 		for (let i=0; i<newlyPressed.length; i++) {
 			for (let j=0; j<keys.length; j++) {
 				if (newlyPressed[i] == keys[j]) {
