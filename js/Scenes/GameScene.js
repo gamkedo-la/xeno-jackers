@@ -280,6 +280,7 @@ function GameScene() {
             if(entityToRemove === player) {
                 remainingLives--;
                 if(remainingLives < 0) {
+                    remainingLives = 2;
                     transitionToGameOver();
                 } else {
                     player.setPosition(currentMap.playerSpawn.x, currentMap.playerSpawn.y - player.getSize().height);

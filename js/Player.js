@@ -392,8 +392,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function enterDead(deltaTime) {
-		// Play death animation?
-		SceneState.scenes[SCENE.GAME].removeMe(this);
+        // Play death animation?
+		SceneState.scenes[SCENE.GAME].removeMe(self);
 		//play death sound here?
 	}
 
@@ -587,7 +587,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     this.didCollideWith = function (otherEntity, collisionData) {
 		if (isEnemy(otherEntity)) {
-			lastCollidedEnemy = otherEntity;
+            lastCollidedEnemy = otherEntity;
 		} else if (isEnvironment(otherEntity)) {
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
                 this.setPosition(position.x + collisionData.deltaX, position.y);
