@@ -4,7 +4,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const WALK_SPEED = 65;
     const KNOCKBACK_SPEED = 100;
     const KNOCKBACK_YSPEED = -85;
-    const MAX_JUMP_TIME = 320;//225 - how long you can hold the jump key and still go up
+    const MAX_JUMP_TIME = 320;//320 - how long you can hold the jump key and still go up
     const FRAME_WIDTH = 83; //old tile sheet = 24, then = 64, now 83
     const FRAME_HEIGHT = 36;
     const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
