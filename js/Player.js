@@ -158,7 +158,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.FallAttackRight], PlayerState.FallingRight, finishedJumpAttackingAnimation);
     this.fsm.addTransition([PlayerState.FallAttackLeft], PlayerState.FallingLeft, finishedJumpAttackingAnimation);
 	this.fsm.addTransition([PlayerState.FallAttackRight], PlayerState.LandingRight, collidedWithWalkable);
-	this.fsm.addTransition([PlayerState.FallAttackLeft], PlayerState.LandingLeft, collidedWithWalkable);
+    this.fsm.addTransition([PlayerState.FallAttackLeft], PlayerState.LandingLeft, collidedWithWalkable);
+    this.fsm.addTransition([PlayerState.FallingRight], PlayerState.FallAttackRight, canAttack);
+    this.fsm.addTransition([PlayerState.FallingLeft], PlayerState.FallAttackLeft, canAttack);
 
 	function doNothing(deltaTime) {}
 
