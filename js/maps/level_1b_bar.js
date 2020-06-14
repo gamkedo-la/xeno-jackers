@@ -1166,7 +1166,7 @@
                 {
                  "height":0,
                  "id":74,
-                 "name":"ground3",
+                 "name":"platform2",
                  "polygon":[
                         {
                          "x":0,
@@ -1194,7 +1194,7 @@
                 {
                  "height":0,
                  "id":75,
-                 "name":"ground3",
+                 "name":"platform1",
                  "polygon":[
                         {
                          "x":0,
@@ -1353,7 +1353,7 @@
                          "y":15.9832985386221
                         }],
                  "rotation":0,
-                 "type":"wall",
+                 "type":"ceiling",
                  "visible":true,
                  "width":0,
                  "x":16,
@@ -1381,7 +1381,7 @@
                          "y":15.9832985386221
                         }],
                  "rotation":0,
-                 "type":"wall",
+                 "type":"ceiling",
                  "visible":true,
                  "width":0,
                  "x":224,
@@ -1409,11 +1409,39 @@
                          "y":15.9832985386221
                         }],
                  "rotation":0,
-                 "type":"wall",
+                 "type":"ceiling",
                  "visible":true,
                  "width":0,
                  "x":1376,
                  "y":176
+                }, 
+                {
+                 "height":0,
+                 "id":85,
+                 "name":"deadzone",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":-0.0167014613778704
+                        }, 
+                        {
+                         "x":912,
+                         "y":-0.0167014613778704
+                        }, 
+                        {
+                         "x":912,
+                         "y":15.9832985386221
+                        }, 
+                        {
+                         "x":0,
+                         "y":15.9832985386221
+                        }],
+                 "rotation":0,
+                 "type":"deadzone",
+                 "visible":true,
+                 "width":0,
+                 "x":1344,
+                 "y":344
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1565,7 +1593,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":85,
+ "nextobjectid":86,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",

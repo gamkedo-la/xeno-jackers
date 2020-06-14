@@ -21,7 +21,7 @@ function EnemyAlienGuard(posX, posY) {
     let flipped = false;
 
     this.type = EntityType.EnemyAlienGuard;
-    this.health = 13; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
+    this.health = 7; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
 
     this.collisionBody = new AABBCollider([
         {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
