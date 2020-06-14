@@ -288,6 +288,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isAttacking = true;
         currentAnimation = animations.attacking;
         currentAnimation.reset();
+        chainAttack1.play()
     }
 
     function updateAttacking(deltaTime) {
@@ -315,6 +316,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isAttacking = true;
         currentAnimation = animations.attackcrouch;
         currentAnimation.reset();
+        chainAttack2.play()
     }
 
     function updateCrouchAttacking(deltaTime) {
