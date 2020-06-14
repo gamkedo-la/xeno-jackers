@@ -36,8 +36,8 @@ function Camera(canvas) {
 
         if(playerPos.y + 14 > canvas.center.y + DEAD_ZONE_Y) {
             canvas.center.y = playerPos.y + 14 - DEAD_ZONE_Y;
-        } else if(playerPos.y + 14 < canvas.center.y - DEAD_ZONE_Y) {
-            canvas.center.y = playerPos.y + 14 + DEAD_ZONE_Y;
+        } else if(playerPos.y + 14 < canvas.center.y - 3.5 * DEAD_ZONE_Y) {
+            canvas.center.y = playerPos.y + 14 + 3.5 * DEAD_ZONE_Y;
         }
 
         canvas.deltaX = canvas.center.x - oldX;

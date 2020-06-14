@@ -88,6 +88,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.AttackRight, enterAttacking, updateAttacking, exitAttacking);
 	this.fsm.addState(PlayerState.CrouchAttackLeft, enterCrouchAttacking, updateCrouchAttacking, exitCrouchAttacking);
 	this.fsm.addState(PlayerState.CrouchAttackRight, enterCrouchAttacking, updateCrouchAttacking, exitCrouchAttacking);
+	this.fsm.addState(PlayerState.JumpAttackLeft, enterJumpAttacking, updateJumpAttacking, exitJumpAttacking);
+	this.fsm.addState(PlayerState.JumpAttackRight, enterJumpAttacking, updateJumpAttacking, exitJumpAttacking);
+	this.fsm.addState(PlayerState.FallAttackLeft, enterFallAttacking, updateFallAttacking, exitFallAttacking);
+	this.fsm.addState(PlayerState.FallAttackRight, enterFallAttacking, updateFallAttacking, exitFallAttacking);
 
 	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
@@ -145,6 +149,16 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.AttackRight], PlayerState.IdleRight, finishedAttackingAnimation);
     this.fsm.addTransition([PlayerState.WalkLeft, PlayerState.IdleLeft], PlayerState.AttackLeft, canAttack);
     this.fsm.addTransition([PlayerState.WalkRight, PlayerState.IdleRight], PlayerState.AttackRight, canAttack);
+    this.fsm.addTransition([PlayerState.JumpRight], PlayerState.JumpAttackRight, canAttack);
+    this.fsm.addTransition([PlayerState.JumpLeft], PlayerState.JumpAttackLeft, canAttack);
+	this.fsm.addTransition([PlayerState.JumpAttackRight], PlayerState.FallAttackRight, releasedJumpKeyOrMaxedTimer);
+    this.fsm.addTransition([PlayerState.JumpAttackLeft], PlayerState.FallAttackLeft, releasedJumpKeyOrMaxedTimer);
+	this.fsm.addTransition([PlayerState.JumpAttackRight], PlayerState.JumpRight, finishedJumpAttackingAnimation);
+    this.fsm.addTransition([PlayerState.JumpAttackLeft], PlayerState.JumpLeft, finishedJumpAttackingAnimation);
+	this.fsm.addTransition([PlayerState.FallAttackRight], PlayerState.FallingRight, finishedJumpAttackingAnimation);
+    this.fsm.addTransition([PlayerState.FallAttackLeft], PlayerState.FallingLeft, finishedJumpAttackingAnimation);
+	this.fsm.addTransition([PlayerState.FallAttackRight], PlayerState.LandingRight, collidedWithWalkable);
+	this.fsm.addTransition([PlayerState.FallAttackLeft], PlayerState.LandingLeft, collidedWithWalkable);
 
 	function doNothing(deltaTime) {}
 
@@ -333,12 +347,72 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         chain.deactivate();
     }
 
+    function enterJumpAttacking(deltaTime) {
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.JumpAttackLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.JumpAttackRight, position);
+        }
+        colliderManager.updateCollider(position.x, position.y);
+
+        currentAnimation = animations.attackjump;
+        currentAnimation.reset();
+		chainAttack1.play();
+    }
+
+    function updateJumpAttacking(deltaTime) {
+        if(currentAnimation.getCurrentFrameIndex() === 2) {
+            if(flipped) {
+                chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+            } else {
+                chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+            }
+        }
+    }
+
+    function exitJumpAttacking(deltaTime) {
+        chain.deactivate();
+    }
+
+    function enterFallAttacking(deltaTime) {
+        if(currentAnimation !== animations.attackjump) {
+            if(flipped) {
+                colliderManager.setPointsForState(PlayerState.JumpAttackLeft, position);
+            } else {
+                colliderManager.setPointsForState(PlayerState.JumpAttackRight, position);
+            }
+            colliderManager.updateCollider(position.x, position.y);
+    
+            currentAnimation = animations.attackjump;
+            currentAnimation.reset();
+            chainAttack1.play();
+        }
+    }
+
+    function updateFallAttacking(deltaTime) {
+        if(currentAnimation.getCurrentFrameIndex() === 2) {
+            if(flipped) {
+                chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+            } else {
+                chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+            }
+        }
+    }
+
+    function exitFallAttacking(deltaTime) {
+        chain.deactivate();
+    }
+
     function finishedAttackingAnimation(deltaTime) {
 		return currentAnimation.getIsFinished() || currentAnimation != animations.attacking;
     }
     
     function finishedCrouchAttackAnimation(deltaTime) {
         return currentAnimation.getIsFinished() || currentAnimation != animations.attackcrouch;
+    }
+
+    function finishedJumpAttackingAnimation(deltaTime) {
+		return currentAnimation.getIsFinished() || currentAnimation != animations.attackjump;
     }
 
 	function collidedWithWalkable(deltaTime) {
@@ -352,6 +426,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterCrouching(deltaTime) {
 		velocity.x = 0;
         currentAnimation = animations.crouching;
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
+        } else {
+            colliderManager.setPointsForState(PlayerState.CrouchRight, position);
+        }
+        colliderManager.updateCollider(position.x, position.y);
 	}
 
 	function enterCrouchingLeft(deltaTime) {
@@ -452,8 +532,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.collisionBody = new AABBCollider([
         { x: startX + 10, y: startY + 6 }, //top left +10/+6 to make collision box smaller than sprite
         { x: startX + 23, y: startY + 6 }, //top right +23/+6 makes collision box smaller than sprite
-        { x: startX + 23, y: startY + FRAME_HEIGHT }, //bottom right +23/+32 makes collision box smaller than sprite
-        { x: startX + 10, y: startY + FRAME_HEIGHT } //bottom left +10/+32 makes collision box smaller than sprite
+        { x: startX + 23, y: startY + FRAME_HEIGHT  - 1}, //bottom right +23/+32 makes collision box smaller than sprite
+        { x: startX + 10, y: startY + FRAME_HEIGHT - 1} //bottom left +10/+32 makes collision box smaller than sprite
     ]);
     colliderManager.setBody(this.collisionBody);
     const collBody = this.collisionBody;
@@ -467,18 +547,18 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         spawn.y = y - canvas.height / 2;
         position.x = x;
         position.y = y;
+        const drawOffset = colliderManager.updateCollider(position.x, position.y);
         drawPosition.x = position.x - spawn.x - 26;
         drawPosition.y = position.y - spawn.y + 2;
-        colliderManager.updateCollider(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
 
     this.setPosition = function (x, y) {
         position.x = x;
         position.y = y;
-        drawPosition.x = position.x - spawn.x - 26 - canvas.offsetX;
-        drawPosition.y = position.y - spawn.y + 2 - canvas.offsetY;
-        colliderManager.updateCollider(position.x, position.y);
+        const drawOffset = colliderManager.updateCollider(position.x, position.y);
+        drawPosition.x = position.x - spawn.x - 26 - canvas.offsetX + drawOffset.x;
+        drawPosition.y = position.y - spawn.y + 2 - canvas.offsetY + drawOffset.y;
         this.collisionBody.calcOnscreen(canvas);
     };
 
@@ -648,7 +728,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
         anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
         anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
-        //anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
+        anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
         //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);

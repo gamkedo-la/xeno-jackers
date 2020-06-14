@@ -81,7 +81,12 @@ function AABBCollider(points) {
         this.center.y = newY + this.height / 2;
 		
 		this.findCenterAndRadiusOfPoints();
-    };
+	};
+	
+	this.setPoints = function(points) {
+		this.points = [...points];
+		this.findCenterAndRadiusOfPoints();
+	};
     
     this.calcOnscreen = function(canvas) {
 		const left = 0;

@@ -18,6 +18,8 @@ const PlayerState = {
     CrouchAttackRight:'crouchAttackRight',
     JumpAttackLeft:'JumpAttackLeft',
     JumpAttackRight:'JumpAttackRight',
+    FallAttackLeft:'FallAttackLeft',
+    FallAttackRight:'FallAttackRight',
 	KnockBackLeft: 'knockbackLeft',
 	KnockBackRight: 'knockbackRight',
 	Hurt: 'gettingHurt',
@@ -34,6 +36,8 @@ function PlayerColliderManager(startX, startY, size) {
     this.setBody = function(newBody) {
         body = newBody
     };
+
+    this.drawOffset = {x:0, y:0};
 
     const idleRightOffsets = [
         {x:size.width/2+6, y:size.height-29}, //top right corner
@@ -108,15 +112,15 @@ function PlayerColliderManager(startX, startY, size) {
     const landingRightOffsets = [
         {x:size.width/2+6, y:size.height - 29}, //top right corner
         {x:size.width/2-6, y:size.height - 29}, //top left corner
-        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
-        {x:size.width/2+6, y:size.height - 6} //bottom left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const landingLeftOffsets = [
         {x:size.width/2+6, y:size.height - 29}, //top right corner
         {x:size.width/2-6, y:size.height - 29}, //top left corner
-        {x:size.width/2-6, y:size.height - 6}, //bottom right corner
-        {x:size.width/2+6, y:size.height - 6} //bottom left corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const attackRightOffsets = [
@@ -161,6 +165,8 @@ function PlayerColliderManager(startX, startY, size) {
             x + (startX - canvas.center.x), 
             y + (startY - canvas.center.y)
         );
+
+        return this.drawOffset;
     };
 
     this.processEnvironmentCollision = function(playerPos, playerVel, otherEntity, collisionData) {
@@ -178,6 +184,8 @@ function PlayerColliderManager(startX, startY, size) {
 
     this.setPointsForState = function(state, position) {
         let theseOffsets;
+        this.drawOffset.x = 0;
+        this.drawOffset.y = 0;
         switch(state) {
             case PlayerState.IdleLeft:
                 theseOffsets = idleLeftOffsets;
@@ -192,21 +200,29 @@ function PlayerColliderManager(startX, startY, size) {
                 theseOffsets = walkRightOffsets;
                 break;
             case PlayerState.CrouchLeft:
+            case PlayerState.CrouchAttackLeft:
                 theseOffsets = crouchLeftOffsets;
+                this.drawOffset.y = -9;
                 break;
             case PlayerState.CrouchRight:
+            case PlayerState.CrouchAttackRight:
+                this.drawOffset.y = -9;
                 theseOffsets = crouchRightOffsets;
                 break;
             case PlayerState.JumpLeft:
+            case PlayerState.JumpAttackLeft:
                 theseOffsets = jumpLeftOffsets;
                 break;
             case PlayerState.JumpRight:
+            case PlayerState.JumpAttackRight:
                 theseOffsets = jumpRightOffsets;
                 break;
             case PlayerState.FallingLeft:
+            case PlayerState.FallAttackLeft:
                 theseOffsets = fallingLeftOffsets;
                 break;
             case PlayerState.FallingRight:
+            case PlayerState.FallAttackRight:
                 theseOffsets = fallingRightOffsets;
                 break;
             case PlayerState.LandingLeft:
@@ -224,19 +240,27 @@ function PlayerColliderManager(startX, startY, size) {
             case PlayerState.Thumb:
                 theseOffsets = thumbOffsets;
                 break;
+            case PlayerState.Hurt:
+            case PlayerState.Dead:
             case PlayerState.KnockBackLeft:
+                this.drawOffset.y = -9;
                 theseOffsets = knockbackLeftOffsets;
                 break;
             case PlayerState.KnockBackRight:
+                this.drawOffset.y = -9;
                 theseOffsets = knockbackRightOffsets;
                 break;
             }
 
+        const newPoints = [];
         for(let i = 0; i < body.points.length; i++) {
             const point = body.points[i];
-            point.x = position.x + (startX - canvas.center.x) + theseOffsets[i].x;
+            point.x = position.x + (startX - canvas.center.x) + theseOffsets[i].x + 45;
             point.y = position.y + (startY - canvas.center.y) + theseOffsets[i].y;
+            newPoints.push(point);
         }
+
+        body.setPoints(newPoints);
 
         this.state = state;
     };
