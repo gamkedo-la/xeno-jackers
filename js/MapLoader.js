@@ -29,7 +29,7 @@ function Map(layers, name) {
             this.collisionTiles.heightInTiles = layer.height;
         } else if(layer.name === MAP_LAYER_NAME.EnvironmentColliders) {
             for(let collider of layer.objects) {
-                this.colliders.push(new EnvironmentCollider(collider.polygon, {x:collider.x, y:collider.y}));
+                this.colliders.push(new EnvironmentCollider(collider.type, collider.polygon, {x:collider.x, y:collider.y}));
             }
         } else if(layer.name === MAP_LAYER_NAME.Entities) {
             for(let entity of layer.objects) {

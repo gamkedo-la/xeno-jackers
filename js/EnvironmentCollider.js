@@ -1,6 +1,6 @@
 //EnvironmentCollider.js
-function EnvironmentCollider(points, position) {
-    this.type = EntityType.Ground;
+function EnvironmentCollider(type, points, position) {
+    this.type = type;
     this.points = [];
     this.position = {x:points[0].x + position.x, y:points[0].y + position.y};
     let spawnPoint = {x:0, y:0};

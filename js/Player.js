@@ -589,16 +589,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		if (isEnemy(otherEntity)) {
             lastCollidedEnemy = otherEntity;
 		} else if (isEnvironment(otherEntity)) {
-            if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
-                this.setPosition(position.x + collisionData.deltaX, position.y);
+            if(otherEntity.type === EntityType.Deadzone) {
+                SceneState.scenes[SCENE.GAME].removeMe(self);
             } else {
-                this.setPosition(position.x, position.y + collisionData.deltaY);
-                if(collisionData.deltaY < 0) {
-                    isOnGround = true;
+                if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
+                    this.setPosition(position.x + collisionData.deltaX, position.y);
+                } else {
+                    this.setPosition(position.x, position.y + collisionData.deltaY);
+                    if(collisionData.deltaY < 0) {
+                        isOnGround = true;
+                    }
                 }
+    
+                justCollidedWithEnvironment = true;
             }
-
-			justCollidedWithEnvironment = true;
         } else if(isPickup(otherEntity)) {
             switch (otherEntity.type) {
                 case EntityType.Health:

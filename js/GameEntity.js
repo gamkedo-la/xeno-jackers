@@ -85,6 +85,7 @@ function isEnvironment(entity) {
         case EntityType.Crate:
         case EntityType.Barrel:
         case EntityType.Table:
+        case EntityType.Deadzone:
             return true;
         default:
             return false;
