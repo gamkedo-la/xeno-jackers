@@ -219,10 +219,12 @@ function PlayerColliderManager(startX, startY, size) {
                 break;
             case PlayerState.FallingLeft:
             case PlayerState.FallAttackLeft:
+                this.drawOffset.y = -6;
                 theseOffsets = fallingLeftOffsets;
                 break;
             case PlayerState.FallingRight:
             case PlayerState.FallAttackRight:
+                this.drawOffset.y = -6;
                 theseOffsets = fallingRightOffsets;
                 break;
             case PlayerState.LandingLeft:
