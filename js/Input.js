@@ -120,7 +120,7 @@ function notifyCurrentScene(newInput, pressed) {
 
 function keyPress(evt) {
 	evt.preventDefault();
-
+	cheats(evt.key);
 	if (evt.keyCode === KEY_PLUS) {
 		turnVolumeUp();
 		return;
