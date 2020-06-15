@@ -19,7 +19,7 @@ var cheatList = [
 		action: function(){
 			console.log("Look mom");
 			console.log("im cheating");
-		},
+		}
 	},
 	cheat ={
 		// "i" like i need coffee
@@ -28,8 +28,8 @@ var cheatList = [
 		action: function(){
 			console.log("you dont look");
 			console.log("like a dev");
-		},
-	}, 			
+		}
+	},	
 ];
 
 //The cheatcode function, nothing interresting here.
@@ -71,8 +71,6 @@ function cheats(key) {
 							console.log("cheat activated: " + val.code);
 							val.action();			
 						}
-						cheatBuffer = "";
-							break;				
 					}
 				}else{
 					//remove point if string doesnt matched
@@ -82,7 +80,8 @@ function cheats(key) {
 			}
 		});
 
-		// reset complete string if nothing matched
+		//Reset complete string if nothing has matched.
+		//We keep the string in the cheatbuffer if we still have possible matches left.
 		if (mightMatchCode == 0 && keyBuffer.length == 1 && keyBuffer != " " && cheatBuffer.length > 1) {
 			cheatBuffer = "";
 			//We run this to see if it was a single letter cheatCode
