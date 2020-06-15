@@ -235,13 +235,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
 			velocity.x = WALK_SPEED;
             flipped = false;
-            colliderManager.setPointsForState(PlayerState.JumpRight, position);
-            colliderManager.updateCollider(position.x, position.y);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
-            colliderManager.setPointsForState(PlayerState.JumpLeft, position);
-            colliderManager.updateCollider(position.x, position.y);
         }
 	}
 
@@ -267,13 +263,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
 			velocity.x = WALK_SPEED;
             flipped = false;
-            colliderManager.setPointsForState(PlayerState.FallingRight, position);
-            colliderManager.updateCollider(position.x, position.y);
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
-            colliderManager.setPointsForState(PlayerState.FallingLeft, position);
-            colliderManager.updateCollider(position.x, position.y);
         }
     };
 
@@ -363,12 +355,17 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     function updateJumpAttacking(deltaTime) {
-        if(currentAnimation.getCurrentFrameIndex() === 2) {
-            if(flipped) {
-                chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
-            } else {
-                chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
-            }
+        velocity.y = -MAX_Y_SPEED;
+        heldJumpTime += deltaTime;
+
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
         }
     }
 
@@ -392,12 +389,14 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     function updateFallAttacking(deltaTime) {
-        if(currentAnimation.getCurrentFrameIndex() === 2) {
-            if(flipped) {
-                chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
-            } else {
-                chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
-            }
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
         }
     }
 

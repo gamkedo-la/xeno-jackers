@@ -31,15 +31,16 @@ function Camera(canvas) {
         const feet = playerPos.y + player.collisionBody.height;
 
         if(playerPos.x + 6 > canvas.center.x + DEAD_ZONE_X) {
-            canvas.center.x = playerPos.x + 6 - DEAD_ZONE_X;
+            canvas.center.x++;
         } else if(playerPos.x + 6 < canvas.center.x - DEAD_ZONE_X) {
-            canvas.center.x = playerPos.x + 6 + DEAD_ZONE_X;
+            canvas.center.x--;
         }
-
-        if(feet > canvas.center.y + (canvas.height / 2) - LOWER_DEAD_ZONE) {
-            canvas.center.y = feet - (canvas.height / 2) + LOWER_DEAD_ZONE;
+        if(feet > canvas.center.y + (canvas.height / 2) - 24) {
+            canvas.center.y = feet + 24 - canvas.height / 2;
+        } else if(feet > canvas.center.y + (canvas.height / 2) - LOWER_DEAD_ZONE) {
+            canvas.center.y++;
         } else if(feet + UPPER_DEAD_ZONE < canvas.center.y) {
-            canvas.center.y = feet + UPPER_DEAD_ZONE;
+            canvas.center.y--;
         }
 
         canvas.deltaX = canvas.center.x - oldX;
