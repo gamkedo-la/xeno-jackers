@@ -12,20 +12,20 @@ var DEBUG_CHEATS = true;
 //action: Insert the code that should run when a cheatcode gets activated here.
 
 var cheatList = [
-	cheat ={
+	cheat = {
 		//This could kill someone
 		code: 'kill',
 		active: true,
-		action: function(){
+		action: function() {
 			console.log("Look mom");
 			console.log("im cheating");
 		}
 	},
-	cheat ={
+	cheat = {
 		// "i" like i need coffee
 		code: 'i',
 		active: DEBUG_CHEATS,
-		action: function(){
+		action: function() {
 			console.log("you dont look");
 			console.log("like a dev");
 		}
@@ -38,41 +38,40 @@ function cheats(key) {
 	var keyBuffer = "";
 	
 	// Turn inputs to lowercase and special case buttons to uppercase letters
-	if(key.length == 1){
+	if(key.length === 1) {
 		keyBuffer = key.toLowerCase();
-	}else if(key == "ArrowUp"){
+	} else if(key === "ArrowUp") {
 		keyBuffer = "U";
-	}else if(key == "ArrowDown"){
+	} else if(key === "ArrowDown") {
 		keyBuffer = "D";
-	}else if(key == "ArrowLeft"){
+	} else if(key === "ArrowLeft") {
 		keyBuffer = "L";
-	}else if(key == "ArrowRight"){
+	} else if(key === "ArrowRight") {
 		keyBuffer = "R";
 	}
-
 	
-	if(keyBuffer != " "){
+	if(keyBuffer != "") {
 		//add the pressed key to the current buffer string
 		cheatBuffer += keyBuffer;
 		//run a check for each cheatcode in the array
-		cheatList.forEach (function (val,index){
+		cheatList.forEach (function (val,index) {
 
 			//Give points for each cheatCode in the array
 			mightMatchCode++;
 
 			//check if cheatbuffer string matches to an element
-			for (var i = 0; i < cheatBuffer.length++; i++){	
-				if (cheatBuffer.charAt(i) == val.code.charAt(i)){
+			for (var i = 0; i < cheatBuffer.length++; i++) {	
+				if (cheatBuffer.charAt(i) == val.code.charAt(i)) {
 					
 					//If cheatcode fully matches
-					if(cheatBuffer == val.code){
+					if(cheatBuffer == val.code) {
 						//is cheatcode enabled?		
-						if(val.active == true){
+						if(val.active == true) {
 							console.log("cheat activated: " + val.code);
 							val.action();			
 						}
 					}
-				}else{
+				} else {
 					//remove point if string doesnt matched
 					mightMatchCode--;
 					break;						
