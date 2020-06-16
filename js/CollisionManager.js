@@ -489,33 +489,33 @@ function CollisionManager(player) {
 		} else if((body1Top_vs_body2Right) && (body1Bottom_vs_body2Right)) {
 			//collision is all along body1's left side
 			result.collision = true;
-			result.body1.deltaX = Math.round(body2.right.x - body1.type.left);
+			result.body1.deltaX = Math.round(body2.right.x - body1.top.left);
 			result.body1.deltaY = Number.MAX_SAFE_INTEGER;
 		} else if(body1Right_vs_body2Top) {
             //collision point is at body1Right at the bottom: {x:body1.right.x, y:body1.right.bottom}
             //collision point is at body2Top at the left: {x:body2.top.left, y:body2.top.y}
             result.collision = true;
-            result.body1.deltaX = Math.round(body2.top.left - body1.right.x);
+			result.body1.deltaX = Math.round(body2.top.left - body1.right.x);
             result.body1.deltaY = Math.round(body2.top.y - body1.right.bottom);
         } else if(body1Left_vs_body2Top) {
             //collision point is at body1Left at the bottom: {x:body1.left.x, y:body1.left.bottom}
             //collision point is at body2Top at the right: {x:body2.top.right, y:body2.top.y}
             result.collision = true;
-            result.body1.deltaX = Math.round(body2.top.right - body1.left.x);
+			result.body1.deltaX = Math.round(body2.top.right - body1.left.x);
             result.body1.deltaY = Math.round(body2.top.y - body1.left.bottom);
         } else if(body1Right_vs_body2Bottom) {
             //collision point is at body1Right at the top: {x:body1.right.x, y:body1.right.top}
             //collision point is at body2Bottom at the left: {x:body2.bottom.left, y:body2.bottom.y}
             result.collision = true;
-            result.body1.deltaX = Math.round(body2.bottom.left - body1.right.x);
+			result.body1.deltaX = Math.round(body2.bottom.left - body1.right.x);
             result.body1.deltaY = Math.round(body2.bottom.y - body1.right.top);
         } else if(body1Left_vs_body2Bottom) {
             //collision point is at body1Left at the top: {x:body1.left.x, y:body1.left.top}
             //collision point is at body2Bottom at the right: {x:body2.bottom.right, y:body2.bottom.y}
             result.collision = true;
-            result.body1.deltaX = Math.round(body2.bottom.right - body1.left.x);
+			result.body1.deltaX = Math.round(body2.bottom.right - body1.left.x);
             result.body1.deltaY = Math.round(body2.bottom.y - body1.left.top);
-        } 
+		}
 
         //directions are opposite for body2
         result.body2.deltaX = -result.body1.deltaX;

@@ -82,6 +82,7 @@ function isPickup(entity) {
 function isEnvironment(entity) {
     switch(entity.type) {
         case EntityType.Ground:
+        case EntityType.Wall:
         case EntityType.Crate:
         case EntityType.Barrel:
         case EntityType.Table:
