@@ -2,6 +2,7 @@
 function BikerEnemy(posX, posY) {
     const SCALE = GAME_SCALE;
     const WIDTH = 23;
+	const ANIM_WIDTH = 32
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_CACKLE = 1000;
@@ -109,7 +110,7 @@ function BikerEnemy(posX, posY) {
             return;
         } else {
             console.log("Biker Enemy is trying to attack.");
-//            currentAnimation = animations.attacking;
+			currentAnimation = animations.attacking;
         }
     };
 
@@ -163,10 +164,10 @@ function BikerEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], WIDTH, HEIGHT, [512], false, true);
+        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true);
         anims.idle.scale = SCALE;
+		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [1, 2, 3, 4, 5, 0], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, true);
 //        animations.jumping = ...
-//        animations.attacking = ...
 //        animations.blocking = ...
 //        animations.crouching = ...
 
