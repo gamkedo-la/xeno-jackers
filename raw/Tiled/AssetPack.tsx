@@ -19,4 +19,7 @@
  <tile id="5" type="lamp">
   <image width="16" height="16" source="../img/characters/LampSpawn.png"/>
  </tile>
+ <tile id="6" type="wheelPickup">
+  <image width="16" height="17" source="../img/characters/WheelSpawn.png"/>
+ </tile>
 </tileset>

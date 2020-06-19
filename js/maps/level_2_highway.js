@@ -271,18 +271,6 @@
                  "y":120
                 }, 
                 {
-                 "gid":4100,
-                 "height":17,
-                 "id":11,
-                 "name":"Wheel Pickup",
-                 "rotation":0,
-                 "type":"wheelPickup",
-                 "visible":true,
-                 "width":16,
-                 "x":1284.45454545455,
-                 "y":65.8484848484849
-                }, 
-                {
                  "gid":4099,
                  "height":32,
                  "id":29,
@@ -317,6 +305,18 @@
                  "width":21,
                  "x":1176,
                  "y":120
+                }, 
+                {
+                 "gid":4103,
+                 "height":17,
+                 "id":33,
+                 "name":"Wheel PickUp",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":1282,
+                 "y":71
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -336,8 +336,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":32,
+ "nextlayerid":12,
+ "nextobjectid":34,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
