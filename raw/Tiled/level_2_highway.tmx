@@ -418,7 +418,7 @@
   <object id="6" name="biker1" type="enemyBiker" gid="4098" x="168" y="56" width="21" height="31"/>
   <object id="7" name="biker2" type="enemyBiker" gid="4098" x="312" y="56" width="21" height="31"/>
   <object id="8" name="alienGuard1" type="enemyAlienGuard" gid="4099" x="680" y="120" width="21" height="32"/>
-  <object id="11" name="Chain Pickup" type="chainPickup" gid="4100" x="1376" y="120" width="16" height="17"/>
+  <object id="11" name="Wheel Pickup" type="wheelPickup" gid="4100" x="1284.45" y="65.8485" width="16" height="17"/>
   <object id="29" name="alienGuard2" type="enemyAlienGuard" gid="4099" x="848" y="120" width="21" height="32"/>
   <object id="30" name="alienGuard2" type="enemyAlienGuard" gid="4099" x="1008" y="120" width="21" height="32"/>
   <object id="31" name="alienGuard2" type="enemyAlienGuard" gid="4099" x="1176" y="120" width="21" height="32"/>

@@ -85,7 +85,7 @@
                          "y":0
                         }, 
                         {
-                         "x":1391.67539130273,
+                         "x":1391.68,
                          "y":15.7542
                         }, 
                         {
@@ -274,13 +274,13 @@
                  "gid":4100,
                  "height":17,
                  "id":11,
-                 "name":"Chain Pickup",
+                 "name":"Wheel Pickup",
                  "rotation":0,
-                 "type":"chainPickup",
+                 "type":"wheelPickup",
                  "visible":true,
                  "width":16,
-                 "x":1376,
-                 "y":120
+                 "x":1284.45454545455,
+                 "y":65.8484848484849
                 }, 
                 {
                  "gid":4099,
