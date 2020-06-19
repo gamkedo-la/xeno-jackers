@@ -9,12 +9,15 @@ function ChainWhip() {
         {x: 0, y: 7},// 0,7
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
+    let spawnPoint = {x:0, y:0};
     this.isActive = false;
 
     this.setSpawnPoint = function(x, y) {
         this.position.x = x;
         this.position.y = y;
-        this.collisionBody.setPosition(position.x, position.y);
+        spawnPoint.x = x;
+        spawnPoint.y = y;
+        this.collisionBody.setPosition(this.position.x, this.position.y);
         this.collisionBody.calcOnscreen(canvas);
 
     };
@@ -24,16 +27,16 @@ function ChainWhip() {
     this.activate = function(x, y) {
         this.isActive = true;
 
-        const deltaX = x - this.points[0].x - canvas.center.x;
-        const deltaY = y - this.points[0].y - canvas.offsetY;
+        const deltaX = x - this.position.x;
+        const deltaY = y - this.position.y;
 
-        for(let point of this.points) {
+        this.position.x = x;
+        this.position.y = y;
+
+        for (let point of this.points) {
             point.x += deltaX;
             point.y += deltaY;
         }
-
-        this.position.x = this.points[0].x;
-        this.position.y = this.points[0].y;
 
         this.collisionBody.setPosition(this.position.x, this.position.y);
         this.collisionBody.calcOnscreen(canvas);

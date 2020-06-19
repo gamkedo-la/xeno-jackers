@@ -324,9 +324,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     function updateAttacking(deltaTime) {
         if(currentAnimation.getCurrentFrameIndex() === 2) {
             if(flipped) {
-                chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+                chain.activate(drawPosition.x + 0, drawPosition.y + 12);
             } else {
-                chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+                chain.activate(drawPosition.x + 30, drawPosition.y + 12);
             }
         }
     }
@@ -352,9 +352,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     function updateCrouchAttacking(deltaTime) {
         if(currentAnimation.getCurrentFrameIndex() === 2) {
             if(flipped) {
-                chain.activate(position.x + FRAME_WIDTH -28, position.y + 12); 
+                chain.activate(drawPosition.x + 4, drawPosition.y + 20);
             } else {
-                chain.activate(position.x + FRAME_WIDTH, position.y + 12);
+                chain.activate(drawPosition.x + 26, drawPosition.y + 20);
             }
         }
     }
@@ -389,9 +389,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 
         if(flipped) {
-            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(drawPosition.x + 5, drawPosition.y + 15);
         } else {
-            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT            
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(drawPosition.x + 25, drawPosition.y + 15);
         }
     }
 
@@ -424,9 +424,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
 
         if(flipped) {
-            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(drawPosition.x + 5, drawPosition.y + 15);
         } else {
-            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(drawPosition.x + 25, drawPosition.y + 15);
         }
     }
 
@@ -591,6 +591,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         drawPosition.x = position.x - spawn.x - 26 - canvas.offsetX + drawOffset.x;
         drawPosition.y = position.y - spawn.y + 2 - canvas.offsetY + drawOffset.y;
         this.collisionBody.calcOnscreen(canvas);
+    };
+
+    this.setToolSpawnPoint = function(deltaX, deltaY) {
+        chain.setSpawnPoint(drawPosition.x, drawPosition.y);
     };
 
     this.reset = function () {

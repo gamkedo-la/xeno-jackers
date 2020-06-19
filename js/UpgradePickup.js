@@ -9,8 +9,8 @@ function UpgradePickup(type, posX, posY) {
     let velocity = {x:0, y:0};
 
     this.type = type;
-    //TODO: Need the right animation sheet and frames
 
+    //TODO: Need the right animation sheet and frames
     const getAnimationDataForType = function(type) {
         const animationData = {
             name:'idle',

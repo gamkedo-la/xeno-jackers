@@ -85,6 +85,9 @@ function GameScene() {
             camera.setStartPos(playerPos.x, playerPos.y);
             const deltaX = playerPos.x - canvas.width / 2;
             const deltaY = playerPos.y - canvas.height / 2;
+
+            player.setToolSpawnPoint(deltaX, deltaY);
+
             for(let env of environmentColliders) {
                 env.setSpawnPoint(env.collisionBody.position.x - deltaX, env.collisionBody.position.y - deltaY);
             }
@@ -198,7 +201,7 @@ function GameScene() {
                 break;
         }
         
-        reset();
+        this.reset();
         SceneState.setState(SCENE.GAME);
     };
 
@@ -214,7 +217,7 @@ function GameScene() {
         return true;
     }
 
-    const reset = function() {
+    this.reset = function() {
         mapLoader = null;
         currentMap = null;
         mapRenderer = null;
@@ -231,11 +234,12 @@ function GameScene() {
         reloading = false;
     };
 
+    self = this;
     const reloadLevel = function(context) {
         reloading = true;
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
         setTimeout(() => {
-            reset();
+            self.reset();
 
             context.transitionIn();
         }, TRANSITION_TIME);
@@ -296,7 +300,7 @@ function GameScene() {
         reloading = true;
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
         setTimeout(() => {
-            reset();
+            this.reset();
 
             SceneState.setState(SCENE.TITLE);//TODO: This should be game over
         }, TRANSITION_TIME);
@@ -342,7 +346,6 @@ function GameScene() {
             if(isEnemy(entityToRemove)) {
                 enemies.splice(enemies.indexOf(entityToRemove), 1);
             } else {
-                console.log(`Removed something: ${entityToRemove.type}`);
                 otherEntities.splice(otherEntities.indexOf(entityToRemove), 1);
             }
         }

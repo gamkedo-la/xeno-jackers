@@ -29,7 +29,71 @@ var cheatList = [
 			console.log("you dont look");
 			console.log("like a dev");
 		}
-	},	
+	},
+	cheat = {
+		code: '1',
+		active: DEBUG_CHEATS,
+		action: function() {
+			currentLevelName = MAP_NAME.Bar;
+			SceneState.scenes[SCENE.GAME].reset();
+			SceneState.setState(SCENE.GAME);
+		}
+	},
+	cheat = {
+		code: '2',
+		active: DEBUG_CHEATS,
+		action: function() {
+			currentLevelName = MAP_NAME.Highway;
+			SceneState.scenes[SCENE.GAME].reset();
+			SceneState.setState(SCENE.GAME);
+		}
+	},
+	cheat = {
+		code: '3',
+		active: DEBUG_CHEATS,
+		action: function() {
+			currentLevelName = MAP_NAME.Area51;
+			SceneState.scenes[SCENE.GAME].reset();
+			SceneState.setState(SCENE.GAME);
+		}
+	},
+	cheat = {
+		code: '4',
+		active: DEBUG_CHEATS,
+		action: function() {
+			currentLevelName = MAP_NAME.Boss;
+			SceneState.scenes[SCENE.GAME].reset();
+			SceneState.setState(SCENE.GAME);
+		}
+	},
+	cheat = {
+		code: 'chain',
+		active: DEBUG_CHEATS,
+		action: function() {
+			player.didCollideWith({type:EntityType.ChainPickup});
+		}
+	},
+	cheat = {
+		code: 'wheel',
+		active: DEBUG_CHEATS,
+		action: function() {
+			player.didCollideWith({type:EntityType.WheelPickup});
+		}
+	},
+	cheat = {
+		code: 'handle',
+		active: DEBUG_CHEATS,
+		action: function() {
+			player.didCollideWith({type:EntityType.HandlebarPickup});
+		}
+	},
+	cheat = {
+		code: 'engine',
+		active: DEBUG_CHEATS,
+		action: function() {
+			player.didCollideWith({type:EntityType.EnginePickup});
+		}
+	}
 ];
 
 //The cheatcode function, nothing interresting here.

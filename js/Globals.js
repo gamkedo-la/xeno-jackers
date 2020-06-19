@@ -5,7 +5,7 @@ let canvasContext;
 let gamepad;
 let DEBUG = true;
 let CHEATS_ACTIVE = false;
-let DRAW_COLLIDERS = false;
+let DRAW_COLLIDERS = true;
 
 const GRAVITY = 350; //220 - lower number is less gravity force and more hang time
 const MAX_Y_SPEED = 95; //65 - launch off ground speed for player jump
