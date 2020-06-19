@@ -28,6 +28,8 @@ function UpgradePickup(type, posX, posY) {
             case EntityType.ChainPickup:
                 break;
             case EntityType.WheelPickup:
+                animationData.sheet = wheelPickup;
+                animationData.frames = [0, 1, 2, 3];
                 break;
             case EntityType.HandlebarPickup:
                 break;

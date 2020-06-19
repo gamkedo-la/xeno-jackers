@@ -88,6 +88,7 @@ const lampPic = document.createElement("img");
 //power ups
 const healthpickup = document.createElement("img");
 const chainPickup = document.createElement("img");
+const wheelPickup = document.createElement("img");
 
 //player related
 const playerSpriteSheet = document.createElement("img");
@@ -139,6 +140,7 @@ function loadImages() {
         // power ups
         { imgName: healthpickup, theFile: "interface/item_pickups.png" },
         { imgName: chainPickup, theFile: "interface/ChainPickUp.png" },
+        { imgName: wheelPickup, theFile: "interface/WheelPickUp.png" },
 
         // player related
         { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" }, //player_spritesheet_debug.png
