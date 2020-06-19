@@ -171,6 +171,7 @@ function CollisionManager(player) {
 	let enemies = new Set();
 	let enemyWeapons = new Set();
 	let environment = new Set();
+	let environmentObjects = new Set();
 	let gameObjects = new Set();
     let playerTools = new Set();
 	let playerList = [player];
@@ -201,6 +202,8 @@ function CollisionManager(player) {
 			return addEnemyWeapon(newEntity);
 		} else if(isEnvironment(newEntity)) {
 			return addEnvironment(newEntity);
+		} else if(isEnvironmentObject(newEntity)) {
+			return addEnvironmentObject(newEntity);
 		} else if(isPlayerTool(newEntity)) {
 			return addPlayerTool(newEntity);
         } else if(isPickup(newEntity)) {
@@ -227,7 +230,14 @@ function CollisionManager(player) {
 		environment.add(newEnvironment);
 
 		return (!(beforeLength === environment.size));
-    };
+	};
+	
+	const addEnvironmentObject = function(newEnvironmentObject) {
+		const beforeLength = environmentObjects.size;
+		environmentObjects.add(newEnvironmentObject);
+
+		return (!(beforeLength === environmentObjects.size));
+	}
     
     const addPlayerTool = function(newTool) {
         const beforeLength = playerTools.size;
@@ -250,6 +260,8 @@ function CollisionManager(player) {
 			removeEnemyWeapon(entityToRemove);
 		} else if(isEnvironment(entityToRemove)) {
 			removeEnvironment(entityToRemove);
+		} else if(isEnvironmentObject(entityToRemove)) {
+			removeEnvironmentObject(entityToRemove);
         } else if(isPlayerTool(entityToRemove)) {
             removePlayerWeapon(entityToRemove);
         } else if(isPickup(entityToRemove)) {
@@ -291,7 +303,17 @@ function CollisionManager(player) {
 		}
 
 		return false;
-    };
+	};
+	
+	const removeEnvironmentObject = function(environmentObjectToRemove) {
+		if(environmentObjects.has(environmentObjectToRemove)) {
+			environmentObjects.delete(environmentObjectToRemove);
+
+			return true;
+		}
+
+		return false;
+	}
     
     const removePlayerWeapon = function(weaponToRemove) {
         if(playerTools.has(weaponToRemove)) {
@@ -316,6 +338,7 @@ function CollisionManager(player) {
 		enemies.clear();
 		enemyWeapons.clear();
 		environment.clear();
+		environmentObjects.clear();
 		gameObjects.clear();
 //        playerTools.clear();//do we want this?
 	};
@@ -341,6 +364,9 @@ function CollisionManager(player) {
 
         //Player Weapons vs Environment
         checkCollsionsForLists(environment, playerTools);
+
+		//Player Weapons vs Environment Objects
+		checkCollsionsForLists(environmentObjects, playerTools);
 
         //Enemy Weapons vs Environment
         checkCollsionsForLists(enemyWeapons, environment);

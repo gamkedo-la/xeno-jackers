@@ -205,6 +205,7 @@ function GameScene() {
         enemies.length = 0;
         entitiesToRemove.length = 0;
         environmentColliders.length = 0;
+        otherEntities.length = 0;
         
         reloading = false;
     };
@@ -235,6 +236,10 @@ function GameScene() {
                 case EntityType.EnemyMech:
                     anEntity = new EnemyMech(data.x-12, data.y-36); // sprite is 36x36
                     enemies.push(anEntity);
+                    break;
+                case EntityType.Lamp:
+                    anEntity = new Lamp(data.x, data.y);
+                    otherEntities.push(anEntity);
                     break;
                 case EntityType.ChainPickup:
                     if(!hasChain) {
@@ -316,6 +321,7 @@ function GameScene() {
             if(isEnemy(entityToRemove)) {
                 enemies.splice(enemies.indexOf(entityToRemove), 1);
             } else {
+                console.log(`Removed something: ${entityToRemove.type}`);
                 otherEntities.splice(otherEntities.indexOf(entityToRemove), 1);
             }
         }

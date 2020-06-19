@@ -32,6 +32,8 @@ const EntityType = {
     Table:"table",
     Deadzone:"deadzone",
 
+    //Destructible
+    Lamp:"lamp",
 };
 
 function isEnemy(entity) {
@@ -87,6 +89,15 @@ function isEnvironment(entity) {
         case EntityType.Barrel:
         case EntityType.Table:
         case EntityType.Deadzone:
+            return true;
+        default:
+            return false;
+    }
+}
+
+function isEnvironmentObject(entity) {
+    switch(entity.type) {
+        case EntityType.Lamp:
             return true;
         default:
             return false;

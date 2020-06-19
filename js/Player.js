@@ -383,11 +383,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
 			velocity.x = WALK_SPEED;
             flipped = false;
-            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
+        }
+
+        if(flipped) {
             if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+        } else {
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT            
         }
     }
 
@@ -414,11 +418,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
 			velocity.x = WALK_SPEED;
             flipped = false;
-            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
+        }
+
+        if(flipped) {
             if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH -28, position.y + 5); // chain collision box anchor - attackLEFT
+        } else {
+            if(currentAnimation.getCurrentFrameIndex() === 2) chain.activate(position.x + FRAME_WIDTH, position.y + 5); // chain collision box anchor - attackRIGHT
         }
     }
 

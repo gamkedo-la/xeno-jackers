@@ -82,6 +82,9 @@ const enemyMechSpriteSheet = document.createElement("img");
 //screens
 const uiMenuBorderPic = document.createElement("img");
 
+//environment objects
+const lampPic = document.createElement("img");
+
 //power ups
 const healthpickup = document.createElement("img");
 const chainPickup = document.createElement("img");
@@ -129,6 +132,9 @@ function loadImages() {
 
         // screens
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
+
+        //environment objects
+        { imgName: lampPic, theFile: "backgrounds/lamp.png" },
 
         // power ups
         { imgName: healthpickup, theFile: "interface/item_pickups.png" },
