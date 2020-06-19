@@ -193,11 +193,11 @@
                          "y":0
                         }, 
                         {
-                         "x":64,
+                         "x":55.6363636363636,
                          "y":0
                         }, 
                         {
-                         "x":64,
+                         "x":55.6363636363636,
                          "y":56
                         }, 
                         {
@@ -210,6 +210,118 @@
                  "width":0,
                  "x":488,
                  "y":56
+                }, 
+                {
+                 "height":0,
+                 "id":34,
+                 "name":"Truck Engine",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":30.7272727272727,
+                         "y":0
+                        }, 
+                        {
+                         "x":30.909090909091,
+                         "y":38.7272727272727
+                        }, 
+                        {
+                         "x":0.727272727272748,
+                         "y":38.9090909090909
+                        }],
+                 "rotation":0,
+                 "type":"ground",
+                 "visible":true,
+                 "width":0,
+                 "x":551.272727272727,
+                 "y":80.5454545454545
+                }, 
+                {
+                 "height":0,
+                 "id":35,
+                 "name":"Truck Windshield",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":1.93103448275864,
+                         "y":0
+                        }, 
+                        {
+                         "x":2,
+                         "y":42.1818181818182
+                        }, 
+                        {
+                         "x":0,
+                         "y":42.1818181818182
+                        }],
+                 "rotation":0,
+                 "type":"ground",
+                 "visible":true,
+                 "width":0,
+                 "x":544,
+                 "y":66.7272727272727
+                }, 
+                {
+                 "height":0,
+                 "id":36,
+                 "name":"Truck Windshield",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":1.93103,
+                         "y":0
+                        }, 
+                        {
+                         "x":2,
+                         "y":42.1818
+                        }, 
+                        {
+                         "x":0,
+                         "y":42.1818
+                        }],
+                 "rotation":0,
+                 "type":"ground",
+                 "visible":true,
+                 "width":0,
+                 "x":546.363636363636,
+                 "y":70.9090909090909
+                }, 
+                {
+                 "height":0,
+                 "id":37,
+                 "name":"Truck Windshield",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":1.93103,
+                         "y":0
+                        }, 
+                        {
+                         "x":2,
+                         "y":42.1818
+                        }, 
+                        {
+                         "x":0,
+                         "y":42.1818
+                        }],
+                 "rotation":0,
+                 "type":"ground",
+                 "visible":true,
+                 "width":0,
+                 "x":548.727272727273,
+                 "y":74.1818181818182
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -312,7 +424,7 @@
                  "id":33,
                  "name":"Wheel PickUp",
                  "rotation":0,
-                 "type":"",
+                 "type":"wheelPickup",
                  "visible":true,
                  "width":16,
                  "x":1282,
@@ -337,7 +449,7 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":34,
+ "nextobjectid":38,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
