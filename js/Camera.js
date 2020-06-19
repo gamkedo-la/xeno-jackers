@@ -43,6 +43,18 @@ function Camera(canvas) {
             canvas.center.y--;
         }
 
+        if(canvas.center.x < canvas.width / 2) {
+            canvas.center.x = canvas.width / 2;
+        } else if(canvas.center.x > levelWidth - canvas.width / 2) {
+            canvas.center.x = levelWidth - canvas.width / 2;
+        }
+
+        if(canvas.center.y < canvas.height / 2) {
+            canvas.center.y = canvas.height / 2;
+        } else if(canvas.center.y > levelHeight - canvas.height / 2) {
+            canvas.center.y = levelHeight - canvas.height / 2;
+        }
+
         canvas.deltaX = canvas.center.x - oldX;
         canvas.deltaY = canvas.center.y - oldY;
         canvas.offsetX += canvas.deltaX;
