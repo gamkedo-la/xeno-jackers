@@ -66,14 +66,11 @@ function MapLoader() {
             case MAP_NAME.Highway:
                 this.currentMap = loadHighway();
                 break;
+            case MAP_NAME.Area51:
+                this.currentMap = loadArea51();
+                break;
             case MAP_NAME.Boss:
                 this.currentMap = loadBoss();
-                break;
-            case MAP_NAME.TestBar:
-                this.currentMap = loadTestBar();
-                break;
-            default:
-                this.currentMap = loadTestMap();
                 break;
         }
 
@@ -86,42 +83,34 @@ function MapLoader() {
                 this.currentMap = loadHighway();
                 break;
             case MAP_NAME.Highway:
+                this.currentMap = loadArea51();
+                break;
+            case MAP_NAME.Area51:
                 this.currentMap = loadBoss();
                 break;
             case MAP_NAME.Boss:
                 this.currentMap = null;
                 break;
-            case MAP_NAME.TestBar:
-                this.currentMap = loadBar();
-                break;
-            default:
-                this.currentMap = loadBar();
-                break;
         }
     };
     
     const loadBar = function() {
-        const layers = TileMaps.bar.layers;
+        const layers = TileMaps[MAP_NAME.Bar].layers;
         return new Map(layers, MAP_NAME.Bar);
     };
     
     const loadHighway = function() {
-        const layers = TileMaps.highway.layers;
+        const layers = TileMaps[MAP_NAME.Highway].layers;
         return new Map(layers, MAP_NAME.Highway);
+    };
+
+    const loadArea51 = function() {
+        const layers = TileMaps[MAP_NAME.Area51].layers;
+        return new Map(layers, MAP_NAME.Area51);
     };
     
     const loadBoss = function() {
         const layers = TileMaps.boss.layers;
         return new Map(layers, MAP_NAME.Boss);
-    };
-
-    const loadTestBar = function() {
-        const layers = TileMaps.level_1b_bar.layers;
-        return new Map(layers, MAP_NAME.TestBar);
-    }
-    
-    const loadTestMap = function() {
-        const layers = TileMaps.testMap.layers;
-        return new Map(layers, MAP_NAME.TestMap);
     };
 }

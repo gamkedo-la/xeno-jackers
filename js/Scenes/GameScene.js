@@ -181,6 +181,27 @@ function GameScene() {
         gameUI.hasEngine = true;
     };
 
+    this.playerAtExit = function() {
+        //We'll want to check if the current level's boss has been defeated, but for now...
+        switch(currentLevelName) {
+            case MAP_NAME.Bar:
+                currentLevelName = MAP_NAME.Highway;
+                break;
+            case MAP_NAME.Highway:
+                currentLevelName = MAP_NAME.Area51;
+                break;
+            case MAP_NAME.Area51:
+                currentLevelName = MAP_NAME.Boss;
+                break;
+            case MAP_NAME.Boss:
+                currentLevelName = MAP_NAME.Bar;
+                break;
+        }
+        
+        reset();
+        SceneState.setState(SCENE.GAME);
+    };
+
     const verifyNewKeyPressed = function(newKeyEvent, pressed, pressedKeys) {
         if(!pressed) return false;
 

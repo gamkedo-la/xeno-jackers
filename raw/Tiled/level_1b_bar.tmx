@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="99">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="100">
  <editorsettings>
   <export target="../../js/maps/level_1b_bar.js" format="js"/>
  </editorsettings>
@@ -406,8 +406,8 @@
   <object id="13" name="ground2" type="ground" x="1175.82" y="239.993">
    <polygon points="0,0 0,8.00695 104.18,7.91379 104.18,-0.186207"/>
   </object>
-  <object id="15" name="rightWall" type="wall" x="2224.18" y="192">
-   <polygon points="0,0 -0.365702,120.364 31.8161,120.364 31.4505,0.227102"/>
+  <object id="15" name="rightWall" type="wall" x="2239.84" y="191">
+   <polygon points="0,0 -0.277634,120.364 24.1542,120.364 23.8766,0.227102"/>
   </object>
   <object id="16" name="ground3" type="ground" x="1342.36" y="312.194">
    <polygon points="0,0 0,16.1695 89.64,15.9814 89.64,-0.376033"/>
@@ -512,7 +512,7 @@
    <polygon points="0,0 0,16 32,16 32,0"/>
   </object>
   <object id="73" name="ground3" type="ground" x="1944" y="312">
-   <polygon points="0,0 0,16.1695 312,15.9814 312,-0.376033"/>
+   <polygon points="0,0 0,16.1695 320.25,15.9814 320.25,-0.376033"/>
   </object>
   <object id="74" name="platform2" type="ground" x="1952" y="240">
    <polygon points="0,0 0,8.18567 40,8.09045 40,-0.190363"/>
@@ -544,6 +544,9 @@
   <object id="85" name="deadzone" type="deadzone" x="1344" y="344">
    <polygon points="0,-0.0167015 912,-0.0167015 912,15.9833 0,15.9833"/>
   </object>
+  <object id="99" name="level_1_exit" type="levelExit" x="2206.75" y="271">
+   <polygon points="0,0 26.75,0 26.3115,40.25 0,40.25"/>
+  </object>
  </objectgroup>
  <objectgroup id="10" name="Entities">
   <object id="6" name="biker1" type="enemyBiker" gid="4098" x="488" y="120" width="21" height="31"/>
@@ -553,7 +556,7 @@
   <object id="59" name="biker3" type="enemyBiker" gid="4098" x="816.25" y="117.5" width="21" height="31"/>
   <object id="60" name="alienGuard1" type="enemyAlienGuard" gid="4099" x="1968" y="239" width="21" height="32"/>
   <object id="66" name="mech1" type="enemyMech" gid="4101" x="2174.91" y="310.909" width="25" height="34"/>
-  <object id="67" name="PlayerSpawn" type="player" gid="4097" x="154.106" y="119.818" width="21" height="30"/>
+  <object id="67" name="PlayerSpawn" type="player" gid="4097" x="156.773" y="117.151" width="21" height="30"/>
   <object id="80" name="biker3" type="enemyBiker" gid="4098" x="1218.43" y="237.318" width="21" height="31"/>
   <object id="84" name="alienGuard1" type="enemyAlienGuard" gid="4099" x="1848" y="312" width="21" height="32"/>
   <object id="86" gid="4102" x="120.25" y="88.75" width="16" height="16"/>

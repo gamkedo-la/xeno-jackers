@@ -70,11 +70,10 @@ const SCENE = {
 }
 
 const MAP_NAME = {
-	Bar:"bar",
-	Highway:"highway",
+	Bar:"level_1b_bar",
+	Highway:"level_2_highway",
+	Area51:"level_3_area51",
 	Boss:"boss",
-	TestMap:"testMap",
-	TestBar:"level_1b_bar"
 };
 
 const MAP_LAYER_NAME = {
@@ -91,7 +90,7 @@ const TILE_WIDTH = 8;
 const TILE_HEIGHT = 8;
 
 let firstLoad = localStorage.getItem(localStorageKey.FirstLoad);
-let currentLevelName = "level_1b_bar";// MAP_NAME.TestMap;
+let currentLevelName = MAP_NAME.Bar;
 let timer;
 
 //------------Asset Management----------//

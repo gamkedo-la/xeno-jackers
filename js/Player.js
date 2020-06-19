@@ -701,7 +701,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.didCollideWith = function (otherEntity, collisionData) {
 		if (isEnemy(otherEntity)) {
             lastCollidedEnemy = otherEntity;
-		} else if (isEnvironment(otherEntity)) {
+        } else if(otherEntity.type === EntityType.LevelExit) {
+            SceneState.scenes[SCENE.GAME].playerAtExit();
+        } else if (isEnvironment(otherEntity)) {
             if(otherEntity.type === EntityType.Deadzone) {
                 SceneState.scenes[SCENE.GAME].removeMe(self);
             } else {
