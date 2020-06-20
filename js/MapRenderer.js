@@ -38,7 +38,8 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
 
     const renderRowAtIndex = function(tiles, index, mapWidthInTiles, offsetX=0, offsetY=0) {
         let renderIndex = index - 1;
-        for(let i = 0; i < renderedTilesPerRow; i++) {
+        let count = renderedTilesPerRow + (offsetX?1:0); // an extra tile if needed
+        for(let i = 0; i < count; i++) {
             const renderPos = getPixelPosForIndex(++renderIndex, mapWidthInTiles);
             if(tiles[renderIndex] === 0) continue;
             const texturePos = getTexturePosForGID(tiles[renderIndex]);
