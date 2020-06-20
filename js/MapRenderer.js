@@ -10,14 +10,14 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         tileManager.update(deltaTime);
     };
 
-    this.drawSkybox = function(context, skybox) {
+    this.drawSkybox = function(context, skybox, offsetX=0, offsetY=0) {
         const skyboxImage = getSkyboxForName(skybox.image);
         if(skyboxImage !== null) {
-            context.drawImage(skybox.image, skybox.x, skybox.y);
+            context.drawImage(skybox.image, skybox.x+offsetX, skybox.y+offsetX);
         }
     };
 
-    this.drawTileLayer = function(tiles, mapWidthInTiles) {
+    this.drawTileLayer = function(tiles, mapWidthInTiles, offsetX=0, offsetY=0) {
         let leftEdge = canvas.center.x - canvas.width / 2;
         if(leftEdge < 0) leftEdge = 0;
         let topEdge = canvas.center.y - canvas.height / 2;
@@ -25,7 +25,7 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
 
         for(let j = 0; j < renderedRowCount; j++) {
             const index = getIndexForPixelPos(leftEdge, topEdge + j * tile_RenderHeight, mapWidthInTiles);
-            renderRowAtIndex(tiles, index, mapWidthInTiles);
+            renderRowAtIndex(tiles, index, mapWidthInTiles, offsetX, offsetY);
         }
     };
 
@@ -36,7 +36,7 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         return tileY * mapWidthInTiles + tileX;
     };
 
-    const renderRowAtIndex = function(tiles, index, mapWidthInTiles) {
+    const renderRowAtIndex = function(tiles, index, mapWidthInTiles, offsetX=0, offsetY=0) {
         let renderIndex = index - 1;
         for(let i = 0; i < renderedTilesPerRow; i++) {
             const renderPos = getPixelPosForIndex(++renderIndex, mapWidthInTiles);
@@ -46,7 +46,7 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
                 tileSheet, 
                 texturePos.x, texturePos.y, 
                 tile_ImageWidth, tile_ImageHeight,
-                renderPos.x, renderPos.y,
+                renderPos.x+offsetX, renderPos.y+offsetY,
                 tile_RenderWidth, tile_RenderHeight);
         }
     };

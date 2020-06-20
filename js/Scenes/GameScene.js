@@ -356,11 +356,20 @@ function GameScene() {
         return true;
     };
 
+    var autoScrollX = 0; // background scrolling counter for highway level
+    let parallaxScale = 1; // increase for a slower bg or extra layers
+
     const draw = function(deltaTime) {
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
+        
+        let offsetX = 0;
+        if (currentLevelName==MAP_NAME.Highway) {
+            autoScrollX--; // integer only for crispness
+            offsetX = Math.floor((autoScrollX/parallaxScale)%TILE_WIDTH);
+        }
+        
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
-
-        mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles);
+        mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles, offsetX);
         mapRenderer.drawTileLayer(currentMap.nearBackgroundTiles.tiles, currentMap.nearBackgroundTiles.widthInTiles);
         mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles);
 
