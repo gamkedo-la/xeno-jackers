@@ -402,7 +402,6 @@ function GameScene() {
         mapRenderer.drawTileLayer(currentMap.nearBackgroundTiles.tiles, currentMap.nearBackgroundTiles.widthInTiles);
         mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, 0, wobbleY);
 
-        player.draw(deltaTime);
         for(let enemy of enemies) {
             enemy.draw(deltaTime);
         }
@@ -410,6 +409,8 @@ function GameScene() {
         for(let gameObject of otherEntities) {
             gameObject.draw();
         }
+
+        player.draw(deltaTime);
 
         mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles);
 
