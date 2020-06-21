@@ -76,6 +76,10 @@ const tempGameSceneBG = document.createElement("img");
 const bikerEnemySheet = document.createElement("img");
 const enemyAlienGuardSheet = document.createElement("img");
 const enemyMechSpriteSheet = document.createElement("img");
+    //bright sheets
+let bikerEnemyBrightSheet;
+let enemyAlienGuardBrightSheet;
+let enemyMechSpriteBrightSheet;
 
 //screens
 const uiMenuBorderPic = document.createElement("img");
@@ -91,6 +95,8 @@ const wheelPickup = document.createElement("img");
 
 //player related
 const playerSpriteSheet = document.createElement("img");
+    //player bright sheet
+let playerBrightSheet;
 
 //UI
 const fontSheet = document.createElement("img");
@@ -110,6 +116,11 @@ let picsToLoad = 0;
 function countLoadedImageAndLaunchIfReady() {
     picsToLoad--;
     if (picsToLoad == 0) { // last image loaded?
+        const brightLight = new BrightImageBuilder();
+        bikerEnemyBrightSheet = brightLight.imageForImage(bikerEnemySheet);
+        enemyAlienGuardBrightSheet = brightLight.imageForImage(enemyAlienGuardSheet);
+        enemyMechSpriteBrightSheet = brightLight.imageForImage(enemyMechSpriteSheet);
+        playerBrightSheet = brightLight.imageForImage(playerSpriteSheet);
         loadingDoneSoStartGame();
     }
 }

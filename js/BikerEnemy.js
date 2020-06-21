@@ -8,6 +8,7 @@ function BikerEnemy(posX, posY) {
     const MIN_TIME_TO_CACKLE = 1000;
     const MEDIAN_TIME_TO_CACLE = 500;
     const HEALTH_DROP_PROBABILITY = 30;
+    const FLASH_TIME = 300; 
     
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -20,6 +21,8 @@ function BikerEnemy(posX, posY) {
 
     let isOnGround = true;
     let flipped = false;
+
+    let flashTimer = FLASH_TIME;
 
     this.type = EntityType.EnemyBiker;
     this.health = 1;
@@ -55,6 +58,16 @@ function BikerEnemy(posX, posY) {
         position.y -= canvas.deltaY;
 
         if(this.collisionBody.isOnScreen) {
+            if(flashTimer < FLASH_TIME) {
+                flashTimer += deltaTime;
+                if(Math.floor(flashTimer / 100) % 2 === 0) {
+                    currentAnimation.useBrightImage = !currentAnimation.useBrightImage;
+                }
+            } else {
+                flashTimer = FLASH_TIME;
+                currentAnimation.useBrightImage = false;
+            }
+
             timeToCackle -= deltaTime;
             if(timeToCackle <= 0) {
                 alienCackle1.play();
@@ -145,6 +158,7 @@ function BikerEnemy(posX, posY) {
                 }
                 SceneState.scenes[SCENE.GAME].removeMe(this);
             }
+            flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
@@ -164,9 +178,9 @@ function BikerEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true);
+        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemyBrightSheet);
         anims.idle.scale = SCALE;
-		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [1, 2, 3, 4, 5, 0], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, true);
+		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [1, 2, 3, 4, 5, 0], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, true, [0], bikerEnemyBrightSheet);
 //        animations.jumping = ...
 //        animations.blocking = ...
 //        animations.crouching = ...

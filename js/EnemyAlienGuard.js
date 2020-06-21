@@ -7,6 +7,7 @@ function EnemyAlienGuard(posX, posY) {
     const MIN_TIME_TO_GROWL = 1000;
     const MEDIAN_TIME_TO_GROWL = 500;
     const HEALTH_DROP_PROBABILITY = 50;
+    const FLASH_TIME = 300; 
 
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -19,6 +20,8 @@ function EnemyAlienGuard(posX, posY) {
 
     let isOnGround = true;
     let flipped = false;
+
+    let flashTimer = FLASH_TIME;
 
     this.type = EntityType.EnemyAlienGuard;
     this.health = 7; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
@@ -47,6 +50,16 @@ function EnemyAlienGuard(posX, posY) {
         position.y -= canvas.deltaY;
 
         if(this.collisionBody.isOnScreen) {
+            if(flashTimer < FLASH_TIME) {
+                flashTimer += deltaTime;
+                if(Math.floor(flashTimer / 100) % 2 === 0) {
+                    currentAnimation.useBrightImage = !currentAnimation.useBrightImage;
+                }
+            } else {
+                flashTimer = FLASH_TIME;
+                currentAnimation.useBrightImage = false;
+            }
+
             timeToGrowl -= deltaTime;
             if(timeToGrowl <= 0) {
                 alienGrowl2.play();
@@ -134,6 +147,8 @@ function EnemyAlienGuard(posX, posY) {
                 }
                 SceneState.scenes[SCENE.GAME].removeMe(this);
             }
+
+            flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move player the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
@@ -153,7 +168,7 @@ function EnemyAlienGuard(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', enemyAlienGuardSheet, [0, 1], 23, 34, [512], false, true);
+        anims.idle = new SpriteAnimation('idle', enemyAlienGuardSheet, [0, 1], 23, 34, [512], false, true, [0], enemyAlienGuardBrightSheet);
         anims.idle.scale = SCALE;
 //        animations.jumping = ...
 //        animations.attacking = ...

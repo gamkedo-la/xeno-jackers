@@ -7,11 +7,14 @@ function SpriteAnimation(name, //string identifier for this animation
                    frameTimes = [64],//array of milliseconds to show each frame
                    reverses = false, //boolean indicates if animation reverses (true)
                    loops = false, //boolean indicates if animation loops (true)
-                   frameOffsetH = [0]) { //array of pixels to offset each frame (0)
+                   frameOffsetH = [0], //array of pixels to offset each frame (0)
+                   brightImage = null //an HTML5 Canvas object with bright pixels
+                   ) { 
                     
     this.name = name;
     this.scale = 1;
     let isFinished = false; //only becomes true if reverses is false and loops is false (i.e. does neither)
+    this.useBrightImage = false;
     this.getIsFinished = function() {
         return isFinished;
     };
@@ -58,11 +61,17 @@ function SpriteAnimation(name, //string identifier for this animation
 			drawPosY = 0;
 		}
 
-        canvasContext.drawImage(image, 
-            thisFrameRect.x + offset, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
-            drawPosX, drawPosY, thisFrameRect.width * this.scale, thisFrameRect.height * this.scale);
+        if(this.useBrightImage) {
+            canvasContext.drawImage(brightImage, 
+                thisFrameRect.x + offset, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
+                drawPosX, drawPosY, thisFrameRect.width * this.scale, thisFrameRect.height * this.scale);
+        } else {
+            canvasContext.drawImage(image, 
+                thisFrameRect.x + offset, thisFrameRect.y, thisFrameRect.width, thisFrameRect.height,
+                drawPosX, drawPosY, thisFrameRect.width * this.scale, thisFrameRect.height * this.scale);
+        }
 
-            canvasContext.restore();
+        canvasContext.restore();
     }
 
     const getCurrentFrameRect = function() {

@@ -8,6 +8,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const FRAME_WIDTH = 83; //old tile sheet = 24, then = 64, now 83
     const FRAME_HEIGHT = 36;
     const SIZE = { width: FRAME_WIDTH, height: FRAME_HEIGHT };
+    const FLASH_TIME = 300;
 
     let currentAnimation;
     let position = {x:startX, y:startY};
@@ -28,6 +29,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	let didCollideWithEnemy = false;
 	let lastCollidedEnemy = null;
     let justCollidedWithEnvironment = false;
+    let flashTimer = FLASH_TIME;
     const self = this;
 
     let levelWidth = 0;
@@ -532,9 +534,13 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         colliderManager.updateCollider(position.x, position.y);
         
         currentAnimation = animations.knockback;
+
+        flashTimer = 0;
 	}
 
 	function updateKnockBack(deltaTime) {
+        flashTimer += deltaTime;
+
         if (velocity.x > 0) {
             velocity.x -= 2;
         } else if (velocity.x < 0) {
@@ -544,7 +550,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
 	function exitKnockBack(deltaTime) {
 		velocity.x = 0;
-		lastCollidedEnemy = null;
+        lastCollidedEnemy = null;
+        flashTimer = FLASH_TIME;
 	}
 
 	function enterThumbUp(deltaTime) {
@@ -625,6 +632,16 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.update = function (deltaTime) {
         if (colliderManager.state === null) {
             colliderManager.setPointsForState(PlayerState.IdleRight, position);
+        }
+
+        if(flashTimer < FLASH_TIME) {
+            flashTimer += deltaTime;
+            if(Math.floor(flashTimer / 100) % 2 === 0) {
+                currentAnimation.useBrightImage = !currentAnimation.useBrightImage;
+            }
+        } else {
+            flashTimer = FLASH_TIME;
+            currentAnimation.useBrightImage = false;
         }
 
         justCollidedWithEnvironment = false;
@@ -762,20 +779,20 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const initializeAnimations = function () {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true, [8, 8, 8, 8]);
+        anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true, [8, 8, 8, 8], playerBrightSheet);
         anims.idle.scale = SCALE;
-        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
+        anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true, [0], playerBrightSheet);
         anims.walking.scale = SCALE;
-        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false);
-        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-        anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false);
-        anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
-        anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
-        anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false);
+        anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
+        anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false, [0], playerBrightSheet);
+        anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
+        anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
+        anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
         //        anims.blocking = ...
-        anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false);
-        anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false);
-        anims.knockback = new SpriteAnimation('knockedback', playerSpriteSheet, [12], FRAME_WIDTH, FRAME_HEIGHT, [125], false, false);
+        anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
+        anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false, [0], playerBrightSheet);
+        anims.knockback = new SpriteAnimation('knockedback', playerSpriteSheet, [12], FRAME_WIDTH, FRAME_HEIGHT, [125], false, false, [0], playerBrightSheet);
 
         return anims;
     };
