@@ -363,16 +363,18 @@ function GameScene() {
     const draw = function(deltaTime) {
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
         
-        let offsetX = 0;
+        let offsetX = 0; // scrolling bg
+        let wobbleY = 0; // bouncing tires
         if (currentLevelName==MAP_NAME.Highway) {
             autoScrollX--; // integer only for crispness
             offsetX = Math.floor((autoScrollX/parallaxScale)%TILE_WIDTH);
+            wobbleY = Math.floor(Math.sin(performance.now()/50))+1;
         }
         
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
         mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles, offsetX);
         mapRenderer.drawTileLayer(currentMap.nearBackgroundTiles.tiles, currentMap.nearBackgroundTiles.widthInTiles);
-        mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles);
+        mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, 0, wobbleY);
 
         player.draw(deltaTime);
         for(let enemy of enemies) {
