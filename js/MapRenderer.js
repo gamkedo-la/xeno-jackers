@@ -10,6 +10,10 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         tileManager.update(deltaTime);
     };
 
+    this.stopAnimating = function(tilesToStopAnimating) {
+        tileManager.stopAnimating(tilesToStopAnimating);
+    };
+
     this.drawSkybox = function(context, skybox, offsetX=0, offsetY=0) {
         const skyboxImage = getSkyboxForName(skybox.image);
         if(skyboxImage !== null) {

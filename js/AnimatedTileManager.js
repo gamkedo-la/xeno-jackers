@@ -1,6 +1,7 @@
 //AnimatedTileManager.js
 function AnimatedTileManager() {
     const tiles = {};
+    let unanimated = new Set();
     let elapsedTime = 0;
 
     this.update = function(deltaTime) {
@@ -11,10 +12,17 @@ function AnimatedTileManager() {
         elapsedTime += deltaTime;
     };
 
+    this.stopAnimating = function(tilesToStop) {
+        for(let tile of tilesToStop) {
+            unanimated.add(tile);
+        }
+    };
+
     this.nextGIDForGID = function(GID) {
         GID--;//subtract 1 to align Tiled 1-based numbering to our 0-based numbering
         const GIDData = tiles[GID];
         if(GIDData === undefined) return GID;
+        if(unanimated.has(GID)) return GID;
 
         GIDData.currentFrame = (Math.floor(elapsedTime / GIDData.frameTime) % GIDData.GIDs.length);
 

@@ -389,10 +389,12 @@ function GameScene() {
         
         let offsetX = 0; // scrolling bg
         let wobbleY = 0; // bouncing tires
-        if (currentLevelName==MAP_NAME.Highway) {
+        if ((currentLevelName === MAP_NAME.Highway) && (highwayScrollTime < highwayAutoScrollTime)) {
             autoScrollX--; // integer only for crispness
-            offsetX = Math.floor((autoScrollX/parallaxScale)%TILE_WIDTH);
-            wobbleY = Math.floor(Math.sin(performance.now()/50))+1;
+            offsetX = Math.floor((autoScrollX / parallaxScale) % TILE_WIDTH);
+            wobbleY = Math.floor(Math.sin(performance.now() / 50)) + 1;
+        } else {
+            mapRenderer.stopAnimating([150, 151, 214, 215]);
         }
         
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
