@@ -16,6 +16,11 @@ function GameScene() {
     const environmentColliders = [];
     const otherEntities = [];
 
+    const highwayAutoScrollTime = 20000;
+    const highwayAutoScrollLimit = 600;
+
+    let highwayScrollTime = 0;
+
     let hasChain = false;
     let hasWheel = false;
     let hasHandlebar = false;
@@ -38,8 +43,13 @@ function GameScene() {
             player = new Player(canvas.width / 2 + 8, canvas.height / 2 + 8, hasChain, hasWheel, hasHandlebar, hasEngine);
         }
 
-        player.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
-        player.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);
+        if(currentLevelName === MAP_NAME.Highway) {
+            player.setLevelWidth(highwayAutoScrollLimit);
+            player.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);
+            } else {
+            player.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
+            player.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);    
+        }
 
         if(collisionManager === null) {
             collisionManager = new CollisionManager(player);
@@ -59,8 +69,13 @@ function GameScene() {
             camera = new Camera(canvas);
         }
 
-        camera.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
-        camera.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);
+        if(currentLevelName === MAP_NAME.Highway) {
+            camera.setLevelWidth(highwayAutoScrollLimit);
+            camera.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);
+        } else {
+            camera.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
+            camera.setLevelHeight(currentMap.collisionTiles.heightInTiles * TILE_HEIGHT);
+        }
 
         if(gameUI === null) {
             gameUI = new GameUI(canvas, canvasContext);
@@ -308,6 +323,15 @@ function GameScene() {
 
     const update = function(deltaTime, context) {
         if(reloading) return false;
+
+        if(currentLevelName === MAP_NAME.Highway) {
+            highwayScrollTime += deltaTime;
+            if(highwayScrollTime > highwayAutoScrollTime) {
+                player.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
+                camera.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
+
+            }
+        }
 
         mapRenderer.update(deltaTime);
 

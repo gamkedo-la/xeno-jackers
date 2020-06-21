@@ -225,7 +225,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             position.x = 0;
         }
 		if(position.x + FRAME_WIDTH > levelWidth) {
-            position.x = levelWidth;
+            position.x = levelWidth - FRAME_WIDTH;
         }
 	}
 
