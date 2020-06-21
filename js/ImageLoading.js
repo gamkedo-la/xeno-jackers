@@ -134,7 +134,7 @@ function loadImages() {
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
 
         //environment objects
-        { imgName: lampPic, theFile: "backgrounds/lamp.png" },
+        { imgName: lampPic, theFile: "backgrounds/Lamp.png" },
         { imgName: cutsceneTruck, theFile: "backgrounds/cutscenetruck.png" },
 
         // power ups
