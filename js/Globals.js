@@ -61,12 +61,13 @@ let worldSpeed = 1;
 const SCENE = {
 	LOADING:"loading",
 	TITLE:"title",
-	SETTINGS:"settings",
+	OPTIONS:"options",
 	CREDITS:"credits",
 	HELP:"help",
 	PAUSE:"pause",
 	GAME:"game",
-	ENDING:"ending"
+	ENDING:"ending",
+	LVL1LVL2: "lvl1lvl2"
 }
 
 const MAP_NAME = {

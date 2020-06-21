@@ -202,7 +202,7 @@ function GameScene() {
         }
         
         this.reset();
-        SceneState.setState(SCENE.GAME);
+        SceneState.setState(SCENE.LVL1LVL2);
     };
 
     const verifyNewKeyPressed = function(newKeyEvent, pressed, pressedKeys) {
@@ -327,6 +327,7 @@ function GameScene() {
         }
 
         collisionManager.doCollisionChecks();
+        if(player === null) return;
         player.fsm.update(deltaTime);
         newlyPressed.length = 0;
 

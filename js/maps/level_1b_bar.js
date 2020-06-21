@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -37,7 +37,7 @@
          "name":"FarBackgroundTiles",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":320,
          "x":0,
          "y":0
@@ -49,7 +49,7 @@
          "name":"NearBackgroundTiles",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":320,
          "x":0,
          "y":0
@@ -1473,7 +1473,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -1575,8 +1575,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":156.773,
-                 "y":117.151
+                 "x":2140.773,
+                 "y":305.151
                 }, 
                 {
                  "gid":4098,
@@ -1748,7 +1748,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -1759,7 +1759,7 @@
          "name":"ForegroundTiles",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":320,
          "x":0,
          "y":0

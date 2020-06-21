@@ -70,8 +70,6 @@ function loadStartImagePic() {
 //-----Load the rest of the game images----//
 //tiles
 const tileSheet = document.createElement("img");
-//const tileSheetRock = document.createElement("img");
-//const tileSheetWorkshop = document.createElement("img");
 const tempGameSceneBG = document.createElement("img");
 
 //characters
@@ -84,6 +82,7 @@ const uiMenuBorderPic = document.createElement("img");
 
 //environment objects
 const lampPic = document.createElement("img");
+const cutsceneTruck = document.createElement("img");
 
 //power ups
 const healthpickup = document.createElement("img");
@@ -136,6 +135,7 @@ function loadImages() {
 
         //environment objects
         { imgName: lampPic, theFile: "backgrounds/lamp.png" },
+        { imgName: cutsceneTruck, theFile: "backgrounds/cutscenetruck.png" },
 
         // power ups
         { imgName: healthpickup, theFile: "interface/item_pickups.png" },
