@@ -27,4 +27,8 @@ function AnimatedTileManager() {
     tiles[333] = {GIDs:[333, 335], frameTime:128, currentFrame:0};
     tiles[458] = {GIDs:[458, 590, 718, 846, 844, 1102], frameTime:128, currentFrame:0};
     tiles[459] = {GIDs:[459, 591, 719, 847, 845, 1103], frameTime:128, currentFrame:0};
+    tiles[150] = {GIDs:[150, 152, 154, 152], frameTime:256, currentFrame:0};
+    tiles[151] = {GIDs:[151, 153, 155, 153], frameTime:256, currentFrame:0};
+    tiles[214] = {GIDs:[214, 216, 218, 216], frameTime:256, currentFrame:0};
+    tiles[215] = {GIDs:[215, 217, 219, 217], frameTime:256, currentFrame:0};
 }
