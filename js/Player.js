@@ -100,8 +100,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.FallingRight, enterFalling, updateFalling, exitFalling);
 	this.fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
 	this.fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
-	this.fsm.addState(PlayerState.CrouchLeft, enterCrouchingLeft, doNothing, doNothing);
-	this.fsm.addState(PlayerState.CrouchRight, enterCrouchingRight, doNothing, doNothing);
+	this.fsm.addState(PlayerState.CrouchLeft, enterCrouchingLeft, doNothing, exitCrouch);
+	this.fsm.addState(PlayerState.CrouchRight, enterCrouchingRight, doNothing, exitCrouch);
 	this.fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
 	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
@@ -455,7 +455,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function enterCrouching(deltaTime) {
-		velocity.x = 0;
+        velocity.x = 0;
+        position.y += 6;
+
         currentAnimation = animations.crouching;
         if(flipped) {
             colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
@@ -473,7 +475,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterCrouchingRight(deltaTime) {
 		enterCrouching(deltaTime);
 		flipped = false;
-	}
+    }
+    
+    function exitCrouch(deltaTime) {
+        position.y -= 6;
+    }
 
 	function collidedWithEnemy(deltaTime) {
 		return lastCollidedEnemy !== null;
