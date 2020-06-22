@@ -116,7 +116,7 @@ let picsToLoad = 0;
 function countLoadedImageAndLaunchIfReady() {
     picsToLoad--;
     if (picsToLoad == 0) { // last image loaded?
-        const brightLight = new BrightImageBuilder();
+        const brightLight = new safeBrightImageBuilder();
         bikerEnemyBrightSheet = brightLight.imageForImage(bikerEnemySheet);
         enemyAlienGuardBrightSheet = brightLight.imageForImage(enemyAlienGuardSheet);
         enemyMechSpriteBrightSheet = brightLight.imageForImage(enemyMechSpriteSheet);

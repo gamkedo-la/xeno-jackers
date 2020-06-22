@@ -42,3 +42,21 @@ function BrightImageBuilder() {
         return result;
     };
 }
+
+
+// this version does not use getImageData
+// so it works on local files without CORS security issues
+function safeBrightImageBuilder() {
+    const ALPHA = 155/255;
+    this.imageForImage = function(image) {
+        const thisCanvas = document.createElement("canvas");
+        thisCanvas.width = image.width;
+        thisCanvas.height = image.height;
+        const thisContext = thisCanvas.getContext("2d");
+        thisContext.drawImage(image, 0, 0);
+        thisContext.globalCompositeOperation = "source-atop";
+        thisContext.fillStyle = "rgba(255,255,255,"+ALPHA+")";
+        thisContext.fillRect(0,0,image.width,image.width);
+        return thisCanvas;
+    };
+}
