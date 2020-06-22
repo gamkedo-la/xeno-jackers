@@ -3,15 +3,19 @@ function BrightImageBuilder() {
     const BRIGHT_FACTOR = 155;
 
     this.imageForImage = function(image) {
-        const thisCanvas = document.createElement("canvas");
-        thisCanvas.width = image.width;
-        thisCanvas.height = image.height;
-        const thisContext = thisCanvas.getContext("2d");
-        thisContext.drawImage(image, 0, 0);
-        const data = thisContext.getImageData(0, 0, thisCanvas.width, thisCanvas.height);
-        const processedData = processData(data);
-        thisContext.putImageData(processedData, 0, 0);
-        return thisCanvas;
+        try {
+            const thisCanvas = document.createElement("canvas");
+            thisCanvas.width = image.width;
+            thisCanvas.height = image.height;
+            const thisContext = thisCanvas.getContext("2d");
+            thisContext.drawImage(image, 0, 0);
+            const data = thisContext.getImageData(0, 0, thisCanvas.width, thisCanvas.height);
+            const processedData = processData(data);
+            thisContext.putImageData(processedData, 0, 0);
+            return thisCanvas;
+        } catch (error) {
+            return image;
+        }
     };
 
     function processData(imageData) {
