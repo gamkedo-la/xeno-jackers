@@ -2,13 +2,14 @@
 function BikerEnemy(posX, posY) {
     const SCALE = GAME_SCALE;
     const WIDTH = 23;
-	const ANIM_WIDTH = 32
+	const ANIM_WIDTH = 41
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_CACKLE = 1000;
     const MEDIAN_TIME_TO_CACLE = 500;
     const HEALTH_DROP_PROBABILITY = 30;
     const FLASH_TIME = 300; 
+    const ATTACK_DIST = 25;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -16,6 +17,8 @@ function BikerEnemy(posX, posY) {
 
     let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     
+    let isAttacking = false;
+    let fistIsActive = false
     let isBlocking = false;
     let isCrouching = false;
 
@@ -33,6 +36,8 @@ function BikerEnemy(posX, posY) {
         {x:posX + 21, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
         {x:posX + 2, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
     ]);
+
+    fist = new EnemyFist();
 
     this.getSize = function() {
         return SIZE;
@@ -82,12 +87,41 @@ function BikerEnemy(posX, posY) {
 
             this.setPosition(xPos, yPos);
 
-            if(player.getPosition().x < position.x) {
+            let distToPlayer = 0;
+            if(player.collisionBody.center.x < this.collisionBody.center.x) {
                 flipped = true;
+                distToPlayer = this.collisionBody.center.x - player.collisionBody.center.x;
             } else {
                 flipped = false;
+                distToPlayer = player.collisionBody.center.x - this.collisionBody.center.x;
+            }
+
+            if(distToPlayer < ATTACK_DIST) {
+                if(!isAttacking) {
+                    currentAnimation = animations.attacking;
+                    currentAnimation.reset();
+                    isAttacking = true;
+                }
+            }
+
+            if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3)) {
+                fistIsActive = true;
+                if(flipped) {
+                    fist.activate(position.x - 5, position.y + 6);
+                } else {
+                    fist.activate(position.x + 5, position.y + 6);
+                }
+            } else if((isAttacking) && (currentAnimation.getCurrentFrameIndex() != 3)) {
+                fist.deactivate();
+                fistIsActive = false;
+            }
+            
+            if((isAttacking) && (currentAnimation.getIsFinished())) {
+                isAttacking = false;
+                currentAnimation = animations.idle;
             }
         }
+
 
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
@@ -136,10 +170,11 @@ function BikerEnemy(posX, posY) {
     };
 
     this.draw = function(deltaTime) {
-        currentAnimation.drawAt(position.x, position.y, flipped);
+        currentAnimation.drawAt(position.x - 10, position.y - 2, flipped);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
+        fist.draw();
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
@@ -180,7 +215,7 @@ function BikerEnemy(posX, posY) {
 
         anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemyBrightSheet);
         anims.idle.scale = SCALE;
-		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [1, 2, 3, 4, 5, 0], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, true, [0], bikerEnemyBrightSheet);
+		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemyBrightSheet);
 //        animations.jumping = ...
 //        animations.blocking = ...
 //        animations.crouching = ...

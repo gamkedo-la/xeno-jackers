@@ -15,6 +15,7 @@ const EntityType = {
 
     //EnemyTools
     EnemyBullet:"enemyBullet",
+    EnemyFist:"enemyFist",
 
     //Pickups
     Health:"health",
@@ -63,6 +64,7 @@ function isPlayerTool(entity) {
 function isEnemyWeapon(entity) {
     switch(entity.type) {
         case EntityType.EnemyBullet:
+        case EntityType.EnemyFist:
             return true;
         default:
             return false;

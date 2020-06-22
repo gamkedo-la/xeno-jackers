@@ -728,7 +728,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     this.didCollideWith = function (otherEntity, collisionData) {
-		if (isEnemy(otherEntity)) {
+		if((isEnemy(otherEntity)) || (isEnemyWeapon(otherEntity))) {
             lastCollidedEnemy = otherEntity;
         } else if(otherEntity.type === EntityType.LevelExit) {
             SceneState.scenes[SCENE.GAME].playerAtExit();
