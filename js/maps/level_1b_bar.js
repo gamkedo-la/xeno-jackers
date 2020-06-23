@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -1575,8 +1575,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":583.773,
-                 "y":117.151
+                 "x":141.439666666667,
+                 "y":116.484333333333
                 }, 
                 {
                  "gid":4098,
