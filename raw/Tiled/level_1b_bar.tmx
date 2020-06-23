@@ -559,18 +559,18 @@
   <object id="67" name="PlayerSpawn" type="player" gid="4097" x="141.44" y="116.484" width="21" height="30"/>
   <object id="80" name="biker3" type="enemyBiker" gid="4098" x="1218.43" y="237.318" width="21" height="31"/>
   <object id="84" name="alienGuard1" type="enemyAlienGuard" gid="4099" x="1848" y="312" width="21" height="32"/>
-  <object id="102" type="lamp" gid="4104" x="120" y="88" width="16" height="16"/>
-  <object id="103" type="lamp" gid="4104" x="168" y="88" width="16" height="16"/>
-  <object id="104" type="lamp" gid="4104" x="200" y="88" width="16" height="16"/>
-  <object id="105" type="lamp" gid="4104" x="248" y="88" width="16" height="16"/>
-  <object id="106" type="lamp" gid="4104" x="376" y="88" width="16" height="16"/>
-  <object id="107" type="lamp" gid="4104" x="424" y="88" width="16" height="16"/>
-  <object id="108" type="lamp" gid="4104" x="456" y="88" width="16" height="16"/>
-  <object id="109" type="lamp" gid="4104" x="504" y="88" width="16" height="16"/>
-  <object id="110" type="lamp" gid="4104" x="696" y="88" width="16" height="16"/>
-  <object id="111" type="lamp" gid="4104" x="744" y="88" width="16" height="16"/>
-  <object id="112" type="lamp" gid="4104" x="776" y="88" width="16" height="16"/>
-  <object id="113" type="lamp" gid="4104" x="824" y="88" width="16" height="16"/>
+  <object id="102" type="lamp" gid="4102" x="120" y="88" width="16" height="16"/>
+  <object id="103" type="lamp" gid="4102" x="168" y="88" width="16" height="16"/>
+  <object id="104" type="lamp" gid="4102" x="200" y="88" width="16" height="16"/>
+  <object id="105" type="lamp" gid="4102" x="248" y="88" width="16" height="16"/>
+  <object id="106" type="lamp" gid="4102" x="376" y="88" width="16" height="16"/>
+  <object id="107" type="lamp" gid="4102" x="424" y="88" width="16" height="16"/>
+  <object id="108" type="lamp" gid="4102" x="456" y="88" width="16" height="16"/>
+  <object id="109" type="lamp" gid="4102" x="504" y="88" width="16" height="16"/>
+  <object id="110" type="lamp" gid="4102" x="696" y="88" width="16" height="16"/>
+  <object id="111" type="lamp" gid="4102" x="744" y="88" width="16" height="16"/>
+  <object id="112" type="lamp" gid="4102" x="776" y="88" width="16" height="16"/>
+  <object id="113" type="lamp" gid="4102" x="824" y="88" width="16" height="16"/>
  </objectgroup>
  <layer id="5" name="ForegroundTiles" width="320" height="126">
   <data encoding="csv">
