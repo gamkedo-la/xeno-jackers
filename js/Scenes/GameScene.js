@@ -399,6 +399,9 @@ function GameScene() {
         
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
         mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles, offsetX);
+        if(currentLevelName === MAP_NAME.Highway) {
+            mapRenderer.drawScrollingTileLayer(mapLoader.backgroundMap.nearBackgroundTiles.tiles, mapLoader.backgroundMap.widthInTiles, 0.5 * autoScrollX);
+        }
         mapRenderer.drawTileLayer(currentMap.nearBackgroundTiles.tiles, currentMap.nearBackgroundTiles.widthInTiles);
         mapRenderer.drawTileLayer(currentMap.collisionTiles.tiles, currentMap.collisionTiles.widthInTiles, 0, wobbleY);
 
@@ -413,6 +416,9 @@ function GameScene() {
         player.draw(deltaTime);
 
         mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles);
+        if(currentLevelName === MAP_NAME.Highway) {
+            mapRenderer.drawScrollingTileLayer(mapLoader.foregroundMap.foregroundTiles.tiles, mapLoader.foregroundMap.widthInTiles, 2 * autoScrollX);
+        }
 
         for(let env of environmentColliders) {
             env.draw();

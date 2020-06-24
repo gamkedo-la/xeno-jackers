@@ -52,6 +52,8 @@ function Map(layers, name) {
 //MapLoader.js
 function MapLoader() {
     this.currentMap = null;
+    this.foregroundMap = null;
+    this.backgroundMap = null;
 
     this.loadMap = function(name) {
         if((this.currentMap != null) && 
@@ -62,15 +64,20 @@ function MapLoader() {
         switch(name) {
             case MAP_NAME.Bar:
                 this.currentMap = loadBar();
+                //this.foregroundMap = null;
                 break;
             case MAP_NAME.Highway:
                 this.currentMap = loadHighway();
+                this.backgroundMap = loadBackground();
+                this.foregroundMap = loadForeground();
                 break;
             case MAP_NAME.Area51:
                 this.currentMap = loadArea51();
+                //this.foregroundMap = null;
                 break;
             case MAP_NAME.Boss:
                 this.currentMap = loadBoss();
+                //this.foregroundMap = null;
                 break;
         }
 
@@ -102,6 +109,22 @@ function MapLoader() {
     const loadHighway = function() {
         const layers = TileMaps[MAP_NAME.Highway].layers;
         return new Map(layers, MAP_NAME.Highway);
+    };
+
+    const loadForeground = function() {
+        const layers = TileMaps[MAP_NAME.Foreground].layers;
+        const foregroundMap = new Map(layers, MAP_NAME.Foreground);
+        foregroundMap.widthInTiles = TileMaps[MAP_NAME.Foreground].width;
+        foregroundMap.heightInTiles = TileMaps[MAP_NAME.Foreground].height;
+        return foregroundMap;
+    };
+
+    const loadBackground = function() {
+        const layers = TileMaps[MAP_NAME.Background].layers;
+        const backgroundMap = new Map(layers, MAP_NAME.Background);
+        backgroundMap.widthInTiles = TileMaps[MAP_NAME.Background].width;
+        backgroundMap.heightInTiles = TileMaps[MAP_NAME.Background].height;
+        return backgroundMap;
     };
 
     const loadArea51 = function() {

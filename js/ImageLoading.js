@@ -86,6 +86,7 @@ const uiMenuBorderPic = document.createElement("img");
 
 //environment objects
 const lampPic = document.createElement("img");
+const cactusFullPic = document.createElement("img");
 const cutsceneTruck = document.createElement("img");
 
 //power ups
@@ -146,6 +147,7 @@ function loadImages() {
 
         //environment objects
         { imgName: lampPic, theFile: "backgrounds/Lamp.png" },
+        { imgName: cactusFullPic, theFile: "backgrounds/cactus_full.png" },
         { imgName: cutsceneTruck, theFile: "backgrounds/cutscenetruck.png" },
 
         // power ups

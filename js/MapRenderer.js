@@ -33,6 +33,18 @@ function MapRenderer(canvas, context, tileSheet, tile_ImageWidth = 8, tile_Image
         }
     };
 
+    this.drawScrollingTileLayer = function(tiles, mapWidthInTiles, offsetX = 0, offsetY = 0) {
+        let leftEdge = canvas.center.x - offsetX - canvas.width / 2;
+        if(leftEdge < 0) leftEdge = 0;
+        let topEdge = canvas.center.y + offsetY - canvas.height / 2;
+        if(topEdge < 0) topEdge = 0;
+
+        for(let j = 0; j < renderedRowCount; j++) {
+            const index = getIndexForPixelPos(leftEdge, topEdge + j * tile_RenderHeight, mapWidthInTiles);
+            renderRowAtIndex(tiles, index, mapWidthInTiles, offsetX, offsetY);
+        }
+    };
+
     const getIndexForPixelPos = function(x, y, mapWidthInTiles) {
         const tileX = Math.floor(x / tile_RenderWidth);
         const tileY = Math.floor(y / tile_RenderHeight);

@@ -73,6 +73,8 @@ const SCENE = {
 const MAP_NAME = {
 	Bar:"level_1b_bar",
 	Highway:"level_2_highway",
+	Foreground:"level_2_foreground_scroll",
+	Background:"level_2_background_scroll",
 	Area51:"level_3_area51",
 	Boss:"boss",
 };
