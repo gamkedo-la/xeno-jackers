@@ -85,10 +85,26 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 			ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2,
 			ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2,
 		]);
-	};
+    };
+    
 	function releasedWalkKey() {
 		return !pressedWalkKey();
-	}
+    }
+    
+    function walkedOffLedge() {
+        if(!justCollidedWithEnvironment && (velocity.y > 0)) {
+            //didn't hit the ground recently
+            isOnGround = false;
+            if(pressedWalkLeftKey()) {
+                flipped = true;
+            } else if(pressedWalkRightKey()) {
+                flipped = false;
+            }
+            currentAnimation = animations.falling;
+            return true;
+        }
+        return false;
+    };
 
 	this.fsm = new FSM(initial=PlayerState.IdleRight);
 	// fsm.addState takes the state id, enter state function, update state function, and exit state function
@@ -122,6 +138,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkRight, pressedWalkRightKey);
 	this.fsm.addTransition([PlayerState.WalkLeft], PlayerState.IdleLeft, releasedWalkKey);
 	this.fsm.addTransition([PlayerState.WalkRight], PlayerState.IdleRight, releasedWalkKey);
+	this.fsm.addTransition([PlayerState.WalkLeft], PlayerState.FallingLeft, walkedOffLedge);
+	this.fsm.addTransition([PlayerState.WalkRight], PlayerState.FallingRight, walkedOffLedge);
+	this.fsm.addTransition([PlayerState.IdleLeft], PlayerState.FallingLeft, walkedOffLedge);
+	this.fsm.addTransition([PlayerState.IdleRight], PlayerState.FallingRight, walkedOffLedge);
 	this.fsm.addTransition([PlayerState.WalkLeft], PlayerState.WalkRight, pressedWalkRightKey);
 	this.fsm.addTransition([PlayerState.WalkRight], PlayerState.WalkLeft, pressedWalkLeftKey);
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.WalkLeft], PlayerState.JumpLeft, pressedJumpKey);
