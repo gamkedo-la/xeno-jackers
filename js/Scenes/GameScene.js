@@ -315,7 +315,14 @@ function GameScene() {
         reloading = true;
         drawRect(0, 0, canvas.width, canvas.height, '#252525');
         setTimeout(() => {
-            this.reset();
+            hasChain = false;
+            hasWheel = false;
+            hasHandlebar = false;
+            hasEngine = false;
+            currentLevelName = MAP_NAME.Bar;
+            score = 0;
+
+            self.reset();
 
             SceneState.setState(SCENE.TITLE);//TODO: This should be game over
         }, TRANSITION_TIME);
