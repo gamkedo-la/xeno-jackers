@@ -26,7 +26,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let lastJumpKeyTime = 0;
     let flipped = false;
 	let didCollideWithEnvironment = false;
-	let didCollideWithEnemy = false;
+    let didCollideWithEnemy = false;
+    let didHitRoad = false;
 	let lastCollidedEnemy = null;
     let justCollidedWithEnvironment = false;
     let flashTimer = FLASH_TIME;
@@ -641,6 +642,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isOnGround = true;
         heldJumpTime = 0;
         flipped = false;
+        didHitRoad = false;
     };
 
     this.getSize = function () {
@@ -756,8 +758,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             if(otherEntity.type === EntityType.Deadzone) {
                 SceneState.scenes[SCENE.GAME].removeMe(self);
             } else {
+                if(otherEntity.type === EntityType.Roadzone) {
+                    lastCollidedEnemy = otherEntity;
+                    didHitRoad = true;
+                }
+
                 if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
-                    this.setPosition(position.x + collisionData.deltaX, position.y);
+                    if(!didHitRoad) {
+                        this.setPosition(position.x + collisionData.deltaX, position.y);
+                    }
                 } else {
                     this.setPosition(position.x, position.y + collisionData.deltaY);
                     if(collisionData.deltaY < 0) {

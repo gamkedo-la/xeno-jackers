@@ -424,7 +424,7 @@
   <object id="37" name="Truck Windshield" type="ground" x="548.727" y="74.1818">
    <polygon points="0,0 1.93103,0 2,42.1818 0,42.1818"/>
   </object>
-  <object id="38" name="deadzone" type="deadzone" x="0" y="120">
+  <object id="38" name="road" type="roadzone" x="0" y="120">
    <polygon points="0,0 552,0 551.873,7.87498 0,8"/>
   </object>
   <object id="39" name="Truck Trailer" type="ground" x="272" y="56">
