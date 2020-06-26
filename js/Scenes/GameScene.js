@@ -346,6 +346,9 @@ function GameScene() {
         camera.update(player);
 
         for(let env of environmentColliders) {
+            if((highwayScrollTime >= highwayAutoScrollTime) && (env.type === EntityType.Roadzone)) {
+                env.type = EntityType.Ground;
+            }
             env.update(deltaTime);
         }
 
