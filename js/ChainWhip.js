@@ -55,6 +55,8 @@ function ChainWhip() {
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        this.deactivate();
+        if(otherEntity.type != EntityType.Player) {
+            this.deactivate();
+        }
     };
 }
