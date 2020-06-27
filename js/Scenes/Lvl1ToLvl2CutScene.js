@@ -8,9 +8,14 @@ function Lvl1ToLvl2CutScene() {
     let moving = false;
     let truckPos = 100;
     let titlePos = 20;
+    let ufo = null;
+    let ufoPosition = {x: 0, y: 20};
+    let ufoTurnedAround = false;
+    let ufoExiting = false;
 
     this.transitionIn = function() {
-        cutScenePlayer = new CutScenePlayer(0, 80);
+        cutScenePlayer = new CutScenePlayer(0, 100);
+        ufo = new SpriteAnimation('idle', ufoSpriteSheet, [0, 1, 2, 3], 50, 26, [360], false, true);
         const titleWidth = fontRenderer.getWidthOfText("THE HIGHWAY", 1, FONT.Stroked);
         titlePos = Math.round((canvas.width - titleWidth) / 2);
     };
@@ -39,10 +44,12 @@ function Lvl1ToLvl2CutScene() {
 
     const update = function(deltaTime) {
         cutScenePlayer.update(deltaTime);
+        ufo.update(deltaTime);
+        
         if((cutScenePlayer.position.x >= 53) && (!reachedTruck)) {
             reachedTruck = true;
             cutScenePlayer.climb();
-        } else if((cutScenePlayer.position.y < 14) && (!climbedTruck)) {
+        } else if((cutScenePlayer.position.y < 34) && (!climbedTruck)) {
             climbedTruck = true;
             cutScenePlayer.walk();
         } else if((cutScenePlayer.position.x > 80) && (!onTruck)) {
@@ -54,16 +61,32 @@ function Lvl1ToLvl2CutScene() {
         } else if((onTruck) && (truckPos > canvas.width + 10)){
             SceneState.setState(SCENE.GAME);
         }
+
+        if((ufoPosition.x < 40) && (!ufoTurnedAround)) {
+            ufoPosition.x++;
+        } else if((ufoPosition.x >= 40) && (!ufoTurnedAround)) {
+            ufoPosition.x--;
+            ufoTurnedAround = true;
+        } else if((ufoPosition.x > 5) && (!ufoExiting)) {
+            ufoPosition.x--;
+        } else if((ufoPosition.x <= 5) && (!ufoExiting)) {
+            ufoExiting = true;
+            ufoPosition.x += 3;
+        } else {
+            ufoPosition.x += 3;
+        }
     };
 
     const draw = function(deltaTime) {
 		// render the menu background
         drawBG();
 
+        ufo.drawAt(ufoPosition.x, ufoPosition.y);
+
         fontRenderer.drawString(canvasContext, titlePos, 5, "THE HIGHWAY", FONT.Stroked);
 
         cutScenePlayer.draw(deltaTime);
-        canvasContext.drawImage(cutsceneTruck, truckPos, 48);
+        canvasContext.drawImage(cutsceneTruck, truckPos, 68);
 	};
 	
 	const drawBG = function() {

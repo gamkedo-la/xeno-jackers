@@ -76,6 +76,7 @@ const tempGameSceneBG = document.createElement("img");
 const bikerEnemySheet = document.createElement("img");
 const enemyAlienGuardSheet = document.createElement("img");
 const enemyMechSpriteSheet = document.createElement("img");
+const ufoSpriteSheet = document.createElement("img");
     //bright sheets
 let bikerEnemyBrightSheet;
 let enemyAlienGuardBrightSheet;
@@ -141,6 +142,7 @@ function loadImages() {
         { imgName: bikerEnemySheet, theFile: "characters/enemy_biker.png" },
         { imgName: enemyAlienGuardSheet, theFile: "characters/enemy_alien_guard.png" },
         { imgName: enemyMechSpriteSheet, theFile: "characters/enemy_mech_spritesheet.png" },
+        { imgName: ufoSpriteSheet, theFile: "characters/ufo_spritesheet.png" },
 
         // screens
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
