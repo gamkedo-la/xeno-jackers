@@ -354,7 +354,10 @@ function CollisionManager(player) {
         checkCollsionsForLists(playerList, environment);
 
 		//Player vs Other Game Objects
-        checkCollsionsForLists(playerList, gameObjects);
+		checkCollsionsForLists(playerList, gameObjects);
+		
+		//Player vs Other Game Objects
+		checkCollsionsForLists(playerList, playerTools);
 
         //Player Weapons vs Enemies
         checkCollsionsForLists(enemies, playerTools);

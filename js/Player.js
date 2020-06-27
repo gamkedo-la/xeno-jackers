@@ -41,6 +41,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.type = EntityType.Player;
 
     let chain = new ChainWhip();
+    let wheel = new Wheel();
 
     const pressedJumpKey = getNewKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
     const heldJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
@@ -73,7 +74,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         return false;
     }
-    
+
+    const pressedThrowKey = getNewKeyChecker([KEY_X]);
+    const canThrow = function() {
+        return (hasWheel && pressedThrowKey());
+    }
+
     const pressedAttackKey = getNewKeyChecker([ALIAS.ATTACK]);
     const canAttack = function() {
         return (hasChain && pressedAttackKey());
@@ -127,6 +133,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
 	this.fsm.addState(PlayerState.AttackLeft, enterAttacking, updateAttacking, exitAttacking);
 	this.fsm.addState(PlayerState.AttackRight, enterAttacking, updateAttacking, exitAttacking);
+	this.fsm.addState(PlayerState.ThrowLeft, enterThrowing, updateThrowing, exitThrowing);
+	this.fsm.addState(PlayerState.ThrowRight, enterThrowing, updateThrowing, exitThrowing);
 	this.fsm.addState(PlayerState.CrouchAttackLeft, enterCrouchAttacking, updateCrouchAttacking, exitCrouchAttacking);
 	this.fsm.addState(PlayerState.CrouchAttackRight, enterCrouchAttacking, updateCrouchAttacking, exitCrouchAttacking);
 	this.fsm.addState(PlayerState.JumpAttackLeft, enterJumpAttacking, updateJumpAttacking, exitJumpAttacking);
@@ -194,8 +202,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
 	this.fsm.addTransition([PlayerState.AttackLeft], PlayerState.IdleLeft, finishedAttackingAnimation);
 	this.fsm.addTransition([PlayerState.AttackRight], PlayerState.IdleRight, finishedAttackingAnimation);
+	this.fsm.addTransition([PlayerState.ThrowLeft], PlayerState.IdleLeft, finishedThrowingAnimation);
+	this.fsm.addTransition([PlayerState.ThrowRight], PlayerState.IdleRight, finishedThrowingAnimation);
     this.fsm.addTransition([PlayerState.WalkLeft, PlayerState.IdleLeft], PlayerState.AttackLeft, canAttack);
     this.fsm.addTransition([PlayerState.WalkRight, PlayerState.IdleRight], PlayerState.AttackRight, canAttack);
+    this.fsm.addTransition([PlayerState.WalkLeft, PlayerState.IdleLeft], PlayerState.ThrowLeft, canThrow);
+    this.fsm.addTransition([PlayerState.WalkRight, PlayerState.IdleRight], PlayerState.ThrowRight, canThrow);
     this.fsm.addTransition([PlayerState.JumpRight], PlayerState.JumpAttackRight, canAttack);
     this.fsm.addTransition([PlayerState.JumpLeft], PlayerState.JumpAttackLeft, canAttack);
 	this.fsm.addTransition([PlayerState.JumpAttackRight], PlayerState.FallAttackRight, releasedJumpKeyOrMaxedTimer);
@@ -343,7 +355,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isAttacking = true;
         currentAnimation = animations.attacking;
         currentAnimation.reset();
-        chainAttack1.play()
+        chainAttack1.play();
     }
 
     function updateAttacking(deltaTime) {
@@ -459,6 +471,34 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         chain.deactivate();
     }
 
+    function enterThrowing(deltaTime) {
+        if(flipped) {
+            colliderManager.setPointsForState(PlayerState.AttackLeft, position);//I think AttackLeft/Right will work
+        } else {
+            colliderManager.setPointsForState(PlayerState.AttackRight, position);
+        }
+        colliderManager.updateCollider(position.x, position.y);
+        velocity.x = 0;
+        isAttacking = true;//TODO: Do we need this or something else?
+        currentAnimation = animations.throwing;
+        currentAnimation.reset();
+        chainAttack1.play();//TODO: Need a throw SFX?
+    }
+
+    function updateThrowing(deltaTime) {
+        if(currentAnimation.getCurrentFrameIndex() === 2) {
+            if(flipped) {
+                wheel.activate(drawPosition.x + 15, drawPosition.y + 15, -3 * WALK_SPEED);
+            } else {
+                wheel.activate(drawPosition.x + 50, drawPosition.y + 15, 3 * WALK_SPEED);
+            }
+        }
+    }
+
+    function exitThrowing(deltaTime) {
+        
+    }
+
     function finishedAttackingAnimation(deltaTime) {
 		return currentAnimation.getIsFinished() || currentAnimation != animations.attacking;
     }
@@ -469,6 +509,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     function finishedJumpAttackingAnimation(deltaTime) {
 		return currentAnimation.getIsFinished() || currentAnimation != animations.attackjump;
+    }
+
+    function finishedThrowingAnimation(deltaTime) {
+        return currentAnimation.getIsFinished() || currentAnimation != animations.throwing;
     }
 
 	function collidedWithWalkable(deltaTime) {
@@ -631,6 +675,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     this.setToolSpawnPoint = function(deltaX, deltaY) {
         chain.setSpawnPoint(drawPosition.x, drawPosition.y);
+        wheel.setSpawnPoint(drawPosition.x + 30, drawPosition.y + 15);
     };
 
     this.reset = function () {
@@ -656,6 +701,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.update = function (deltaTime) {
         if (colliderManager.state === null) {
             colliderManager.setPointsForState(PlayerState.IdleRight, position);
+        }
+
+        if((hasWheel) && wheel.isActive) {
+            wheel.update(deltaTime, this.collisionBody.center);
         }
 
         if(flashTimer < FLASH_TIME) {
@@ -707,10 +756,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                 case ALIAS.BLOCK:
                     stillBlocking = true;
                     block();
-                    break;
-                case ALIAS.ATTACK:
-//                    attack();
-                    break;
+                break;
             }
         }
 
@@ -747,6 +793,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
         chain.draw();
+        wheel.draw();
     };
 
     this.didCollideWith = function (otherEntity, collisionData) {
@@ -798,7 +845,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     hasWheel = true;
                     SceneState.scenes[SCENE.GAME].gotWheel();
                     break;
-                case EpntityType.EnginePickup:
+                case EntityType.EnginePickup:
                     playerPickup2.play();
                     hasEngine = true;
                     SceneState.scenes[SCENE.GAME].gotEngine();
@@ -820,6 +867,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.attacking = new SpriteAnimation('attack', playerSpriteSheet, [20, 21, 22], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
         anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
         anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
+        anims.throwing = new SpriteAnimation('throw', playerSpriteSheet, [9, 10, 11, 12], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
         //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false, [0], playerBrightSheet);

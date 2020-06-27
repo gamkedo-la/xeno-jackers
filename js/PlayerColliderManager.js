@@ -20,6 +20,8 @@ const PlayerState = {
     JumpAttackRight:'JumpAttackRight',
     FallAttackLeft:'FallAttackLeft',
     FallAttackRight:'FallAttackRight',
+    ThrowLeft:'ThrowLeft',
+    ThrowRight:'ThrowRight',
 	KnockBackLeft: 'knockbackLeft',
 	KnockBackRight: 'knockbackRight',
 	Hurt: 'gettingHurt',
