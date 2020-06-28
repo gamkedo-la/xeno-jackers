@@ -39,9 +39,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.maxHealth = 10;
     this.health = this.maxHealth / 2;
     this.type = EntityType.Player;
+    this.pogoedAnEnemy = false;
 
     let chain = new ChainWhip();
     let wheel = new Wheel();
+    let handlebar = new Handlebar(this);
 
     const pressedJumpKey = getNewKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
     const heldJumpKey = getKeyChecker([ALIAS.JUMP, ALIAS.JUMP2]);
@@ -84,6 +86,19 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     const canAttack = function() {
         return (hasChain && pressedAttackKey());
     };
+
+    const pressedPogoKey = getKeyChecker([KEY_Z]);
+    const canPogo = function() {
+        if(hasHandleBar) {
+            console.log(`Player State: ${self.fsm.getState()}`);
+            console.log(`Pressed Pogo? ${pressedPogoKey()}`);
+        }
+        return (hasHandleBar && pressedPogoKey());
+    }
+
+    const pogoedABadGuy = function() {
+        return self.pogoedAnEnemy;
+    }
 
 	const pressedWalkLeftKey = getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]);
 	const pressedWalkRightKey = getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]);
@@ -141,6 +156,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.JumpAttackRight, enterJumpAttacking, updateJumpAttacking, exitJumpAttacking);
 	this.fsm.addState(PlayerState.FallAttackLeft, enterFallAttacking, updateFallAttacking, exitFallAttacking);
 	this.fsm.addState(PlayerState.FallAttackRight, enterFallAttacking, updateFallAttacking, exitFallAttacking);
+	this.fsm.addState(PlayerState.PogoJumpLeft, enterJumpPogo, updateJumpPogo, exitJumpPogo);
+	this.fsm.addState(PlayerState.PogoJumpRight, enterJumpPogo, updateJumpPogo, exitJumpPogo);
+	this.fsm.addState(PlayerState.PogoFallLeft, enterFallPogo, updateFallPogo, exitFallPogo);
+	this.fsm.addState(PlayerState.PogoFallRight, enterFallPogo, updateFallPogo, exitFallPogo);
 
 	// fsm.addTransition takes a list of FROM states, the state to switch from any of those states, and a function that will return true or false, indicating whether the transition will happen or not
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.WalkLeft, pressedWalkLeftKey);
@@ -220,6 +239,18 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     this.fsm.addTransition([PlayerState.FallAttackLeft], PlayerState.LandingLeft, collidedWithWalkable);
     this.fsm.addTransition([PlayerState.FallingRight], PlayerState.FallAttackRight, canAttack);
     this.fsm.addTransition([PlayerState.FallingLeft], PlayerState.FallAttackLeft, canAttack);
+    this.fsm.addTransition([PlayerState.JumpRight], PlayerState.PogoJumpRight, canPogo);
+    this.fsm.addTransition([PlayerState.JumpLeft], PlayerState.PogoJumpLeft, canPogo);
+    this.fsm.addTransition([PlayerState.FallingRight], PlayerState.PogoFallRight, canPogo);
+    this.fsm.addTransition([PlayerState.FallingLeft], PlayerState.PogoFallLeft, canPogo);
+	this.fsm.addTransition([PlayerState.PogoJumpRight], PlayerState.PogoFallRight, releasedJumpKeyOrMaxedTimer);
+    this.fsm.addTransition([PlayerState.PogoJumpLeft], PlayerState.PogoFallLeft, releasedJumpKeyOrMaxedTimer);
+	this.fsm.addTransition([PlayerState.PogoFallRight], PlayerState.LandingRight, collidedWithWalkable);
+    this.fsm.addTransition([PlayerState.PogoFallLeft], PlayerState.LandingLeft, collidedWithWalkable);
+	this.fsm.addTransition([PlayerState.PogoJumpRight], PlayerState.PogoJumpRight, pogoedABadGuy);
+    this.fsm.addTransition([PlayerState.PogoJumpLeft], PlayerState.PogoJumpLeft, pogoedABadGuy);
+	this.fsm.addTransition([PlayerState.PogoFallRight], PlayerState.PogoJumpRight, pogoedABadGuy);
+    this.fsm.addTransition([PlayerState.PogoFallLeft], PlayerState.PogoJumpLeft, pogoedABadGuy);
 
 	function doNothing(deltaTime) {}
 
@@ -437,6 +468,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     function enterFallAttacking(deltaTime) {
+        if(velocity.y < 0) velocity.y = 0;//Prevent double jump by attacking?
+
         if(currentAnimation !== animations.attackjump) {
             if(flipped) {
                 colliderManager.setPointsForState(PlayerState.JumpAttackLeft, position);
@@ -482,7 +515,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         isAttacking = true;//TODO: Do we need this or something else?
         currentAnimation = animations.throwing;
         currentAnimation.reset();
-        chainAttack1.play();//TODO: Need a throw SFX?
+        //chainAttack1.play();//TODO: Need a throw SFX?
     }
 
     function updateThrowing(deltaTime) {
@@ -497,6 +530,83 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     function exitThrowing(deltaTime) {
         
+    }
+
+
+    function enterJumpPogo(deltaTime) {
+        self.pogoedAnEnemy = false;
+        velocity.y = -MAX_Y_SPEED;
+        heldJumpTime += deltaTime;
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+            colliderManager.setPointsForState(PlayerState.JumpRight, position);
+            colliderManager.updateCollider(position.x, position.y);
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+            colliderManager.updateCollider(position.x, position.y);
+        }
+
+        handlebar.activate(self.collisionBody.center.x, self.collisionBody.center.y);//center at bottom of player sprite
+        currentAnimation = animations.pogoJumping;
+        currentAnimation.reset();
+        //chainAttack1.play();//Need a sound here
+    }
+
+    function updateJumpPogo(deltaTime) {
+        heldJumpTime += deltaTime;
+        velocity.y = -MAX_Y_SPEED;
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+        }
+    }
+
+    function exitJumpPogo(deltaTime) {
+//        handlebar.deactivate();
+    }
+
+    function enterFallPogo(deltaTime) {
+        if(velocity.y < 0) velocity.y = 0;
+        heldJumpTime += deltaTime;
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+            colliderManager.setPointsForState(PlayerState.JumpRight, position);
+            colliderManager.updateCollider(position.x, position.y);
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+            colliderManager.setPointsForState(PlayerState.JumpLeft, position);
+            colliderManager.updateCollider(position.x, position.y);
+        }
+
+        if(!handlebar.isActive) {
+            handlebar.activate(self.collisionBody.center.x, self.collisionBody.center.y);//center at bottom of player sprite
+        }
+        currentAnimation = animations.pogoFalling;
+        currentAnimation.reset();
+        //chainAttack1.play();//Need a sound here
+    }
+
+    function updateFallPogo(deltaTime) {
+        heldJumpTime += deltaTime;
+        if (checkForPressedKeys([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2])) {
+			velocity.x = WALK_SPEED;
+            flipped = false;
+		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
+			velocity.x = -WALK_SPEED;
+            flipped = true;
+        }
+    }
+
+    function exitFallPogo(deltaTime) {
+        handlebar.deactivate();
     }
 
     function finishedAttackingAnimation(deltaTime) {
@@ -675,7 +785,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     this.setToolSpawnPoint = function(deltaX, deltaY) {
         chain.setSpawnPoint(drawPosition.x, drawPosition.y);
-        wheel.setSpawnPoint(drawPosition.x + 30, drawPosition.y + 15);
     };
 
     this.reset = function () {
@@ -698,6 +807,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         return drawPosition;
     };
 
+    this.didPogoEnemy = function() {
+        heldJumpTime = 0;
+        this.pogoedAnEnemy = true;
+    }
+
     this.update = function (deltaTime) {
         if (colliderManager.state === null) {
             colliderManager.setPointsForState(PlayerState.IdleRight, position);
@@ -705,6 +819,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
         if((hasWheel) && wheel.isActive) {
             wheel.update(deltaTime, this.collisionBody.center);
+        }
+
+        if((hasHandleBar) && handlebar.isActive) {
+            handlebar.update(deltaTime, this.collisionBody.center);
         }
 
         if(flashTimer < FLASH_TIME) {
@@ -794,6 +912,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         this.collisionBody.draw();
         chain.draw();
         wheel.draw();
+        handlebar.draw();
     };
 
     this.didCollideWith = function (otherEntity, collisionData) {
@@ -835,15 +954,15 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     hasChain = true;
                     SceneState.scenes[SCENE.GAME].gotChain();
                     break;
-                case EntityType.HandlebarPickup:
-                    playerPickup2.play();
-                    hasHandleBar = true;
-                    SceneState.scenes[SCENE.GAME].gotHandlebar();
-                    break;
                 case EntityType.WheelPickup:
                     playerPickup2.play();
                     hasWheel = true;
                     SceneState.scenes[SCENE.GAME].gotWheel();
+                    break;
+                case EntityType.HandlebarPickup:
+                    playerPickup2.play();
+                    hasHandleBar = true;
+                    SceneState.scenes[SCENE.GAME].gotHandlebar();
                     break;
                 case EntityType.EnginePickup:
                     playerPickup2.play();
@@ -868,6 +987,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.attackcrouch = new SpriteAnimation('attackcrouch', playerSpriteSheet, [23, 24, 25], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
         anims.attackjump = new SpriteAnimation('attackjump', playerSpriteSheet, [26, 27, 28], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 100], false, false, [0], playerBrightSheet);
         anims.throwing = new SpriteAnimation('throw', playerSpriteSheet, [9, 10, 11, 12], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
+        anims.pogoJumping = new SpriteAnimation('pogoJump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
+        anims.pogoFalling = new SpriteAnimation('pogoFall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
         //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false, [0], playerBrightSheet);

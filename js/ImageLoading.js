@@ -94,6 +94,8 @@ const cutsceneTruck = document.createElement("img");
 const healthpickup = document.createElement("img");
 const chainPickup = document.createElement("img");
 const wheelPickup = document.createElement("img");
+const handlebarPickup = document.createElement("img");
+const handlebar = document.createElement("img");
 
 //player related
 const playerSpriteSheet = document.createElement("img");
@@ -156,6 +158,8 @@ function loadImages() {
         { imgName: healthpickup, theFile: "interface/item_pickups.png" },
         { imgName: chainPickup, theFile: "interface/ChainPickUp.png" },
         { imgName: wheelPickup, theFile: "interface/WheelPickUp.png" },
+        { imgName: handlebarPickup, theFile: "interface/HandlebarPickUp.png" },
+        { imgName: handlebar, theFile: "interface/Handlebar.png" },
 
         // player related
         { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" }, //player_spritesheet_debug.png

@@ -1,27 +1,25 @@
-//Wheel.js
-function Wheel() {
+//Handlebar.js
+function Handlebar(player) {
     const FRAME_WIDTH = 16;
     const FRAME_HEIGHT = 16;
-    this.type = EntityType.Wheel;
+    this.type = EntityType.Handlebar;
     this.points = [
-        {x: 1, y: 1},
-        {x: 14, y: 1},
-        {x: 14, y: 14},
-        {x: 1, y: 14},
+        {x: 4, y: 1},
+        {x: 10, y: 1},
+        {x: 10, y: 16},
+        {x: 4, y: 16},
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
-    let velocity = {x: 0, y: 0};
-
+    
     this.isActive = false;
-    let currentAnimation = new SpriteAnimation('idle', wheelPickup, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true);
+    let currentAnimation = new SpriteAnimation('idle', handlebar, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true);
     this.collisionBody = new AABBCollider(this.points);
 
-    this.activate = function(x, y, speed) {
+    this.activate = function(x, y) {
         this.isActive = true;
-        velocity.x = speed;
 
-        this.position.x = x;
-        this.position.y = y;
+        this.position.x = Math.round(x - 3);
+        this.position.y = Math.round(y + 10);
 
         this.collisionBody.setPosition(this.position.x, this.position.y);
         this.collisionBody.calcOnscreen(canvas);
@@ -36,15 +34,8 @@ function Wheel() {
     this.update = function(deltaTime, playerPos) {
         currentAnimation.update(deltaTime);
 
-        this.position.x += Math.round(velocity.x * deltaTime / 1000);
-        const diff = (this.collisionBody.center.x - playerPos.x) / 4;
-        if(this.collisionBody.center.x > playerPos.x) {
-            velocity.x -= clamp((400 / (diff * diff)), 5, 20);
-            if(velocity.x < -100) velocity.x = -275;
-        } else if(this.collisionBody.center.x < playerPos.x) {
-            velocity.x += clamp((400 / (diff * diff)), 5, 20);
-            if(velocity.x > 100) velocity.x = 275;
-        }
+        this.position.x = Math.round(playerPos.x - 3);
+        this.position.y = Math.round(playerPos.y + 10);
 
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(this.position.x, this.position.y);
@@ -53,14 +44,14 @@ function Wheel() {
 
     this.draw = function() {
         if(this.isActive) {
-            currentAnimation.drawAt(Math.round(this.collisionBody.center.x - 8), Math.round(this.collisionBody.center.y - 8));
+            currentAnimation.drawAt(Math.round(this.collisionBody.center.x - 8), Math.round(this.collisionBody.center.y - 9));
             this.collisionBody.draw();
         }
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        if(otherEntity.type === EntityType.Player) {
-            this.deactivate();
+        if(isEnemy(otherEntity)) {
+            player.didPogoEnemy();
         }
     };
 
