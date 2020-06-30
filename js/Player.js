@@ -89,10 +89,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const pressedPogoKey = getKeyChecker([KEY_Z]);
     const canPogo = function() {
-        if(hasHandleBar) {
-            console.log(`Player State: ${self.fsm.getState()}`);
-            console.log(`Pressed Pogo? ${pressedPogoKey()}`);
-        }
         return (hasHandleBar && pressedPogoKey());
     }
 
@@ -569,7 +565,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     function exitJumpPogo(deltaTime) {
-//        handlebar.deactivate();
     }
 
     function enterFallPogo(deltaTime) {
