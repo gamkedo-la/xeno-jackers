@@ -6,7 +6,7 @@ function Lvl1ToLvl2CutScene() {
     let climbedTruck = false;
     let onTruck = false;
     let moving = false;
-    let truckPos = 100;
+    let truckPos = 80;
     let titlePos = 20;
     let ufo = null;
     let ufoPosition = {x: 0, y: 20};
@@ -85,8 +85,8 @@ function Lvl1ToLvl2CutScene() {
 
         fontRenderer.drawString(canvasContext, titlePos, 5, "THE HIGHWAY", FONT.Stroked);
 
-        cutScenePlayer.draw(deltaTime);
         canvasContext.drawImage(cutsceneTruck, truckPos, 68);
+        cutScenePlayer.draw(deltaTime);
 	};
 	
 	const drawBG = function() {

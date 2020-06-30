@@ -4,6 +4,8 @@ const PlayerState = {
     IdleRight:'idleRight',
     WalkLeft:'walkLeft',
     WalkRight:'walkRight',
+    ClimbLeft:'climbLeft',
+    ClimbRight:'climbRight',
     CrouchLeft:'crouchLeft',
     CrouchRight:'crouchRight',
     JumpLeft:'jumpLeft',
