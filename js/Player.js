@@ -144,7 +144,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.CrouchRight, enterCrouchingRight, doNothing, exitCrouch);
 	this.fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
 	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
-	this.fsm.addState(PlayerState.Dead, enterDead, doNothing, doNothing);
+	this.fsm.addState(PlayerState.Dead, enterDead, updateDead, exitDead);
 	this.fsm.addState(PlayerState.Thumb, enterThumbUp, doNothing, doNothing);
 	this.fsm.addState(PlayerState.AttackLeft, enterAttacking, updateAttacking, exitAttacking);
 	this.fsm.addState(PlayerState.AttackRight, enterAttacking, updateAttacking, exitAttacking);
@@ -213,9 +213,10 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         PlayerState.AttackLeft,
         PlayerState.AttackRight,
 	], PlayerState.Hurt, collidedWithEnemy);
-	this.fsm.addTransition([PlayerState.Hurt], PlayerState.Dead, healthDepleted);
+    this.fsm.addTransition([PlayerState.IdleRight, PlayerState.IdleLeft], PlayerState.Dead, healthDepleted);
 	this.fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
 	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingLeft);
+	this.fsm.addTransition([PlayerState.Dead], PlayerState.IdleRight, finishedDeathAnimation);
 	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
 	this.fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
@@ -681,19 +682,31 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	}
 
 	function healthRemaining(deltaTime) {
-		return !healthDepleted(deltaTime);
+        return true;
 	}
 
 	function enterGettingHurt(deltaTime) {
 		self.health--;
 		hurt1.play();
-	}
+    }
+    
+    function finishedDeathAnimation(deltaTime) {
+        return currentAnimation.getIsFinished() || currentAnimation != animations.dieing;
+    }
 
 	function enterDead(deltaTime) {
-        // Play death animation?
-		SceneState.scenes[SCENE.GAME].removeMe(self);
+        currentAnimation = animations.dieing
+        currentAnimation.reset()		
 		//play death sound here?
-	}
+    }
+    
+    function updateDead(deltaTime) {
+
+    }
+
+    function exitDead(deltaTime) {
+        SceneState.scenes[SCENE.GAME].removeMe(self);
+    }
 
 	function enterKnockBack(deltaTime) {
 		if (lastCollidedEnemy.collisionBody.center.x >= self.collisionBody.center.x) {
@@ -980,6 +993,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.idle.scale = SCALE;
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true, [0], playerBrightSheet);
         anims.walking.scale = SCALE;
+        anims.climbing = new SpriteAnimation('climb', playerSpriteSheet, [29, 30], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
         anims.jumping = new SpriteAnimation('jump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
         anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
         anims.landing = new SpriteAnimation('land', playerSpriteSheet, [11, 12, 13], FRAME_WIDTH, FRAME_HEIGHT, [80, 60, 60], false, false, [0], playerBrightSheet);
@@ -993,6 +1007,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false, [0], playerBrightSheet);
         anims.knockback = new SpriteAnimation('knockedback', playerSpriteSheet, [12], FRAME_WIDTH, FRAME_HEIGHT, [125], false, false, [0], playerBrightSheet);
+        anims.dieing = new SpriteAnimation('death', playerSpriteSheet, [31, 32, 33], FRAME_WIDTH, FRAME_HEIGHT, [125, 125, 400], false, false, [0], playerBrightSheet);
 
         return anims;
     };
