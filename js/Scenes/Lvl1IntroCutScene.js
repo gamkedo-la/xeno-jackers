@@ -9,9 +9,10 @@ function Lvl1IntroCutScene() {
     const ufoStallPosition = 100;
     let ufoStallTime = 1500;
     let ufoIsStalled = false;
-    let laserColors = ['#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8']
-    let laserColorIndex = 0
-
+    let laserColors = ['#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8', '#BFF8E3'];
+    let laserColorIndex = 0;
+    let laserWidth = 0;
+    let laserHeight = 0;
 
     this.transitionIn = function() {
         cutScenePlayer = new CutScenePlayer(0, 100);
@@ -66,8 +67,9 @@ function Lvl1IntroCutScene() {
             ufoPosition.x++;
         } else if((ufoPosition.x >= ufoStallPosition) && (ufoStallTime > 0)) {
             ufoStallTime -= deltaTime;
+            calculateLaserDimensions();
             ufoIsStalled = true;
-            laserColorIndex = (laserColorIndex + 2) % 5;
+            laserColorIndex = (laserColorIndex + 2) % 9;
         } else if((ufoPosition.x >= ufoStallPosition) && (!ufoTurnedAround)) {
             ufoPosition.x--;
             ufoTurnedAround = true;
@@ -86,12 +88,25 @@ function Lvl1IntroCutScene() {
         }
     };
 
+    const calculateLaserDimensions = function() {
+        if(ufoStallTime > 1200) {
+            laserWidth = 5;
+            laserHeight = canvas.height * (1500 - ufoStallTime) / 300;
+        } else if(ufoStallTime > 300) {
+            laserHeight = canvas.height;
+            laserWidth = 5 + 4 * (Math.sin((Math.PI / 180) * 3 * (1200 - ufoStallTime)));
+        } else {
+            laserWidth = 5;
+            laserHeight = canvas.height * (ufoStallTime) / 300;
+        }
+    };
+
     const draw = function(deltaTime) {
 		// render the menu background
         drawBG();
 
         if(ufoIsStalled) {
-            drawRect(117, 30, 15, canvas.height * (1500 - ufoStallTime) / 2000, laserColors[laserColorIndex]);
+            drawRect(124 - ((laserWidth - 2) / 2), 30, laserWidth, laserHeight, laserColors[laserColorIndex]);
         }
         ufo.drawAt(ufoPosition.x, ufoPosition.y);
 
