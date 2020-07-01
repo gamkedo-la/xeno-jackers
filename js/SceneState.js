@@ -11,6 +11,7 @@ const SceneState = {
 		[SCENE.PAUSE]: new PauseScene(),
 		[SCENE.CREDITS]: new CreditsScene(),
 		[SCENE.HELP]: new HelpScene(),
+		[SCENE.LVL1Intro]: new Lvl1IntroCutScene(),
 		[SCENE.LVL1LVL2]: new Lvl1ToLvl2CutScene(),
 //		[SCENE.GAMEOVER]: new GameOverScene(),
 //		[SCENE.ENDING]: new EndgameScene()

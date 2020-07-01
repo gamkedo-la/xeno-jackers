@@ -67,7 +67,8 @@ const SCENE = {
 	PAUSE:"pause",
 	GAME:"game",
 	ENDING:"ending",
-	LVL1LVL2: "lvl1lvl2"
+	LVL1Intro: "lvl1Intro",
+	LVL1LVL2: "lvl1lvl2",
 }
 
 const MAP_NAME = {
