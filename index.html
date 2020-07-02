@@ -39,7 +39,35 @@
 
         #mobileControls {
             display:none;
+            z-index:999999;
+            position:absolute;
+            bottom:0px;
+            left:0px;
+            width:100%;
         }
+
+        #mobileControls a {
+            position:absolute;
+            color:rgba(128,128,128,1);
+            font-weight:bold;
+            line-height:64px;
+            font-size:64px;
+            
+        }
+
+        #mobileControls a:hover,
+        #mobileControls a:active {
+            color:rgba(255,255,255,1);
+            background:rgba(128,128,128,1);
+        }
+
+        #mobileLEFT { left:0px; bottom:0px; }
+        #mobileRIGHT { left:128px; bottom:0px; }
+        #mobileUP { left:64px; bottom:64px; }
+        #mobileDOWN { left:64px; bottom:0px; }
+        #mobileATTACK1 { right:64px; bottom:0px; }
+        #mobileATTACK2 { right:0px; bottom:0px; }
+
 	</style>
 </head>
 <body>
@@ -99,31 +127,31 @@
 	<script src="js/SceneState.js"></script>
 	<script src="js/Main.js"></script>
 
-<!-- mobile controls -->
+<!-- mobile controls that also support mouse for debugging -->
 <div id='mobileControls'>
-    <a id='mobileUP'
-        ontouchstart='touchingUP=1' onmousedown='touchingUP=1'
-        ontouchend='touchingUP=0' onmouseup='touchingUP=0'
-    >△</a>
-    <a id='mobileDOWN'
-    ontouchstart='touchingDOWN=1' onmousedown='touchingDOWN=1'
-    ontouchend='touchingDOWN=0' onmouseup='touchingDOWN=0'
-    >▽</a>
     <a id='mobileLEFT'
-    ontouchstart='touchingLEFT=1' onmousedown='touchingLEFT=1'
-    ontouchend='touchingLEFT=0' onmouseup='touchingLEFT=0'
+    ontouchstart='touchDOWN(KEY_LEFT)' ontouchend='touchUP(KEY_LEFT)'
+    onmousedown='touchDOWN(KEY_LEFT)' onmouseup='touchUP(KEY_LEFT)'
     >◁</a>
     <a id='mobileRIGHT'
-    ontouchstart='touchingRIGHT=1' onmousedown='touchingRIGHT=1'
-    ontouchend='touchingRIGHT=0' onmouseup='touchingRIGHT=0'
+    ontouchstart='touchDOWN(KEY_RIGHT)' ontouchend='touchUP(KEY_RIGHT)'
+    onmousedown='touchDOWN(KEY_RIGHT)' onmouseup='touchUP(KEY_RIGHT)'
     >▷</a>
+    <a id='mobileUP'
+    ontouchstart='touchDOWN(KEY_UP)' ontouchend='touchUP(KEY_UP)'
+    onmousedown='touchDOWN(KEY_UP)' onmouseup='touchUP(KEY_UP)'
+    >△</a>
+    <a id='mobileDOWN'
+    ontouchstart='touchDOWN(KEY_DOWN)' ontouchend='touchUP(KEY_DOWN)'
+    onmousedown='touchDOWN(KEY_DOWN)' onmouseup='touchUP(KEY_DOWN)'
+    >▽</a>
     <a id='mobileATTACK1'
-    ontouchstart='touchingATTACK1=1' onmousedown='touchingATTACK1=1'
-    ontouchend='touchingATTACK1=0' onmouseup='touchingATTACK1=0'
+    ontouchstart='touchDOWN(KEY_SPACE)' ontouchend='touchUP(KEY_SPACE)'
+    onmousedown='touchDOWN(KEY_SPACE)' onmouseup='touchUP(KEY_SPACE)'
     >⚆</a>
     <a id='mobileATTACK2'
-    ontouchstart='touchingATTACK2=1' onmousedown='touchingATTACK2=1'
-    ontouchend='touchingATTACK2=0' onmouseup='touchingATTACK2=0'
+    ontouchstart='touchDOWN(KEY_X)' ontouchend='touchUP(KEY_X)'
+    onmousedown='touchDOWN(KEY_X)' onmouseup='touchUP(KEY_X)'
     >⚇</a>
 </div>
 

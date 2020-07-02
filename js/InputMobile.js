@@ -1,4 +1,4 @@
-// simple mobile controls
+// simple mobile controls that emulate keyboard events
 
 // at first I was going to do it via
 // document.addEventListener('touchstart', onTouchStart);
@@ -15,18 +15,37 @@
 // no scaling or finger IDs
 // and we don't bother with fancy callbacks or event managers
 
-// just check these globals anytime! cheap but effective! =)
-var touchingUP = false;
-var touchingDOWN = false;
-var touchingLEFT = false;
-var touchingRIGHT = false;
-var touchingATTACK1 = false;
-var touchingATTACK2 = false;
+var fakeEvent = {
+    key:'SPACE',
+    keyCode:0,
+    preventDefault:function(){;},
+}
+
+// emulate keyboard events
+
+function touchDOWN(key) {
+    //console.log("TOUCH DOWN " + key);
+    fakeEvent.keyCode=key;
+    keyPress(fakeEvent); 
+}
+
+function touchUP(key) {
+    //console.log("TOUCH UP " + key);
+    fakeEvent.keyCode=key;
+    keyRelease(fakeEvent); 
+}
 
 function initializeMobileControls() {
 
     console.log("Mobile Support is ENABLED. Displaying touch controls...");
+    var mobileControlsDIV = document.getElementById('mobileControls');
+    if (mobileControlsDIV) mobileControlsDIV.style.display = 'block';
 
+}
+
+function hideMobileControls() {
+    var mobileControlsDIV = document.getElementById('mobileControls');
+    if (mobileControlsDIV) mobileControlsDIV.style.display = 'none';
 }
 
 /*

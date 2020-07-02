@@ -124,7 +124,10 @@ function notifyCurrentScene(newInput, pressed) {
 }
 
 function keyPress(evt) {
-	evt.preventDefault();
+    
+    if (TOUCH_ENABLED) console.log("keyPress: "+evt.keyCode); // just for debugging
+    
+    evt.preventDefault();
 	cheats(evt.key);
 	if (evt.keyCode === KEY_PLUS) {
 		turnVolumeUp();
