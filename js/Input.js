@@ -1,3 +1,5 @@
+const TOUCH_ENABLED = false; // work in progress mobile support
+
 //Input
 const KEY_BACKSPACE = 8;
 const KEY_TAB = 9;
@@ -109,7 +111,10 @@ function initializeInput() {
 	document.addEventListener("keyup", keyRelease);
 	document.addEventListener("mousedown", mouseButtonPressed);
 	document.addEventListener("mouseup", mouseButtonReleased);
-	document.addEventListener('mousemove', calculateMousePos);
+    document.addEventListener('mousemove', calculateMousePos);
+    if (TOUCH_ENABLED) {
+        initializeMobileControls();
+    }
 }
 
 function notifyCurrentScene(newInput, pressed) {

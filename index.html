@@ -36,6 +36,10 @@
 		    left: 90px;
 		    top: 0;
 		}
+
+        #mobileControls {
+            display:none;
+        }
 	</style>
 </head>
 <body>
@@ -66,6 +70,7 @@
 	<script src="js/Chronogram.js"></script>
 	<script src="js/GraphicsCommon.js"></script>
 	<script src="js/ImageLoading.js"></script>
+	<script src="js/InputMobile.js"></script>
 	<script src="js/Input.js"></script>
 	<script src="js/Gamepad.js"></script>
     <script src="js/SoundandMusic.js"></script>
@@ -93,5 +98,35 @@
 	<script src="js/Scenes/CreditsScene.js"></script>
 	<script src="js/SceneState.js"></script>
 	<script src="js/Main.js"></script>
+
+<!-- mobile controls -->
+<div id='mobileControls'>
+    <a id='mobileUP'
+        ontouchstart='touchingUP=1' onmousedown='touchingUP=1'
+        ontouchend='touchingUP=0' onmouseup='touchingUP=0'
+    >△</a>
+    <a id='mobileDOWN'
+    ontouchstart='touchingDOWN=1' onmousedown='touchingDOWN=1'
+    ontouchend='touchingDOWN=0' onmouseup='touchingDOWN=0'
+    >▽</a>
+    <a id='mobileLEFT'
+    ontouchstart='touchingLEFT=1' onmousedown='touchingLEFT=1'
+    ontouchend='touchingLEFT=0' onmouseup='touchingLEFT=0'
+    >◁</a>
+    <a id='mobileRIGHT'
+    ontouchstart='touchingRIGHT=1' onmousedown='touchingRIGHT=1'
+    ontouchend='touchingRIGHT=0' onmouseup='touchingRIGHT=0'
+    >▷</a>
+    <a id='mobileATTACK1'
+    ontouchstart='touchingATTACK1=1' onmousedown='touchingATTACK1=1'
+    ontouchend='touchingATTACK1=0' onmouseup='touchingATTACK1=0'
+    >⚆</a>
+    <a id='mobileATTACK2'
+    ontouchstart='touchingATTACK2=1' onmousedown='touchingATTACK2=1'
+    ontouchend='touchingATTACK2=0' onmouseup='touchingATTACK2=0'
+    >⚇</a>
+</div>
+
 </body>
 </html>
+
