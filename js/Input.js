@@ -124,8 +124,7 @@ function notifyCurrentScene(newInput, pressed) {
 }
 
 function keyPress(evt) {
-    
-    if (TOUCH_ENABLED) console.log("keyPress: "+evt.keyCode); // just for debugging
+    if (TOUCH_ENABLED) console.log("keyPress: " + evt.keyCode); // just for debugging
     
     evt.preventDefault();
 	cheats(evt.key);
@@ -167,7 +166,6 @@ function keyRelease(evt) {
 }
 
 function mouseButtonPressed(evt) {
-
 	if (!didInteract) { // very first click ever?
 		didInteract = true;
 		console.log("First click, audio now available, starting bg music.")
@@ -179,10 +177,14 @@ function mouseButtonPressed(evt) {
 	evt.preventDefault();
 
 	if (evt.button === 0) {//left mouse button is button 0
-		heldButtons.push(LEFT_MOUSE_BUTTON);
+		if(SceneState.currentScene !== SCENE.GAME) {
+			heldButtons.push(LEFT_MOUSE_BUTTON);
+		}
 		notifyCurrentScene(LEFT_MOUSE_BUTTON, true);
 	} else if (evt.button === 1) {//right mouse button is button 1
-		heldButtons.push(RIGHT_MOUSE_BUTTON);
+		if(SceneState.currentScene !== SCENE.GAME) {
+			heldButtons.push(RIGHT_MOUSE_BUTTON);
+		}
 		notifyCurrentScene(RIGHT_MOUSE_BUTTON, true);
 	}
 }
@@ -246,6 +248,7 @@ function getExclusiveKeyChecker(keys) {
 				break;
 			}
 		}
+
 		return heldSet.size == 0;
 	};
 	return exclusiveKeyChecker;
