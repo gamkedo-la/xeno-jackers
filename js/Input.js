@@ -1,4 +1,4 @@
-const TOUCH_ENABLED = false; // work in progress mobile support
+const TOUCH_ENABLED = true; // work in progress mobile support
 
 //Input
 const KEY_BACKSPACE = 8;
