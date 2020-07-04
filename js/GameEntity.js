@@ -5,6 +5,7 @@ const EntityType = {
     EnemyBiker:"enemyBiker",
     EnemyBiker2:"enemyBiker2",
     EnemyCrawler:"enemyCrawler",
+    FlyingEnemy:"flyingEnemy",
     EnemyAlienGuard:"enemyAlienGuard",
     EnemyMech:"enemyMech",
     FinalBoss:"finalBoss",

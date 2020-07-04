@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.4" name="AssetPack" tilewidth="29" tileheight="34" tilecount="11" columns="0">
+<tileset version="1.2" tiledversion="1.3.4" name="AssetPack" tilewidth="34" tileheight="34" tilecount="12" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="player">
   <image width="21" height="30" source="../img/characters/PlayerSpawnImage.png"/>
@@ -33,5 +33,8 @@
  </tile>
  <tile id="10" type="enemyBiker2">
   <image width="21" height="31" source="../img/characters/Biker2Spawn.png"/>
+ </tile>
+ <tile id="11" type="flyingEnemy">
+  <image width="34" height="23" source="../img/characters/FlyingEnemySpawn.png"/>
  </tile>
 </tileset>
