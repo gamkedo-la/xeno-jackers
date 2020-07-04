@@ -209,11 +209,11 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         PlayerState.AttackLeft,
         PlayerState.AttackRight,
 	], PlayerState.Hurt, collidedWithEnemy);
-    this.fsm.addTransition([PlayerState.IdleRight, PlayerState.IdleLeft], PlayerState.Dead, healthDepleted);
+	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingLeft);
+	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingRight);
 	this.fsm.addTransition([PlayerState.Hurt], PlayerState.KnockBack, healthRemaining);
-	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleLeft, collidedWithEnvironmentWhileFallingLeft);
 	this.fsm.addTransition([PlayerState.Dead], PlayerState.IdleRight, finishedDeathAnimation);
-	this.fsm.addTransition([PlayerState.KnockBack], PlayerState.IdleRight, collidedWithEnvironmentWhileFallingRight);
+    this.fsm.addTransition([PlayerState.IdleRight, PlayerState.IdleLeft], PlayerState.Dead, healthDepleted);
 	this.fsm.addTransition([PlayerState.IdleLeft, PlayerState.IdleRight], PlayerState.Thumb, getKeyChecker([ALIAS.THUMBUP]));
 	this.fsm.addTransition([PlayerState.Thumb], PlayerState.IdleLeft, finishedThumbUpAnimation); // Not adding thumb->IdleRight transition to avoid conflicting condition
 	this.fsm.addTransition([PlayerState.AttackLeft], PlayerState.IdleLeft, finishedAttackingAnimation);
