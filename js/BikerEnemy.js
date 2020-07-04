@@ -9,7 +9,8 @@ function BikerEnemy(posX, posY) {
     const MEDIAN_TIME_TO_CACLE = 500;
     const HEALTH_DROP_PROBABILITY = 30;
     const FLASH_TIME = 300; 
-    const ATTACK_DIST = 25;
+    const ATTACK_DIST = 18;
+    const WALK_SPEED = 30;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -31,10 +32,10 @@ function BikerEnemy(posX, posY) {
     this.health = 1;
 
     this.collisionBody = new AABBCollider([
-        {x:posX + 2, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
-        {x:posX + 21, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
-        {x:posX + 21, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
-        {x:posX + 2, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
+        {x:posX + 4, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
+        {x:posX + 19, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
+        {x:posX + 19, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
+        {x:posX + 4, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
     ]);
 
     fist = new EnemyFist();
@@ -98,10 +99,23 @@ function BikerEnemy(posX, posY) {
 
             if(distToPlayer < ATTACK_DIST) {
                 if(!isAttacking) {
+                    velocity.x = 0;
                     currentAnimation = animations.attacking;
                     currentAnimation.reset();
                     isAttacking = true;
                 }
+            } else {
+                if(currentAnimation != animations.walk) {
+                    currentAnimation = animations.walk;
+                    if(isAttacking) isAttacking = false;
+                }
+
+                if(flipped) {
+                    moveLeft();
+                } else {
+                    moveRight();
+                }
+
             }
 
             if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3)) {
@@ -129,11 +143,11 @@ function BikerEnemy(posX, posY) {
     };
 
     const moveLeft = function() {
-        position.x -= 10;
+        velocity.x = -WALK_SPEED;
     };
 
     const moveRight = function() {
-        position.x += 10;
+        velocity.x = WALK_SPEED;
     };
 
     const jump = function() {
@@ -170,7 +184,7 @@ function BikerEnemy(posX, posY) {
     };
 
     this.draw = function(deltaTime) {
-        currentAnimation.drawAt(position.x - 10, position.y - 2, flipped);
+        currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
 
         //colliders only draw when DRAW_COLLIDERS is set to true
         this.collisionBody.draw();
@@ -216,6 +230,7 @@ function BikerEnemy(posX, posY) {
         anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemyBrightSheet);
         anims.idle.scale = SCALE;
 		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemyBrightSheet);
+		anims.walk = new SpriteAnimation('walking', bikerEnemySheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
 //        animations.jumping = ...
 //        animations.blocking = ...
 //        animations.crouching = ...

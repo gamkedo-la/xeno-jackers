@@ -3,8 +3,8 @@ function EnemyFist() {
     this.type = EntityType.EnemyFist;
     this.points = [
         {x: 0, y: 0},// 0,0
-        {x: 20, y: 0},// 53,0
-        {x: 20, y: 7},// 53,7
+        {x: 22, y: 0},// 53,0
+        {x: 22, y: 7},// 53,7
         {x: 0, y: 7},// 0,7
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
