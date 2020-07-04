@@ -1575,8 +1575,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":592.773333333333,
-                 "y":119.817333333333
+                 "x":160.106333333333,
+                 "y":119.150333333333
                 }, 
                 {
                  "gid":4098,
@@ -1756,7 +1756,19 @@
                  "visible":true,
                  "width":29,
                  "x":345,
-                 "y":118.333333333333
+                 "y":118.333
+                }, 
+                {
+                 "gid":4107,
+                 "height":31,
+                 "id":115,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyBiker2",
+                 "visible":true,
+                 "width":21,
+                 "x":372,
+                 "y":119.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1777,7 +1789,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":115,
+ "nextobjectid":116,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",

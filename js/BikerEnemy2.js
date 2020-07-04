@@ -1,8 +1,8 @@
-//BikerEnemy.js
-function BikerEnemy(posX, posY) {
+//BikerEnemy2.js
+function BikerEnemy2(posX, posY) {
     const SCALE = GAME_SCALE;
-    const WIDTH = 23;
-	const ANIM_WIDTH = 41
+    const WIDTH = 32;
+	const ANIM_WIDTH = 32
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_CACKLE = 1000;
@@ -29,7 +29,7 @@ function BikerEnemy(posX, posY) {
     let flashTimer = FLASH_TIME;
 
     this.type = EntityType.EnemyBiker;
-    this.health = 13; //13 is minimum amount needed for three hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
+    this.health = 7; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
 
     this.collisionBody = new AABBCollider([
         {x:posX + 4, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
@@ -104,7 +104,7 @@ function BikerEnemy(posX, posY) {
                     currentAnimation.reset();
                     isAttacking = true;
                 }
-            } else {
+            } /*else {
                 if(currentAnimation != animations.walk) {
                     currentAnimation = animations.walk;
                     if(isAttacking) isAttacking = false;
@@ -116,7 +116,7 @@ function BikerEnemy(posX, posY) {
                     moveRight();
                 }
 
-            }
+            }*/
 
             if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3)) {
                 fistIsActive = true;
@@ -227,10 +227,9 @@ function BikerEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', bikerEnemySheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemyBrightSheet);
-        anims.idle.scale = SCALE;
-		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemyBrightSheet);
-		anims.walk = new SpriteAnimation('walking', bikerEnemySheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
+        anims.idle = new SpriteAnimation('idle', bikerEnemy2Sheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemy2BrightSheet);
+		anims.attacking = new SpriteAnimation('attacking', bikerEnemy2Sheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemy2BrightSheet);
+//		anims.walk = new SpriteAnimation('walking', bikerEnemy2Sheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
 //        animations.jumping = ...
 //        animations.blocking = ...
 //        animations.crouching = ...
