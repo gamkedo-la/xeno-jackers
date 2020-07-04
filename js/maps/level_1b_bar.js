@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1468,8 +1468,8 @@
                  "type":"levelExit",
                  "visible":true,
                  "width":0,
-                 "x":2262.56818181818,
-                 "y":271.181818181818
+                 "x":2262.57,
+                 "y":271.182
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1563,8 +1563,8 @@
                  "type":"enemyMech",
                  "visible":true,
                  "width":25,
-                 "x":2195.45545454545,
-                 "y":310.545363636364
+                 "x":2195.46,
+                 "y":310.545
                 }, 
                 {
                  "gid":4097,
@@ -1745,6 +1745,18 @@
                  "width":16,
                  "x":824,
                  "y":88
+                }, 
+                {
+                 "gid":4106,
+                 "height":9,
+                 "id":114,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyCrawler",
+                 "visible":true,
+                 "width":29,
+                 "x":345,
+                 "y":118.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1765,7 +1777,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":114,
+ "nextobjectid":115,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",

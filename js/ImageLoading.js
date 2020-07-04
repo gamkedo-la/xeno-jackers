@@ -77,10 +77,12 @@ const bikerEnemySheet = document.createElement("img");
 const enemyAlienGuardSheet = document.createElement("img");
 const enemyMechSpriteSheet = document.createElement("img");
 const ufoSpriteSheet = document.createElement("img");
+const enemyCrawlerSheet = document.createElement("img");
     //bright sheets
 let bikerEnemyBrightSheet;
 let enemyAlienGuardBrightSheet;
 let enemyMechSpriteBrightSheet;
+let enemyCrawlerBrightSheet;
 
 //screens
 const uiMenuBorderPic = document.createElement("img");
@@ -124,6 +126,7 @@ function countLoadedImageAndLaunchIfReady() {
         bikerEnemyBrightSheet = brightLight.imageForImage(bikerEnemySheet);
         enemyAlienGuardBrightSheet = brightLight.imageForImage(enemyAlienGuardSheet);
         enemyMechSpriteBrightSheet = brightLight.imageForImage(enemyMechSpriteSheet);
+        enemyCrawlerBrightSheet = brightLight.imageForImage(enemyCrawlerSheet);
         playerBrightSheet = brightLight.imageForImage(playerSpriteSheet);
         loadingDoneSoStartGame();
     }
@@ -144,6 +147,7 @@ function loadImages() {
         { imgName: bikerEnemySheet, theFile: "characters/enemy_biker.png" },
         { imgName: enemyAlienGuardSheet, theFile: "characters/enemy_alien_guard.png" },
         { imgName: enemyMechSpriteSheet, theFile: "characters/enemy_mech_spritesheet.png" },
+        { imgName: enemyCrawlerSheet, theFile: "characters/enemy_crawler_spritesheet.png" },
         { imgName: ufoSpriteSheet, theFile: "characters/ufo_spritesheet.png" },
 
         // screens

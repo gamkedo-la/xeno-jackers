@@ -269,6 +269,10 @@ function GameScene() {
                     anEntity = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy
                     enemies.push(anEntity);
                     break;
+                case EntityType.EnemyCrawler:
+                    anEntity = new CrawlerEnemy(data.x, data.y - 10);//10 is height of crawler enemy
+                    enemies.push(anEntity);
+                    break;
                 case EntityType.EnemyAlienGuard:
                     anEntity = new EnemyAlienGuard(data.x, data.y - 33);
                     enemies.push(anEntity);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="114">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="115">
  <editorsettings>
   <export target="../../js/maps/level_1b_bar.js" format="js"/>
  </editorsettings>
@@ -571,6 +571,7 @@
   <object id="111" type="lamp" gid="4102" x="744" y="88" width="16" height="16"/>
   <object id="112" type="lamp" gid="4102" x="776" y="88" width="16" height="16"/>
   <object id="113" type="lamp" gid="4102" x="824" y="88" width="16" height="16"/>
+  <object id="114" gid="4106" x="345" y="118.333" width="29" height="9"/>
  </objectgroup>
  <layer id="5" name="ForegroundTiles" width="320" height="126">
   <data encoding="csv">

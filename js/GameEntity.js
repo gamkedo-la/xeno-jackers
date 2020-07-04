@@ -3,6 +3,7 @@ const EntityType = {
     //Characters
     Player:"player",
     EnemyBiker:"enemyBiker",
+    EnemyCrawler:"enemyCrawler",
     EnemyAlienGuard:"enemyAlienGuard",
     EnemyMech:"enemyMech",
     FinalBoss:"finalBoss",
@@ -42,6 +43,7 @@ const EntityType = {
 function isEnemy(entity) {
     switch(entity.type) {
         case EntityType.EnemyBiker:
+        case EntityType.EnemyCrawler:
         case EntityType.EnemyAlienGuard:
         case EntityType.EnemyMech:
             return true;
