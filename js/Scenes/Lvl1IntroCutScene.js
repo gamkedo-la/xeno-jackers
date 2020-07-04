@@ -13,9 +13,11 @@ function Lvl1IntroCutScene() {
     let laserColorIndex = 0;
     let laserWidth = 0;
     let laserHeight = 0;
+    let barBackImage = barBack;
+    let barFrontImage = barFront;
 
     this.transitionIn = function() {
-        cutScenePlayer = new CutScenePlayer(0, 100);
+        cutScenePlayer = new CutScenePlayer(0, 108);
         ufo = new SpriteAnimation('idle', ufoSpriteSheet, [0, 1, 2, 3], 50, 26, [360], false, true);
         const titleWidth = fontRenderer.getWidthOfText("THE BAR", 1, FONT.Stroked);
         titlePos = Math.round((canvas.width - titleWidth) / 2);
@@ -46,22 +48,6 @@ function Lvl1IntroCutScene() {
     const update = function(deltaTime) {
         cutScenePlayer.update(deltaTime);
         ufo.update(deltaTime);
-        
-        /*if((cutScenePlayer.position.x >= 53) && (!reachedTruck)) {
-            reachedTruck = true;
-            cutScenePlayer.climb();
-        } else if((cutScenePlayer.position.y < 34) && (!climbedTruck)) {
-            climbedTruck = true;
-            cutScenePlayer.walk();
-        } else if((cutScenePlayer.position.x > 80) && (!onTruck)) {
-            cutScenePlayer.idle();
-            onTruck = true;
-        } else if((onTruck) && (truckPos <= canvas.width + 10)) {
-            truckPos++;
-            cutScenePlayer.position.x++;
-        } else if((onTruck) && (truckPos > canvas.width + 10)){
-            SceneState.setState(SCENE.GAME);
-        }*/
 
         if((ufoPosition.x < ufoStallPosition) && (!ufoTurnedAround)) {
             ufoPosition.x++;
@@ -70,6 +56,8 @@ function Lvl1IntroCutScene() {
             calculateLaserDimensions();
             ufoIsStalled = true;
             laserColorIndex = (laserColorIndex + 2) % 9;
+            barBackImage = barBackBroke;
+            barFrontImage = barFrontBroke;
         } else if((ufoPosition.x >= ufoStallPosition) && (!ufoTurnedAround)) {
             ufoPosition.x--;
             ufoTurnedAround = true;
@@ -112,12 +100,16 @@ function Lvl1IntroCutScene() {
 
         fontRenderer.drawString(canvasContext, titlePos, 5, "THE BAR", FONT.Stroked);
 
+        canvasContext.drawImage(barBackImage, 53, 61);
+
         cutScenePlayer.draw(deltaTime);
+
+        canvasContext.drawImage(barFrontImage, 83, 95);
+
 	};
 	
 	const drawBG = function() {
         // fill the background since there is no image for now
         drawRect(0, 0, canvas.width, canvas.height, "#252525");
-        canvasContext.drawImage(titleScreenPic, 0, 0);
     };
 }

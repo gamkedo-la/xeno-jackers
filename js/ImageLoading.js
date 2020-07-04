@@ -90,6 +90,10 @@ let enemyFlyerBrightSheet;
 
 //screens
 const uiMenuBorderPic = document.createElement("img");
+const barBack = document.createElement("img");
+const barBackBroke = document.createElement("img");
+const barFront = document.createElement("img");
+const barFrontBroke = document.createElement("img");
 
 //environment objects
 const lampPic = document.createElement("img");
@@ -148,6 +152,10 @@ function loadImages() {
         // tiles
         { imgName: tileSheet, theFile: "backgrounds/spritesheet_master.png" },
         { imgName: tempGameSceneBG, theFile: "backgrounds/background_test.png" },
+        { imgName: barFront, theFile: "backgrounds/FinalDestination2.png" },
+        { imgName: barBack, theFile: "backgrounds/FinalDestinationBack.png" },
+        { imgName: barBackBroke, theFile: "backgrounds/FinalDestinationBackDamaged.png" },
+        { imgName: barFrontBroke, theFile: "backgrounds/FinalDestinationFrontDamaged.png" },
 
         // characters
         { imgName: bikerEnemySheet, theFile: "characters/enemy_biker.png" },
