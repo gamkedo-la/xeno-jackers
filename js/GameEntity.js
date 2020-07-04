@@ -5,7 +5,7 @@ const EntityType = {
     EnemyBiker:"enemyBiker",
     EnemyBiker2:"enemyBiker2",
     EnemyCrawler:"enemyCrawler",
-    FlyingEnemy:"flyingEnemy",
+    EnemyFlyer:"flyingEnemy",
     EnemyAlienGuard:"enemyAlienGuard",
     EnemyMech:"enemyMech",
     FinalBoss:"finalBoss",
@@ -47,6 +47,7 @@ function isEnemy(entity) {
         case EntityType.EnemyBiker:
         case EntityType.EnemyBiker2:
         case EntityType.EnemyCrawler:
+        case EntityType.EnemyFlyer:
         case EntityType.EnemyAlienGuard:
         case EntityType.EnemyMech:
             return true;

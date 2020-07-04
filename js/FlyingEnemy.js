@@ -6,17 +6,22 @@ function FlyingEnemy(posX, posY) {
     const SIZE = {width:WIDTH, height:HEIGHT};
     const HEALTH_DROP_PROBABILITY = 30;
     const FLASH_TIME = 300;
-    const WALK_SPEED = 30;
+    const ATTACK_DIST = 100;
+    const ATTACK_SPEED = 100;
+    const RESET_SPEED = 50;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
+    let spawnPoint = {x:posX, y:posY};
     let velocity = {x:0, y:0};
 
     let flipped = false;
+    let isAttacking = false;
+    let isResetting = false;
 
     let flashTimer = FLASH_TIME;
 
-    this.type = EntityType.EnemyCrawler;
+    this.type = EntityType.EnemyFlyer;
     this.health = 1;
 
     this.collisionBody = new AABBCollider([
@@ -33,6 +38,8 @@ function FlyingEnemy(posX, posY) {
     this.setSpawnPoint = function(x, y) {
         position.x = x;
         position.y = y;
+        spawnPoint.x = x;
+        spawnPoint.y = y;
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
@@ -61,9 +68,6 @@ function FlyingEnemy(posX, posY) {
             }
 
             const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
-
-            velocity.y += GRAVITY * deltaTime / 1000;
-            if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
             const yPos = position.y + Math.round(velocity.y * deltaTime / 1000);
 
             this.setPosition(xPos, yPos);
@@ -71,23 +75,53 @@ function FlyingEnemy(posX, posY) {
             let distToPlayer = 0;
             if(player.collisionBody.center.x < this.collisionBody.center.x) {
                 flipped = true;
-                moveLeft();
+                distToPlayer = this.collisionBody.center.x - player.collisionBody.center.x;
             } else {
                 flipped = false;
-                moveRight();
+                distToPlayer = player.collisionBody.center.x - this.collisionBody.center.x;
+            }
+
+            if(distToPlayer < ATTACK_DIST) {
+                let dirToPlayer = {x: 0, y: 0};
+                dirToPlayer.x = player.collisionBody.center.x - this.collisionBody.center.x;
+                dirToPlayer.y = player.collisionBody.center.y - this.collisionBody.center.y;
+                dirToPlayer = normalize(dirToPlayer);
+                if(magnitudeOfVec(velocity) < 0.1) {
+                    //need to start attacking
+                    velocity.x = ATTACK_SPEED * dirToPlayer.x;
+                    velocity.y = ATTACK_SPEED * dirToPlayer.y;
+                    //currentAnimation = animations.attacking;
+                    //currentAnimation.reset();
+                    isAttacking = true;
+                } else {
+                    //already attacking, should continue or reset?
+                    if((isAttacking) && (dotProduct(dirToPlayer, velocity) > 0)) {
+                        //keep attacking
+                    } else {
+                        //reset
+                        isAttacking = false;
+                        let dirToSpawn = {x: spawnPoint.x - this.collisionBody.center.x - canvas.offsetX, y: spawnPoint.y - this.collisionBody.center.y + canvas.offsetY};
+                        if(magnitudeOfVec(dirToSpawn) < 32) {//No idea why 32 is the magic number
+                            //reached spawn point, stop resetting
+                            isResetting = false;
+                            velocity.x = 0;
+                            velocity.y = 0;
+                        } else if(isResetting) {
+                            //continue resetting
+                        } else {
+                            //need to start resetting
+                            isResetting = true;
+                            dirToSpawn = normalize(dirToSpawn);
+                            velocity.x = RESET_SPEED * dirToSpawn.x;
+                            velocity.y = RESET_SPEED * dirToSpawn.y;
+                        }
+                    }
+                }
             }
         }
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
-    };
-
-    const moveLeft = function() {
-        velocity.x = -WALK_SPEED;
-    };
-
-    const moveRight = function() {
-        velocity.x = WALK_SPEED;
     };
 
     this.draw = function(deltaTime) {
@@ -99,11 +133,7 @@ function FlyingEnemy(posX, posY) {
 
     this.didCollideWith = function(otherEntity, collisionData) {
         if(otherEntity.type === EntityType.Player) {
-            if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
-                position.x -= 5;
-            } else {
-                position.x += 5;
-            }
+            isAttacking = false;
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
             if(this.health <= 0) {
@@ -120,10 +150,6 @@ function FlyingEnemy(posX, posY) {
                 this.setPosition(position.x + collisionData.deltaX, position.y);
             } else {
                 this.setPosition(position.x, position.y + collisionData.deltaY);
-                if(collisionData.deltaY < 0) {
-                    isOnGround = true;
-                    velocity.y = 0;
-                }
             }
 
             this.collisionBody.setPosition(position.x, position.y);
@@ -133,7 +159,7 @@ function FlyingEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', enemyFlyerSheet, [0, 1, 2, 3], ANIM_WIDTH, HEIGHT, [256], false, true, [0], enemyFlyerBrightSheet);
+        anims.idle = new SpriteAnimation('idle', enemyFlyerSheet, [0, 1, 2, 3], ANIM_WIDTH, HEIGHT, [128], false, true, [0], enemyFlyerBrightSheet);
         return anims;
     };
     const animations = initializeAnimations();
