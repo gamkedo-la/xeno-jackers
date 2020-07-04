@@ -201,23 +201,25 @@ function GameScene() {
 
     this.playerAtExit = function() {
         //We'll want to check if the current level's boss has been defeated, but for now...
+        this.reset();
         switch(currentLevelName) {
             case MAP_NAME.Bar:
                 currentLevelName = MAP_NAME.Highway;
+                SceneState.setState(SCENE.LVL1LVL2);
                 break;
             case MAP_NAME.Highway:
                 currentLevelName = MAP_NAME.Area51;
+                SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl2Lvl3 Cutscene
                 break;
             case MAP_NAME.Area51:
                 currentLevelName = MAP_NAME.Boss;
+                SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl3Boss Cutscene
                 break;
             case MAP_NAME.Boss:
                 currentLevelName = MAP_NAME.Bar;
+                SceneState.setState(SCENE.CREDITS);
                 break;
         }
-        
-        this.reset();
-        SceneState.setState(SCENE.LVL1LVL2);
     };
 
     const verifyNewKeyPressed = function(newKeyEvent, pressed, pressedKeys) {
