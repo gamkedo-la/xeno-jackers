@@ -184,11 +184,13 @@ function BikerEnemy2(posX, posY) {
     };
 
     this.draw = function(deltaTime) {
-        currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
+        if(this.collisionBody.isOnScreen) {
+            currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
 
-        //colliders only draw when DRAW_COLLIDERS is set to true
-        this.collisionBody.draw();
-        fist.draw();
+            //colliders only draw when DRAW_COLLIDERS is set to true
+            this.collisionBody.draw();
+            fist.draw();
+        }
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {

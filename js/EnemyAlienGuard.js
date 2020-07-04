@@ -124,10 +124,12 @@ function EnemyAlienGuard(posX, posY) {
     };
 
     this.draw = function(deltaTime) {
-        currentAnimation.drawAt(position.x, position.y - 3, flipped);
+        if(this.collisionBody.isOnScreen) {
+            currentAnimation.drawAt(position.x, position.y - 3, flipped);
 
-        //colliders only draw when DRAW_COLLIDERS is set to true
-        this.collisionBody.draw();
+            //colliders only draw when DRAW_COLLIDERS is set to true
+            this.collisionBody.draw();
+        }
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
