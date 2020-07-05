@@ -63,6 +63,10 @@ function BikerEnemy(posX, posY) {
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
 
+        if(currentAnimation === animations.death) {
+            return;
+        }
+
         if(this.collisionBody.isOnScreen) {
             if(flashTimer < FLASH_TIME) {
                 flashTimer += deltaTime;
@@ -185,7 +189,12 @@ function BikerEnemy(posX, posY) {
 
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
-            currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
+            if(currentAnimation === animations.death) {
+                currentAnimation.drawAt(position.x, position.y + 10, flipped);
+            } else {
+                currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
+            }
+
 
             //colliders only draw when DRAW_COLLIDERS is set to true
             this.collisionBody.draw();
@@ -202,14 +211,21 @@ function BikerEnemy(posX, posY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-            if(this.health <= 0) {
+            if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
-                SceneState.scenes[SCENE.GAME].removeMe(this);
+                currentAnimation = animations.death;
+                flashTimer = FLASH_TIME;
+                currentAnimation.useBrightImage = false;
+            } else if(currentAnimation === animations.death) {
+                if(currentAnimation.getIsFinished()) {
+                    SceneState.scenes[SCENE.GAME].removeMe(this);
+                }
+            } else if(this.health > 0) {
+                flashTimer = 0;
             }
-            flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
@@ -233,7 +249,9 @@ function BikerEnemy(posX, posY) {
         anims.idle.scale = SCALE;
 		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemyBrightSheet);
 		anims.walk = new SpriteAnimation('walking', bikerEnemySheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100, 100, 100, 90,  70, 65, 65, 75, 80, 85], false, true, [0], bikerEnemyBrightSheet);
-//        animations.jumping = ...
+		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
+        //anims.death = new SpriteAnimation('dieing', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
+        //        animations.jumping = ...
 //        animations.blocking = ...
 //        animations.crouching = ...
 

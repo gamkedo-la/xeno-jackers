@@ -80,6 +80,7 @@ const enemyMechSpriteSheet = document.createElement("img");
 const ufoSpriteSheet = document.createElement("img");
 const enemyCrawlerSheet = document.createElement("img");
 const enemyFlyerSheet = document.createElement("img");
+const deathSheet = document.createElement("img");
     //bright sheets
 let bikerEnemyBrightSheet;
 let bikerEnemy2BrightSheet;
@@ -165,6 +166,7 @@ function loadImages() {
         { imgName: enemyMechSpriteSheet, theFile: "characters/enemy_mech_spritesheet.png" },
         { imgName: enemyCrawlerSheet, theFile: "characters/enemy_crawler_spritesheet.png" },
         { imgName: enemyFlyerSheet, theFile: "characters/enemy_flyer_spritesheet.png" },
+        { imgName: deathSheet, theFile: "characters/deathpoof.png" },
         { imgName: ufoSpriteSheet, theFile: "characters/ufo_spritesheet.png" },
 
         // screens
