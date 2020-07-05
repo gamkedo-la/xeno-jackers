@@ -353,6 +353,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		} else if (checkForPressedKeys([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2])) {
 			velocity.x = -WALK_SPEED;
             flipped = true;
+        } else {
+            velocity.x = 0;
         }
     };
 

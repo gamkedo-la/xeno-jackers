@@ -248,6 +248,7 @@ function GameScene() {
         environmentColliders.length = 0;
         otherEntities.length = 0;
         
+        highwayScrollTime = 0;
         reloading = false;
     };
 
