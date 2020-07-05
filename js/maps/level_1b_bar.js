@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -1515,8 +1515,8 @@
                  "type":"enemyAlienGuard",
                  "visible":true,
                  "width":21,
-                 "x":1584,
-                 "y":312
+                 "x":1628.90909090909,
+                 "y":310.909090909091
                 }, 
                 {
                  "gid":4100,
@@ -1575,8 +1575,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":160.106333333333,
-                 "y":119.150333333333
+                 "x":160.106,
+                 "y":119.15
                 }, 
                 {
                  "gid":4098,
@@ -1587,20 +1587,8 @@
                  "type":"enemyBiker",
                  "visible":true,
                  "width":21,
-                 "x":1218.43,
-                 "y":237.318
-                }, 
-                {
-                 "gid":4099,
-                 "height":32,
-                 "id":84,
-                 "name":"alienGuard1",
-                 "rotation":0,
-                 "type":"enemyAlienGuard",
-                 "visible":true,
-                 "width":21,
-                 "x":1848,
-                 "y":312
+                 "x":1246.24818181818,
+                 "y":238.227090909091
                 }, 
                 {
                  "gid":4102,
@@ -1755,8 +1743,8 @@
                  "type":"enemyCrawler",
                  "visible":true,
                  "width":29,
-                 "x":345,
-                 "y":118.333
+                 "x":902.272727272727,
+                 "y":118.696636363636
                 }, 
                 {
                  "gid":4107,
@@ -1767,20 +1755,8 @@
                  "type":"enemyBiker2",
                  "visible":true,
                  "width":21,
-                 "x":372,
-                 "y":119.666666666667
-                }, 
-                {
-                 "gid":4108,
-                 "height":23,
-                 "id":116,
-                 "name":"",
-                 "rotation":0,
-                 "type":"flyingEnemy",
-                 "visible":true,
-                 "width":34,
-                 "x":77.6666666666667,
-                 "y":49.3333333333333
+                 "x":294.909090909091,
+                 "y":118.576090909091
                 }, 
                 {
                  "gid":4108,
@@ -1791,8 +1767,116 @@
                  "type":"flyingEnemy",
                  "visible":true,
                  "width":34,
-                 "x":278.333333333333,
-                 "y":48.3333333333333
+                 "x":1087.06063636364,
+                 "y":65.9696636363636
+                }, 
+                {
+                 "gid":4108,
+                 "height":23,
+                 "id":118,
+                 "name":"",
+                 "rotation":0,
+                 "type":"flyingEnemy",
+                 "visible":true,
+                 "width":34,
+                 "x":1464.87881818182,
+                 "y":221.424209090909
+                }, 
+                {
+                 "gid":4107,
+                 "height":31,
+                 "id":119,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyBiker2",
+                 "visible":true,
+                 "width":21,
+                 "x":56.9090909090909,
+                 "y":114.030636363636
+                }, 
+                {
+                 "gid":4108,
+                 "height":23,
+                 "id":120,
+                 "name":"",
+                 "rotation":0,
+                 "type":"flyingEnemy",
+                 "visible":true,
+                 "width":34,
+                 "x":1739.78790909091,
+                 "y":220.151481818182
+                }, 
+                {
+                 "gid":4106,
+                 "height":9,
+                 "id":121,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyCrawler",
+                 "visible":true,
+                 "width":29,
+                 "x":1566.45454545455,
+                 "y":308.878454545455
+                }, 
+                {
+                 "gid":4107,
+                 "height":31,
+                 "id":122,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyBiker2",
+                 "visible":true,
+                 "width":21,
+                 "x":338.363636363636,
+                 "y":119.303363636364
+                }, 
+                {
+                 "gid":4107,
+                 "height":31,
+                 "id":123,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyBiker2",
+                 "visible":true,
+                 "width":21,
+                 "x":563.636363636364,
+                 "y":119.485181818182
+                }, 
+                {
+                 "gid":4107,
+                 "height":31,
+                 "id":124,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enemyBiker2",
+                 "visible":true,
+                 "width":21,
+                 "x":863.454545454545,
+                 "y":119.848818181818
+                }, 
+                {
+                 "gid":4108,
+                 "height":23,
+                 "id":125,
+                 "name":"",
+                 "rotation":0,
+                 "type":"flyingEnemy",
+                 "visible":true,
+                 "width":34,
+                 "x":1294.51518181818,
+                 "y":163.424209090909
+                }, 
+                {
+                 "gid":4099,
+                 "height":32,
+                 "id":126,
+                 "name":"alienGuard1",
+                 "rotation":0,
+                 "type":"enemyAlienGuard",
+                 "visible":true,
+                 "width":21,
+                 "x":1855.63636363636,
+                 "y":310.090909090909
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1813,10 +1897,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":118,
+ "nextobjectid":127,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"1.4.1",
  "tileheight":8,
  "tilesets":[
         {
@@ -1829,6 +1913,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.2,
+ "version":1.4,
  "width":320
 });
