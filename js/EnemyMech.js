@@ -13,7 +13,7 @@ function EnemyMech(startX, startY) {
     let anims = {
         idle: new SpriteAnimation('idle', enemyMechSpriteSheet, [0,1,2,3,4,5,6,7,8,9], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
-        shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [10,11,12,13], WIDTH, HEIGHT, [100], false, false, [0], enemyMechSpriteBrightSheet),
+        shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [300, 400], false, false, [0], enemyMechSpriteBrightSheet),
     };
     let currentAnimation = anims.idle;
     let phase1Complete = false;
@@ -21,6 +21,7 @@ function EnemyMech(startX, startY) {
     let isPunching = false;
     let fistIsActive = false;
     let isShooting = false;
+    let didShoot = false;
 
     fist = new EnemyFist();
 
@@ -137,20 +138,33 @@ function EnemyMech(startX, startY) {
 
         if(isShooting) {
             const currentFrameIndex = currentAnimation.getCurrentFrameIndex();
-            if((currentFrameIndex === 1) || (currentFrameIndex === 2)) {
+            if(currentFrameIndex === 0) {
                 fistIsActive = true;
                 if(flipped) {
                     fist.activate(position.x + 4, position.y + 13);
                 } else {
                     fist.activate(position.x - 9, position.y + 13);
                 }
-            } else if(currentFrameIndex === 3) {
+
+                
+            } else if(currentFrameIndex === 1) {
+                if(!didShoot) {
+                    didShoot = true;
+                    if(flipped) {
+                        SceneState.scenes[SCENE.GAME].addFlyingFist(position.x + 9, position.y + 13, flipped);
+                    } else {
+                        SceneState.scenes[SCENE.GAME].addFlyingFist(position.x - 9, position.y + 13, flipped);
+                    }
+                }
+
                 if(currentAnimation.getIsFinished()) {
                     currentAnimation = anims.idle;
+                    isShooting = false;
+                    didShoot = false;
+                    
+                    fist.deactivate();
+                    fistIsActive = false;
                 }
-                
-                fist.deactivate();
-                fistIsActive = false;
             } else {
                 fist.deactivate();
                 fistIsActive = false;
@@ -184,13 +198,14 @@ function EnemyMech(startX, startY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-            if(this.health < 2 * MAX_HEALTH / 3) {
-                phase1Complete = true;
+            if(this.health <= 0) {
+                SceneState.scenes[SCENE.GAME].mechDefeated(this);
             } else if(this.health < MAX_HEALTH / 3) {
                 phase2Complete = true;
-            } else if(this.health <= 0) {
-                SceneState.scenes[SCENE.GAME].mechDefeated(this);
-            }
+            } else if(this.health < 2 * MAX_HEALTH / 3) {
+                phase1Complete = true;
+            } 
+            
             flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap

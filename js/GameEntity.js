@@ -19,6 +19,7 @@ const EntityType = {
     //EnemyTools
     EnemyBullet:"enemyBullet",
     EnemyFist:"enemyFist",
+    FlyingFist:"flyingFist",
 
     //Pickups
     Health:"health",
@@ -72,6 +73,7 @@ function isEnemyWeapon(entity) {
     switch(entity.type) {
         case EntityType.EnemyBullet:
         case EntityType.EnemyFist:
+        case EntityType.FlyingFist:
             return true;
         default:
             return false;

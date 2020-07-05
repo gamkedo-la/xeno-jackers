@@ -186,6 +186,13 @@ function GameScene() {
         collisionManager.addEntity(newHealth);
     };
 
+    this.addFlyingFist = function(posX, posY, flipped) {
+        const newFist = new FlyingFist(flipped);
+        newFist.activate(posX, posY);
+        otherEntities.push(newFist);
+        collisionManager.addEntity(newFist);
+    }
+
     this.gotChain = function() {
         hasChain = true;
         gameUI.hasChain = true;
