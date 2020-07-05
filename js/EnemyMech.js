@@ -2,7 +2,8 @@
 function EnemyMech(startX, startY) {
     const WIDTH = 36;
     const HEIGHT = 36;
-    const ATTACK_DIST = 30;
+    const MELEE_ATTACK_DIST = 28;
+    const RANGE_ATTACK_DIST = 60;
     const FLASH_TIME = 300; 
 
     let flipped = false;
@@ -12,14 +13,19 @@ function EnemyMech(startX, startY) {
     let anims = {
         idle: new SpriteAnimation('idle', enemyMechSpriteSheet, [0,1,2,3,4,5,6,7,8,9], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
+        shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [10,11,12,13], WIDTH, HEIGHT, [100], false, false, [0], enemyMechSpriteBrightSheet),
     };
     let currentAnimation = anims.idle;
     let phase1Complete = false;
     let phase2Complete = false;
-    let isAttacking = false;
-    let fistIsActive = false
+    let isPunching = false;
+    let fistIsActive = false;
+    let isShooting = false;
 
-    this.health = 100;
+    fist = new EnemyFist();
+
+    const MAX_HEALTH = 100;
+    this.health = MAX_HEALTH;
     this.type = EntityType.EnemyMech;
     this.collisionBody = new AABBCollider([
         {x:startX + 2, y:startY + 3},
@@ -68,19 +74,92 @@ function EnemyMech(startX, startY) {
                 distToPlayer = player.collisionBody.center.x - this.collisionBody.center.x;
             }
 
-            if(distToPlayer < ATTACK_DIST) {
-                if(!isAttacking) {
-                    velocity.x = 0;
-                    currentAnimation = anims.punch;
-                    isAttacking = true;
-                }
+            if(!phase1Complete) {
+                checkPhase1Attack(distToPlayer);
+            } else if(!phase2Complete) {
+                checkPhase2Attack(distToPlayer);
             } else {
-                currentAnimation = anims.idle;
+                checkPhase3Attack(distToPlayer);
             }
         }
 
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
+    };
+
+    const checkPhase1Attack = function(distToPlayer) {
+        if(distToPlayer < MELEE_ATTACK_DIST) {
+            if(!isPunching) {
+                velocity.x = 0;
+                currentAnimation = anims.punch;
+                isPunching = true;
+            }
+        } else {
+            currentAnimation = anims.idle;
+            fist.deactivate();
+            fistIsActive = false;
+            isPunching = false;
+        }
+
+        if(isPunching) {
+            const currentFrameIndex = currentAnimation.getCurrentFrameIndex();
+            if((currentFrameIndex === 1) || (currentFrameIndex === 2) || (currentFrameIndex === 5)) {
+                fistIsActive = true;
+                if(flipped) {
+                    fist.activate(position.x + 4, position.y + 13);
+                } else {
+                    fist.activate(position.x - 9, position.y + 13);
+                }
+            } else {
+                fist.deactivate();
+                fistIsActive = false;
+            }
+        }
+    };
+
+    const checkPhase2Attack = function(distToPlayer) {
+        if(distToPlayer < MELEE_ATTACK_DIST - 3) {
+            checkPhase1Attack(distToPlayer);
+            return;
+        } else if(distToPlayer < RANGE_ATTACK_DIST) {
+            if(!isShooting) {
+                velocity.x = 0;
+                currentAnimation = anims.shoot;
+                currentAnimation.reset();
+                isShooting = true;
+            }
+        } else {
+            currentAnimation = anims.idle;
+            fist.deactivate();
+            fistIsActive = false;
+            isShooting = false;
+        }
+
+        if(isShooting) {
+            const currentFrameIndex = currentAnimation.getCurrentFrameIndex();
+            if((currentFrameIndex === 1) || (currentFrameIndex === 2)) {
+                fistIsActive = true;
+                if(flipped) {
+                    fist.activate(position.x + 4, position.y + 13);
+                } else {
+                    fist.activate(position.x - 9, position.y + 13);
+                }
+            } else if(currentFrameIndex === 3) {
+                if(currentAnimation.getIsFinished()) {
+                    currentAnimation = anims.idle;
+                }
+                
+                fist.deactivate();
+                fistIsActive = false;
+            } else {
+                fist.deactivate();
+                fistIsActive = false;
+            }
+        }
+    };
+
+    const checkPhase3Attack = function(distToPlayer) {
+
     };
 
     this.draw = function (deltaTime) {
@@ -92,6 +171,7 @@ function EnemyMech(startX, startY) {
             }
             
             this.collisionBody.draw();
+            fist.draw();
         }        
     };
 
@@ -104,8 +184,12 @@ function EnemyMech(startX, startY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-            if(this.health <= 0) {
-                SceneState.scenes[SCENE.GAME].removeMe(this);
+            if(this.health < 2 * MAX_HEALTH / 3) {
+                phase1Complete = true;
+            } else if(this.health < MAX_HEALTH / 3) {
+                phase2Complete = true;
+            } else if(this.health <= 0) {
+                SceneState.scenes[SCENE.GAME].mechDefeated(this);
             }
             flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {

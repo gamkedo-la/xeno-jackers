@@ -26,6 +26,8 @@ function GameScene() {
     let hasHandlebar = false;
     let hasEngine = false;
 
+    let canExitBar = false;
+
     this.transitionIn = function() {
         if(mapLoader === null) {
             mapLoader = new MapLoader();
@@ -165,6 +167,11 @@ function GameScene() {
         score += pointsForType(entityToRemove.type);
     };
 
+    this.mechDefeated = function(mech) {
+        canExitBar = true;
+        this.removeMe(mech);
+    };
+
     this.addCollisionEntity = function(entity) {
         collisionManager.addEntity(entity);
     };
@@ -201,21 +208,26 @@ function GameScene() {
 
     this.playerAtExit = function() {
         //We'll want to check if the current level's boss has been defeated, but for now...
-        this.reset();
         switch(currentLevelName) {
             case MAP_NAME.Bar:
-                currentLevelName = MAP_NAME.Highway;
-                SceneState.setState(SCENE.LVL1LVL2);
+                if(canExitBar) {
+                    this.reset();
+                    currentLevelName = MAP_NAME.Highway;
+                    SceneState.setState(SCENE.LVL1LVL2);
+                }
                 break;
             case MAP_NAME.Highway:
+                this.reset();
                 currentLevelName = MAP_NAME.Area51;
                 SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl2Lvl3 Cutscene
                 break;
             case MAP_NAME.Area51:
+                this.reset();
                 currentLevelName = MAP_NAME.Boss;
                 SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl3Boss Cutscene
                 break;
             case MAP_NAME.Boss:
+                this.reset();
                 currentLevelName = MAP_NAME.Bar;
                 SceneState.setState(SCENE.CREDITS);
                 break;
