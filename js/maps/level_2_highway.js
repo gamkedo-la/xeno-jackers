@@ -85,7 +85,7 @@
                          "y":0
                         }, 
                         {
-                         "x":951.781660869565,
+                         "x":951.782,
                          "y":7.78442
                         }, 
                         {
@@ -137,22 +137,22 @@
                          "y":0
                         }, 
                         {
-                         "x":-0.185949497031018,
+                         "x":-0.185949,
                          "y":128
                         }, 
                         {
-                         "x":16.1776855029689,
+                         "x":16.1777,
                          "y":128
                         }, 
                         {
-                         "x":15.9917539036441,
-                         "y":0.241510133333333
+                         "x":15.9918,
+                         "y":0.24151
                         }],
                  "rotation":0,
                  "type":"wall",
                  "visible":true,
                  "width":0,
-                 "x":1503.82231449703,
+                 "x":1503.82,
                  "y":0
                 }, 
                 {
@@ -417,22 +417,22 @@
                          "y":0
                         }, 
                         {
-                         "x":-1.63846876246707,
+                         "x":-1.63847,
                          "y":72
                         }, 
                         {
-                         "x":142.547480734564,
+                         "x":142.547,
                          "y":72
                         }, 
                         {
-                         "x":140.909169675307,
-                         "y":0.13584945
+                         "x":140.909,
+                         "y":0.135849
                         }],
                  "rotation":0,
                  "type":"wall",
                  "visible":true,
                  "width":0,
-                 "x":1361.45251926544,
+                 "x":1361.45,
                  "y":0
                 }, 
                 {
@@ -445,22 +445,22 @@
                          "y":0
                         }, 
                         {
-                         "x":-0.456562396505881,
+                         "x":-0.456562,
                          "y":48
                         }, 
                         {
-                         "x":39.721123106463,
+                         "x":39.7211,
                          "y":48
                         }, 
                         {
-                         "x":39.2646046542525,
+                         "x":39.2646,
                          "y":0.0905663
                         }],
                  "rotation":0,
                  "type":"levelExit",
                  "visible":true,
                  "width":0,
-                 "x":1464.45656239651,
+                 "x":1464.46,
                  "y":72
                 }],
          "opacity":1,
@@ -569,6 +569,42 @@
                  "width":16,
                  "x":1376,
                  "y":104
+                }, 
+                {
+                 "gid":4098,
+                 "height":31,
+                 "id":44,
+                 "name":"biker2",
+                 "rotation":0,
+                 "type":"enemyBiker",
+                 "visible":true,
+                 "width":21,
+                 "x":459,
+                 "y":55.5
+                }, 
+                {
+                 "gid":4106,
+                 "height":9,
+                 "id":45,
+                 "name":"Crawler",
+                 "rotation":0,
+                 "type":"enemyCrawler",
+                 "visible":true,
+                 "width":29,
+                 "x":1101.5,
+                 "y":118.5
+                }, 
+                {
+                 "gid":4106,
+                 "height":9,
+                 "id":46,
+                 "name":"Crawler",
+                 "rotation":0,
+                 "type":"enemyCrawler",
+                 "visible":true,
+                 "width":29,
+                 "x":781,
+                 "y":119
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -589,10 +625,10 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":44,
+ "nextobjectid":47,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"1.4.1",
  "tileheight":8,
  "tilesets":[
         {
@@ -605,6 +641,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.2,
+ "version":1.4,
  "width":320
 });
