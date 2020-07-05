@@ -14,6 +14,7 @@ function EnemyMech(startX, startY) {
         idle: new SpriteAnimation('idle', enemyMechSpriteSheet, [0,1,2,3,4,5,6,7,8,9], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [300, 400], false, false, [0], enemyMechSpriteBrightSheet),
+        fastShoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [150, 200], false, false, [0], enemyMechSpriteBrightSheet),
     };
     let currentAnimation = anims.idle;
     let phase1Complete = false;
@@ -119,13 +120,21 @@ function EnemyMech(startX, startY) {
     };
 
     const checkPhase2Attack = function(distToPlayer) {
+        checkShootAttack(distToPlayer, anims.shoot);
+    };
+
+    const checkPhase3Attack = function(distToPlayer) {
+        checkShootAttack(distToPlayer, anims.fastShoot);
+    };
+
+    const checkShootAttack = function(distToPlayer, animation) {
         if(distToPlayer < MELEE_ATTACK_DIST - 3) {
             checkPhase1Attack(distToPlayer);
             return;
         } else if(distToPlayer < RANGE_ATTACK_DIST) {
             if(!isShooting) {
                 velocity.x = 0;
-                currentAnimation = anims.shoot;
+                currentAnimation = animation;
                 currentAnimation.reset();
                 isShooting = true;
             }
@@ -170,10 +179,6 @@ function EnemyMech(startX, startY) {
                 fistIsActive = false;
             }
         }
-    };
-
-    const checkPhase3Attack = function(distToPlayer) {
-
     };
 
     this.draw = function (deltaTime) {

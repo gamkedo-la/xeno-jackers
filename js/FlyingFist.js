@@ -61,6 +61,8 @@ function FlyingFist(flipped) {
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        SceneState.scenes[SCENE.GAME].removeMe(this);
+        if(otherEntity.type !== EntityType.LevelExit) {
+            SceneState.scenes[SCENE.GAME].removeMe(this);
+        }
     };
 }

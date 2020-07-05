@@ -340,8 +340,9 @@ function GameScene() {
                     }
                     break;
             }
-
-            collisionManager.addEntity(anEntity);
+            if(anEntity) {
+                collisionManager.addEntity(anEntity);
+            }
         }
     };
 
