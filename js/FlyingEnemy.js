@@ -56,6 +56,13 @@ function FlyingEnemy(posX, posY) {
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
 
+        if(currentAnimation === animations.death) {
+            if(currentAnimation.getIsFinished()) {
+                SceneState.scenes[SCENE.GAME].removeMe(this);
+            }
+            return;
+        }
+
         if(this.collisionBody.isOnScreen) {
             if(flashTimer < FLASH_TIME) {
                 flashTimer += deltaTime;
@@ -126,7 +133,11 @@ function FlyingEnemy(posX, posY) {
 
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
-            currentAnimation.drawAt(position.x, position.y - 2, flipped);
+            if(currentAnimation === animations.death) {
+                currentAnimation.drawAt(position.x, position.y + 4, flipped);
+            } else {
+                currentAnimation.drawAt(position.x, position.y - 2, flipped);
+            }
 
             //colliders only draw when DRAW_COLLIDERS is set to true
             this.collisionBody.draw();
@@ -138,14 +149,19 @@ function FlyingEnemy(posX, posY) {
             isAttacking = false;
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-            if(this.health <= 0) {
+            if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
-                SceneState.scenes[SCENE.GAME].removeMe(this);
+                currentAnimation = animations.death;
+                flashTimer = FLASH_TIME;
+                currentAnimation.useBrightImage = false;
+            } else if(currentAnimation === animations.death) {
+                // do nothing
+            } else if(this.health > 0) {
+                flashTimer = 0;
             }
-            flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
@@ -162,6 +178,7 @@ function FlyingEnemy(posX, posY) {
         const anims = {};
 
         anims.idle = new SpriteAnimation('idle', enemyFlyerSheet, [0, 1, 2, 3], ANIM_WIDTH, HEIGHT, [128], false, true, [0], enemyFlyerBrightSheet);
+        anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
         return anims;
     };
     const animations = initializeAnimations();

@@ -64,6 +64,9 @@ function BikerEnemy(posX, posY) {
         position.y -= canvas.deltaY;
 
         if(currentAnimation === animations.death) {
+            if(currentAnimation.getIsFinished()) {
+                SceneState.scenes[SCENE.GAME].removeMe(this);
+            }
             return;
         }
 
@@ -190,11 +193,10 @@ function BikerEnemy(posX, posY) {
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === animations.death) {
-                currentAnimation.drawAt(position.x, position.y + 10, flipped);
+                currentAnimation.drawAt(position.x, position.y + 4, flipped);
             } else {
                 currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
             }
-
 
             //colliders only draw when DRAW_COLLIDERS is set to true
             this.collisionBody.draw();
@@ -220,9 +222,7 @@ function BikerEnemy(posX, posY) {
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
             } else if(currentAnimation === animations.death) {
-                if(currentAnimation.getIsFinished()) {
-                    SceneState.scenes[SCENE.GAME].removeMe(this);
-                }
+                // do nothing
             } else if(this.health > 0) {
                 flashTimer = 0;
             }
@@ -250,7 +250,6 @@ function BikerEnemy(posX, posY) {
 		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemyBrightSheet);
 		anims.walk = new SpriteAnimation('walking', bikerEnemySheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100, 100, 100, 90,  70, 65, 65, 75, 80, 85], false, true, [0], bikerEnemyBrightSheet);
 		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
-        //anims.death = new SpriteAnimation('dieing', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
         //        animations.jumping = ...
 //        animations.blocking = ...
 //        animations.crouching = ...

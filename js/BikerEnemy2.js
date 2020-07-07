@@ -28,7 +28,7 @@ function BikerEnemy2(posX, posY) {
 
     let flashTimer = FLASH_TIME;
 
-    this.type = EntityType.EnemyBiker;
+    this.type = EntityType.EnemyBiker2;
     this.health = 7; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
 
     this.collisionBody = new AABBCollider([
@@ -62,6 +62,13 @@ function BikerEnemy2(posX, posY) {
         currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
+
+        if(currentAnimation === animations.death) {
+            if(currentAnimation.getIsFinished()) {
+                SceneState.scenes[SCENE.GAME].removeMe(this);
+            }
+            return;
+        }
 
         if(this.collisionBody.isOnScreen) {
             if(flashTimer < FLASH_TIME) {
@@ -185,7 +192,11 @@ function BikerEnemy2(posX, posY) {
 
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
-            currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
+            if(currentAnimation === animations.death) {
+                currentAnimation.drawAt(position.x, position.y + 4, flipped);
+            } else {
+                currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
+            }
 
             //colliders only draw when DRAW_COLLIDERS is set to true
             this.collisionBody.draw();
@@ -202,14 +213,19 @@ function BikerEnemy2(posX, posY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-            if(this.health <= 0) {
+            if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
-                SceneState.scenes[SCENE.GAME].removeMe(this);
+                currentAnimation = animations.death;
+                flashTimer = FLASH_TIME;
+                currentAnimation.useBrightImage = false;
+            } else if(currentAnimation === animations.death) {
+                // do nothing
+            } else if(this.health > 0) {
+                flashTimer = 0;
             }
-            flashTimer = 0;
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
@@ -231,6 +247,7 @@ function BikerEnemy2(posX, posY) {
 
         anims.idle = new SpriteAnimation('idle', bikerEnemy2Sheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemy2BrightSheet);
 		anims.attacking = new SpriteAnimation('attacking', bikerEnemy2Sheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemy2BrightSheet);
+		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
 //		anims.walk = new SpriteAnimation('walking', bikerEnemy2Sheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
 //        animations.jumping = ...
 //        animations.blocking = ...

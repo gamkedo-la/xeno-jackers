@@ -14,7 +14,8 @@ function EnemyMech(startX, startY) {
         idle: new SpriteAnimation('idle', enemyMechSpriteSheet, [0,1,2,3,4,5,6,7,8,9], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [300, 400], false, false, [0], enemyMechSpriteBrightSheet),
-        fastShoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [150, 200], false, false, [0], enemyMechSpriteBrightSheet),
+        fastShoot: new SpriteAnimation('fastShoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [150, 200], false, false, [0], enemyMechSpriteBrightSheet),
+        death: new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false)
     };
     let currentAnimation = anims.idle;
     let phase1Complete = false;
@@ -44,8 +45,17 @@ function EnemyMech(startX, startY) {
     };
 
     this.update = function (deltaTime, player) {
+        // play the animation
+        currentAnimation.update(deltaTime);
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
+
+        if(currentAnimation === anims.death) {
+            if(currentAnimation.getIsFinished()) {
+                SceneState.scenes[SCENE.GAME].mechDefeated(this);
+            }
+            return;
+        }
 
         if(this.collisionBody.isOnScreen) {
             if(flashTimer < FLASH_TIME) {
@@ -57,9 +67,6 @@ function EnemyMech(startX, startY) {
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
             }
-
-            // play the animation
-            currentAnimation.update(deltaTime);
 
             const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
 
@@ -203,15 +210,21 @@ function EnemyMech(startX, startY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-            if(this.health <= 0) {
-                SceneState.scenes[SCENE.GAME].mechDefeated(this);
+            if((this.health <= 0) && (currentAnimation !== anims.death)) {
+                currentAnimation = anims.death;
+                flashTimer = FLASH_TIME;
+                currentAnimation.useBrightImage = false;
+            } else if(currentAnimation === anims.death) {
+                //do nothing
             } else if(this.health < MAX_HEALTH / 3) {
                 phase2Complete = true;
+                flashTimer = 0;
             } else if(this.health < 2 * MAX_HEALTH / 3) {
                 phase1Complete = true;
-            } 
-            
-            flashTimer = 0;
+                flashTimer = 0;
+            } else {
+                flashTimer = 0;
+            }
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
