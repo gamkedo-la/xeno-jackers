@@ -1,8 +1,8 @@
 //BikerEnemy2.js
 function BikerEnemy2(posX, posY) {
     const SCALE = GAME_SCALE;
-    const WIDTH = 32;
-	const ANIM_WIDTH = 32
+    const WIDTH = 41;
+	const ANIM_WIDTH = 41
     const HEIGHT = 33;
     const SIZE = {width:WIDTH, height:HEIGHT};
     const MIN_TIME_TO_CACKLE = 1000;
