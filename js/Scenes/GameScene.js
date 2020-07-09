@@ -476,6 +476,14 @@ function GameScene() {
         switch(type) {
             case EntityType.EnemyBiker:
                 return POINTS.EnemyBiker;
+            case EntityType.EnemyBiker2:
+                    return POINTS.EnemyBiker2;
+            case EntityType.EnemyBiker3:
+                    return POINTS.EnemyBiker3;
+            case EntityType.EnemyCrawler:
+                    return POINTS.EnemyCrawler;
+            case EntityType.EnemyFlyer:
+                    return POINTS.EnemyFlyer;
             case EntityType.EnemyAlienGuard:
                 return POINTS.EnemyAlienGuard;
             case EntityType.FinalBoss:

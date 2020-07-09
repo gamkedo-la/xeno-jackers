@@ -33,6 +33,10 @@ let player = null;
 
 const POINTS = {
 	EnemyBiker:100,
+	EnemyBiker2:50,
+	EnemyBiker3:50,
+	EnemyCrawler:50,
+	EnemyFlyer:150,
 	EnemyAlienGuard:150,
 	BikePart:500,
 	Boss:5000,
