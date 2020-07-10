@@ -83,7 +83,7 @@ function BikerEnemy2(posX, posY) {
 
             timeToCackle -= deltaTime;
             if(timeToCackle <= 0) {
-                alienCackle1.play();
+                bikerGrowl1.play();
                 timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
             }
 

@@ -9,6 +9,7 @@ let menuNav2;
 let alienBossDeath;
 let alienCackle1;
 let alienGrowl2;
+let bikerGrowl1;
 let hurt1;
 let playerPickup1;
 let playerPickup2;
@@ -45,6 +46,7 @@ function loadAudio() {
 	alienBossDeath = new SoundOverlapsClass(assetPath.Audio + "alien_boss_death");
 	alienCackle1 = new SoundOverlapsClass(assetPath.Audio + "alien_cackle1");
 	alienGrowl2 = new SoundOverlapsClass(assetPath.Audio + "alien_growl2");
+	bikerGrowl1 = new SoundOverlapsClass(assetPath.Audio + "biker_growl1");
 	hurt1 = new SoundOverlapsClass(assetPath.Audio + "hit_hurt1");
 	playerPickup1 = new SoundOverlapsClass(assetPath.Audio + "player_pickup1");
 	playerPickup2 = new SoundOverlapsClass(assetPath.Audio + "player_pickup2");
