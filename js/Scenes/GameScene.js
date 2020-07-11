@@ -21,6 +21,7 @@ function GameScene() {
 
     let highwayScrollTime = 0;
 
+    let playerHealth = 5;
     let hasChain = false;
     let hasWheel = false;
     let hasHandlebar = false;
@@ -43,6 +44,7 @@ function GameScene() {
         if(player === null) {
             needToRepositionPlayer = true;
             player = new Player(canvas.width / 2 + 8, canvas.height / 2 + 8, hasChain, hasWheel, hasHandlebar, hasEngine);
+            player.health = playerHealth;
         }
 
         if(currentLevelName === MAP_NAME.Highway) {
@@ -218,22 +220,26 @@ function GameScene() {
         switch(currentLevelName) {
             case MAP_NAME.Bar:
                 if(canExitBar) {
+                    playerHealth = player.health;
                     this.reset();
                     currentLevelName = MAP_NAME.Highway;
                     SceneState.setState(SCENE.LVL1LVL2);
                 }
                 break;
             case MAP_NAME.Highway:
+                playerHealth = player.health;
                 this.reset();
                 currentLevelName = MAP_NAME.Area51;
                 SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl2Lvl3 Cutscene
                 break;
             case MAP_NAME.Area51:
+                playerHealth = player.health;
                 this.reset();
                 currentLevelName = MAP_NAME.Boss;
                 SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl3Boss Cutscene
                 break;
             case MAP_NAME.Boss:
+                playerHealth = player.health;
                 this.reset();
                 currentLevelName = MAP_NAME.Bar;
                 SceneState.setState(SCENE.CREDITS);
