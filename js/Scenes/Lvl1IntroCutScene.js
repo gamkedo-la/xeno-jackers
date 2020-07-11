@@ -9,7 +9,7 @@ function Lvl1IntroCutScene() {
     const ufoStallPosition = 100;
     let ufoStallTime = 1500;
     let ufoIsStalled = false;
-    let laserColors = ['#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8', '#BFF8E3'];
+    const laserColors = ['#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8', '#BFF8E3', '#A2E7E5', '#A9E5F8', '#BFF8E3'];
     let laserColorIndex = 0;
     let laserWidth = 0;
     let laserHeight = 0;
@@ -17,6 +17,7 @@ function Lvl1IntroCutScene() {
     let barFrontImage = barFront;
 
     this.transitionIn = function() {
+        reset();
         cutScenePlayer = new CutScenePlayer(0, 108);
         ufo = new SpriteAnimation('idle', ufoSpriteSheet, [0, 1, 2, 3], 50, 26, [360], false, true);
         const titleWidth = fontRenderer.getWidthOfText("THE BAR", 1, FONT.Stroked);
@@ -43,6 +44,19 @@ function Lvl1IntroCutScene() {
         }
         
         return false;
+    };
+
+    const reset = function() {
+        ufoPosition = {x: 0, y: 20};
+        ufoTurnedAround = false;
+        ufoExiting = false;
+        ufoStallTime = 1500;
+        ufoIsStalled = false;
+        laserColorIndex = 0;
+        laserWidth = 0;
+        laserHeight = 0;
+        barBackImage = barBack;
+        barFrontImage = barFront;
     };
 
     const update = function(deltaTime) {

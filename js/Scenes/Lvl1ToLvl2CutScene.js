@@ -5,7 +5,6 @@ function Lvl1ToLvl2CutScene() {
     let reachedTruck = false;
     let climbedTruck = false;
     let onTruck = false;
-    let moving = false;
     let truckPos = 80;
     let titlePos = 20;
     let ufo = null;
@@ -15,7 +14,15 @@ function Lvl1ToLvl2CutScene() {
 
     this.transitionIn = function() {
         cutScenePlayer = new CutScenePlayer(0, 100);
+        reachedTruck = false;
+        climbedTruck = false;
+        onTruck = false;
+        truckPos = 80;
+        titlePos = 20;
         ufo = new SpriteAnimation('idle', ufoSpriteSheet, [0, 1, 2, 3], 50, 26, [360], false, true);
+        ufoPosition = {x: 0, y: 20};
+        ufoTurnedAround = false;
+        ufoExiting = false;
         const titleWidth = fontRenderer.getWidthOfText("THE HIGHWAY", 1, FONT.Stroked);
         titlePos = Math.round((canvas.width - titleWidth) / 2);
     };
