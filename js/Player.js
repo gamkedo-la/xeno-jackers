@@ -665,7 +665,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
     
     function exitCrouch(deltaTime) {
-        position.y -= 6;
+        position.y -= 9;
     }
 
 	function collidedWithEnemy(deltaTime) {
