@@ -190,7 +190,9 @@ function EnemyMech(startX, startY) {
 
     this.draw = function (deltaTime) {
         if(this.collisionBody.isOnScreen) {
-            if(flipped) {
+            if(currentAnimation === anims.death) {
+                currentAnimation.drawAt(position.x, position.y + 4, flipped);
+            } else if(flipped) {
                 currentAnimation.drawAt(position.x - 5, position.y - 2, flipped);
             } else {
                 currentAnimation.drawAt(position.x - 15, position.y - 2, flipped);
