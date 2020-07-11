@@ -22,6 +22,7 @@ function FlyingEnemy(posX, posY) {
     let flashTimer = FLASH_TIME;
 
     this.type = EntityType.EnemyFlyer;
+    this.dead = false;
     this.health = 1;
 
     this.collisionBody = new AABBCollider([
@@ -154,6 +155,7 @@ function FlyingEnemy(posX, posY) {
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
+                this.dead = true;
                 currentAnimation = animations.death;
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;

@@ -1,4 +1,3 @@
-
 function EnemyMech(startX, startY) {
     const WIDTH = 36;
     const HEIGHT = 36;
@@ -30,6 +29,7 @@ function EnemyMech(startX, startY) {
     const MAX_HEALTH = 100;
     this.health = MAX_HEALTH;
     this.type = EntityType.EnemyMech;
+    this.dead = false;
     this.collisionBody = new AABBCollider([
         {x:startX + 2, y:startY + 3},
         {x:startX + 18, y:startY + 3},
@@ -214,6 +214,7 @@ function EnemyMech(startX, startY) {
                 currentAnimation = anims.death;
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
+                this.dead = true;
             } else if(currentAnimation === anims.death) {
                 //do nothing
             } else if(this.health < MAX_HEALTH / 3) {

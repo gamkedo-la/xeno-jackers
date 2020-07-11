@@ -29,6 +29,7 @@ function BikerEnemy2(posX, posY) {
     let flashTimer = FLASH_TIME;
 
     this.type = EntityType.EnemyBiker2;
+    this.dead = false;
     this.health = 7; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
 
     this.collisionBody = new AABBCollider([
@@ -215,6 +216,7 @@ function BikerEnemy2(posX, posY) {
             this.health--;
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
+                this.dead = true;
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
