@@ -205,7 +205,6 @@ function PlayerColliderManager(startX, startY, size) {
     };
 
     this.setPointsForState = function(state, position) {
-        console.log(`State: ${state}`)
         let theseOffsets;
         this.drawOffset.x = 0;
         this.drawOffset.y = 0;

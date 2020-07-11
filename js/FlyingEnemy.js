@@ -134,7 +134,7 @@ function FlyingEnemy(posX, posY) {
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === animations.death) {
-                currentAnimation.drawAt(position.x, position.y + 4, flipped);
+                currentAnimation.drawAt(position.x + 9, position.y, flipped);
             } else {
                 currentAnimation.drawAt(position.x, position.y - 2, flipped);
             }

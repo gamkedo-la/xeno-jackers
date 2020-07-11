@@ -100,7 +100,7 @@ function CrawlerEnemy(posX, posY) {
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === animations.death) {
-                currentAnimation.drawAt(position.x, position.y, flipped);
+                currentAnimation.drawAt(position.x + 7, position.y - 3, flipped);
             } else {
                 currentAnimation.drawAt(position.x, position.y - 2, flipped);
             }
