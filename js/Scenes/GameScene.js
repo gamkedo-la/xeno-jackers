@@ -305,6 +305,10 @@ function GameScene() {
                     anEntity = new CrawlerEnemy(data.x, data.y - 10);//10 is height of crawler enemy
                     enemies.push(anEntity);
                     break;
+                case EntityType.EnemyChunkyCrawler:
+                    anEntity = new ChunkyCrawlerEnemy(data.x, data.y - 12);//10 is height of crawler enemy
+                    enemies.push(anEntity);
+                    break;    
                 case EntityType.EnemyFlyer:
                     anEntity = new FlyingEnemy(data.x, data.y - 24);//24 is height of crawler enemy
                     enemies.push(anEntity);

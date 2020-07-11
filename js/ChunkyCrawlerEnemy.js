@@ -1,8 +1,9 @@
+//BuffCrawler.js
 //CrawlerEnemy.js
-function CrawlerEnemy(posX, posY) {
-    const WIDTH = 30;
-	const ANIM_WIDTH = 30
-    const HEIGHT = 10;
+function ChunkyCrawlerEnemy(posX, posY) {
+    const WIDTH = 31;
+	const ANIM_WIDTH = 31
+    const HEIGHT = 12;
     const SIZE = {width:WIDTH, height:HEIGHT};
     const HEALTH_DROP_PROBABILITY = 30;
     const FLASH_TIME = 300;
@@ -18,7 +19,7 @@ function CrawlerEnemy(posX, posY) {
 
     this.type = EntityType.EnemyCrawler;
     this.dead = false;
-    this.health = 1;
+    this.health = 10;
 
     this.collisionBody = new AABBCollider([
         {x:posX + 1, y:posY + 2}, //top left +2/+3 to make collision box smaller than sprite
@@ -123,7 +124,7 @@ function CrawlerEnemy(posX, posY) {
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
-                    SceneState.scenes[SCENE.GAME].addHealthDrop(position.x + 5, position.y);
+                    SceneState.scenes[SCENE.GAME].addHealthDrop(position.x + 7, position.y);
                 }
                 this.dead = true;
                 currentAnimation = animations.death;
@@ -153,7 +154,7 @@ function CrawlerEnemy(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.walk = new SpriteAnimation('walking', enemyCrawlerSheet, [0, 1, 2, 3, 4], ANIM_WIDTH, HEIGHT, [256], false, true, [0], enemyCrawlerBrightSheet);
+        anims.walk = new SpriteAnimation('walking', enemyChunkyCrawlerSheet, [0, 1, 2, 3, 4], ANIM_WIDTH, HEIGHT, [256], false, true, [0], enemyChunkyCrawlerBrightSheet);
         anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
         
         return anims;

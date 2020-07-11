@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.1" name="AssetPack" tilewidth="34" tileheight="34" tilecount="13" columns="0">
+<tileset version="1.2" tiledversion="1.3.4" name="AssetPack" tilewidth="34" tileheight="34" tilecount="14" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="player">
   <image width="21" height="30" source="../img/characters/PlayerSpawnImage.png"/>
@@ -39,5 +39,8 @@
  </tile>
  <tile id="12" type="wallOrb">
   <image width="16" height="16" source="../img/characters/WallOrbSpawn.png"/>
+ </tile>
+ <tile id="13" type="chunkyEnemyCrawler">
+  <image width="29" height="11" source="../img/characters/ChunkyCrawlerSpawn.png"/>
  </tile>
 </tileset>
