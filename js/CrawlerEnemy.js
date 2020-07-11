@@ -20,8 +20,8 @@ function CrawlerEnemy(posX, posY) {
     this.health = 1;
 
     this.collisionBody = new AABBCollider([
-        {x:posX + 1, y:posY}, //top left +2/+3 to make collision box smaller than sprite
-        {x:posX + 29, y:posY}, //top right +21/+3 makes collision box smaller than sprite
+        {x:posX + 1, y:posY + 2}, //top left +2/+3 to make collision box smaller than sprite
+        {x:posX + 29, y:posY + 2}, //top right +21/+3 makes collision box smaller than sprite
         {x:posX + 29, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
         {x:posX + 1, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
     ]);
