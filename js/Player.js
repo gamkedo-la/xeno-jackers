@@ -402,21 +402,31 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         chain.deactivate();
     }
 
+    let crouchAdjustTime = 0;
+    let crouchY = 0;
     function enterCrouchAttacking(deltaTime) {
         if(flipped) {
-            colliderManager.setPointsForState(PlayerState.CrouchLeft, position);
+            colliderManager.setPointsForState(PlayerState.CrouchAttackLeft, position);
         } else {
-            colliderManager.setPointsForState(PlayerState.CrouchRight, position);
+            colliderManager.setPointsForState(PlayerState.CrouchAttackRight, position);
         }
         colliderManager.updateCollider(position.x, position.y);
         velocity.x = 0;
         isAttacking = true;
         currentAnimation = animations.attackcrouch;
         currentAnimation.reset();
-        chainAttack2.play()
+        chainAttack2.play();
+        crouchAdjustTime = 0;
+        crouchY = drawPosition.y;
     }
 
     function updateCrouchAttacking(deltaTime) {
+        if(crouchAdjustTime < 20) {
+            // Absolute total Hack, but can't figure out why
+            //the crouch attack hop is occuring and this suppresses it
+            drawPosition.y = crouchY;
+            crouchAdjustTime += deltaTime;
+        }
         if(currentAnimation.getCurrentFrameIndex() === 2) {
             if(flipped) {
                 chain.activate(drawPosition.x + 4, drawPosition.y + 20);

@@ -82,6 +82,20 @@ function PlayerColliderManager(startX, startY, size) {
         {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
+    const crouchAttackLeftOffsets = [
+        {x:size.width/2-6, y:size.height-20}, //top left corner
+        {x:size.width/2+6, y:size.height-20}, //top right corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
+    ];
+
+    const crouchAttackRightOffsets = [
+        {x:size.width/2-6, y:size.height-20}, //top left corner
+        {x:size.width/2+6, y:size.height-20}, //top right corner
+        {x:size.width/2-6, y:size.height}, //bottom right corner
+        {x:size.width/2+6, y:size.height} //bottom left corner
+    ];
+
     const crouchLeftOffsets = [
         {x:size.width/2-6, y:size.height - 20}, //top left corner
         {x:size.width/2+6, y:size.height - 20}, //top right corner
@@ -191,6 +205,7 @@ function PlayerColliderManager(startX, startY, size) {
     };
 
     this.setPointsForState = function(state, position) {
+        console.log(`State: ${state}`)
         let theseOffsets;
         this.drawOffset.x = 0;
         this.drawOffset.y = 0;
@@ -208,14 +223,20 @@ function PlayerColliderManager(startX, startY, size) {
                 theseOffsets = walkRightOffsets;
                 break;
             case PlayerState.CrouchLeft:
-            case PlayerState.CrouchAttackLeft:
                 theseOffsets = crouchLeftOffsets;
                 this.drawOffset.y = -9;
                 break;
+            case PlayerState.CrouchAttackLeft:
+                theseOffsets = crouchAttackLeftOffsets;
+                this.drawOffset.y = -9;
+                break;
             case PlayerState.CrouchRight:
-            case PlayerState.CrouchAttackRight:
                 this.drawOffset.y = -9;
                 theseOffsets = crouchRightOffsets;
+                break;
+            case PlayerState.CrouchAttackRight:
+                this.drawOffset.y = -9;
+                theseOffsets = crouchAttackRightOffsets;
                 break;
             case PlayerState.JumpLeft:
             case PlayerState.JumpAttackLeft:
