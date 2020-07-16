@@ -223,6 +223,7 @@ function GameScene() {
                     playerHealth = player.health;
                     this.reset();
                     currentLevelName = MAP_NAME.Highway;
+                    score += 1000;
                     SceneState.setState(SCENE.LVL1LVL2);
                 }
                 break;
@@ -230,18 +231,21 @@ function GameScene() {
                 playerHealth = player.health;
                 this.reset();
                 currentLevelName = MAP_NAME.Area51;
+                score += 1000;
                 SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl2Lvl3 Cutscene
                 break;
             case MAP_NAME.Area51:
                 playerHealth = player.health;
                 this.reset();
                 currentLevelName = MAP_NAME.Boss;
+                score += 1000;
                 SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl3Boss Cutscene
                 break;
             case MAP_NAME.Boss:
                 playerHealth = player.health;
                 this.reset();
                 currentLevelName = MAP_NAME.Bar;
+                score += 5000;
                 SceneState.setState(SCENE.CREDITS);
                 break;
         }
