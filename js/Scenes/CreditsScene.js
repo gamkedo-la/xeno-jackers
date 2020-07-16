@@ -1,6 +1,6 @@
 //Credits Scene
 function CreditsScene() {
-    const buttonHeight = 25;//TODO: Adjust this size based on custom font
+    const buttonHeight = 25;
     const buttonTitlePadding = 2;
     const buttons = [];
     const SCROLL_SPEED = 20;

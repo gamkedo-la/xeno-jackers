@@ -4,18 +4,17 @@ function OptionsScene() {
     const selections = [
         SCENE.GAME
     ];
-    const buttonHeight = 25;//TODO: Adjust this size based on custom font
+    const buttonHeight = 25;
     const buttonTitlePadding = 2;
     const buttons = [];
 
 
     this.transitionIn = function() {
-        let mainMenuX = 0;
-        const mainMenuY = canvas.height - 45;
+        let mainMenuX = Math.round(canvas.width - fontRenderer.getWidthOfText("MAIN MENU", 1, FONT.White) - 0);
+        const mainMenuY = canvas.height - fontRenderer.getHeightOfText(1, FONT.White) + 0;
         
         if(buttons.length === 0) {
-            const playButtonX = canvas.width - fontRenderer.getWidthOfText("PLAY", GAME_SCALE, FONT.White) - 20;
-            buttons.push(buildPlayButton(playButtonX, mainMenuY, buttonHeight, buttonTitlePadding));
+            buttons.push(buildMenuButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding, GAME_SCALE));
         }
 
         selectorPositionsIndex = 0;
@@ -84,6 +83,14 @@ function OptionsScene() {
         return new UIButton("PLAY", x, y, height, padding, thisClick, Color.Aqua);
     };
 
+    const buildMenuButton = function(x, y, height, padding, scale) {
+        const thisClick = function() {
+            SceneState.setState(SCENE.TITLE);
+        }
+
+        return new UIButton("MAIN MENU", x, y, height, padding, thisClick, Color.Aqua, scale);
+    };
+
     const printNavigation = function(navItems) {
         for(let i = 0; i < navItems.length; i++) {
             navItems[i].draw();
@@ -94,8 +101,8 @@ function OptionsScene() {
 		// render the menu background
         drawBG();
         
-		drawTitle();
-
+        drawTitle();
+        
         // render menu
         printNavigation(buttons, selectorPositionIndex);        
 	};
@@ -106,7 +113,7 @@ function OptionsScene() {
     };
     
     const drawTitle = function() {
-        const titleWidth = fontRenderer.getWidthOfText("OPTIONS", 2 * GAME_SCALE, FONT.White);
-        fontRenderer.drawString(canvasContext, canvas.width / 2 - titleWidth / 2, canvas.height / 4, "OPTIONS", FONT.White, 2 * GAME_SCALE);
+        const titleWidth = fontRenderer.getWidthOfText("OPTIONS", 1, FONT.Stroked);
+        fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - titleWidth / 2), Math.round(canvas.height / 8), "OPTIONS", FONT.Stroked, 1);
     };
 }
