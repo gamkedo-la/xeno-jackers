@@ -115,11 +115,15 @@ function CreditsScene() {
         let drawOffset = 0;
         for(let person of credits) {
             const nameWidth = fontRenderer.getWidthOfText(person.name, 1, FONT.Stroked);
-            fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.Stroked, 1);
+            if(textYPos + drawOffset > 25) {
+                fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - nameWidth / 2), textYPos + drawOffset, person.name, FONT.Stroked, 1);
+            }
             drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
             for(let contribution of person.contributions) {
-                const contributionWidth = fontRenderer.getWidthOfText(contribution, 1, FONT.White);
-                fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - contributionWidth / 2), textYPos + drawOffset, contribution, FONT.White, 1);
+                if(textYPos + drawOffset > 25) {
+                    const contributionWidth = fontRenderer.getWidthOfText(contribution, 1, FONT.White);
+                    fontRenderer.drawString(canvasContext, Math.round(canvas.width / 2 - contributionWidth / 2), textYPos + drawOffset, contribution, FONT.White, 1);    
+                }
                 drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.White));
             }
             drawOffset += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
