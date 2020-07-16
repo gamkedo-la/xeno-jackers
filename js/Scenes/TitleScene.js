@@ -134,7 +134,7 @@ function TitleScene() {
 	const draw = function() {
 		// render the menu background
         drawBG();
-
+        drawTitleScreenExtras();
         // render menu
         canvasContext.drawImage(uiMenuBorderPic, 0, 0, uiMenuBorderPic.width, uiMenuBorderPic.height, mainMenuX - 8, mainMenuY - 2, uiMenuBorderPic.width * GAME_SCALE, uiMenuBorderPic.height * GAME_SCALE);
 
@@ -144,6 +144,18 @@ function TitleScene() {
 	const drawBG = function() {
         canvasContext.drawImage(titleScreenPic, 0, 0, canvas.width, canvas.height);
     };
-        
+  
+    const drawTitleScreenExtras = function() {
+        // init on demand
+        if (!this.titleUFOcounter) this.titleUFOcounter = 50;
+        if (!this.titleUFO) this.titleUFO = new SpriteAnimation('idle', ufoSpriteSheet, [0, 1, 2, 3], 50, 26, [360], false, true);
+        // wobble a ship
+        this.titleUFO.drawAt(
+            Math.round(172+Math.cos(this.titleUFOcounter/100)*100),
+            Math.round(-4+Math.cos(this.titleUFOcounter/21)*8));
+        this.titleUFOcounter++;
+        // twinkle stars
+    }
+
     return this;
 };
