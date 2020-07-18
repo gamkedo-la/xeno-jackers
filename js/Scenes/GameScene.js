@@ -518,6 +518,14 @@ function GameScene() {
                     return POINTS.EnemyFlyer;
             case EntityType.EnemyAlienGuard:
                 return POINTS.EnemyAlienGuard;
+            case EntityType.FlyingFist:
+                return POINTS.FlyingFist;
+            case EntityType.FlyingSpit:
+                return POINTS.FlyingSpit;
+            case EntityType.EnemyBullet:
+                return POINTS.EnemyBullet;
+            case EntityType.WallOrb:
+                return POINTS.WallOrb;
             case EntityType.FinalBoss:
                 return POINTS.FinalBoss;
             case EntityType.ChainPickup:

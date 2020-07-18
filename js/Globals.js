@@ -38,6 +38,10 @@ const POINTS = {
 	EnemyCrawler:50,
 	EnemyFlyer:150,
 	EnemyAlienGuard:150,
+	WallOrb: 300,
+	FlyingFist: 50,
+	FlyingSpit: 50,
+	EnemyBullet: 50,
 	BikePart:500,
 	Boss:5000,
 	BeatGame:5000
