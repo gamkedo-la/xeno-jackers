@@ -7,7 +7,8 @@ function OptionsScene() {
     const buttonHeight = 25;
     const buttonTitlePadding = 2;
     const buttons = [];
-
+    const volumeY = 50;
+    let volumeTextWidth = 0;
 
     this.transitionIn = function() {
         let mainMenuX = Math.round(canvas.width - fontRenderer.getWidthOfText("MAIN MENU", 1, FONT.White) - 0);
@@ -15,9 +16,13 @@ function OptionsScene() {
         
         if(buttons.length === 0) {
             buttons.push(buildMenuButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding, GAME_SCALE));
+            buttons.push(buildVolumeUpButton(56, volumeY, buttonHeight, buttonTitlePadding, GAME_SCALE));
+            buttons.push(buildVolumeDownButton(96, volumeY, buttonHeight, buttonTitlePadding, GAME_SCALE));
         }
 
         selectorPositionsIndex = 0;
+
+        volumeTextWidth = fontRenderer.getWidthOfText("VOLUME", 1, FONT.White);
     };
 
     this.transitionOut = function() {
@@ -91,6 +96,22 @@ function OptionsScene() {
         return new UIButton("MAIN MENU", x, y, height, padding, thisClick, Color.Aqua, scale);
     };
 
+    const buildVolumeUpButton = function(x, y, height, padding, scale) {
+        const thisClick = function() {
+            turnVolumeUp();
+        }
+
+        return new UIButton("+", x, y, height, padding, thisClick, Color.Aqua, scale);
+    }
+
+    const buildVolumeDownButton = function(x, y, height, padding, scale) {
+        const thisClick = function() {
+            turnVolumeDown();
+        }
+
+        return new UIButton("-", x, y, height, padding, thisClick, Color.Aqua, scale);
+    }
+
     const printNavigation = function(navItems) {
         for(let i = 0; i < navItems.length; i++) {
             navItems[i].draw();
@@ -102,10 +123,20 @@ function OptionsScene() {
         drawBG();
         
         drawTitle();
+
+        drawVolume();
         
         // render menu
         printNavigation(buttons, selectorPositionIndex);        
-	};
+    };
+    
+    const drawVolume = function() {
+        const volumeLevelWidth = fontRenderer.getWidthOfText(`${Math.round(100 * musicVolume)}`, 1, FONT.Stroked);
+
+        fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeTextWidth) / 2), volumeY - 10, "VOLUME", FONT.White);
+        const volumeString = `${Math.round(musicVolume * 100)}`
+        fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeLevelWidth) / 2), volumeY, volumeString, FONT.Stroked)
+    };
 	
 	const drawBG = function() {
         // fill the background since there is no image for now

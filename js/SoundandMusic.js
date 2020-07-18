@@ -101,7 +101,6 @@ function backgroundMusicClass() {
 
 	this.setVolume = function (volume) {
 		// Multipliction by a boolean serves as 1 for true and 0 for false
-		console.log("Music Sound: " + musicSound + ", musicSound.volume: " + musicSound.volume);
 		if (isMuted) {
 			musicSound.volume = 0;
 		} else {
