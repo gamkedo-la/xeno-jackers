@@ -35,12 +35,14 @@ function Camera(canvas) {
         } else if(playerPos.x + 6 < canvas.center.x - DEAD_ZONE_X) {
             canvas.center.x--;
         }
-        if(feet > canvas.center.y + (canvas.height / 2) - 24) {
-            canvas.center.y = feet + 24 - canvas.height / 2;
-        } else if(feet > canvas.center.y + (canvas.height / 2) - LOWER_DEAD_ZONE) {
-            canvas.center.y++;
-        } else if(feet + UPPER_DEAD_ZONE < canvas.center.y) {
-            canvas.center.y--;
+        if(currentLevelName != MAP_NAME.Highway) {
+            if(feet > canvas.center.y + (canvas.height / 2) - 24) {
+                canvas.center.y = feet + 24 - canvas.height / 2;
+            } else if(feet > canvas.center.y + (canvas.height / 2) - LOWER_DEAD_ZONE) {
+                canvas.center.y++;
+            } else if(feet + UPPER_DEAD_ZONE < canvas.center.y) {
+                canvas.center.y--;
+            }                
         }
 
         if(canvas.center.x < canvas.width / 2) {
