@@ -32,6 +32,8 @@ function UpgradePickup(type, posX, posY) {
                 animationData.frames = [0, 1, 2, 3];
                 break;
             case EntityType.HandlebarPickup:
+                animationData.sheet = handlebarPickup;
+                animationData.frames = [0, 1, 2, 3];
                 break;
             case EntityType.Engine:
                 break;
