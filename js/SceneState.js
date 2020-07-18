@@ -12,7 +12,8 @@ const SceneState = {
 		[SCENE.HELP]: new HelpScene(),
 		[SCENE.LVL1Intro]: new Lvl1IntroCutScene(),
 		[SCENE.LVL1LVL2]: new Lvl1ToLvl2CutScene(),
-		[SCENE.LVL2LVL3]: new Lvl3IntroCutScene()
+		[SCENE.LVL2LVL3]: new Lvl3IntroCutScene(),
+		[SCENE.GAMEOVER]: new GameOverScene()
 	},
 	setState: function(newScene, properties) {
         this.scenes[this.currentScene].transitionOut();

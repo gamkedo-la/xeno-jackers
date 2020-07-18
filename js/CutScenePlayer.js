@@ -46,6 +46,12 @@ function CutScenePlayer(posX, posY) {
         velocity.x = 0;
         velocity.y = WALK_SPEED;
         currentAnimation = animations.falling;
+    };
+
+    this.die = function() {
+        velocity.x = 0;
+        velocity.y = 0;
+        currentAnimation = animations.dieing;
     }
 
     this.draw = function(deltaTime) {
@@ -59,6 +65,7 @@ function CutScenePlayer(posX, posY) {
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
         anims.climbing = new SpriteAnimation('climb', playerSpriteSheet, [29, 30], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
         anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0]);
+        anims.dieing = new SpriteAnimation('death', playerSpriteSheet, [31, 32, 33], FRAME_WIDTH, FRAME_HEIGHT, [125, 125, 400], false, false, [0], playerBrightSheet);
 
         return anims;
     };

@@ -399,7 +399,7 @@ function GameScene() {
 
             self.reset();
 
-            SceneState.setState(SCENE.TITLE);//TODO: This should be game over
+            SceneState.setState(SCENE.GAMEOVER);
         }, TRANSITION_TIME);
     };
 
