@@ -8,6 +8,7 @@ function EnemyAlienGuard(posX, posY) {
     const MEDIAN_TIME_TO_GROWL = 500;
     const HEALTH_DROP_PROBABILITY = 50;
     const FLASH_TIME = 300; 
+    const ATTACK_DIST = 50;
 
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -15,6 +16,8 @@ function EnemyAlienGuard(posX, posY) {
 
     let timeToGrowl = MIN_TIME_TO_GROWL + MEDIAN_TIME_TO_GROWL * Math.random();
     
+    let isAttacking = false;
+    let didSpit = false;
     let isBlocking = false;
     let isCrouching = false;
 
@@ -82,6 +85,40 @@ function EnemyAlienGuard(posX, posY) {
                 flipped = true;
             } else {
                 flipped = false;
+            }
+
+            let distToPlayer = 0;
+            if(player.collisionBody.center.x < this.collisionBody.center.x) {
+                flipped = true;
+                distToPlayer = this.collisionBody.center.x - player.collisionBody.center.x;
+            } else {
+                flipped = false;
+                distToPlayer = player.collisionBody.center.x - this.collisionBody.center.x;
+            }
+
+            if(distToPlayer < ATTACK_DIST) {
+                if(!isAttacking) {
+                    velocity.x = 0;
+                    currentAnimation = animations.attacking;
+                    currentAnimation.reset();
+                    isAttacking = true;
+                }
+            }
+
+            if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3) && !didSpit) {
+                didSpit = true;
+                if(flipped) {
+                    SceneState.scenes[SCENE.GAME].addFlyingSpit(position.x - 11, position.y + 5, flipped);
+                } else {
+                    SceneState.scenes[SCENE.GAME].addFlyingSpit(position.x + 17, position.y + 5, flipped);
+                }
+            } else if((isAttacking) && (currentAnimation.getCurrentFrameIndex() !== 3)) {
+                didSpit = false
+            }
+            
+            if((isAttacking) && (currentAnimation.getIsFinished())) {
+                isAttacking = false;
+                currentAnimation = animations.idle;
             }
         }
 

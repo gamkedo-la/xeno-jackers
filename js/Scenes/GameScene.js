@@ -193,7 +193,14 @@ function GameScene() {
         newFist.activate(posX, posY);
         otherEntities.push(newFist);
         collisionManager.addEntity(newFist);
-    }
+    };
+
+    this.addFlyingSpit = function(posX, posY, flipped) {
+        const newSpit = new FlyingSpit(flipped);
+        newSpit.activate(posX, posY);
+        otherEntities.push(newSpit);
+        collisionManager.addEntity(newSpit);       
+    };
 
     this.gotChain = function() {
         hasChain = true;

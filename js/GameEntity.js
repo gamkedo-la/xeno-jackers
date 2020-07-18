@@ -21,6 +21,7 @@ const EntityType = {
     EnemyBullet:"enemyBullet",
     EnemyFist:"enemyFist",
     FlyingFist:"flyingFist",
+    FlyingSpit:"flyingSpit",
 
     //Pickups
     Health:"health",
@@ -76,6 +77,7 @@ function isEnemyWeapon(entity) {
         case EntityType.EnemyBullet:
         case EntityType.EnemyFist:
         case EntityType.FlyingFist:
+        case EntityType.FlyingSpit:
             return true;
         default:
             return false;

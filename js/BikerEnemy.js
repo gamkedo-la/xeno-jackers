@@ -8,7 +8,7 @@ function BikerEnemy(posX, posY) {
     const MIN_TIME_TO_CACKLE = 1000;
     const MEDIAN_TIME_TO_CACLE = 500;
     const HEALTH_DROP_PROBABILITY = 30;
-    const FLASH_TIME = 300; 
+    const FLASH_TIME = 300;
     const ATTACK_DIST = 18;
     const WALK_SPEED = 30;
     
