@@ -71,7 +71,6 @@ function TitleScene() {
 
     const buildPlayButton = function(x, y, height, padding) {
         const thisClick = function() {
-            //SceneState.setState(SCENE.GAME);
             SceneState.setState(SCENE.LVL1Intro);
         }
 

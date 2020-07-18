@@ -13,6 +13,10 @@ function CutScenePlayer(posX, posY) {
     this.position = {x:posX, y:posY};
     velocity = {x:WALK_SPEED, y:0};
 
+    this.getSize = function() {
+        return SIZE;
+    };
+
     this.update = function(deltaTime) {
         currentAnimation.update(deltaTime);
 
@@ -38,6 +42,12 @@ function CutScenePlayer(posX, posY) {
         currentAnimation = animations.idle;
     };
 
+    this.fall = function() {
+        velocity.x = 0;
+        velocity.y = WALK_SPEED;
+        currentAnimation = animations.falling;
+    }
+
     this.draw = function(deltaTime) {
         currentAnimation.drawAt(this.position.x, this.position.y);
     };
@@ -47,7 +57,8 @@ function CutScenePlayer(posX, posY) {
 
         anims.idle = new SpriteAnimation('idle', playerSpriteSheet, [0, 1, 2, 3], FRAME_WIDTH, FRAME_HEIGHT, [360], false, true, [8, 8, 8, 8]);
         anims.walking = new SpriteAnimation('walk', playerSpriteSheet, [4, 5, 6, 7], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
-		anims.climbing = new SpriteAnimation('climb', playerSpriteSheet, [29, 30], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
+        anims.climbing = new SpriteAnimation('climb', playerSpriteSheet, [29, 30], FRAME_WIDTH, FRAME_HEIGHT, [164], false, true);
+        anims.falling = new SpriteAnimation('fall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0]);
 
         return anims;
     };

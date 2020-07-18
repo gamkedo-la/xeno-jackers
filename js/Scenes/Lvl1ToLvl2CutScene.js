@@ -1,5 +1,4 @@
 //Lvl1ToLvl2CutScene
-//Options Scene
 function Lvl1ToLvl2CutScene() {
     let cutScenePlayer;
     let reachedTruck = false;
@@ -85,7 +84,6 @@ function Lvl1ToLvl2CutScene() {
     };
 
     const draw = function(deltaTime) {
-		// render the menu background
         drawBG();
 
         ufo.drawAt(ufoPosition.x, ufoPosition.y);
@@ -97,7 +95,6 @@ function Lvl1ToLvl2CutScene() {
 	};
 	
 	const drawBG = function() {
-        // fill the background since there is no image for now
         drawRect(0, 0, canvas.width, canvas.height, "#252525");
     };
 }

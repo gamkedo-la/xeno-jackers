@@ -254,7 +254,7 @@ function GameScene() {
                 this.reset();
                 currentLevelName = MAP_NAME.Area51;
                 score += 1000;
-                SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl2Lvl3 Cutscene
+                SceneState.setState(SCENE.LVL2LVL3);
                 break;
             case MAP_NAME.Area51:
                 playerHealth = player.health;

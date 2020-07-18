@@ -4,7 +4,6 @@ const SceneState = {
 	currentScene: SCENE.TITLE,
 	pauseCause:null,
 	scenes: {
-//		[SCENE.LOADING]: new LoadingScreen(),
 		[SCENE.TITLE]: new TitleScene(),
         [SCENE.OPTIONS]: new OptionsScene(),
 		[SCENE.GAME]: new GameScene(),
@@ -13,8 +12,7 @@ const SceneState = {
 		[SCENE.HELP]: new HelpScene(),
 		[SCENE.LVL1Intro]: new Lvl1IntroCutScene(),
 		[SCENE.LVL1LVL2]: new Lvl1ToLvl2CutScene(),
-//		[SCENE.GAMEOVER]: new GameOverScene(),
-//		[SCENE.ENDING]: new EndgameScene()
+		[SCENE.LVL2LVL3]: new Lvl3IntroCutScene()
 	},
 	setState: function(newScene, properties) {
         this.scenes[this.currentScene].transitionOut();
