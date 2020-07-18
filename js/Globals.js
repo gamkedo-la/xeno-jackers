@@ -38,6 +38,7 @@ const POINTS = {
 	EnemyCrawler:50,
 	EnemyFlyer:150,
 	EnemyAlienGuard:150,
+	EnemyMech: 1000,
 	WallOrb: 300,
 	FlyingFist: 50,
 	FlyingSpit: 50,

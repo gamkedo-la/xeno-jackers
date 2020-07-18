@@ -532,6 +532,8 @@ function GameScene() {
                 return POINTS.FlyingSpit;
             case EntityType.EnemyBullet:
                 return POINTS.EnemyBullet;
+            case EntityType.EnemyMech:
+                return POINTS.EnemyMech;
             case EntityType.WallOrb:
                 return POINTS.WallOrb;
             case EntityType.FinalBoss:
