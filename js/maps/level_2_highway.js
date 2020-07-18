@@ -177,7 +177,7 @@
                          "y":55.3333
                         }],
                  "rotation":0,
-                 "type":"ground",
+                 "type":"truck",
                  "visible":true,
                  "width":0,
                  "x":23.6364,
@@ -373,7 +373,7 @@
                          "y":55.3333
                         }],
                  "rotation":0,
-                 "type":"ground",
+                 "type":"truck",
                  "visible":true,
                  "width":0,
                  "x":272,
@@ -564,7 +564,7 @@
                  "id":40,
                  "name":"Handlebar PickUp",
                  "rotation":0,
-                 "type":"",
+                 "type":"handlebarPickup",
                  "visible":true,
                  "width":16,
                  "x":1376,
@@ -612,7 +612,7 @@
                  "id":47,
                  "name":"Wall Orb Top",
                  "rotation":0,
-                 "type":"",
+                 "type":"wallOrb",
                  "visible":true,
                  "width":16,
                  "x":1312,
@@ -624,7 +624,7 @@
                  "id":48,
                  "name":"Wall Orb Mid",
                  "rotation":0,
-                 "type":"",
+                 "type":"wallOrb",
                  "visible":true,
                  "width":16,
                  "x":1312,
@@ -636,7 +636,7 @@
                  "id":49,
                  "name":"Wall Orb Bottom",
                  "rotation":0,
-                 "type":"",
+                 "type":"wallOrb",
                  "visible":true,
                  "width":16,
                  "x":1312,
@@ -664,7 +664,7 @@
  "nextobjectid":50,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {
@@ -677,6 +677,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":320
 });

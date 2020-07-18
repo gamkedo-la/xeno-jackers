@@ -38,6 +38,7 @@ const EntityType = {
     Crate:"crate",
     Barrel:"barrel",
     Table:"table",
+    Truck:"truck",
     Deadzone:"deadzone",
     Roadzone:"roadzone",
     LevelExit:"levelExit",
@@ -106,6 +107,7 @@ function isEnvironment(entity) {
         case EntityType.Crate:
         case EntityType.Barrel:
         case EntityType.Table:
+        case EntityType.Truck:
         case EntityType.Deadzone:
         case EntityType.Roadzone:
         case EntityType.LevelExit:

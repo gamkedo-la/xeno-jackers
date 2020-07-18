@@ -11,10 +11,14 @@ function BikerEnemy(posX, posY) {
     const FLASH_TIME = 300;
     const ATTACK_DIST = 18;
     const WALK_SPEED = 30;
-    
+    const KNOCKBACK_SPEED = 100;
+    const KNOCKBACK_YSPEED = -85;
+
     let currentAnimation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
+    let wasKnockedBack = false;
+    let didHitRoad = false;
 
     let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     
@@ -151,43 +155,22 @@ function BikerEnemy(posX, posY) {
     };
 
     const moveLeft = function() {
-        velocity.x = -WALK_SPEED;
+        if(didHitRoad) return;
+        if((!wasKnockedBack) && (velocity.x > -WALK_SPEED / 2)) {
+            velocity.x = -WALK_SPEED / 2;
+        } else {
+            velocity.x--;
+            if(velocity.x < -WALK_SPEED) velocity.x = -WALK_SPEED;
+        }
     };
 
     const moveRight = function() {
-        velocity.x = WALK_SPEED;
-    };
-
-    const jump = function() {
-        if(isOnGround) {
-            isOnGround = false;
-//            currentAnimation = animations.jumping;
-            console.log("Biker Enemy is trying to jump.");
-        }
-    };
-
-    const block = function() {
-        if(isOnGround && hasWheelWeapon && !isBlocking) {
-            console.log("Biker Enemy is trying to block.");
-            isBlocking = true;
-//            currentAnimation = animations.blocking;
-        }
-    };
-
-    const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
-            return;
+        if(didHitRoad) return;
+        if((!wasKnockedBack) && (velocity.x < WALK_SPEED / 2)) {
+            velocity.x = WALK_SPEED / 2;
         } else {
-            console.log("Biker Enemy is trying to attack.");
-			currentAnimation = animations.attacking;
-        }
-    };
-
-    const crouch = function() {
-        if(isOnGround && !isCrouching) {
-            console.log("Biker Enemy is crouching now.");
-            isCrouching = true;
-//            currentAnimation = animations.crouching;
+            velocity.x++;
+            if(velocity.x > WALK_SPEED) velocity.x = WALK_SPEED;
         }
     };
 
@@ -216,22 +199,22 @@ function BikerEnemy(posX, posY) {
             this.health--;
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 this.dead = true;
-                const healthDropChance = 100 * Math.random();
-                if(healthDropChance < HEALTH_DROP_PROBABILITY) {
-                    SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
-                }
-                currentAnimation = animations.death;
-                flashTimer = FLASH_TIME;
-                currentAnimation.useBrightImage = false;
+                setUpDeath();
             } else if(currentAnimation === animations.death) {
                 // do nothing
             } else if(this.health > 0) {
                 flashTimer = 0;
+                velocity.x = player.collisionBody.center.x < this.collisionBody.center.x ? KNOCKBACK_SPEED : -KNOCKBACK_SPEED;
+                velocity.y = KNOCKBACK_YSPEED;
+                wasKnockedBack = true;
             }
         } else if(isEnvironment(otherEntity)) {
+            if(otherEntity.type === EntityType.Truck && didHitRoad) return;
             //Environment objects don't move, so need to move biker enemy the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
-                this.setPosition(position.x + collisionData.deltaX, position.y);
+                if(!didHitRoad) {
+                    this.setPosition(position.x + collisionData.deltaX, position.y);
+                }
             } else {
                 this.setPosition(position.x, position.y + collisionData.deltaY);
                 if(collisionData.deltaY < 0) {
@@ -240,8 +223,40 @@ function BikerEnemy(posX, posY) {
                 }
             }
 
+            if(wasKnockedBack) {
+                velocity.x = 0;
+            }
+
+            wasKnockedBack = false;
+
+            if(otherEntity.type === EntityType.Roadzone) {
+                didHitRoad = true;
+                this.health--;
+                if((this.health <= 0) && (currentAnimation !== animations.death)) {
+                    this.dead = true;
+                    setUpDeath();
+                } else if(currentAnimation === animations.death) {
+                    // do nothing
+                } else if(this.health > 0) {
+                    flashTimer = 0;
+                    velocity.x = -KNOCKBACK_SPEED;
+                    velocity.y = KNOCKBACK_YSPEED;
+                    wasKnockedBack = true;
+                }
+            }
+
             this.collisionBody.setPosition(position.x, position.y);
         }
+    };
+
+    const setUpDeath = function() {
+        const healthDropChance = 100 * Math.random();
+        if(healthDropChance < HEALTH_DROP_PROBABILITY) {
+            SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
+        }
+        currentAnimation = animations.death;
+        flashTimer = FLASH_TIME;
+        currentAnimation.useBrightImage = false;
     };
 
     const initializeAnimations = function() {
