@@ -136,8 +136,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	this.fsm.addState(PlayerState.FallingRight, enterFalling, updateFalling, exitFalling);
 	this.fsm.addState(PlayerState.LandingLeft, enterLanding, doNothing, doNothing);
 	this.fsm.addState(PlayerState.LandingRight, enterLanding, doNothing, doNothing);
-	this.fsm.addState(PlayerState.CrouchLeft, enterCrouchingLeft, doNothing, exitCrouch);
-	this.fsm.addState(PlayerState.CrouchRight, enterCrouchingRight, doNothing, exitCrouch);
+	this.fsm.addState(PlayerState.CrouchLeft, enterCrouchingLeft, updateCrouching, exitCrouch);
+	this.fsm.addState(PlayerState.CrouchRight, enterCrouchingRight, updateCrouching, exitCrouch);
 	this.fsm.addState(PlayerState.KnockBack, enterKnockBack, updateKnockBack, exitKnockBack);
 	this.fsm.addState(PlayerState.Hurt, enterGettingHurt, doNothing, doNothing);
 	this.fsm.addState(PlayerState.Dead, enterDead, updateDead, exitDead);
@@ -403,7 +403,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
     let crouchAdjustTime = 0;
-    let crouchY = 0;
+    let crouchAttackY = 0;
     function enterCrouchAttacking(deltaTime) {
         if(flipped) {
             colliderManager.setPointsForState(PlayerState.CrouchAttackLeft, position);
@@ -417,7 +417,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         currentAnimation.reset();
         chainAttack2.play();
         crouchAdjustTime = 0;
-        crouchY = drawPosition.y;
+        crouchAttackY = drawPosition.y;
     }
 
     function updateCrouchAttacking(deltaTime) {
@@ -641,6 +641,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 		return currentAnimation.getIsFinished() || currentAnimation != animations.landing;
 	}
 
+    let crouchY = 0
 	function enterCrouching(deltaTime) {
         velocity.x = 0;
         position.y += 6;
@@ -652,16 +653,21 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
             colliderManager.setPointsForState(PlayerState.CrouchRight, position);
         }
         colliderManager.updateCollider(position.x, position.y);
+        crouchY = drawPosition.y;
 	}
 
 	function enterCrouchingLeft(deltaTime) {
 		enterCrouching(deltaTime);
-		flipped = true;
-	}
-
+        flipped = true;
+    }
+    
 	function enterCrouchingRight(deltaTime) {
 		enterCrouching(deltaTime);
 		flipped = false;
+    }
+
+    function updateCrouching(deltaTime) {
+        drawPosition.y = crouchY;
     }
     
     function exitCrouch(deltaTime) {

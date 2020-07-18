@@ -83,15 +83,15 @@ function PlayerColliderManager(startX, startY, size) {
     ];
 
     const crouchAttackLeftOffsets = [
-        {x:size.width/2-6, y:size.height-20}, //top left corner
-        {x:size.width/2+6, y:size.height-20}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2+6, y:size.height-29}, //top right corner
         {x:size.width/2-6, y:size.height}, //bottom right corner
         {x:size.width/2+6, y:size.height} //bottom left corner
     ];
 
     const crouchAttackRightOffsets = [
-        {x:size.width/2-6, y:size.height-20}, //top left corner
-        {x:size.width/2+6, y:size.height-20}, //top right corner
+        {x:size.width/2-6, y:size.height-29}, //top left corner
+        {x:size.width/2+6, y:size.height-29}, //top right corner
         {x:size.width/2-6, y:size.height}, //bottom right corner
         {x:size.width/2+6, y:size.height} //bottom left corner
     ];
@@ -227,14 +227,14 @@ function PlayerColliderManager(startX, startY, size) {
                 break;
             case PlayerState.CrouchAttackLeft:
                 theseOffsets = crouchAttackLeftOffsets;
-                this.drawOffset.y = -9;
+                //this.drawOffset.y = -9;
                 break;
             case PlayerState.CrouchRight:
                 this.drawOffset.y = -9;
                 theseOffsets = crouchRightOffsets;
                 break;
             case PlayerState.CrouchAttackRight:
-                this.drawOffset.y = -9;
+                //this.drawOffset.y = -9;
                 theseOffsets = crouchAttackRightOffsets;
                 break;
             case PlayerState.JumpLeft:
