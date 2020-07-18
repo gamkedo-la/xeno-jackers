@@ -202,6 +202,13 @@ function GameScene() {
         collisionManager.addEntity(newSpit);       
     };
 
+    this.addEnemyBullet = function(posX, posY) {
+        const newBullet = new EnemyBullet();
+        newBullet.activate(posX, posY);
+        otherEntities.push(newBullet);
+        collisionManager.addEntity(newBullet);
+    }
+
     this.gotChain = function() {
         hasChain = true;
         gameUI.hasChain = true;

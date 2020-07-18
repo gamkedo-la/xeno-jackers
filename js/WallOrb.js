@@ -9,14 +9,14 @@ function WallOrb(posX, posY) {
     const HEALTH_DROP_PROBABILITY = 70;
     const FLASH_TIME = 300; 
     const ATTACK_DIST = 45;
-    const ATTACK_DELAY = 200;
+    const ATTACK_DELAY = 1000;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
     
     let isAttacking = false;
     let bulletIsActive = false;
-    let timeSinceAttack = ATTACK_DELAY;
+    let timeSinceAttack = Math.round(ATTACK_DELAY * Math.random());
     let didShoot = false;
     let flashTimer = FLASH_TIME;
 
@@ -25,10 +25,10 @@ function WallOrb(posX, posY) {
     this.health = 49; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
 
     this.collisionBody = new AABBCollider([
-        {x:posX + 4, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
-        {x:posX + 19, y:posY + 3}, //top right +21/+3 makes collision box smaller than sprite
-        {x:posX + 19, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
-        {x:posX + 4, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
+        {x:posX, y:posY},
+        {x:posX + WIDTH, y:posY},
+        {x:posX + WIDTH, y:posY + HEIGHT},
+        {x:posX, y:posY + HEIGHT}
     ]);
 
     this.getSize = function() {
@@ -88,17 +88,11 @@ function WallOrb(posX, posY) {
                 }
             } 
 
-            if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3)) {
-                fistIsActive = true;
-                fist.activate(position.x - 5, position.y + 6);
-            } else if((isAttacking) && (currentAnimation.getCurrentFrameIndex() != 3)) {
-                fist.deactivate();
-                fistIsActive = false;
-            }
-            
-            if((isAttacking) && (currentAnimation.getIsFinished())) {
-                isAttacking = false;
-                currentAnimation = animations.idle;
+            if(timeSinceAttack < ATTACK_DELAY) {
+                timeSinceAttack += deltaTime;
+            } else {
+                timeSinceAttack = 0;
+                SceneState.scenes[SCENE.GAME].addEnemyBullet(position.x - 11, position.y + 5, false);
             }
         }
 
@@ -106,30 +100,6 @@ function WallOrb(posX, posY) {
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
-    };
-
-    const moveLeft = function() {
-        velocity.x = -WALK_SPEED;
-    };
-
-    const moveRight = function() {
-        velocity.x = WALK_SPEED;
-    };
-
-    const jump = function() {
-        if(isOnGround) {
-            isOnGround = false;
-//            currentAnimation = animations.jumping;
-            console.log("Biker Enemy is trying to jump.");
-        }
-    };
-
-    const block = function() {
-        if(isOnGround && hasWheelWeapon && !isBlocking) {
-            console.log("Biker Enemy is trying to block.");
-            isBlocking = true;
-//            currentAnimation = animations.blocking;
-        }
     };
 
     const attack = function() {
@@ -141,20 +111,12 @@ function WallOrb(posX, posY) {
         }
     };
 
-    const crouch = function() {
-        if(isOnGround && !isCrouching) {
-            console.log("Biker Enemy is crouching now.");
-            isCrouching = true;
-//            currentAnimation = animations.crouching;
-        }
-    };
-
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === animations.death) {
-                currentAnimation.drawAt(position.x, position.y + 4, false);
+                currentAnimation.drawAt(position.x, position.y, false);
             } else {
-                currentAnimation.drawAt(position.x - 12, position.y - 2, false);
+                currentAnimation.drawAt(position.x, position.y, false);
             }
 
             //colliders only draw when DRAW_COLLIDERS is set to true
@@ -164,13 +126,7 @@ function WallOrb(posX, posY) {
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        if(otherEntity.type === EntityType.Player) {
-            if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
-                position.x -= 5;
-            } else {
-                position.x += 5;
-            }
-        } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
+        if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
@@ -186,19 +142,6 @@ function WallOrb(posX, posY) {
             } else if(this.health > 0) {
                 flashTimer = 0;
             }
-        } else if(isEnvironment(otherEntity)) {
-            //Environment objects don't move, so need to move biker enemy the full amount of the overlap
-            if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
-                this.setPosition(position.x + collisionData.deltaX, position.y);
-            } else {
-                this.setPosition(position.x, position.y + collisionData.deltaY);
-                if(collisionData.deltaY < 0) {
-                    isOnGround = true;
-                    velocity.y = 0;
-                }
-            }
-
-            this.collisionBody.setPosition(position.x, position.y);
         }
     };
 
