@@ -167,6 +167,14 @@ function GameScene() {
     this.removeMe = function(entityToRemove) {
         entitiesToRemove.push(entityToRemove);
         score += pointsForType(entityToRemove.type);
+
+        if(entityToRemove.type === EntityType.WallOrb) {
+            for(const anEntity of enemies) {
+                if(anEntity.type === EntityType.WallOrb) {
+                    anEntity.offset();
+                }
+            }
+        }
     };
 
     this.mechDefeated = function(mech) {

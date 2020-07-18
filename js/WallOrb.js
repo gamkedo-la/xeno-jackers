@@ -9,7 +9,8 @@ function WallOrb(posX, posY) {
     const HEALTH_DROP_PROBABILITY = 70;
     const FLASH_TIME = 300; 
     const ATTACK_DIST = 45;
-    const ATTACK_DELAY = 1000;
+    const ATTACK_DELAY = 1500;
+    const OFFSET = 32;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
@@ -19,6 +20,10 @@ function WallOrb(posX, posY) {
     let timeSinceAttack = Math.round(ATTACK_DELAY * Math.random());
     let didShoot = false;
     let flashTimer = FLASH_TIME;
+    let totalOffset = 0;
+    let didOffset1 = false;
+    let didOffset2 = false;
+    let offsetting = false;
 
     this.type = EntityType.WallOrb;
     this.dead = false;
@@ -48,6 +53,11 @@ function WallOrb(posX, posY) {
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
+
+    this.offset = function() {
+        offsetting = true;
+        totalOffset++;
+    }
 
     this.update = function(deltaTime, player) {
         currentAnimation.update(deltaTime);
@@ -94,8 +104,23 @@ function WallOrb(posX, posY) {
                 timeSinceAttack = 0;
                 SceneState.scenes[SCENE.GAME].addEnemyBullet(position.x - 11, position.y + 5, false);
             }
-        }
 
+            if(offsetting) {
+                if(totalOffset < OFFSET) {
+                    totalOffset++;
+                    if(totalOffset === OFFSET) {
+                        offsetting = false;
+                    }
+                } else if(totalOffset < 2 * OFFSET) {
+                    totalOffset++;
+                    if(totalOffset === 2 * OFFSET) {
+                        offsetting = false;
+                    }
+                }
+            }
+
+            position.y = posY + totalOffset;
+        }
 
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
