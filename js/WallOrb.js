@@ -1,36 +1,28 @@
+//WallOrb.js
 //BikerEnemy2.js
-function BikerEnemy2(posX, posY) {
+function WallOrb(posX, posY) {
     const SCALE = GAME_SCALE;
-    const WIDTH = 41;
-	const ANIM_WIDTH = 41
-    const HEIGHT = 33;
+    const WIDTH = 16;
+	const ANIM_WIDTH = 16
+    const HEIGHT = 16;
     const SIZE = {width:WIDTH, height:HEIGHT};
-    const MIN_TIME_TO_CACKLE = 1000;
-    const MEDIAN_TIME_TO_CACLE = 500;
-    const HEALTH_DROP_PROBABILITY = 30;
+    const HEALTH_DROP_PROBABILITY = 70;
     const FLASH_TIME = 300; 
-    const ATTACK_DIST = 18;
-    const WALK_SPEED = 30;
+    const ATTACK_DIST = 45;
+    const ATTACK_DELAY = 200;
     
     let currentAnimation;
     let position = {x:posX, y:posY};
-    let velocity = {x:0, y:0};
-
-    let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     
     let isAttacking = false;
-    let fistIsActive = false
-    let isBlocking = false;
-    let isCrouching = false;
-
-    let isOnGround = true;
-    let flipped = false;
-
+    let bulletIsActive = false;
+    let timeSinceAttack = ATTACK_DELAY;
+    let didShoot = false;
     let flashTimer = FLASH_TIME;
 
-    this.type = EntityType.EnemyBiker2;
+    this.type = EntityType.WallOrb;
     this.dead = false;
-    this.health = 7; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
+    this.health = 49; //7 is minimum amount needed for two hits (1-6 = 1 HIT, 7-12 = 2 HITS, etc)
 
     this.collisionBody = new AABBCollider([
         {x:posX + 4, y:posY + 3}, //top left +2/+3 to make collision box smaller than sprite
@@ -38,8 +30,6 @@ function BikerEnemy2(posX, posY) {
         {x:posX + 19, y:posY + HEIGHT}, //bottom right +21/+32 makes collision box smaller than sprite
         {x:posX + 4, y:posY + HEIGHT} //bottom left +2/+32 makes collision box smaller than sprite
     ]);
-
-    fist = new EnemyFist();
 
     this.getSize = function() {
         return SIZE;
@@ -82,45 +72,25 @@ function BikerEnemy2(posX, posY) {
                 currentAnimation.useBrightImage = false;
             }
 
-            timeToCackle -= deltaTime;
-            if(timeToCackle <= 0) {
-                bikerGrowl1.play();
-                timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
-            }
-
-            const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
-
-            velocity.y += GRAVITY * deltaTime / 1000;
-            if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
-            const yPos = position.y + Math.round(velocity.y * deltaTime / 1000);
-
-            this.setPosition(xPos, yPos);
-
             let distToPlayer = 0;
             if(player.collisionBody.center.x < this.collisionBody.center.x) {
-                flipped = true;
                 distToPlayer = this.collisionBody.center.x - player.collisionBody.center.x;
             } else {
-                flipped = false;
                 distToPlayer = player.collisionBody.center.x - this.collisionBody.center.x;
             }
 
             if(distToPlayer < ATTACK_DIST) {
                 if(!isAttacking) {
-                    velocity.x = 0;
-                    currentAnimation = animations.attacking;
-                    currentAnimation.reset();
+                    //TODO: Would like to have an animation for this
+                    //currentAnimation = animations.attacking;
+                    //currentAnimation.reset();
                     isAttacking = true;
                 }
-            }
+            } 
 
             if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3)) {
                 fistIsActive = true;
-                if(flipped) {
-                    fist.activate(position.x - 5, position.y + 6);
-                } else {
-                    fist.activate(position.x + 5, position.y + 6);
-                }
+                fist.activate(position.x - 5, position.y + 6);
             } else if((isAttacking) && (currentAnimation.getCurrentFrameIndex() != 3)) {
                 fist.deactivate();
                 fistIsActive = false;
@@ -182,9 +152,9 @@ function BikerEnemy2(posX, posY) {
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === animations.death) {
-                currentAnimation.drawAt(position.x, position.y + 4, flipped);
+                currentAnimation.drawAt(position.x, position.y + 4, false);
             } else {
-                currentAnimation.drawAt(position.x - 12, position.y - 2, flipped);
+                currentAnimation.drawAt(position.x - 12, position.y - 2, false);
             }
 
             //colliders only draw when DRAW_COLLIDERS is set to true
@@ -235,13 +205,9 @@ function BikerEnemy2(posX, posY) {
     const initializeAnimations = function() {
         const anims = {};
 
-        anims.idle = new SpriteAnimation('idle', bikerEnemy2Sheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemy2BrightSheet);
-		anims.attacking = new SpriteAnimation('attacking', bikerEnemy2Sheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemy2BrightSheet);
+        anims.idle = new SpriteAnimation('idle', wallOrbSheet, [0], ANIM_WIDTH, HEIGHT, [512], false, true, [0], wallOrbBrightSheet);
+		anims.attacking = new SpriteAnimation('attacking', wallOrbSheet, [0], ANIM_WIDTH, HEIGHT, [100], false, false, [0], wallOrbBrightSheet);
 		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
-//		anims.walk = new SpriteAnimation('walking', bikerEnemy2Sheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
-//        animations.jumping = ...
-//        animations.blocking = ...
-//        animations.crouching = ...
 
         return anims;
     };

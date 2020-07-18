@@ -328,6 +328,10 @@ function GameScene() {
                     anEntity = new EnemyAlienGuard(data.x, data.y - 33);
                     enemies.push(anEntity);
                     break;
+                case EntityType.WallOrb:
+                    anEntity = new WallOrb(data.x, data.y - 16);
+                    enemies.push(anEntity);
+                    break;
                 case EntityType.EnemyMech:
                     anEntity = new EnemyMech(data.x-12, data.y-36); // sprite is 36x36
                     enemies.push(anEntity);
