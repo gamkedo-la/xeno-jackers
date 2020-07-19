@@ -112,6 +112,7 @@ const wheelPickup = document.createElement("img");
 const handlebarPickup = document.createElement("img");
 const handlebar = document.createElement("img");
 const flyingFist = document.createElement("img");
+const flyingSpit = document.createElement("img");
 
 //player related
 const playerSpriteSheet = document.createElement("img");
@@ -192,6 +193,7 @@ function loadImages() {
         { imgName: handlebarPickup, theFile: "interface/HandlebarPickUp.png" },
         { imgName: handlebar, theFile: "interface/Handlebar.png" },
         { imgName: flyingFist, theFile: "interface/FlyingFist.png" },
+        { imgName: flyingSpit, theFile: "interface/FlyingSpit.png" },
 
         // player related
         { imgName: playerSpriteSheet, theFile: "characters/player_spritesheet.png" }, //player_spritesheet_debug.png

@@ -11,8 +11,8 @@ function BikerEnemy(posX, posY) {
     const FLASH_TIME = 300;
     const ATTACK_DIST = 18;
     const WALK_SPEED = 30;
-    const KNOCKBACK_SPEED = 100;
-    const KNOCKBACK_YSPEED = -85;
+    const KNOCKBACK_SPEED = 38;
+    const KNOCKBACK_YSPEED = -50;
 
     let currentAnimation;
     let position = {x:posX, y:posY};

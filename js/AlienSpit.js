@@ -12,7 +12,7 @@ function FlyingSpit(flipped) {
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
     this.isActive = false;
-    const currentAnimation = new SpriteAnimation('idle', flyingFist, [0, 1, 2], WIDTH, HEIGHT, [100], true, true);
+    const currentAnimation = new SpriteAnimation('idle', flyingSpit, [0, 1, 2], WIDTH, HEIGHT, [100], true, true);
 
     this.collisionBody = new AABBCollider(this.points);
 
