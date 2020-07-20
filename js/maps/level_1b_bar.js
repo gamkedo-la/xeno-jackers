@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1791,8 +1791,8 @@
                  "type":"enemyBiker2",
                  "visible":true,
                  "width":21,
-                 "x":56.9091,
-                 "y":114.031
+                 "x":57.4091,
+                 "y":117.531
                 }, 
                 {
                  "gid":4108,
@@ -1900,7 +1900,7 @@
  "nextobjectid":127,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {
@@ -1913,6 +1913,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":320
 });
