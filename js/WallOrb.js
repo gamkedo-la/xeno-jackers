@@ -103,6 +103,7 @@ function WallOrb(posX, posY) {
             } else {
                 timeSinceAttack = 0;
                 SceneState.scenes[SCENE.GAME].addEnemyBullet(position.x - 11, position.y + 5, false);
+                alienSpit.play();
             }
 
             if(offsetting) {
@@ -131,7 +132,6 @@ function WallOrb(posX, posY) {
         if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
             return;
         } else {
-            console.log("Biker Enemy is trying to attack.");
 			currentAnimation = animations.attacking;
         }
     };
@@ -153,9 +153,11 @@ function WallOrb(posX, posY) {
     this.didCollideWith = function(otherEntity, collisionData) {
         if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
+            alienHurt.play();
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 this.dead = true;
+                alienBossDeath.play();
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
