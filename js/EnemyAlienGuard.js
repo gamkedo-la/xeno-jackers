@@ -107,6 +107,7 @@ function EnemyAlienGuard(posX, posY) {
 
             if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3) && !didSpit) {
                 didSpit = true;
+                alienSpit.play();
                 if(flipped) {
                     SceneState.scenes[SCENE.GAME].addFlyingSpit(position.x - 11, position.y + 5, flipped);
                 } else {

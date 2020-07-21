@@ -12,6 +12,8 @@ let alienGrowl2;
 let bikerGrowl1;
 let bikerHurt;
 let alienHurt;
+let alienSpit;
+let bossDeath;
 let hurt1;
 let playerPickup1;
 let playerPickup2;
@@ -51,6 +53,8 @@ function loadAudio() {
 	bikerGrowl1 = new SoundOverlapsClass(assetPath.Audio + "biker_growl1");
 	bikerHurt = new SoundOverlapsClass(assetPath.Audio + "playerHurt");
 	alienHurt = new SoundOverlapsClass(assetPath.Audio + "enemyDamage");
+	alienSpit = new SoundOverlapsClass(assetPath.Audio + "alien_blast1");
+	bossDeath = new SoundOverlapsClass(assetPath.Audio + "alien_boss_death");
 	hurt1 = new SoundOverlapsClass(assetPath.Audio + "hit_hurt1");
 	playerPickup1 = new SoundOverlapsClass(assetPath.Audio + "player_pickup1");
 	playerPickup2 = new SoundOverlapsClass(assetPath.Audio + "player_pickup2");

@@ -218,6 +218,7 @@ function EnemyMech(startX, startY) {
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
                 this.dead = true;
+                alienBossDeath.play();
             } else if(currentAnimation === anims.death) {
                 //do nothing
             } else if(this.health < MAX_HEALTH / 3) {
