@@ -15,6 +15,8 @@ function TitleScene() {
     const buttons = [];
 
     this.transitionIn = function() {
+        currentBackgroundMusic.loopSong(MENU_MUSIC_FILENAME);
+
         if(buttons.length === 0) {
             //add these in the same order as the selections array above
             buttons.push(buildPlayButton(mainMenuX, mainMenuY + 1, buttonHeight, buttonTitlePadding));

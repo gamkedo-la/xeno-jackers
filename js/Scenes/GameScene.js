@@ -30,6 +30,12 @@ function GameScene() {
     let canExitBar = false;
 
     this.transitionIn = function() {
+        if((currentLevelName === MAP_NAME.Bar) || (currentLevelName === MAP_NAME.Area51)) {
+            currentBackgroundMusic.loopSong(LEVEL_1_MUSIC_FILENAME);
+        } else {
+            currentBackgroundMusic.loopSong(MENU_MUSIC_FILENAME);
+        }
+
         if(mapLoader === null) {
             mapLoader = new MapLoader();
         }
@@ -122,7 +128,6 @@ function GameScene() {
     };
 
     this.transitionOut = function() {
-
     };
 
     this.run = function(deltaTime) {

@@ -17,6 +17,8 @@ function Lvl1IntroCutScene() {
     let barFrontImage = barFront;
 
     this.transitionIn = function() {
+        currentBackgroundMusic.pauseSound();
+
         reset();
         cutScenePlayer = new CutScenePlayer(0, 108);
         ufo = new SpriteAnimation('idle', ufoSpriteSheet, [0, 1, 2, 3], 50, 26, [360], false, true);

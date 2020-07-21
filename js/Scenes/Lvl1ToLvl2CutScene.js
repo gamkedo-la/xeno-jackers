@@ -12,6 +12,8 @@ function Lvl1ToLvl2CutScene() {
     let ufoExiting = false;
 
     this.transitionIn = function() {
+        currentBackgroundMusic.pauseSound();
+
         cutScenePlayer = new CutScenePlayer(0, 100);
         reachedTruck = false;
         climbedTruck = false;

@@ -3,6 +3,8 @@ function Lvl3IntroCutScene() {
     let cutScenePlayer;
 
     this.transitionIn = function() {
+        currentBackgroundMusic.pauseSound();
+
         cutScenePlayer = new CutScenePlayer(0, 100);
         const titleWidth = fontRenderer.getWidthOfText("AREA 51", 1, FONT.Stroked);
         titlePos = Math.round((canvas.width - titleWidth) / 2);
