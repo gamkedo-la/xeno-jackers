@@ -117,17 +117,22 @@ function BikerEnemy(posX, posY) {
                     isAttacking = true;
                 }
             } else {
-                if(currentAnimation != animations.walk) {
-                    currentAnimation = animations.walk;
-                    if(isAttacking) isAttacking = false;
-                }
-
-                if(flipped) {
-                    moveLeft();
+                if(wasKnockedBack) {
+                    if(currentAnimation != animations.knockback) {
+                        currentAnimation = animations.knockback;
+                    }
                 } else {
-                    moveRight();
+                    if(currentAnimation != animations.walk) {
+                        currentAnimation = animations.walk;
+                        if(isAttacking) isAttacking = false;
+                    }
+    
+                    if(flipped) {
+                        moveLeft();
+                    } else {
+                        moveRight();
+                    }
                 }
-
             }
 
             if((isAttacking) && (currentAnimation.getCurrentFrameIndex() === 3)) {
@@ -216,19 +221,19 @@ function BikerEnemy(posX, posY) {
                 if(!didHitRoad) {
                     this.setPosition(position.x + collisionData.deltaX, position.y);
                 }
+                wasKnockedBack = false;
             } else {
                 this.setPosition(position.x, position.y + collisionData.deltaY);
                 if(collisionData.deltaY < 0) {
                     isOnGround = true;
                     velocity.y = 0;
                 }
+                wasKnockedBack = false;
             }
 
             if(wasKnockedBack) {
                 velocity.x = 0;
             }
-
-            wasKnockedBack = false;
 
             if(otherEntity.type === EntityType.Roadzone) {
                 didHitRoad = true;
@@ -268,11 +273,8 @@ function BikerEnemy(posX, posY) {
         anims.idle.scale = SCALE;
 		anims.attacking = new SpriteAnimation('attacking', bikerEnemySheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemyBrightSheet);
         anims.walk = new SpriteAnimation('walking', bikerEnemySheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100, 100, 100, 90,  70, 65, 65, 75, 80, 85], false, true, [0], bikerEnemyBrightSheet);
-        //anims.knockback = new SpriteAnimation('knockedback', bikerEnemySheet, [17], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
+        anims.knockback = new SpriteAnimation('knockedback', bikerEnemySheet, [17], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemyBrightSheet);
 		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3,], 16, 16, [100], false, false);
-        //        animations.jumping = ...
-//        animations.blocking = ...
-//        animations.crouching = ...
 
         return anims;
     };
