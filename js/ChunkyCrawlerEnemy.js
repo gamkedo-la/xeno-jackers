@@ -5,6 +5,8 @@ function ChunkyCrawlerEnemy(posX, posY) {
 	const ANIM_WIDTH = 31
     const HEIGHT = 12;
     const SIZE = {width:WIDTH, height:HEIGHT};
+    const MIN_TIME_TO_CACKLE = 800;
+    const MEDIAN_TIME_TO_CACLE = 400;
     const HEALTH_DROP_PROBABILITY = 30;
     const FLASH_TIME = 300;
     const WALK_SPEED = 30;
@@ -12,11 +14,9 @@ function ChunkyCrawlerEnemy(posX, posY) {
     let currentAnimation;
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
-
+    let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     let flipped = false;
-
     let flashTimer = FLASH_TIME;
-
     this.type = EntityType.EnemyCrawler;
     this.dead = false;
     this.health = 10;
@@ -67,6 +67,12 @@ function ChunkyCrawlerEnemy(posX, posY) {
             } else {
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
+            }
+
+            timeToCackle -= deltaTime;
+            if(timeToCackle <= 0) {
+                alienCackle1.play();
+                timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
             }
 
             const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);

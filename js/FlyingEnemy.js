@@ -4,6 +4,8 @@ function FlyingEnemy(posX, posY) {
 	const ANIM_WIDTH = 35
     const HEIGHT = 24;
     const SIZE = {width:WIDTH, height:HEIGHT};
+    const MIN_TIME_TO_CACKLE = 800;
+    const MEDIAN_TIME_TO_CACLE = 400;
     const HEALTH_DROP_PROBABILITY = 30;
     const FLASH_TIME = 300;
     const ATTACK_DIST = 100;
@@ -14,7 +16,7 @@ function FlyingEnemy(posX, posY) {
     let position = {x:posX, y:posY};
     let spawnPoint = {x:posX, y:posY};
     let velocity = {x:0, y:0};
-
+    let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     let flipped = false;
     let isAttacking = false;
     let isResetting = false;
@@ -73,6 +75,12 @@ function FlyingEnemy(posX, posY) {
             } else {
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
+            }
+
+            timeToCackle -= deltaTime;
+            if(timeToCackle <= 0) {
+                alienGrowl2.play();
+                timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
             }
 
             const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
