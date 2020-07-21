@@ -212,6 +212,7 @@ function EnemyMech(startX, startY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
+            alienHurt.play();
             if((this.health <= 0) && (currentAnimation !== anims.death)) {
                 currentAnimation = anims.death;
                 flashTimer = FLASH_TIME;

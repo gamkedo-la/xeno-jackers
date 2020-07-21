@@ -197,6 +197,7 @@ function BikerEnemy(posX, posY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
+            bikerHurt.play();
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 this.dead = true;
                 setUpDeath();
@@ -232,6 +233,7 @@ function BikerEnemy(posX, posY) {
             if(otherEntity.type === EntityType.Roadzone) {
                 didHitRoad = true;
                 this.health--;
+                bikerHurt.play();
                 if((this.health <= 0) && (currentAnimation !== animations.death)) {
                     this.dead = true;
                     setUpDeath();

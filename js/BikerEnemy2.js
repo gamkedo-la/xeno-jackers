@@ -202,6 +202,7 @@ function BikerEnemy2(posX, posY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
+            bikerHurt.play();
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 this.dead = true;

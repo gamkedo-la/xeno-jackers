@@ -190,7 +190,7 @@ function EnemyAlienGuard(posX, posY) {
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
-
+            alienHurt.play();
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 this.dead = true;
