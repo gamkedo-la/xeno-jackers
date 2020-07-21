@@ -1,19 +1,19 @@
 //EnemyBullet.js
 function EnemyBullet() {
     const SPEED = 50;
-    const WIDTH = 15;
+    const WIDTH = 9;
     const HEIGHT = 9;
     this.type = EntityType.EnemyBullet;
     this.points = [
         {x: 0, y: 0},
-        {x: 12, y: 0},
-        {x: 12, y: 7},
+        {x: 7, y: 0},
+        {x: 7, y: 7},
         {x: 0, y: 7},
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
     let velocity = {x: 0, y: 0};
     this.isActive = false;
-    const currentAnimation = new SpriteAnimation('idle', flyingFist, [0, 1, 2], WIDTH, HEIGHT, [100], true, true);
+    const currentAnimation = new SpriteAnimation('idle', flyingOrb, [0, 1, 2, 3], WIDTH, HEIGHT, [100], true, true);
 
     this.collisionBody = new AABBCollider(this.points);
 
