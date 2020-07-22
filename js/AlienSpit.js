@@ -46,6 +46,7 @@ function FlyingSpit(flipped) {
         }
         
         if(!this.collisionBody.isOnScreen) {
+            this.isOffscreen = true;
             SceneState.scenes[SCENE.GAME].removeMe(this);
         }
 

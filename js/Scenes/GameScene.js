@@ -171,7 +171,14 @@ function GameScene() {
 
     this.removeMe = function(entityToRemove) {
         entitiesToRemove.push(entityToRemove);
-        score += pointsForType(entityToRemove.type);
+
+        if(entityToRemove.type === EntityType.FlyingSpit &&
+            entityToRemove.isOffscreen) {
+            // can be set to true in AlienSpit.js line 49
+            console.log("alien spit was offscreen: no points awarded.");
+        } else {
+            score += pointsForType(entityToRemove.type);
+        }
 
         if(entityToRemove.type === EntityType.WallOrb) {
             for(const anEntity of enemies) {
@@ -534,7 +541,7 @@ function GameScene() {
             case EntityType.FlyingFist:
                 return POINTS.FlyingFist;
             case EntityType.FlyingSpit:
-                return POINTS.FlyingSpit;
+                    return POINTS.FlyingSpit;
             case EntityType.EnemyBullet:
                 return POINTS.EnemyBullet;
             case EntityType.EnemyMech:
