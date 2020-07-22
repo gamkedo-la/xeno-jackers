@@ -1,6 +1,7 @@
 //SoundandMusic
 let audioFormat;
 let musicSound = null;
+let musicName;
 let pauseSound;
 let resumeSound;
 let menuSelect; //confirm any menu item
@@ -74,9 +75,16 @@ function setFormat() {
 }
 
 function backgroundMusicClass() {
+
+
 	this.loopSong = function (filenameWithPath) {
 		console.log("Looping background music: " + filenameWithPath);
 		setFormat(); // calling this to ensure that audioFormat is set before needed
+		if (filenameWithPath == musicName) {
+			return;
+		} else {
+			musicName = filenameWithPath;
+		}
 
 		if (musicSound != null) {
 			musicSound.pause();

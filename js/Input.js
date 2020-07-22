@@ -221,10 +221,18 @@ function pointInside(pointX, pointY, x, y, width, height) {
 	return pointX > x && pointX < x + width && pointY > y && pointY < y + height;
 }
 
-function getKeyChecker(keys) {
-	const keyChecker = function() {
+function getKeyChecker(keys, unlessPressed) {
+    if (typeof(unlessPressed) == 'undefined') {
+	    unlessPressed = [];
+    }
+  const keyChecker = function() {
 		for (let i=0; i<heldButtons.length; i++) {
-			for (let j=0; j<keys.length; j++) {
+			for (let j=0; j<unlessPressed.length; j++) {
+				if (heldButtons[i] == unlessPressed[j]) {
+					return false;
+				}
+			}
+		    for (let j=0; j<keys.length; j++) {
 				if (heldButtons[i] == keys[j]) {
 					return true;
 				}

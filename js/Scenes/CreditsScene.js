@@ -61,8 +61,11 @@ function CreditsScene() {
                 checkButtons();
                 return true;    
             case KEY_SPACE:
-                timeMultiplier = 0;
-                return true;
+                timeMultiplier = timeMultiplier == 0 ? 1 : 0;
+				return true;
+			case KEY_ESCAPE:
+				SceneState.setState(SCENE.TITLE);
+				return true;
         }
         
         return false;
