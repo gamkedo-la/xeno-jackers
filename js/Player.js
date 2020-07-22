@@ -96,8 +96,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         return self.pogoedAnEnemy;
     }
 
-	const pressedWalkLeftKey = getExclusiveKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]);
-	const pressedWalkRightKey = getExclusiveKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]);
+    const pressedWalkLeftKey = getKeyChecker([ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2], [ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2]);
+    const pressedWalkRightKey = getKeyChecker([ALIAS.WALK_RIGHT, ALIAS.WALK_RIGHT2], [ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2]);
 	function pressedWalkKey() {
 		return checkForPressedKeys([
 			ALIAS.WALK_LEFT, ALIAS.WALK_LEFT2,
