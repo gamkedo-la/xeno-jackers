@@ -592,11 +592,11 @@
                  "id":40,
                  "name":"Handlebar PickUp",
                  "rotation":0,
-                 "type":"",
+                 "type":"handlebarPickup",
                  "visible":true,
                  "width":16,
-                 "x":1342.54545454545,
-                 "y":91.2727272727273
+                 "x":1340,
+                 "y":40.7272727272727
                 }, 
                 {
                  "gid":4098,
