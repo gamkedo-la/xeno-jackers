@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -1409,7 +1409,7 @@
                          "y":15.9833
                         }],
                  "rotation":0,
-                 "type":"ceiling",
+                 "type":"ground",
                  "visible":true,
                  "width":0,
                  "x":1376,
@@ -1900,7 +1900,7 @@
  "nextobjectid":127,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"1.4.1",
  "tileheight":8,
  "tilesets":[
         {
@@ -1913,6 +1913,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.2,
+ "version":1.4,
  "width":320
 });

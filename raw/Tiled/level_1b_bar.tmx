@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="127">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="320" height="126" tilewidth="8" tileheight="8" infinite="0" nextlayerid="11" nextobjectid="127">
  <editorsettings>
   <export target="../../js/maps/level_1b_bar.js" format="js"/>
  </editorsettings>
@@ -538,7 +538,7 @@
   <object id="82" name="ceiling" type="ceiling" x="224" y="0">
    <polygon points="0,-0.0167015 872,-0.0167015 872,15.9833 0,15.9833"/>
   </object>
-  <object id="83" name="ceiling" type="ceiling" x="1376" y="176">
+  <object id="83" name="ceiling" type="ground" x="1376" y="176">
    <polygon points="0,-0.0167015 952,-0.0167015 952,15.9833 0,15.9833"/>
   </object>
   <object id="85" name="deadzone" type="deadzone" x="1344" y="344">
