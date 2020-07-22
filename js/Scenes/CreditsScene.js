@@ -57,7 +57,10 @@ function CreditsScene() {
                 return true;    
             case KEY_SPACE:
                 timeMultiplier = 0;
-                return true;
+				return true;
+			case KEY_ESCAPE:
+				SceneState.setState(SCENE.TITLE);
+				return true;
         }
         
         return false;
