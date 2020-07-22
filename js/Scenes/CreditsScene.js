@@ -7,6 +7,7 @@ function CreditsScene() {
 
     let timeMultiplier = 1;
     let textYPos = 0;
+    let previouslyLoaded = false;
 
     let gameCanvas;
     this.transitionIn = function() {
@@ -24,9 +25,13 @@ function CreditsScene() {
 
         selectorPositionsIndex = 0;
 
-        for(let person of credits) {
-            person.contributions = person.contributions.split(', ');
+        if(!previouslyLoaded) {
+            for(let person of credits) {
+                person.contributions = person.contributions.split(', ');
+            }    
         }
+
+        previouslyLoaded = true;
     };
 
     this.transitionOut = function() {

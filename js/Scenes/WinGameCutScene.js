@@ -2,17 +2,21 @@
 function WinGame2CutScene() {
     let cutScenePlayer;
     let didJump = false;
+    let didThumbup = false;
     let onBike = false;
     let titlePos = 20;
     let xenoMorph9000 = null;
+    let emptyBike = null;
     let bikePosition = {x: 80, y: 100};
 
     this.transitionIn = function() {
         currentBackgroundMusic.pauseSound();
 
-        cutScenePlayer = new CutScenePlayer(0, 100);
+        cutScenePlayer = new CutScenePlayer(-30, 100);
         didJump = false;
+        didThumbup = false;
         onBike = false;
+        emptyBike = new SpriteAnimation('idle', XenoMorph9000Empty, [0], 55, 35, [150], false, true);
         xenoMorph9000 = new SpriteAnimation('idle', XenoMorph9000, [0, 1, 2], 55, 35, [150], false, true);
         bikePosition = {x: 80, y: 100};
         const titleWidth = fontRenderer.getWidthOfText("Congratulations", 1, FONT.Stroked);
@@ -43,14 +47,17 @@ function WinGame2CutScene() {
 
     const update = function(deltaTime) {
         cutScenePlayer.update(deltaTime);
-        xenoMorph9000.update(deltaTime);
         
-        if((cutScenePlayer.position.x >= 30) && (!didJump)) {
+        if((cutScenePlayer.position.x > 5) && (!didThumbup)) {
+            didThumbup = true;
+            cutScenePlayer.thumbup();
+        } else if((cutScenePlayer.position.x >= 30) && (!didJump)) {
             didJump = true;
             cutScenePlayer.jump();
         }
 
         if(onBike) {
+            xenoMorph9000.update(deltaTime);
             bikePosition.x++;
         }
 
@@ -62,7 +69,11 @@ function WinGame2CutScene() {
     const draw = function(deltaTime) {
         drawBG();
 
-        xenoMorph9000.drawAt(bikePosition.x, bikePosition.y);
+        if(onBike) {
+            xenoMorph9000.drawAt(bikePosition.x, bikePosition.y);
+        } else {
+            emptyBike.drawAt(bikePosition.x, bikePosition.y);
+        }
 
         fontRenderer.drawString(canvasContext, titlePos, 5, "Congratulations", FONT.Stroked);
 

@@ -84,6 +84,7 @@ const enemyFlyerSheet = document.createElement("img");
 const wallOrbSheet = document.createElement("img");
 const deathSheet = document.createElement("img");
 const XenoMorph9000 = document.createElement("img");
+const XenoMorph9000Empty = document.createElement("img");
     //bright sheets
 let bikerEnemyBrightSheet;
 let bikerEnemy2BrightSheet;
@@ -180,6 +181,7 @@ function loadImages() {
         { imgName: deathSheet, theFile: "characters/deathpoof.png" },
         { imgName: ufoSpriteSheet, theFile: "characters/ufo_spritesheet.png" },
         { imgName: XenoMorph9000, theFile: "characters/player_Bike.png" },
+        { imgName: XenoMorph9000Empty, theFile: "characters/bike.png" },
 
         // screens
         { imgName: uiMenuBorderPic, theFile: "screens/screen_title_menu_border.png" },
