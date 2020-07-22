@@ -177,7 +177,7 @@ function WallOrb(posX, posY) {
 
         anims.idle = new SpriteAnimation('idle', wallOrbSheet, [0], ANIM_WIDTH, HEIGHT, [512], false, true, [0], wallOrbBrightSheet);
 		anims.attacking = new SpriteAnimation('attacking', wallOrbSheet, [0], ANIM_WIDTH, HEIGHT, [100], false, false, [0], wallOrbBrightSheet);
-		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
+		anims.death = new SpriteAnimation('death', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false);
 
         return anims;
     };

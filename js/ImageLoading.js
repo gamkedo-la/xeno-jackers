@@ -83,6 +83,7 @@ const enemyChunkyCrawlerSheet = document.createElement("img");
 const enemyFlyerSheet = document.createElement("img");
 const wallOrbSheet = document.createElement("img");
 const deathSheet = document.createElement("img");
+const explosionSheet = document.createElement("img");
 const XenoMorph9000 = document.createElement("img");
 const XenoMorph9000Empty = document.createElement("img");
     //bright sheets
@@ -179,6 +180,7 @@ function loadImages() {
         { imgName: enemyFlyerSheet, theFile: "characters/enemy_flyer_spritesheet.png" },
         { imgName: wallOrbSheet, theFile: "characters/WallOrbSpawn.png" },
         { imgName: deathSheet, theFile: "characters/deathpoof.png" },
+        { imgName: explosionSheet, theFile: "characters/explosion-sheet.png" },
         { imgName: ufoSpriteSheet, theFile: "characters/ufo_spritesheet.png" },
         { imgName: XenoMorph9000, theFile: "characters/player_Bike.png" },
         { imgName: XenoMorph9000Empty, theFile: "characters/bike.png" },
