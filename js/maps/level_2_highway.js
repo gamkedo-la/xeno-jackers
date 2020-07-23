@@ -385,8 +385,8 @@
                  "name":"ceiling",
                  "polygon":[
                         {
-                         "x":0,
-                         "y":0
+                         "x":-4.66666666666652,
+                         "y":0.333333333333333
                         }, 
                         {
                          "x":-4.86953,
@@ -490,6 +490,34 @@
                  "width":0,
                  "x":952,
                  "y":88
+                }, 
+                {
+                 "height":0,
+                 "id":53,
+                 "name":"WallBarrier",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":14.333333333333,
+                         "y":-0.0138888888888324
+                        }, 
+                        {
+                         "x":14.6666666666667,
+                         "y":95.6805555555555
+                        }, 
+                        {
+                         "x":0,
+                         "y":95.3333333333333
+                        }],
+                 "rotation":0,
+                 "type":"wallBarrier",
+                 "visible":true,
+                 "width":0,
+                 "x":1320.66666666667,
+                 "y":24
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -571,8 +599,8 @@
                  "type":"enemyAlienGuard",
                  "visible":true,
                  "width":21,
-                 "x":1056.90909090909,
-                 "y":119.090909090909
+                 "x":1056.91,
+                 "y":119.091
                 }, 
                 {
                  "gid":4099,
@@ -596,7 +624,7 @@
                  "visible":true,
                  "width":16,
                  "x":1340,
-                 "y":40.7272727272727
+                 "y":40.7273
                 }, 
                 {
                  "gid":4098,
@@ -619,8 +647,8 @@
                  "type":"enemyCrawler",
                  "visible":true,
                  "width":29,
-                 "x":1112.40909090909,
-                 "y":118.681818181818
+                 "x":1112.41,
+                 "y":118.682
                 }, 
                 {
                  "gid":4106,
@@ -689,10 +717,10 @@
          "y":0
         }],
  "nextlayerid":12,
- "nextobjectid":53,
+ "nextobjectid":54,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {
@@ -705,6 +733,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":320
 });

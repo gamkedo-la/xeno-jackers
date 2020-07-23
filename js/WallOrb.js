@@ -102,7 +102,8 @@ function WallOrb(posX, posY) {
                 timeSinceAttack += deltaTime;
             } else {
                 timeSinceAttack = 0;
-                SceneState.scenes[SCENE.GAME].addEnemyBullet(position.x - 11, position.y + 5, false);
+                SceneState.scenes[SCENE.GAME].addEnemyBullet(position.x - 3, position.y + 5, false);
+                flashTimer = FLASH_TIME / 2;
                 alienSpit.play();
             }
 

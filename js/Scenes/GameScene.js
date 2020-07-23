@@ -169,21 +169,28 @@ function GameScene() {
         return false;
     };
 
-    this.removeMe = function(entityToRemove) {
+    this.removeMe = function(entityToRemove, forPoints = true) {
         entitiesToRemove.push(entityToRemove);
 
-        if(entityToRemove.type === EntityType.FlyingSpit &&
-            entityToRemove.isOffscreen) {
-            // can be set to true in AlienSpit.js line 49
-            console.log("alien spit was offscreen: no points awarded.");
-        } else {
+        if(forPoints && entityToRemove.collisionBody.isOnScreen) {
             score += pointsForType(entityToRemove.type);
         }
 
         if(entityToRemove.type === EntityType.WallOrb) {
+            let foundOne = false;
             for(const anEntity of enemies) {
-                if(anEntity.type === EntityType.WallOrb) {
+                if(anEntity.type === EntityType.WallOrb && anEntity !== entityToRemove) {
+                    foundOne = true;
                     anEntity.offset();
+                }
+            }
+
+            if(!foundOne) {
+                for(const anEntity of environmentColliders) {
+                    if(anEntity.type === EntityType.WallBarrier) {
+                        entitiesToRemove.push(anEntity);
+                        break;
+                    }
                 }
             }
         }
