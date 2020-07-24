@@ -943,7 +943,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     this.didCollideWith = function (otherEntity, collisionData) {
 		if(((isEnemy(otherEntity) && (!otherEntity.dead))) || (isEnemyWeapon(otherEntity))) {
-            lastCollidedEnemy = otherEntity;
+            if(otherEntity.type !== EntityType.FlyingFist || !otherEntity.dead) {
+                lastCollidedEnemy = otherEntity;
+            }
         } else if(otherEntity.type === EntityType.LevelExit) {
             SceneState.scenes[SCENE.GAME].playerAtExit();
         } else if (isEnvironment(otherEntity)) {

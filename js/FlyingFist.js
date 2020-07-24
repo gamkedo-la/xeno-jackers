@@ -12,7 +12,12 @@ function FlyingFist(flipped) {
     ];
     this.position = {x:this.points[0].x, y:this.points[0].y};
     this.isActive = false;
-    const currentAnimation = new SpriteAnimation('idle', flyingFist, [0, 1, 2], WIDTH, HEIGHT, [100], true, true);
+    this.dead = false;
+    const animations = {
+        idle: new SpriteAnimation('idle', flyingFist, [0, 1, 2], WIDTH, HEIGHT, [100], true, true),
+        dead: new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false)
+    }
+    let currentAnimation = animations.idle;
 
     this.collisionBody = new AABBCollider(this.points);
 
@@ -49,6 +54,15 @@ function FlyingFist(flipped) {
             SceneState.scenes[SCENE.GAME].removeMe(this);
         }
 
+        if(this.dead && currentAnimation != animations.dead) {
+            currentAnimation = animations.dead;
+            currentAnimation.reset();
+        }
+
+        if(currentAnimation === animations.dead && currentAnimation.getIsFinished()) {
+            SceneState.scenes[SCENE.GAME].removeMe(this, true);
+        }
+
         this.collisionBody.setPosition(this.position.x, this.position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
@@ -61,10 +75,8 @@ function FlyingFist(flipped) {
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        let forPoints = false;
-        if(isPlayerTool(otherEntity)) forPoints = true;
         if(otherEntity.type !== EntityType.LevelExit) {
-            SceneState.scenes[SCENE.GAME].removeMe(this, forPoints);
+            this.dead = true;
         }
     };
 }
