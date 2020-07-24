@@ -63,6 +63,9 @@ function OptionsScene() {
             case ALIAS.POINTER:
                 checkButtons();
                 return true;
+		    case KEY_ESCAPE:
+				SceneState.setState(SCENE.TITLE);
+				return true;
         }
         
         return false;
