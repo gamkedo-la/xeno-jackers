@@ -29,7 +29,7 @@ function EnemyMech(startX, startY) {
 
     fist = new EnemyFist();
 
-    const MAX_HEALTH = 1//00;
+    const MAX_HEALTH = 100;
     this.health = MAX_HEALTH;
     this.type = EntityType.EnemyMech;
     this.dead = false;

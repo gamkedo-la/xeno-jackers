@@ -75,9 +75,10 @@ function setFormat() {
 }
 
 function backgroundMusicClass() {
-
+	this.filenameWithPath = null;
 
 	this.loopSong = function (filenameWithPath) {
+		this.filenameWithPath = filenameWithPath;
 		console.log("Looping background music: " + filenameWithPath);
 		setFormat(); // calling this to ensure that audioFormat is set before needed
 		if (filenameWithPath == musicName) {

@@ -32,8 +32,12 @@ function GameScene() {
     let canExitArea51 = false;
 
     this.transitionIn = function() {
-        if((currentLevelName === MAP_NAME.Bar) || (currentLevelName === MAP_NAME.Area51)) {
+        if(currentLevelName === MAP_NAME.Bar) {
             currentBackgroundMusic.loopSong(LEVEL_1_MUSIC_FILENAME);
+        } else if(currentLevelName === MAP_NAME.Highway) {
+            currentBackgroundMusic.loopSong(LEVEL_2_MUSIC_FILENAME);
+        } else if(currentLevelName === MAP_NAME.Area51) {
+            currentBackgroundMusic.loopSong(LEVEL_3_MUSIC_FILENAME);
         } else {
             currentBackgroundMusic.loopSong(MENU_MUSIC_FILENAME);
         }

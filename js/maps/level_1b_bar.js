@@ -1470,6 +1470,34 @@
                  "width":0,
                  "x":2262.57,
                  "y":271.182
+                }, 
+                {
+                 "height":0,
+                 "id":128,
+                 "name":"box",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":29.9375
+                        }, 
+                        {
+                         "x":31.9375,
+                         "y":29.9375
+                        }, 
+                        {
+                         "x":31.9375,
+                         "y":0
+                        }],
+                 "rotation":0,
+                 "type":"jukeBox",
+                 "visible":true,
+                 "width":0,
+                 "x":608.0625,
+                 "y":90
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1575,8 +1603,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":148.712060606061,
-                 "y":116.84696969697
+                 "x":148.712,
+                 "y":116.847
                 }, 
                 {
                  "gid":4098,
@@ -1887,7 +1915,7 @@
                  "type":"wheelPickup",
                  "visible":true,
                  "width":16,
-                 "x":2229.33333333333,
+                 "x":2229.33,
                  "y":268
                 }],
          "opacity":1,
@@ -1909,7 +1937,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":128,
+ "nextobjectid":129,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
