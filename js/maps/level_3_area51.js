@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_3_area51",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -2814,6 +2814,90 @@
                  "width":0,
                  "x":1104,
                  "y":360
+                }, 
+                {
+                 "height":0,
+                 "id":197,
+                 "name":"level_3_exit",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":23.75,
+                         "y":0
+                        }, 
+                        {
+                         "x":23.3606775700935,
+                         "y":43.25
+                        }, 
+                        {
+                         "x":0,
+                         "y":43.25
+                        }],
+                 "rotation":0,
+                 "type":"levelExit",
+                 "visible":true,
+                 "width":0,
+                 "x":956,
+                 "y":884
+                }, 
+                {
+                 "height":0,
+                 "id":198,
+                 "name":"level_3_exit",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":23.75,
+                         "y":0
+                        }, 
+                        {
+                         "x":23.3607,
+                         "y":43.25
+                        }, 
+                        {
+                         "x":0,
+                         "y":43.25
+                        }],
+                 "rotation":0,
+                 "type":"levelExit",
+                 "visible":true,
+                 "width":0,
+                 "x":1140,
+                 "y":885
+                }, 
+                {
+                 "height":0,
+                 "id":199,
+                 "name":"ExitWall",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":80
+                        }, 
+                        {
+                         "x":16,
+                         "y":80
+                        }, 
+                        {
+                         "x":16,
+                         "y":0
+                        }],
+                 "rotation":0,
+                 "type":"wallBarrier",
+                 "visible":true,
+                 "width":0,
+                 "x":839.9375,
+                 "y":848.028409090909
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2883,8 +2967,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":37.8182,
-                 "y":75.2727
+                 "x":41.8181999999999,
+                 "y":61.9393666666666
                 }, 
                 {
                  "gid":4098,
@@ -3016,7 +3100,7 @@
                  "visible":true,
                  "width":34,
                  "x":54.6667,
-                 "y":453.333333333333
+                 "y":453.333
                 }, 
                 {
                  "gid":4108,
@@ -3028,7 +3112,7 @@
                  "visible":true,
                  "width":34,
                  "x":1120.08,
-                 "y":332.583333333333
+                 "y":332.583
                 }, 
                 {
                  "gid":4110,
@@ -3087,8 +3171,20 @@
                  "type":"enemyCrawler",
                  "visible":true,
                  "width":29,
-                 "x":165.999666666667,
-                 "y":373.583333333333
+                 "x":166,
+                 "y":373.583
+                }, 
+                {
+                 "gid":4105,
+                 "height":16,
+                 "id":200,
+                 "name":"",
+                 "rotation":0,
+                 "type":"enginePickup",
+                 "visible":true,
+                 "width":16,
+                 "x":1057.33333333333,
+                 "y":897.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3109,10 +3205,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":197,
+ "nextobjectid":201,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {
@@ -3125,6 +3221,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":320
 });

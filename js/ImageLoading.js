@@ -113,6 +113,7 @@ const healthpickup = document.createElement("img");
 const chainPickup = document.createElement("img");
 const wheelPickup = document.createElement("img");
 const handlebarPickup = document.createElement("img");
+const enginePickup = document.createElement("img");
 const handlebar = document.createElement("img");
 const flyingFist = document.createElement("img");
 const flyingSpit = document.createElement("img");
@@ -198,6 +199,7 @@ function loadImages() {
         { imgName: chainPickup, theFile: "interface/ChainPickUp.png" },
         { imgName: wheelPickup, theFile: "interface/WheelPickUp.png" },
         { imgName: handlebarPickup, theFile: "interface/HandlebarPickUp.png" },
+        { imgName: enginePickup, theFile: "interface/EnginePickUp.png" },
         { imgName: handlebar, theFile: "interface/Handlebar.png" },
         { imgName: flyingFist, theFile: "interface/FlyingFist.png" },
         { imgName: flyingSpit, theFile: "interface/FlyingSpit.png" },

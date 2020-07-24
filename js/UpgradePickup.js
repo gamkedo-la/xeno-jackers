@@ -35,7 +35,9 @@ function UpgradePickup(type, posX, posY) {
                 animationData.sheet = handlebarPickup;
                 animationData.frames = [0, 1, 2, 3];
                 break;
-            case EntityType.Engine:
+            case EntityType.EnginePickup:
+                animationData.sheet = enginePickup;
+                animationData.frames = [0, 1, 2, 3];
                 break;
                     }
 
@@ -65,7 +67,7 @@ function UpgradePickup(type, posX, posY) {
         position.y -= canvas.deltaY;
         
         if(this.collisionBody.isOnScreen) {
-            position.x += Math.round(velocity.x * deltaTime / 1000);
+            //position.x += Math.round(velocity.x * deltaTime / 1000);
             velocity.y += Math.round(GRAVITY * deltaTime / 1000);
             position.y += Math.round(velocity.y * deltaTime / 1000);
         }

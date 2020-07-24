@@ -955,6 +955,12 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
                     didHitRoad = true;
                 }
 
+                if(otherEntity.type === EntityType.WallBarrier) {
+                    if(currentLevelName === MAP_NAME.Area51 && SceneState.scenes[SCENE.GAME].mechsDefeated() >= 2) {
+                        return;
+                    }
+                }
+
                 if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {
                     if(!didHitRoad) {
                         this.setPosition(position.x + collisionData.deltaX, position.y);

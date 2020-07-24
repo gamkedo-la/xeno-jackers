@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_1b_bar",
-{ "compressionlevel":0,
+{ "compressionlevel":-1,
  "editorsettings":
     {
      "export":
@@ -1575,8 +1575,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":160.106,
-                 "y":119.15
+                 "x":148.712060606061,
+                 "y":116.84696969697
                 }, 
                 {
                  "gid":4098,
@@ -1877,6 +1877,18 @@
                  "width":21,
                  "x":1855.64,
                  "y":310.091
+                }, 
+                {
+                 "gid":4103,
+                 "height":17,
+                 "id":127,
+                 "name":"",
+                 "rotation":0,
+                 "type":"wheelPickup",
+                 "visible":true,
+                 "width":16,
+                 "x":2229.33333333333,
+                 "y":268
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1897,10 +1909,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":127,
+ "nextobjectid":128,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.3.4",
  "tileheight":8,
  "tilesets":[
         {
@@ -1913,6 +1925,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":320
 });

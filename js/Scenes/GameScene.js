@@ -10,6 +10,7 @@ function GameScene() {
     let score = 0;
     let remainingLives = 2;
     let reloading = false;
+    let defeatedMechs = 0;
 
     const enemies = [];
     const entitiesToRemove = [];
@@ -28,6 +29,7 @@ function GameScene() {
     let hasEngine = false;
 
     let canExitBar = false;
+    let canExitArea51 = false;
 
     this.transitionIn = function() {
         if((currentLevelName === MAP_NAME.Bar) || (currentLevelName === MAP_NAME.Area51)) {
@@ -70,6 +72,9 @@ function GameScene() {
                 environmentColliders.push(collider);
                 collisionManager.addEntity(collider);
             }
+
+            canExitBar = false;
+            canExitArea51 = false;
         }
 
         if(camera === null) {
@@ -120,6 +125,8 @@ function GameScene() {
             for(let enemy of enemies) {
                 enemy.setSpawnPoint(enemy.collisionBody.position.x - deltaX, enemy.collisionBody.position.y - deltaY);
             }
+
+            defeatedMechs = 0;
 
             for(let other of otherEntities) {
                 other.setSpawnPoint(other.collisionBody.position.x - deltaX, other.collisionBody.position.y - deltaY)
@@ -196,9 +203,19 @@ function GameScene() {
         }
     };
 
+    this.mechsDefeated = function() {
+        return defeatedMechs;
+    };
+
     this.mechDefeated = function(mech) {
-        canExitBar = true;
-        this.removeMe(mech);
+        if((currentLevelName === MAP_NAME.Bar) && (hasWheel)) {
+            canExitBar = true;
+            this.removeMe(mech);
+            defeatedMechs++;
+        } else if(currentLevelName === MAP_NAME.Area51) {
+            this.removeMe(mech);
+            defeatedMechs++;
+        }
     };
 
     this.addCollisionEntity = function(entity) {
@@ -244,6 +261,9 @@ function GameScene() {
     this.gotWheel = function() {
         hasWheel = true;
         gameUI.hasWheel = true;
+        if(defeatedMechs > 0) {
+            canExitBar = true;
+        }
     };
 
     this.gotHandlebar = function() {
@@ -254,6 +274,7 @@ function GameScene() {
     this.gotEngine = function() {
         hasEngine = true;
         gameUI.hasEngine = true;
+        canExitArea51 = true;
     };
 
     this.playerAtExit = function() {
@@ -276,11 +297,13 @@ function GameScene() {
                 SceneState.setState(SCENE.LVL2LVL3);
                 break;
             case MAP_NAME.Area51:
-                playerHealth = player.health;
-                this.reset();
-                currentLevelName = MAP_NAME.Boss;
-                score += 1000;
-                SceneState.setState(SCENE.GAME);//TODO: Needs to be the Lvl3Boss Cutscene
+                if(canExitArea51) {
+                    playerHealth = player.health;
+                    this.reset();
+                    currentLevelName = MAP_NAME.Boss;
+                    score += 1000;
+                    SceneState.setState(SCENE.WIN);//TODO: Needs to be the Lvl3Boss Cutscene
+                }
                 break;
             case MAP_NAME.Boss:
                 playerHealth = player.health;
