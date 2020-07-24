@@ -14,7 +14,10 @@ function EnemyMech(startX, startY) {
         punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [300, 400], false, false, [0], enemyMechSpriteBrightSheet),
         fastShoot: new SpriteAnimation('fastShoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [150, 200], false, false, [0], enemyMechSpriteBrightSheet),
-        death: new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false)
+		death1: new SpriteAnimation('death1', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false),
+		death2: new SpriteAnimation('death2', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false),
+		death3: new SpriteAnimation('death3', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false),
+		death4: new SpriteAnimation('death4', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false)
     };
     let currentAnimation = anims.idle;
     let phase1Complete = false;
@@ -26,7 +29,7 @@ function EnemyMech(startX, startY) {
 
     fist = new EnemyFist();
 
-    const MAX_HEALTH = 100;
+    const MAX_HEALTH = 1//00;
     this.health = MAX_HEALTH;
     this.type = EntityType.EnemyMech;
     this.dead = false;
@@ -50,8 +53,17 @@ function EnemyMech(startX, startY) {
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
 
-        if(currentAnimation === anims.death) {
-            if(currentAnimation.getIsFinished()) {
+        if(currentAnimation === anims.death1) {
+            if(currentAnimation.getCurrentFrameIndex() > 0) {
+                anims.death2.update(deltaTime);
+                if(anims.death2.getCurrentFrameIndex() > 0) {
+                    anims.death3.update(deltaTime);
+                    if(anims.death3.getCurrentFrameIndex() > 0) {
+                        anims.death4.update(deltaTime);
+                    }
+                }
+            }
+            if(anims.death4.getIsFinished()) {
                 SceneState.scenes[SCENE.GAME].mechDefeated(this);
             }
             return;
@@ -190,8 +202,17 @@ function EnemyMech(startX, startY) {
 
     this.draw = function (deltaTime) {
         if(this.collisionBody.isOnScreen) {
-            if(currentAnimation === anims.death) {
-                currentAnimation.drawAt(position.x, position.y + 4, flipped);
+            if(currentAnimation === anims.death1) {
+                currentAnimation.drawAt(position.x, position.y + 4, false);
+                if(currentAnimation.getCurrentFrameIndex() > 0) {
+                    anims.death2.drawAt(position.x - 5, position.y - 2, false);
+                    if(anims.death2.getCurrentFrameIndex() > 0) {
+                        anims.death3.drawAt(position.x + 5, position.y + 5, false);
+                        if(anims.death3.getCurrentFrameIndex() > 0) {
+                            anims.death4.drawAt(position.x - 2, position.y + 3, false);
+                        }
+                    }
+                }
             } else if(flipped) {
                 currentAnimation.drawAt(position.x - 5, position.y - 2, flipped);
             } else {
@@ -200,7 +221,7 @@ function EnemyMech(startX, startY) {
             
             this.collisionBody.draw();
             fist.draw();
-        }        
+        }   
     };
 
     this.didCollideWith = function(otherEntity) {
@@ -213,13 +234,13 @@ function EnemyMech(startX, startY) {
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
             alienHurt.play();
-            if((this.health <= 0) && (currentAnimation !== anims.death)) {
-                currentAnimation = anims.death;
+            if((this.health <= 0) && (currentAnimation !== anims.death1)) {
+                currentAnimation = anims.death1;
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
                 this.dead = true;
                 alienBossDeath.play();
-            } else if(currentAnimation === anims.death) {
+            } else if(currentAnimation === anims.death1) {
                 //do nothing
             } else if(this.health < MAX_HEALTH / 3) {
                 phase2Complete = true;

@@ -208,14 +208,11 @@ function GameScene() {
     };
 
     this.mechDefeated = function(mech) {
+        this.removeMe(mech);
+        defeatedMechs++;
         if((currentLevelName === MAP_NAME.Bar) && (hasWheel)) {
             canExitBar = true;
-            this.removeMe(mech);
-            defeatedMechs++;
-        } else if(currentLevelName === MAP_NAME.Area51) {
-            this.removeMe(mech);
-            defeatedMechs++;
-        }
+        } 
     };
 
     this.addCollisionEntity = function(entity) {
