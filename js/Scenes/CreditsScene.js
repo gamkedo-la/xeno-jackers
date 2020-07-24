@@ -8,6 +8,7 @@ function CreditsScene() {
     let timeMultiplier = 1;
     let textYPos = 0;
     let previouslyLoaded = false;
+	let fullTextHeight = 0;
 
     let gameCanvas;
     this.transitionIn = function() {
@@ -31,6 +32,15 @@ function CreditsScene() {
             }    
         }
 
+		// calc full text height
+		fullTextHeight = 0;
+		for (let person of credits) {
+			fullTextHeight += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
+			for (let contribution of person.contributions) {
+				fullTextHeight += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
+			}
+			fullTextHeight += Math.round(1.5 * fontRenderer.getHeightOfText(1, FONT.Stroked));
+		}
         previouslyLoaded = true;
     };
 
@@ -72,7 +82,11 @@ function CreditsScene() {
     };
 
     const update = function(deltaTime) {
-        textYPos -= timeMultiplier * deltaTime * SCROLL_SPEED / 1000;
+		if (textYPos + fullTextHeight > 0) {
+			textYPos -= timeMultiplier * deltaTime * SCROLL_SPEED / 1000;
+		} else {
+			// COOL POST-CREDITS ANIMATION HERE!
+		}
     };
 
     const checkButtons = function() {
