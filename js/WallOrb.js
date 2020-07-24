@@ -64,9 +64,20 @@ function WallOrb(posX, posY) {
         position.x -= canvas.deltaX;
         position.y -= canvas.deltaY;
 
-        if(currentAnimation === animations.death) {
-            if(currentAnimation.getIsFinished()) {
-                SceneState.scenes[SCENE.GAME].removeMe(this);
+        if(currentAnimation === animations.death1) {
+            if(currentAnimation.getCurrentFrameIndex() > 0) {
+                animations.death2.update(deltaTime);
+                if(animations.death2.getCurrentFrameIndex() > 0) {
+                    animations.death3.update(deltaTime);
+                    if(animations.death3.getCurrentFrameIndex() > 0) {
+                        animations.death4.update(deltaTime);
+                    }
+                }
+            }
+            if(currentAnimation === animations.death1) {
+                if(animations.death4.getIsFinished()) {
+                    SceneState.scenes[SCENE.GAME].removeMe(this);
+                }    
             }
             return;
         }
@@ -139,8 +150,17 @@ function WallOrb(posX, posY) {
 
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
-            if(currentAnimation === animations.death) {
+            if(currentAnimation === animations.death1) {
                 currentAnimation.drawAt(position.x, position.y, false);
+                if(currentAnimation.getCurrentFrameIndex() > 0) {
+                    animations.death2.drawAt(position.x - 5, position.y - 3, false);
+                    if(animations.death2.getCurrentFrameIndex() > 0) {
+                        animations.death3.drawAt(position.x + 4, position.y + 4, false);
+                        if(animations.death3.getCurrentFrameIndex() > 0) {
+                            animations.death4.drawAt(position.x - 4, position.y + 2, false);
+                        }
+                    }
+                }
             } else {
                 currentAnimation.drawAt(position.x, position.y, false);
             }
@@ -155,17 +175,17 @@ function WallOrb(posX, posY) {
         if(isPlayerTool(otherEntity) && otherEntity.isActive) {
             this.health--;
             alienHurt.play();
-            if((this.health <= 0) && (currentAnimation !== animations.death)) {
+            if((this.health <= 0) && (currentAnimation !== animations.death1)) {
                 const healthDropChance = 100 * Math.random();
                 this.dead = true;
                 alienBossDeath.play();
                 if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
-                currentAnimation = animations.death;
+                currentAnimation = animations.death1;
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
-            } else if(currentAnimation === animations.death) {
+            } else if(currentAnimation === animations.death1) {
                 // do nothing
             } else if(this.health > 0) {
                 flashTimer = 0;
@@ -178,7 +198,10 @@ function WallOrb(posX, posY) {
 
         anims.idle = new SpriteAnimation('idle', wallOrbSheet, [0], ANIM_WIDTH, HEIGHT, [512], false, true, [0], wallOrbBrightSheet);
 		anims.attacking = new SpriteAnimation('attacking', wallOrbSheet, [0], ANIM_WIDTH, HEIGHT, [100], false, false, [0], wallOrbBrightSheet);
-		anims.death = new SpriteAnimation('death', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false);
+		anims.death1 = new SpriteAnimation('death', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false);
+		anims.death2 = new SpriteAnimation('death', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false);
+		anims.death3 = new SpriteAnimation('death', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false);
+		anims.death4 = new SpriteAnimation('death', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false);
 
         return anims;
     };
