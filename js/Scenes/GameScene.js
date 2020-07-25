@@ -301,8 +301,8 @@ function GameScene() {
                 if(canExitArea51) {
                     playerHealth = player.health;
                     this.reset();
-                    currentLevelName = MAP_NAME.Boss;
-                    score += 1000;
+                    currentLevelName = MAP_NAME.Bar;
+                    score += 5000;
                     SceneState.setState(SCENE.WIN);//TODO: Needs to be the Lvl3Boss Cutscene
                 }
                 break;
