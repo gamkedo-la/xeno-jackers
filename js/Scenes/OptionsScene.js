@@ -18,6 +18,8 @@ function OptionsScene() {
             buttons.push(buildMenuButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding, GAME_SCALE));
             buttons.push(buildVolumeUpButton(56, volumeY, buttonHeight, buttonTitlePadding, GAME_SCALE));
             buttons.push(buildVolumeDownButton(96, volumeY, buttonHeight, buttonTitlePadding, GAME_SCALE));
+            buttons.push(buildPaletteUpButton(56, volumeY+30, buttonHeight, buttonTitlePadding, GAME_SCALE));
+            buttons.push(buildPaletteDownButton(130, volumeY+30, buttonHeight, buttonTitlePadding, GAME_SCALE));
         }
 
         selectorPositionsIndex = 0;
@@ -115,6 +117,15 @@ function OptionsScene() {
         return new UIButton("-", x, y, height, padding, thisClick, Color.Aqua, scale);
     }
 
+    const buildPaletteUpButton = function(x, y, height, padding, scale) {
+        const thisClick = function() { nextPallete(); }
+        return new UIButton("+", x, y, height, padding, thisClick, Color.Aqua, scale);
+    }
+    const buildPaletteDownButton = function(x, y, height, padding, scale) {
+        const thisClick = function() { prevPallete(); }
+        return new UIButton("-", x, y, height, padding, thisClick, Color.Aqua, scale);
+    }
+
     const printNavigation = function(navItems) {
         for(let i = 0; i < navItems.length; i++) {
             navItems[i].draw();
@@ -128,6 +139,8 @@ function OptionsScene() {
         drawTitle();
 
         drawVolume();
+
+        drawPalette();
         
         // render menu
         printNavigation(buttons, selectorPositionIndex);        
@@ -135,13 +148,17 @@ function OptionsScene() {
     
     const drawVolume = function() {
         const volumeLevelWidth = fontRenderer.getWidthOfText(`${Math.round(100 * musicVolume)}`, 1, FONT.Stroked);
-
         fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeTextWidth) / 2), volumeY - 10, "VOLUME", FONT.White);
         const volumeString = `${Math.round(musicVolume * 100)}`
         fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeLevelWidth) / 2), volumeY, volumeString, FONT.Stroked)
     };
 	
-	const drawBG = function() {
+    const drawPalette = function() {
+        fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeTextWidth) / 2), volumeY + 20, "PALETTE", FONT.White);
+        fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeTextWidth) / 2)+ 8 , volumeY + 30, paletteString, FONT.Stroked)
+    };
+
+    const drawBG = function() {
         // fill the background since there is no image for now
         drawRect(0, 0, canvas.width, canvas.height, "#252525");
     };
