@@ -10,39 +10,39 @@ const credits = [
     },
     {
         name: "Gonzalo Delgado",
-        contributions:"Player Falling Animation"
+        contributions:"Animations (player falling, thumbs up, idle, walking, transitions), player FSM implementation, light wood tiles, assorted movement bug fixes, biker enemies animations (attack, walk, swig and spit), credits screen exit functionality"
     },
     {
         name: "Christer -McFunkypants- Kaitila",
-        contributions: "Motorcycle tiles, trash can tiles, Enemy Mech Boss design and animation"
+        contributions: "Tiles (motorcycle, trash can, moon, stars), enemy mech boss design and animation, background music code fix, title screen sprites (incl. ufo), trash can placement, WASD support, gamepad and mobile touch support, alien mech sprite animations, alien mech code and placement, highway scroll smoothing"
     },
     {
         name: "Michael -Misha- Fewkes",
-        contributions:"Shadow 51 Music Track (Level 3)"
+        contributions:"Level 3, level 2 music, main menu music, music bug fix"
     },
     {
         name: "Alan Zaring",
-        contributions:"Level 1 Music"
-    },
-    {
-        name: "Martina Natale",
-        contributions:"Mute audio with M key, Player Jump sound effect"
+        contributions:"Level 1 music"
     },
     {
         name: "Trenton Pegeas",
-        contributions:"Enemy Flyer and Crawler animation sprites and code"
-    },
-    {
-        name: "Muhammed -EyeForcz- Durmusoglu", 
-        contributions:"Cheat Codes"
+        contributions:"Enemy flyer and crawler animation sprites and related code"
     },
     {
         name: "Vaan Hope Khani",
-        contributions:"Level 1 Tiles and Props"
+        contributions:"Animation speed tweaks, sounds (plaer hurt and enemy damage), extra life pickup"
+    },
+    {
+        name: "Martina Natale",
+        contributions:"Mute audio with M key, player jump sound effect"
     },
     {
         name: "I-wei Chen",
-        contributions:"Level 1 Tiles and Props"
+        contributions:"Level 1 tiles and props (pool table and several shelves)"
+    },
+    {
+        name: "Muhammed -EyeForcz- Durmusoglu", 
+        contributions:"Cheat codes"
     },
     {
         name: "Michael Richards",
