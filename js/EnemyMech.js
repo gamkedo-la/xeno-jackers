@@ -4,6 +4,9 @@ function EnemyMech(startX, startY) {
     const MELEE_ATTACK_DIST = 28;
     const RANGE_ATTACK_DIST = 60;
     const FLASH_TIME = 300; 
+    const JUMP_DELAY = 2500;
+    const JUMP_VARIANCE = 1000;
+    const JUMP_X_SPEED = 100;
 
     let flipped = false;
     let flashTimer = FLASH_TIME;
@@ -14,6 +17,7 @@ function EnemyMech(startX, startY) {
         punch: new SpriteAnimation('punch', enemyMechSpriteSheet, [10,11,12,13,14,15,16], WIDTH, HEIGHT, [100], false, true, [0], enemyMechSpriteBrightSheet),
         shoot: new SpriteAnimation('shoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [300, 400], false, false, [0], enemyMechSpriteBrightSheet),
         fastShoot: new SpriteAnimation('fastShoot', enemyMechSpriteSheet, [12,13], WIDTH, HEIGHT, [150, 200], false, false, [0], enemyMechSpriteBrightSheet),
+        jump: new SpriteAnimation('jump', enemyMechSpriteSheet, [17,18], WIDTH, HEIGHT, [250, 200], false, false, [0], enemyMechSpriteBrightSheet),
 		death1: new SpriteAnimation('death1', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false),
 		death2: new SpriteAnimation('death2', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false),
 		death3: new SpriteAnimation('death3', explosionSheet, [0, 1, 2, 3, 4, 5], 16, 16, [100], false, false),
@@ -26,6 +30,11 @@ function EnemyMech(startX, startY) {
     let fistIsActive = false;
     let isShooting = false;
     let didShoot = false;
+    let timeSinceJump = 0;
+    const nextJumpTime = function() {
+        return JUMP_DELAY + Math.round(JUMP_VARIANCE * Math.random()) - (JUMP_VARIANCE / 2);
+    }
+    let timeToJump = nextJumpTime();
 
     fist = new EnemyFist();
 
@@ -41,6 +50,13 @@ function EnemyMech(startX, startY) {
     ]);
 
     this.setSpawnPoint = function(x, y) {
+        position.x = x;
+        position.y = y;
+        this.collisionBody.setPosition(position.x, position.y);
+        this.collisionBody.calcOnscreen(canvas);
+    };
+
+    this.setPosition = function (x, y) {
         position.x = x;
         position.y = y;
         this.collisionBody.setPosition(position.x, position.y);
@@ -69,6 +85,14 @@ function EnemyMech(startX, startY) {
             return;
         }
 
+        if(velocity.x > 1) {
+            velocity.x -= 0.5;
+        } else if(velocity.x < -1) {
+            velocity.x += 0.5;
+        } else {
+            velocity.x = 0;
+        }
+
         if(this.collisionBody.isOnScreen) {
             if(flashTimer < FLASH_TIME) {
                 flashTimer += deltaTime;
@@ -83,8 +107,21 @@ function EnemyMech(startX, startY) {
             const xPos = position.x + Math.round(velocity.x * deltaTime / 1000);
 
             velocity.y += GRAVITY * deltaTime / 1000;
+            if (currentAnimation === anims.jump) {
+                if(currentAnimation.getCurrentFrameIndex() > 0) {
+                    if(flipped) {
+                        velocity.x = JUMP_X_SPEED
+                    } else {
+                        velocity.x = -JUMP_X_SPEED
+                    }
+    
+                    velocity.y = -MAX_Y_SPEED;    
+                }
+            }
             if (velocity.y > MAX_Y_SPEED) velocity.y = MAX_Y_SPEED;
             const yPos = position.y + Math.round(velocity.y * deltaTime / 1000);
+
+            this.setPosition(xPos, yPos);
 
             let distToPlayer = 0;
             if(player.collisionBody.center.x < this.collisionBody.center.x) {
@@ -98,9 +135,23 @@ function EnemyMech(startX, startY) {
             if(!phase1Complete) {
                 checkPhase1Attack(distToPlayer);
             } else if(!phase2Complete) {
+                if(currentLevelName === MAP_NAME.Area51) {
+                    timeSinceJump += deltaTime;
+                }
                 checkPhase2Attack(distToPlayer);
             } else {
+                timeSinceJump += deltaTime;
                 checkPhase3Attack(distToPlayer);
+            }
+
+            if(timeSinceJump > timeToJump) {
+                jump();
+                timeToJump = nextJumpTime();
+                timeSinceJump = 0;
+            }
+
+            if((currentAnimation === anims.jump) && (currentAnimation.getIsFinished())) {
+                currentAnimation = anims.idle;
             }
         }
 
@@ -111,7 +162,6 @@ function EnemyMech(startX, startY) {
     const checkPhase1Attack = function(distToPlayer) {
         if(distToPlayer < MELEE_ATTACK_DIST) {
             if(!isPunching) {
-                velocity.x = 0;
                 currentAnimation = anims.punch;
                 isPunching = true;
             }
@@ -139,10 +189,17 @@ function EnemyMech(startX, startY) {
     };
 
     const checkPhase2Attack = function(distToPlayer) {
+        if(currentAnimation === anims.jump) return;
         checkShootAttack(distToPlayer, anims.shoot);
     };
 
     const checkPhase3Attack = function(distToPlayer) {
+        if(currentAnimation === anims.jump) {
+            fist.deactivate();
+            fistIsActive = false;
+            isShooting = false;
+            return;
+        }
         checkShootAttack(distToPlayer, anims.fastShoot);
     };
 
@@ -152,7 +209,6 @@ function EnemyMech(startX, startY) {
             return;
         } else if(distToPlayer < RANGE_ATTACK_DIST) {
             if(!isShooting) {
-                velocity.x = 0;
                 currentAnimation = animation;
                 currentAnimation.reset();
                 isShooting = true;
@@ -200,6 +256,13 @@ function EnemyMech(startX, startY) {
         }
     };
 
+    const jump = function() {
+        isShooting = false;
+        isPunching = false;
+        currentAnimation = anims.jump;
+        currentAnimation.reset();
+    };
+
     this.draw = function (deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === anims.death1) {
@@ -224,7 +287,7 @@ function EnemyMech(startX, startY) {
         }   
     };
 
-    this.didCollideWith = function(otherEntity) {
+    this.didCollideWith = function(otherEntity, collisionData) {
         if(otherEntity.type === EntityType.Player) {
             if(otherEntity.collisionBody.center.x >= this.collisionBody.center.x) {
                 position.x -= 5;
@@ -263,9 +326,13 @@ function EnemyMech(startX, startY) {
                 this.setPosition(position.x, position.y + collisionData.deltaY);
                 if(collisionData.deltaY < 0) {
                     isOnGround = true;
-                    velocity.y = 0;
+                    if(velocity.y > 0) {
+                        velocity.y = 0;
+                    }
                 }
             }
+
+            velocity.x = 0;
 
             this.collisionBody.setPosition(position.x, position.y);
         }

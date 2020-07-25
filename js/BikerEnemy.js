@@ -153,7 +153,6 @@ function BikerEnemy(posX, posY) {
             }
         }
 
-
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
