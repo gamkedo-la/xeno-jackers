@@ -232,7 +232,11 @@ function EnemyMech(startX, startY) {
                 position.x += 5;
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
-            this.health--;
+            if(otherEntity.type === EntityType.Wheel) {
+                this.health -= 0.2;
+            } else {
+                this.health--;
+            }
             alienHurt.play();
             if((this.health <= 0) && (currentAnimation !== anims.death1)) {
                 currentAnimation = anims.death1;

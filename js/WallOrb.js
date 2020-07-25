@@ -173,7 +173,11 @@ function WallOrb(posX, posY) {
 
     this.didCollideWith = function(otherEntity, collisionData) {
         if(isPlayerTool(otherEntity) && otherEntity.isActive) {
-            this.health--;
+            if(otherEntity.type === EntityType.Wheel) {
+                this.health -= 0.2;
+            } else {
+                this.health--;
+            }
             alienHurt.play();
             if((this.health <= 0) && (currentAnimation !== animations.death1)) {
                 const healthDropChance = 100 * Math.random();

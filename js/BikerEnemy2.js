@@ -201,7 +201,11 @@ function BikerEnemy2(posX, posY) {
                 position.x += 5;
             }
         } else if(isPlayerTool(otherEntity) && otherEntity.isActive) {
-            this.health--;
+            if(otherEntity.type === EntityType.Wheel) {
+                this.health -= 0.2;
+            } else {
+                this.health--;
+            }
             bikerHurt.play();
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
