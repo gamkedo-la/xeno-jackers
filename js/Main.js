@@ -46,6 +46,7 @@ function updateButtonText() {
 function update() {
 	const deltaTime = timer.update();
     SceneState.run(deltaTime);
+    drawPaletteEffect();
     if (gamepad) gamepad.update();
 	requestAnimationFrame(update);
 };
