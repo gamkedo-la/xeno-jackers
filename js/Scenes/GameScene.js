@@ -454,7 +454,6 @@ function GameScene() {
             if(highwayScrollTime > highwayAutoScrollTime) {
                 player.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
                 camera.setLevelWidth(currentMap.collisionTiles.widthInTiles * TILE_WIDTH);
-
             }
         }
 
@@ -527,7 +526,7 @@ function GameScene() {
         
         mapRenderer.drawSkybox(canvasContext, currentMap.skybox);
         mapRenderer.drawTileLayer(currentMap.farBackgroundTiles.tiles, currentMap.farBackgroundTiles.widthInTiles, offsetX);
-        if(currentLevelName === MAP_NAME.Highway) {
+        if((currentLevelName === MAP_NAME.Highway) && (highwayScrollTime < highwayAutoScrollTime)) {
             mapRenderer.drawScrollingTileLayer(mapLoader.backgroundMap.nearBackgroundTiles.tiles, mapLoader.backgroundMap.widthInTiles, 0.5 * autoScrollX);
         }
         mapRenderer.drawTileLayer(currentMap.nearBackgroundTiles.tiles, currentMap.nearBackgroundTiles.widthInTiles);
@@ -544,7 +543,7 @@ function GameScene() {
         player.draw(deltaTime);
 
         mapRenderer.drawTileLayer(currentMap.foregroundTiles.tiles, currentMap.foregroundTiles.widthInTiles);
-        if(currentLevelName === MAP_NAME.Highway) {
+        if((currentLevelName === MAP_NAME.Highway) && (highwayScrollTime < highwayAutoScrollTime)) {
             mapRenderer.drawScrollingTileLayer(mapLoader.foregroundMap.foregroundTiles.tiles, mapLoader.foregroundMap.widthInTiles, 2 * autoScrollX);
         }
 
