@@ -9,17 +9,23 @@ function OptionsScene() {
     const buttons = [];
     const volumeY = 50;
     let volumeTextWidth = 0;
-
+    const palletPos = {x: 0, y: 0};
+    const palletLabelPos = {x: 0, y: 0};
     this.transitionIn = function() {
         let mainMenuX = Math.round(canvas.width - fontRenderer.getWidthOfText("MAIN MENU", 1, FONT.White) - 0);
         const mainMenuY = canvas.height - fontRenderer.getHeightOfText(1, FONT.White) + 0;
+        const gameboyWidth = fontRenderer.getWidthOfText("GAMEBOY", 1, FONT.Stroked);
+        palletPos.x = Math.round((canvas.width - gameboyWidth) / 2);
+        palletPos.y = volumeY + 30;
+        palletLabelPos.x = Math.round((canvas.width - fontRenderer.getWidthOfText("PALETTE", 1, FONT.White)) / 2);
+        palletLabelPos.y = volumeY + 20;
         
         if(buttons.length === 0) {
             buttons.push(buildMenuButton(mainMenuX, mainMenuY, buttonHeight, buttonTitlePadding, GAME_SCALE));
             buttons.push(buildVolumeUpButton(56, volumeY, buttonHeight, buttonTitlePadding, GAME_SCALE));
             buttons.push(buildVolumeDownButton(96, volumeY, buttonHeight, buttonTitlePadding, GAME_SCALE));
-            buttons.push(buildPaletteUpButton(56, volumeY+30, buttonHeight, buttonTitlePadding, GAME_SCALE));
-            buttons.push(buildPaletteDownButton(130, volumeY+30, buttonHeight, buttonTitlePadding, GAME_SCALE));
+            buttons.push(buildPrevPaletteButton(palletPos.x - 6, palletPos.y + 1, buttonHeight, buttonTitlePadding, GAME_SCALE));
+            buttons.push(buildNextPaletteButton(palletPos.x + gameboyWidth, palletPos.y + 1, buttonHeight, buttonTitlePadding, GAME_SCALE));
         }
 
         selectorPositionsIndex = 0;
@@ -44,24 +50,22 @@ function OptionsScene() {
         
         switch (newKeyEvent) {
             case ALIAS.UP:
+                turnVolumeUp();
+                return true;
             case ALIAS.LEFT:
-                selectorPositionsIndex--;
-                if (selectorPositionsIndex < 0) {
-                    selectorPositionsIndex += selections.length;
-                }
+                prevPallete();
                 return true;
             case ALIAS.DOWN:
+                turnVolumeDown();
+                return true;
             case ALIAS.RIGHT:
-                selectorPositionsIndex++;
-                if (selectorPositionsIndex >= selections.length) {
-                    selectorPositionsIndex = 0;
-                }
+                nextPallete();
                 return true;
             case ALIAS.SELECT1:
                 SceneState.setState(selections[selectorPositionsIndex]);
                 return true;
             case ALIAS.SELECT2:
-                SceneState.setState(SCENE.GAME);
+                SceneState.setState(SCENE.TITLE);
             case ALIAS.POINTER:
                 checkButtons();
                 return true;
@@ -74,7 +78,8 @@ function OptionsScene() {
     };
 
     const update = function(deltaTime) {
-
+        palletPos.x = Math.round((canvas.width - fontRenderer.getWidthOfText(paletteString, 1, FONT.Stroked)) / 2);
+        palletPos.y = volumeY + 30;
     };
 
     const checkButtons = function() {
@@ -83,14 +88,6 @@ function OptionsScene() {
             wasClicked = buttons[i].respondIfClicked(mouseX, mouseY);
             if(wasClicked) {break;}
         }
-    };
-
-    const buildPlayButton = function(x, y, height, padding) {
-        const thisClick = function() {
-            SceneState.setState(SCENE.GAME);
-        }
-
-        return new UIButton("PLAY", x, y, height, padding, thisClick, Color.Aqua);
     };
 
     const buildMenuButton = function(x, y, height, padding, scale) {
@@ -117,13 +114,13 @@ function OptionsScene() {
         return new UIButton("-", x, y, height, padding, thisClick, Color.Aqua, scale);
     }
 
-    const buildPaletteUpButton = function(x, y, height, padding, scale) {
+    const buildNextPaletteButton = function(x, y, height, padding, scale) {
         const thisClick = function() { nextPallete(); }
-        return new UIButton("+", x, y, height, padding, thisClick, Color.Aqua, scale);
+        return new UIButton(">", x, y, height, padding, thisClick, Color.Aqua, scale);
     }
-    const buildPaletteDownButton = function(x, y, height, padding, scale) {
+    const buildPrevPaletteButton = function(x, y, height, padding, scale) {
         const thisClick = function() { prevPallete(); }
-        return new UIButton("-", x, y, height, padding, thisClick, Color.Aqua, scale);
+        return new UIButton("<", x, y, height, padding, thisClick, Color.Aqua, scale);
     }
 
     const printNavigation = function(navItems) {
@@ -154,8 +151,8 @@ function OptionsScene() {
     };
 	
     const drawPalette = function() {
-        fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeTextWidth) / 2), volumeY + 20, "PALETTE", FONT.White);
-        fontRenderer.drawString(canvasContext, Math.round((canvas.width - volumeTextWidth) / 2)+ 8 , volumeY + 30, paletteString, FONT.Stroked)
+        fontRenderer.drawString(canvasContext, palletLabelPos.x, palletLabelPos.y, "PALETTE", FONT.White);
+        fontRenderer.drawString(canvasContext, palletPos.x , palletPos.y, paletteString, FONT.Stroked)
     };
 
     const drawBG = function() {

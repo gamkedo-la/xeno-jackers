@@ -196,6 +196,10 @@ function FontBuilder() {
                 return {x:84, y:27};
             case ' ':
                 return {x:77, y:36};
+            case '>':
+                return {x:14, y:36};
+            case '<':
+                return {x:21, y:36};
         }
     };
 
@@ -333,6 +337,11 @@ function FontBuilder() {
                 return {x:108, y:33};
             case ' ':
                 return {x:0, y:55};
+            case '>':
+                return {x:18, y:44};
+            case '<':
+                return {x:27, y:44};
+    
         }
     };
 
