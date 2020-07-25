@@ -23,6 +23,7 @@ let chainAttack2;
 let nodeActivate;
 let menuMusic = MENU_MUSIC_FILENAME;
 let musicVolume;
+let unmutedVolume;
 let effectsVolume;
 let currentBackgroundMusic;
 let playerJump;
@@ -40,6 +41,7 @@ function configureGameAudio() {
 	if (Number.isNaN(effectsVolume)) effectsVolume = VOLUME_MUSIC;
 	localStorage.setItem(localStorageKey.SFXVolume, effectsVolume);
 
+	unmutedVolume = musicVolume;
 }
 
 function loadAudio() {
@@ -163,16 +165,18 @@ function getRandomVolume() {
 }
 
 function toggleMute() {
-	if (!isMuted) {
-		setMusicVolume(0);
+	isMuted = !isMuted;
+	if (isMuted) {
+		setMusicVolume(0, false);
 		setEffectsVolume(0);
-		isMuted = !isMuted;
 	}
-	else {
-		isMuted = !isMuted;
-		currentBackgroundMusic.setVolume(VOLUME_MUSIC);
-		setEffectsVolume(VOLUME_MUSIC);
+	else {	
+		setMusicVolume(unmutedVolume);
+		setEffectsVolume(unmutedVolume);
 	}
+
+	currentBackgroundMusic.setVolume(unmutedVolume);
+	setEffectsVolume(unmutedVolume);
 }
 
 function setEffectsVolume(amount) {
@@ -184,17 +188,26 @@ function setEffectsVolume(amount) {
 	}
 }
 
-function setMusicVolume(amount) {
+function setMusicVolume(amount, setUnmutedVolume = true) {
 	musicVolume = amount;
 	if (musicVolume > 1.0) {
 		musicVolume = 1.0;
 	} else if (musicVolume < 0.0) {
 		musicVolume = 0.0;
 	}
+	if(setUnmutedVolume) {
+		unmutedVolume = musicVolume;
+	}
 	currentBackgroundMusic.setVolume(musicVolume);
 }
 
 function turnVolumeUp() {
+	if(isMuted) {
+		isMuted = false;
+		setMusicVolume(0);
+		setEffectsVolume(0);
+	}
+
 	setMusicVolume(musicVolume + VOLUME_INCREMENT);
 	setEffectsVolume(effectsVolume + VOLUME_INCREMENT);
 }
