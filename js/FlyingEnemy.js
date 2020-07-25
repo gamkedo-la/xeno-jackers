@@ -1,3 +1,4 @@
+// Mike was here - this does nothing
 //FlyingEnemy.js
 function FlyingEnemy(posX, posY) {
     const WIDTH = 35;
