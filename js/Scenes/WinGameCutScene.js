@@ -8,6 +8,8 @@ function WinGame2CutScene() {
     let xenoMorph9000 = null;
     let emptyBike = null;
     let bikePosition = {x: 80, y: 100};
+    let scoreString = '';
+    const scorePos = {x: 0, y: 25};
 
     this.transitionIn = function() {
         currentBackgroundMusic.pauseSound();
@@ -21,6 +23,9 @@ function WinGame2CutScene() {
         bikePosition = {x: 80, y: 100};
         const titleWidth = fontRenderer.getWidthOfText("Congratulations", 1, FONT.Stroked);
         titlePos = Math.round((canvas.width - titleWidth) / 2);
+
+        scoreString = 'SCORE ' + `${this.properties}`.padStart(7, '0');
+        scorePos.x = Math.round((canvas.width - fontRenderer.getWidthOfText(scoreString, 1, FONT.White)) / 2);
     };
 
     this.transitionOut = function() {
@@ -76,6 +81,7 @@ function WinGame2CutScene() {
         }
 
         fontRenderer.drawString(canvasContext, titlePos, 5, "Congratulations", FONT.Stroked);
+        fontRenderer.drawString(canvasContext, scorePos.x, scorePos.y, scoreString, FONT.White);
 
         if(cutScenePlayer.position.x < 60) {
             cutScenePlayer.draw(deltaTime);

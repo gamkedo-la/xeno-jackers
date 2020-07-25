@@ -303,7 +303,7 @@ function GameScene() {
                     this.reset();
                     currentLevelName = MAP_NAME.Bar;
                     score += 5000;
-                    SceneState.setState(SCENE.WIN);//TODO: Needs to be the Lvl3Boss Cutscene
+                    SceneState.setState(SCENE.WIN, score);
                 }
                 break;
             case MAP_NAME.Boss:
@@ -584,7 +584,7 @@ function GameScene() {
             case EntityType.ChainPickup:
             case EntityType.WheelPickup:
             case EntityType.HandlebarPickup:
-            case EntityType.Engine:
+            case EntityType.EnginePickup:
                 return POINTS.BikePart;
             default:
                 return 0;
