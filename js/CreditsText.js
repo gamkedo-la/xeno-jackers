@@ -2,11 +2,11 @@
 const credits = [
     {
         name:"Jeff -Axphin- Hanlon",
-        contributions:'Game Lead, Player Animations, Enemy Biker Animations, Alien Guard Animations, Basic Tile set'
+        contributions:'Project lead, main player animations, level layouts (1-3), camera tweaks, enemy biker animations, alien guard animations, core tile sets master spritesheet (bar, truck, area 51), low-res HTGD logo, initial sound effects (incl. pause and unpause, growl and taunt, laser sound effects, explosions, glass breaking), menu border tiles, font variations, collision box authoring, ducking code, item sprites, weapons (chain whip, wheel, handlebar), additional FSM transitions, assorted bug fixes, alien incubators, UFO spritesheet, climbing and death animations, bar exterior, enemy placement, enemy wall boss, score hookups, cutscene authoring, boss design'
     },
     {
         name:"H Trayford",
-        contributions:'Co-Lead, Base Prototype, Collision Detection, Tiled Integration, Menu System, UI Integration'
+        contributions:'Project co-lead, base prototype, collision detection system, tiled editor integration, menu system, UI code, font implementation, enemy code, canvas scaling, camera code, movement, many bug fixes, parallax background layer, animation code, debug mode, credits display, audio implementation, volume change, stairs movement, knockback, action functionality, level skip debug feature, optimizations, flying fists, cutscene integration, win screen, jukebox'
     },
     {
         name: "Gonzalo Delgado",
