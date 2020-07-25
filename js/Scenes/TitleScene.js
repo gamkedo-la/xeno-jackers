@@ -7,7 +7,7 @@ function TitleScene() {
 
     let selectorPositionsIndex = 0;
     const selections = [
-        SCENE.GAME,
+        SCENE.LVL1Intro,
         SCENE.OPTIONS,
         SCENE.CREDITS
     ];
