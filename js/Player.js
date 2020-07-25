@@ -895,6 +895,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
 
     const processInput = function (deltaTime, body) {
+        if(healthDepleted()) heldButtons.length = 0;
         for (let i = 0; i < heldButtons.length; i++) {
             switch (heldButtons[i]) {
                 case ALIAS.BLOCK:
