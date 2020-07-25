@@ -391,13 +391,17 @@ function GameScene() {
                     enemies.push(anEntity);
                     break;
                 case EntityType.EnemyMech:
-                    anEntity = new EnemyMech(data.x-12, data.y-36); // sprite is 36x36
+                    anEntity = new EnemyMech(data.x-12, data.y - 36); // sprite is 36x36
                     enemies.push(anEntity);
                     break;
                 case EntityType.Lamp:
                     anEntity = new Lamp(data.x, data.y);
                     otherEntities.push(anEntity);
                     break;
+                case EntityType.JukeBox:
+                    anEntity = new JukeBox(data.x, data.y - 28);
+                    otherEntities.push(anEntity);
+                    break;    
                 case EntityType.ChainPickup:
                     if(!hasChain) {
                         anEntity = new UpgradePickup(EntityType.ChainPickup, data.x, data.y - 16);

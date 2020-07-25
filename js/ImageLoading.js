@@ -95,6 +95,7 @@ let enemyCrawlerBrightSheet;
 let enemyChunkyCrawlerBrightSheet;
 let enemyFlyerBrightSheet;
 let wallOrbBrightSheet;
+let jukeboxBrightSheet;
 
 //screens
 const uiMenuBorderPic = document.createElement("img");
@@ -105,6 +106,7 @@ const barFrontBroke = document.createElement("img");
 
 //environment objects
 const lampPic = document.createElement("img");
+const jukeboxPic = document.createElement("img");
 const cactusFullPic = document.createElement("img");
 const cutsceneTruck = document.createElement("img");
 
@@ -152,6 +154,7 @@ function countLoadedImageAndLaunchIfReady() {
         enemyFlyerBrightSheet = brightLight.imageForImage(enemyFlyerSheet);
         wallOrbBrightSheet = brightLight.imageForImage(wallOrbSheet);
         playerBrightSheet = brightLight.imageForImage(playerSpriteSheet);
+        jukeboxBrightSheet = brightLight.imageForImage(jukeboxPic);
         loadingDoneSoStartGame();
     }
 }
@@ -191,6 +194,7 @@ function loadImages() {
 
         //environment objects
         { imgName: lampPic, theFile: "backgrounds/Lamp.png" },
+        { imgName: jukeboxPic, theFile: "characters/jukebox.png" },
         { imgName: cactusFullPic, theFile: "backgrounds/cactus_full.png" },
         { imgName: cutsceneTruck, theFile: "backgrounds/cutscenetruck.png" },
 

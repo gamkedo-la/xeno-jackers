@@ -3,7 +3,7 @@ function Lamp(posX, posY) {
     this.type = EntityType.Lamp;
     let position = {x:posX, y:posY};
     let spawnPoint = {x:0, y:0};
-    currentAnimation = new SpriteAnimation('idle', lampPic, [0, 1], 16, 16, [2048], false, true);
+    let currentAnimation = new SpriteAnimation('idle', lampPic, [0, 1], 16, 16, [256], false, true);
     this.collisionBody = new AABBCollider([
         {x:posX + 2, y:posY},
         {x:posX + 12, y:posY},
@@ -21,18 +21,22 @@ function Lamp(posX, posY) {
     };
 
     this.update = function(deltaTime) {
-        currentAnimation.update(deltaTime);
         position.x = spawnPoint.x - canvas.offsetX;
         position.y = spawnPoint.y - canvas.offsetY;
+        if(this.collisionBody.isOnScreen) {
+            currentAnimation.update(deltaTime);
+        }
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
     };
 
     this.draw = function() {
-        currentAnimation.drawAt(position.x - 3, position.y - 2);
+        if(this.collisionBody.isOnScreen) {
+            currentAnimation.drawAt(position.x - 3, position.y - 2);
 
-        //colliders only draw when DRAW_COLLIDERS is set to true
-        this.collisionBody.draw();
+            //colliders only draw when DRAW_COLLIDERS is set to true
+            this.collisionBody.draw();    
+        }
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {

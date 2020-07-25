@@ -46,7 +46,8 @@ const EntityType = {
     JukeBox: "jukeBox",
 
     //Destructible
-    Lamp:"lamp"
+    Lamp:"lamp",
+    JukeBox: "jukebox"
 };
 
 function isEnemy(entity) {
@@ -114,7 +115,6 @@ function isEnvironment(entity) {
         case EntityType.Roadzone:
         case EntityType.LevelExit:
         case EntityType.WallBarrier:
-        case EntityType.JukeBox:
             return true;
         default:
             return false;
@@ -124,6 +124,7 @@ function isEnvironment(entity) {
 function isEnvironmentObject(entity) {
     switch(entity.type) {
         case EntityType.Lamp:
+        case EntityType.JukeBox:
             return true;
         default:
             return false;

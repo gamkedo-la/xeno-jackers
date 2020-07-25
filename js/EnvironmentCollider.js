@@ -4,8 +4,6 @@ function EnvironmentCollider(type, points, position) {
     this.points = [];
     this.position = {x:points[0].x + position.x, y:points[0].y + position.y};
     let spawnPoint = {x:0, y:0};
-    const TIME_DELAY = 100;
-    let lastTime = null;
 
     this.setSpawnPoint = function(x, y) {
         this.position.x = x;
@@ -30,25 +28,6 @@ function EnvironmentCollider(type, points, position) {
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
-        if((isPlayerTool(otherEntity)) && (this.type === EntityType.JukeBox)) {
-            const nowTime = Date.now();
-            if((lastTime === null) || (nowTime - lastTime >= TIME_DELAY)) {
-                lastTime = nowTime;
-                switch(currentBackgroundMusic.filenameWithPath) {
-                    case MENU_MUSIC_FILENAME:
-                        currentBackgroundMusic.loopSong(LEVEL_1_MUSIC_FILENAME);
-                    break;
-                    case LEVEL_1_MUSIC_FILENAME:
-                        currentBackgroundMusic.loopSong(LEVEL_2_MUSIC_FILENAME);
-                    break;
-                    case LEVEL_2_MUSIC_FILENAME:
-                        currentBackgroundMusic.loopSong(LEVEL_3_MUSIC_FILENAME);
-                    break;
-                    case LEVEL_3_MUSIC_FILENAME:
-                        currentBackgroundMusic.loopSong(MENU_MUSIC_FILENAME);
-                    break;
-                }
-            }
-        }
+        // DO NOTHING
     };
 }

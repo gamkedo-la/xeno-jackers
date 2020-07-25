@@ -19,11 +19,7 @@ function BikerEnemy2(posX, posY) {
     let timeToCackle = MIN_TIME_TO_CACKLE + MEDIAN_TIME_TO_CACLE * Math.random();
     
     let isAttacking = false;
-    let fistIsActive = false
-    let isBlocking = false;
-    let isCrouching = false;
 
-    let isOnGround = true;
     let flipped = false;
 
     let flashTimer = FLASH_TIME;
@@ -132,51 +128,9 @@ function BikerEnemy2(posX, posY) {
             }
         }
 
-
         //keep collisionBody in synch with sprite
         this.collisionBody.setPosition(position.x, position.y);
         this.collisionBody.calcOnscreen(canvas);
-    };
-
-    const moveLeft = function() {
-        velocity.x = -WALK_SPEED;
-    };
-
-    const moveRight = function() {
-        velocity.x = WALK_SPEED;
-    };
-
-    const jump = function() {
-        if(isOnGround) {
-            isOnGround = false;
-//            currentAnimation = animations.jumping;
-            console.log("Biker Enemy is trying to jump.");
-        }
-    };
-
-    const block = function() {
-        if(isOnGround && hasWheelWeapon && !isBlocking) {
-            console.log("Biker Enemy is trying to block.");
-            isBlocking = true;
-//            currentAnimation = animations.blocking;
-        }
-    };
-
-    const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
-            return;
-        } else {
-            console.log("Biker Enemy is trying to attack.");
-			currentAnimation = animations.attacking;
-        }
-    };
-
-    const crouch = function() {
-        if(isOnGround && !isCrouching) {
-            console.log("Biker Enemy is crouching now.");
-            isCrouching = true;
-//            currentAnimation = animations.crouching;
-        }
     };
 
     this.draw = function(deltaTime) {
@@ -243,10 +197,6 @@ function BikerEnemy2(posX, posY) {
         anims.idle = new SpriteAnimation('idle', bikerEnemy2Sheet, [0, 1], ANIM_WIDTH, HEIGHT, [512], false, true, [0], bikerEnemy2BrightSheet);
 		anims.attacking = new SpriteAnimation('attacking', bikerEnemy2Sheet, [2, 3, 4, 5, 6, 2], ANIM_WIDTH, HEIGHT, [100, 100, 400, 100, 330, 100], false, false, [0], bikerEnemy2BrightSheet);
 		anims.death = new SpriteAnimation('death', deathSheet, [0, 1, 2, 3], 16, 16, [100], false, false);
-//		anims.walk = new SpriteAnimation('walking', bikerEnemy2Sheet, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16], ANIM_WIDTH, HEIGHT, [100], false, true, [0], bikerEnemyBrightSheet);
-//        animations.jumping = ...
-//        animations.blocking = ...
-//        animations.crouching = ...
 
         return anims;
     };
