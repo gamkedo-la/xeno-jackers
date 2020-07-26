@@ -27,6 +27,7 @@ let unmutedVolume;
 let effectsVolume;
 let currentBackgroundMusic;
 let playerJump;
+let playerDeath;
 const VOLUME_INCREMENT = 0.05;
 const VOLUME_MUSIC = 1.0;
 
@@ -66,6 +67,7 @@ function loadAudio() {
 	chainAttack2 = new SoundOverlapsClass(assetPath.Audio + "chain_attack2");
 	nodeActivate = new SoundOverlapsClass(assetPath.Audio + "node_activate");
 	playerJump = new SoundOverlapsClass(assetPath.Audio + "jumpUp");
+	playerDeath = new SoundOverlapsClass(assetPath.Audio + "playerDeath");
 }
 
 function setFormat() {

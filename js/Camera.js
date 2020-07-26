@@ -30,8 +30,13 @@ function Camera(canvas) {
         const playerPos = player.getPosition();
         const feet = playerPos.y + player.collisionBody.height;
 
-        if(playerPos.x + 6 > canvas.center.x + DEAD_ZONE_X) {
+        if(playerPos.x + 6 > canvas.center.x + (1.3 * DEAD_ZONE_X)) {
+            console.log("In the zone")
+            canvas.center.x += 2;
+        } else if(playerPos.x + 6 > canvas.center.x + DEAD_ZONE_X) {
             canvas.center.x++;
+        } else if(playerPos.x + 6 < canvas.center.x - (1.3 * DEAD_ZONE_X)) {
+            canvas.center.x -= 2;
         } else if(playerPos.x + 6 < canvas.center.x - DEAD_ZONE_X) {
             canvas.center.x--;
         }

@@ -698,6 +698,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 	function enterDead(deltaTime) {
         currentAnimation = animations.dieing;
         currentAnimation.reset();
+        playerDeath.play();
     }
     
     function updateDead(deltaTime) {
