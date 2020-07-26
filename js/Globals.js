@@ -12,9 +12,10 @@ const MAX_Y_SPEED = 95; //65 - launch off ground speed for player jump
 
 const COLLIDER_COLOR = 'aqua';
 const MENU_MUSIC_FILENAME = 'audio/XJ_SAGA';
-const LEVEL_1_MUSIC_FILENAME = 'audio/level1MusicV1';
+const LEVEL_1_MUSIC_FILENAME = 'audio/level1MusicV1-alt';
 const LEVEL_2_MUSIC_FILENAME = 'audio/Green_Tire_Tracks';
 const LEVEL_3_MUSIC_FILENAME = 'audio/Shadow_51';
+const BOSS_MUSIC_FILENAME = 'audio/bossMusicV1';
 const GAMEOVER_MUSIC_FILENAME = 'audio/XJ_SAGA';
 const ENDING_MUSIC_FILENAME = 'audio/XJ_SAGA';
 
