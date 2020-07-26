@@ -46,12 +46,19 @@ function updateButtonText() {
 	}
 }
 
+let frameTime = 0;
 function update() {
 	const deltaTime = timer.update();
-    SceneState.run(deltaTime);
-    drawPaletteEffect();
-    if (gamepad) gamepad.update();
-	requestAnimationFrame(update);
+	frameTime += deltaTime;
+	if(frameTime > 15) {
+		SceneState.run(frameTime);
+		frameTime = 0;
+		drawPaletteEffect();
+		if (gamepad) gamepad.update();
+		requestAnimationFrame(update);	
+	} else {
+		requestAnimationFrame(update);
+	}
 };
 
 function startGame() {
