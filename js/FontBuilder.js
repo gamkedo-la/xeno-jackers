@@ -200,7 +200,9 @@ function FontBuilder() {
                 return {x:14, y:36};
             case '<':
                 return {x:21, y:36};
-        }
+            case '/':
+                return {x:28, y:36};
+            }
     };
 
     const getStrokedXYForChar = function(char) {
@@ -341,7 +343,8 @@ function FontBuilder() {
                 return {x:18, y:44};
             case '<':
                 return {x:27, y:44};
-    
+            case '/':
+                return {x:36, y:44};        
         }
     };
 
