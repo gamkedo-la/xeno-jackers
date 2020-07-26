@@ -1,6 +1,5 @@
 //Main for Xeno Jackers
 window.onload = function() {
-    console.log("Game loaded")
     canvas = document.getElementById("gameCanvas");// document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
 
@@ -26,7 +25,6 @@ window.onload = function() {
 
 function loadingDoneSoStartGame() {
 	if(finishedLoading) {
-        console.log("All downloads completed");
 		timer = new Chronogram();
 		fontRenderer = new FontBuilder();
 		if(DEBUG) {
@@ -80,7 +78,6 @@ function startGame() {
 		return;
 	} 
 
-    console.log("Starting game");
     windowState.help = false;
     windowState.mainMenu = false;
     windowState.playing = true;
@@ -95,7 +92,6 @@ function moveAll() {
 };
 
 function windowOnFocus() {
-    console.log("Game received keyboard focus");
     if(SceneState.currentScene === SCENE.PAUSE) {
 		timer.skipToNow();
 		gameIsPaused = false;
@@ -105,7 +101,6 @@ function windowOnFocus() {
 }
 
 function windowOnBlur() {
-    console.log("Game lost keyboard focus");
 	if(SceneState.currentScene === SCENE.GAME) {
 		gameIsPaused = true;
 		pauseSound.play();

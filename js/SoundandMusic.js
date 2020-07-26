@@ -47,7 +47,6 @@ function configureGameAudio() {
 }
 
 function loadAudio() {
-    console.log("Loading audio files...");
 	pauseSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
 	resumeSound = new SoundOverlapsClass(assetPath.Audio + "pause1");
 	menuSelect = new SoundOverlapsClass(assetPath.Audio + "menu_select");

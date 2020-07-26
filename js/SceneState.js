@@ -17,7 +17,6 @@ const SceneState = {
 		[SCENE.WIN]: new WinGame2CutScene()
 	},
 	setState: function(newScene, properties) {
-        console.log("Game state changed to " + newScene);
         this.scenes[this.currentScene].transitionOut();
         this.log.push(this.currentScene);
 		this.currentScene = newScene;

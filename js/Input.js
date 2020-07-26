@@ -107,7 +107,6 @@ const ALIAS = {
 }
 
 function initializeInput() {
-    console.log("Initializing Input");
     document.addEventListener("keydown", keyPress);
 	document.addEventListener("keyup", keyRelease);
 	document.addEventListener("mousedown", mouseButtonPressed);
@@ -115,7 +114,6 @@ function initializeInput() {
     document.addEventListener('mousemove', calculateMousePos);
     gamepad = new GamepadManager();
     if (TOUCH_ENABLED) {
-        console.log("Mobile Controls are enabled");
         initializeMobileControls();
     }
 }
