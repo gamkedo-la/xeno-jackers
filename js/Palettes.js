@@ -2,14 +2,15 @@
 // for gameboy green optional mode etc
 
 
-const paletteNames = ["GREY", "GAMEBOY", "CHILL", "SEPIA", "LILAC", "LAVA"]
+const paletteNames = ["STEEL", "GAMEBOY", "CHILL", "SEPIA", "LILAC", "LAVA", "OCEAN"]
 const paletteRGBA = [
     "",
     "rgba(0,255,0,0.1)",
     "rgba(0,255,255,0.1)",
-    "rgba(255,200,150,0.1)",
+    "rgba(112, 66, 20,0.2)",
     "rgba(255,0,255,0.1)",
     "rgba(255,0,0,0.1)",
+    "rgba(0,0,255,0.1)",
 ];
 
 let paletteNum = 0;
