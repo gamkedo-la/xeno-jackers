@@ -77,7 +77,8 @@ function moveAll() {
 };
 
 function windowOnFocus() {
-	if(SceneState.currentScene === SCENE.PAUSE) {
+    console.log("Game received keyboard focus");
+    if(SceneState.currentScene === SCENE.PAUSE) {
 		timer.skipToNow();
 		gameIsPaused = false;
 		resumeSound.play();
@@ -86,6 +87,7 @@ function windowOnFocus() {
 }
 
 function windowOnBlur() {
+    console.log("Game lost keyboard focus");
 	if(SceneState.currentScene === SCENE.GAME) {
 		gameIsPaused = true;
 		pauseSound.play();
