@@ -44,7 +44,7 @@ const EntityType = {
     Roadzone:"roadzone",
     LevelExit:"levelExit",
     WallBarrier:"wallBarrier",
-    JukeBox: "jukeBox",
+    BossRoomEntrance: "bossRoomEntrance",
 
     //Destructible
     Lamp:"lamp",
@@ -117,6 +117,7 @@ function isEnvironment(entity) {
         case EntityType.Roadzone:
         case EntityType.LevelExit:
         case EntityType.WallBarrier:
+        case EntityType.BossRoomEntrance:
             return true;
         default:
             return false;

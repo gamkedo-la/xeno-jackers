@@ -901,7 +901,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         } else if(otherEntity.type === EntityType.LevelExit) {
             SceneState.scenes[SCENE.GAME].playerAtExit();
         } else if (isEnvironment(otherEntity)) {
-            if(otherEntity.type === EntityType.Deadzone) {
+            if(otherEntity.type === EntityType.BossRoomEntrance) {
+                currentBackgroundMusic.loopSong(BOSS_MUSIC_FILENAME);
+            } else if(otherEntity.type === EntityType.Deadzone) {
                 SceneState.scenes[SCENE.GAME].removeMe(self);
             } else {
                 if(otherEntity.type === EntityType.Roadzone) {

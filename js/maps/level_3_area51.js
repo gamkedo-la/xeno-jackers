@@ -8,7 +8,7 @@
  if(typeof module === 'object' && module && module.exports) {
   module.exports = data;
  }})("level_3_area51",
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -2829,7 +2829,7 @@
                          "y":0
                         }, 
                         {
-                         "x":23.3606775700935,
+                         "x":23.3607,
                          "y":43.25
                         }, 
                         {
@@ -2896,8 +2896,36 @@
                  "type":"wallBarrier",
                  "visible":true,
                  "width":0,
-                 "x":839.9375,
-                 "y":848.028409090909
+                 "x":839.938,
+                 "y":848.028
+                }, 
+                {
+                 "height":0,
+                 "id":201,
+                 "name":"box",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":8
+                        }, 
+                        {
+                         "x":176,
+                         "y":8
+                        }, 
+                        {
+                         "x":176,
+                         "y":0
+                        }],
+                 "rotation":0,
+                 "type":"bossRoomEntrance",
+                 "visible":true,
+                 "width":0,
+                 "x":487.666666666667,
+                 "y":696.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2967,8 +2995,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":41.8181999999999,
-                 "y":61.9393666666666
+                 "x":41.8182000000002,
+                 "y":53.9393999999999
                 }, 
                 {
                  "gid":4098,
@@ -3183,8 +3211,8 @@
                  "type":"enginePickup",
                  "visible":true,
                  "width":16,
-                 "x":1057.33333333333,
-                 "y":897.333333333333
+                 "x":1057.33,
+                 "y":897.333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -3205,10 +3233,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":201,
+ "nextobjectid":202,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.4",
+ "tiledversion":"1.4.1",
  "tileheight":8,
  "tilesets":[
         {
@@ -3221,6 +3249,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":1.2,
+ "version":1.4,
  "width":320
 });

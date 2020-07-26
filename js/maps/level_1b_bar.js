@@ -1470,6 +1470,34 @@
                  "width":0,
                  "x":2262.57,
                  "y":271.182
+                }, 
+                {
+                 "height":0,
+                 "id":130,
+                 "name":"box",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":64
+                        }, 
+                        {
+                         "x":16,
+                         "y":64
+                        }, 
+                        {
+                         "x":16,
+                         "y":0
+                        }],
+                 "rotation":0,
+                 "type":"bossRoomEntrance",
+                 "visible":true,
+                 "width":0,
+                 "x":2016,
+                 "y":183.75
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1575,8 +1603,8 @@
                  "type":"player",
                  "visible":true,
                  "width":21,
-                 "x":148.712,
-                 "y":116.847
+                 "x":143.378666666667,
+                 "y":119.180333333333
                 }, 
                 {
                  "gid":4098,
@@ -1921,7 +1949,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":130,
+ "nextobjectid":131,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
