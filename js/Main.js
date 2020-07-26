@@ -50,7 +50,8 @@ var storedDeltaTime = 0; // framerate limiter
 
 function update() {
     var deltaTime = timer.update();
-    
+    // avoid divide by zero problems on infinitely fast computers
+    if (deltaTime<1) deltaTime = 1;
     // force 60fps simulation timestep
     deltaTime += storedDeltaTime;
     if (deltaTime<16) {
