@@ -1,8 +1,8 @@
 //Main for Xeno Jackers
 window.onload = function() {
+    console.log("Game loaded")
     canvas = document.getElementById("gameCanvas");// document.createElement("canvas");
     canvasContext = canvas.getContext("2d");
-    gamepad = new GamepadManager();
 
 	drawRect(0, 0, canvas.width, canvas.height, Color.Black);
 	
@@ -24,6 +24,7 @@ window.onload = function() {
 
 function loadingDoneSoStartGame() {
 	if(finishedLoading) {
+        console.log("All downloads completed");
 		timer = new Chronogram();
 		fontRenderer = new FontBuilder();
 		if(DEBUG) {
@@ -61,6 +62,7 @@ function startGame() {
 		return;
 	} 
 
+    console.log("Starting game");
     windowState.help = false;
     windowState.mainMenu = false;
     windowState.playing = true;
