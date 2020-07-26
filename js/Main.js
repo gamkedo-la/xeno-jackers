@@ -18,8 +18,10 @@ window.onload = function() {
 	currentBackgroundMusic.loopSong(menuMusic);
 	loadGamkedoLogo();
 
+    canvas.focus(); // tell browser the keyboard focus is the game canvas
 	window.addEventListener("focus", windowOnFocus);
     window.addEventListener("blur", windowOnBlur);
+
 };
 
 function loadingDoneSoStartGame() {
