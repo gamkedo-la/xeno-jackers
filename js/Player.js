@@ -16,17 +16,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     let drawPosition = {x:0, y:0};
     let velocity = {x:0, y:0};
 
-    let isBlocking = false;
-    let isAttacking = false;
-    let isAttackCrouch = false;
-
     let isOnGround = true;
-    let wasOnGround = true;
     let heldJumpTime = 0;
-    let lastJumpKeyTime = 0;
     let flipped = false;
-	let didCollideWithEnvironment = false;
-    let didCollideWithEnemy = false;
     let didHitRoad = false;
 	let lastCollidedEnemy = null;
     let justCollidedWithEnvironment = false;
@@ -263,7 +255,7 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
         currentAnimation = animations.idle;
         velocity.x = 0;
-        isBlocking = false;
+
         if(!isOnGround) {
             heldJumpTime = MAX_JUMP_TIME;
         }
@@ -521,10 +513,9 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
         colliderManager.updateCollider(position.x, position.y);
         velocity.x = 0;
-        isAttacking = true;//TODO: Do we need this or something else?
+        isAttacking = true;
         currentAnimation = animations.throwing;
         currentAnimation.reset();
-        //chainAttack1.play();//TODO: Need a throw SFX?
     }
 
     function updateThrowing(deltaTime) {
@@ -540,7 +531,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     function exitThrowing(deltaTime) {
         
     }
-
 
     function enterJumpPogo(deltaTime) {
         self.pogoedAnEnemy = false;
@@ -561,7 +551,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         handlebar.activate(self.collisionBody.center.x, self.collisionBody.center.y);//center at bottom of player sprite
         currentAnimation = animations.pogoJumping;
         currentAnimation.reset();
-        //chainAttack1.play();//Need a sound here
     }
 
     function updateJumpPogo(deltaTime) {
@@ -599,7 +588,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         }
         currentAnimation = animations.pogoFalling;
         currentAnimation.reset();
-        //chainAttack1.play();//Need a sound here
     }
 
     function updateFallPogo(deltaTime) {
@@ -708,9 +696,8 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     }
 
 	function enterDead(deltaTime) {
-        currentAnimation = animations.dieing
-        currentAnimation.reset()		
-		//play death sound here?
+        currentAnimation = animations.dieing;
+        currentAnimation.reset();
     }
     
     function updateDead(deltaTime) {
@@ -817,8 +804,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         velocity.x = 0;
         velocity.y = 0;
 
-        isBlocking = false;
-
         isOnGround = true;
         heldJumpTime = 0;
         flipped = false;
@@ -896,40 +881,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
 
     const processInput = function (deltaTime, body) {
         if(healthDepleted()) heldButtons.length = 0;
-        for (let i = 0; i < heldButtons.length; i++) {
-            switch (heldButtons[i]) {
-                case ALIAS.BLOCK:
-                    stillBlocking = true;
-                    block();
-                break;
-            }
-        }
-
-    };
-
-    const block = function () {
-        if (isOnGround && !isBlocking) {
-            console.log("I'm blocking now");
-            isBlocking = true;
-            //currentAnimation = animations.blocking;
-        }
-    };
-
-    const attack = function () {
-        if (isOnGround && currentAnimation != animations.attacking) {
-            isAttacking = true;
-            velocity.x = 0;
-            if (currentAnimation !== animations.attacking) {
-                if (flipped) {
-                    colliderManager.setPointsForState(PlayerState.AttackRight, position);
-                } else {
-                    colliderManager.setPointsForState(PlayerState.AttackLeft, position);
-                }
-                colliderManager.updateCollider(position.x, position.y);
-            }
-            currentAnimation = animations.attacking;
-            currentAnimation.reset();
-        }
     };
 
     this.draw = function (deltaTime) {
@@ -1025,7 +976,6 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
         anims.throwing = new SpriteAnimation('throw', playerSpriteSheet, [9, 10, 11, 12], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
         anims.pogoJumping = new SpriteAnimation('pogoJump', playerSpriteSheet, [9], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
         anims.pogoFalling = new SpriteAnimation('pogoFall', playerSpriteSheet, [8], FRAME_WIDTH, FRAME_HEIGHT, [20], false, false, [0], playerBrightSheet);
-        //        anims.blocking = ...
         anims.crouching = new SpriteAnimation('crouch', playerSpriteSheet, [14], FRAME_WIDTH, FRAME_HEIGHT, [164], false, false, [0], playerBrightSheet);
         anims.thumbup = new SpriteAnimation('thumbup', playerSpriteSheet, [15, 16, 17, 18, 19], FRAME_WIDTH, FRAME_HEIGHT, [100, 100, 100, 100, 400], false, false, [0], playerBrightSheet);
         anims.knockback = new SpriteAnimation('knockedback', playerSpriteSheet, [12], FRAME_WIDTH, FRAME_HEIGHT, [125], false, false, [0], playerBrightSheet);
@@ -1035,16 +985,4 @@ function Player(startX, startY, hasChain, hasWheel, hasHandleBar, hasEngine) {
     };
     const animations = initializeAnimations();
     currentAnimation = animations.idle;
-
-    const isHoldingLeft = function () {
-        for (let i = 0; i < heldButtons.length; i++) {
-            if (heldButtons[i] === ALIAS.WALK_LEFT) {
-                return true;
-            } else if (heldButtons[i] === ALIAS.WALK_RIGHT) {
-                return true;
-            }
-        }
-
-        return false;
-    };
 }

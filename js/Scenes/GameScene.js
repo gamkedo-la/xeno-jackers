@@ -169,7 +169,6 @@ function GameScene() {
                 return true;
             case ALIAS.DEBUG:
                 DEBUG = !DEBUG;
-                console.log("Debug? " + DEBUG);
                 return true;
             default:
                 if(verifyNewKeyPressed(newKeyEvent, pressed, pressedKeys)) {
@@ -360,7 +359,6 @@ function GameScene() {
     const loadEntities = function(enemyData) {
         for(let data of enemyData) {
             let anEntity;
-//            console.log("new entity: "+data.type);
             switch(data.type) {
                 case EntityType.EnemyBiker:
                     anEntity = new BikerEnemy(data.x, data.y - 33);//33 is height of biker enemy

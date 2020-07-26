@@ -17,8 +17,6 @@ var cheatList = [
 		code: 'kill',
 		active: true,
 		action: function() {
-			console.log("Look mom");
-			console.log("im cheating");
 		}
 	},
 	cheat = {
@@ -26,8 +24,6 @@ var cheatList = [
 		code: 'i',
 		active: DEBUG_CHEATS,
 		action: function() {
-			console.log("you dont look");
-			console.log("like a dev");
 		}
 	},
 	cheat = {
@@ -131,7 +127,6 @@ function cheats(key) {
 					if(cheatBuffer == val.code) {
 						//is cheatcode enabled?		
 						if(val.active == true) {
-							console.log("cheat activated: " + val.code);
 							val.action();			
 						}
 					}

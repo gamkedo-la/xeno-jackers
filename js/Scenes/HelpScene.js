@@ -58,7 +58,6 @@ function HelpScene() {
                 }
                 return true;
             case ALIAS.SELECT1:
-                console.log("Activated the current button");
                 SceneState.setState(selections[selectorPositionsIndex]);
                 return true;
             case ALIAS.SELECT2:

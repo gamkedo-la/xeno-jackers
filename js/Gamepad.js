@@ -4,10 +4,9 @@
 // so that no changes to pre-existing wasd code are required
 // ideally this provides zero work, automagic gamepad support
 
-function GamepadManager()
-{
+function GamepadManager() {
     if (!navigator.getGamepads) {
-        console.log("Your browser does not allow the use of gamepads. Please change your browser settings if you want to use a gamepad.");
+        console.error("Your browser does not allow the use of gamepads. Please change your browser settings if you want to use a gamepad.");
     }
     
     console.log("Gamepad Support is ENABLED. Listening for gamepads...");
@@ -39,26 +38,6 @@ function GamepadManager()
     var SIMULATED_KEY_A_BUTTON = 32;//90;//32;//space
     var SIMULATED_KEY_X_BUTTON = 13;//88;//x
     var SIMULATED_KEY_Y_BUTTON = 13;//67;//C //90;//13;//enter
-	//17//lctrl
-    //16//lshift
-	//18//alt
-	//38//up
-	//40//down
-	//37//left
-	//39//right
-	//48=0//49=1//57=9
-	//33//pgup
-	//34//pgdn
-	//36//home
-	//35//end
-	//8//backspace
-	//46//delete
-	//107//num+
-	//109//num-
-	//189//-
-	//187//=
-	//188//,
-	//190//.
 	
     window.addEventListener("gamepadconnected", function(e) {
     // Gamepad connected
@@ -70,8 +49,7 @@ function GamepadManager()
     console.log("Gamepad disconnected", e.gamepad);
     });
 
-    this.applyDeadzone = function(number, threshold)
-    {
+    this.applyDeadzone = function(number, threshold) {
         var percentage = (Math.abs(number) - threshold) / (1 - threshold);
         if(percentage < 0){
             percentage = 0;
@@ -79,15 +57,11 @@ function GamepadManager()
         return percentage * (number > 0 ? 1 : -1);
     }
 
-    this.handle_gamepad = function()
-    {
-        if (!gamepad) // always null until you press a button!
-        {
-            //console.log("Init gamepad..."); // spammy
+    this.handle_gamepad = function() {
+        if (!gamepad) {// always null until you press a button!
             if (!navigator.getGamepads)
             {
                 if (!this.alreadyComplained) {
-                    console.log("Gamepad NOT supported on this browser!");
                     this.alreadyComplained = true;
                 }
                 return; // not supported?
@@ -95,9 +69,7 @@ function GamepadManager()
         }
         // poll every frame
         gamepad = navigator.getGamepads()[0];
-        if (gamepad)
-        {
-            //console.log("Gamepad detected: " + gamepad.axes[0] + "," + gamepad.axes[1]);
+        if (gamepad) {
             var joystickX = this.applyDeadzone(gamepad.axes[0], DEADZONE);
             gamepad_right = (joystickX > 0);
             gamepad_left = (joystickX < 0);
@@ -113,11 +85,6 @@ function GamepadManager()
             gamepad_x = (butt>0);
             butt = this.applyDeadzone(gamepad.buttons[3].value, DEADZONE);
             gamepad_y = (butt>0);
-            //console.log("Gamepad buttons: A:" + gamepad.buttons[0].value + " B:" + + gamepad.buttons[1].value + " X:" + + gamepad.buttons[2].value + " Y:" + + gamepad.buttons[3].value);
-        }
-        else
-        {
-            //console.log("No gamepad detected! YET..."); // spammy before button press
         }
 
         // compare previous state and send fake keyboard events
@@ -127,8 +94,7 @@ function GamepadManager()
         // window.requestAnimationFrame(handle_gamepad);
     }
 
-    this.fake_keyboard_events = function() // if any
-    {
+    this.fake_keyboard_events = function() {// if any
         // compare previous state
         if (!prev_gamepad_left && gamepad_left) this.simulateKeyDown(SIMULATED_KEY_LEFT);
         if (!prev_gamepad_right && gamepad_right) this.simulateKeyDown(SIMULATED_KEY_RIGHT);
@@ -158,9 +124,7 @@ function GamepadManager()
         prev_gamepad_y = gamepad_y;
     }
     
-    this.simulateKeyDown = function(thisKey) 
-    {
-        //console.log('fake keydown: ' + thisKey)
+    this.simulateKeyDown = function(thisKey) {
         var oEvent = document.createEvent('KeyboardEvent');
         Object.defineProperty(oEvent, 'keyCode', { get : function() { return this.keyCodeVal; } });     
         Object.defineProperty(oEvent, 'which', { get : function() { return this.keyCodeVal; } });     
@@ -173,9 +137,7 @@ function GamepadManager()
         document.dispatchEvent(oEvent);
     }
     
-    this.simulateKeyUp = function(thisKey) 
-    {
-        //console.log('fake keyup: ' + thisKey)
+    this.simulateKeyUp = function(thisKey) {
         var oEvent = document.createEvent('KeyboardEvent');
         Object.defineProperty(oEvent, 'keyCode', { get : function() { return this.keyCodeVal; } });     
         Object.defineProperty(oEvent, 'which', { get : function() { return this.keyCodeVal; } });     

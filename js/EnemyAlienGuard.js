@@ -128,47 +128,6 @@ function EnemyAlienGuard(posX, posY) {
         this.collisionBody.calcOnscreen(canvas);
     };
 
-    const moveLeft = function() {
-        position.x -= 10;
-    };
-
-    const moveRight = function() {
-        position.x += 10;
-    };
-
-    const jump = function() {
-        if(isOnGround) {
-            isOnGround = false;
-//            currentAnimation = animations.jumping;
-            console.log("Enemy Alien Guard is trying to jump.");
-        }
-    };
-
-    const block = function() {
-        if(isOnGround && hasWheelWeapon && !isBlocking) {
-            console.log("Enemy Alien Guard is trying to block.");
-            isBlocking = true;
-//            currentAnimation = animations.blocking;
-        }
-    };
-
-    const attack = function() {
-        if((currentAnimation === animations.attacking) && (!currentAnimation.getIsFinished())) {
-            return;
-        } else {
-            console.log("Enemy Alien Guard is trying to attack.");
-//            currentAnimation = animations.attacking;
-        }
-    };
-
-    const crouch = function() {
-        if(isOnGround && !isCrouching) {
-            console.log("Enemy Alien Guard is crouching now.");
-            isCrouching = true;
-//            currentAnimation = animations.crouching;
-        }
-    };
-
     this.draw = function(deltaTime) {
         if(this.collisionBody.isOnScreen) {
             if(currentAnimation === animations.death) {

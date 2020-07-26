@@ -19,17 +19,14 @@ function nextPallete() {
     paletteNum++;
     if (paletteNum > paletteNames.length - 1) paletteNum = 0;
     paletteString = paletteNames[paletteNum];
-    // console.log('Next palette: '+paletteString);
 }
 function prevPallete() {
     paletteNum--;
     if (paletteNum < 0) paletteNum = paletteNames.length - 1;
     paletteString = paletteNames[paletteNum];
-    // console.log('Prev palette: '+paletteString);
 }
 
 function drawPaletteEffect() {
-    
     if (paletteNum === 0) return; // normal greyscale graphics: do nothing
 
     // draw a colour overlay to tint the existing greyscale image

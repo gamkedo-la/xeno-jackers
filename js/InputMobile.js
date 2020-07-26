@@ -24,20 +24,16 @@ var fakeEvent = {
 // emulate keyboard events
 
 function touchDOWN(key) {
-    //console.log("TOUCH DOWN " + key);
     fakeEvent.keyCode=key;
     keyPress(fakeEvent); 
 }
 
 function touchUP(key) {
-    //console.log("TOUCH UP " + key);
     fakeEvent.keyCode=key;
     keyRelease(fakeEvent); 
 }
 
 function initializeMobileControls() {
-
-    console.log("Mobile Support is ENABLED. Displaying touch controls...");
     var mobileControlsDIV = document.getElementById('mobileControls');
     if (mobileControlsDIV) mobileControlsDIV.style.display = 'block';
 
@@ -47,20 +43,3 @@ function hideMobileControls() {
     var mobileControlsDIV = document.getElementById('mobileControls');
     if (mobileControlsDIV) mobileControlsDIV.style.display = 'none';
 }
-
-/*
-function onTouchStart(evt) {
-    console.log("TOUCH START");
-    evt.preventDefault();
-}
-
-function onTouchEnd(evt) {
-    console.log("TOUCH END");
-    evt.preventDefault();
-}
-
-function onTouchCancel(evt) {
-    console.log("TOUCH CANCEL");
-    evt.preventDefault();
-}
-*/

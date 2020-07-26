@@ -124,8 +124,6 @@ function notifyCurrentScene(newInput, pressed) {
 }
 
 function keyPress(evt) {
-    if (TOUCH_ENABLED) console.log("keyPress: " + evt.keyCode); // just for debugging
-    
     evt.preventDefault();
 	cheats(evt.key);
 	if (evt.keyCode === KEY_PLUS) {
@@ -166,7 +164,7 @@ function keyRelease(evt) {
 }
 
 function mouseButtonPressed(evt) {
-	if (!didInteract) { // very first click ever?
+	if (!didInteract) {
 		didInteract = true;
 		console.log("First click, audio now available, starting bg music.")
 		if (currentBackgroundMusic) {
