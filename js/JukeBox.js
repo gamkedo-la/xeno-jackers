@@ -1,7 +1,7 @@
 //JukeBox.js
 function JukeBox(posX, posY) {
     this.type = EntityType.JukeBox;
-    let position = {x:posX, y:posY};
+    const position = {x:posX, y:posY};
     let spawnPoint = {x:0, y:0};
     const TIME_DELAY = 100;
     const FLASH_TIME = 300;
@@ -31,6 +31,15 @@ function JukeBox(posX, posY) {
     this.update = function(deltaTime) {
         position.x = spawnPoint.x - canvas.offsetX;
         position.y = spawnPoint.y - canvas.offsetY;
+
+        const bump = 100 * Math.random();
+        if(bump < 10) {
+            if(position.y < spawnPoint.y) {
+                position.y++;
+            } else {
+                position.y--;
+            }
+        }
 
         if(this.collisionBody.isOnScreen) {
             if(flashTimer < FLASH_TIME) {
