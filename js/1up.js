@@ -8,7 +8,7 @@ function oneUp(posX, posY) {
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
 
-    this.type = EntityType.Health;
+    this.type = EntityType.OneUp;
 
     this.collisionBody = new AABBCollider([
         {x:posX, y:posY}, 

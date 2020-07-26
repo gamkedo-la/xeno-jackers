@@ -26,6 +26,7 @@ const EntityType = {
 
     //Pickups
     Health:"health",
+    OneUp:"oneUp",
     ChainPickup:"chainPickup",
     WheelPickup:"wheelPickup",
     HandlebarPickup:"handlebarPickup",
@@ -93,6 +94,7 @@ function isEnemyWeapon(entity) {
 function isPickup(entity) {
     switch(entity.type) {
         case EntityType.Health:
+        case EntityType.OneUp:
         case EntityType.ChainPickup:
         case EntityType.WheelPickup:
         case EntityType.HandlebarPickup:
