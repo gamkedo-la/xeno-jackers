@@ -46,11 +46,26 @@ function updateButtonText() {
 	}
 }
 
+var storedDeltaTime = 0; // framerate limiter
+
 function update() {
-	const deltaTime = timer.update();
-    SceneState.run(deltaTime);
-    drawPaletteEffect();
-    if (gamepad) gamepad.update();
+    var deltaTime = timer.update();
+    
+    // force 60fps simulation timestep
+    deltaTime += storedDeltaTime;
+    if (deltaTime<16) {
+        storedDeltaTime = deltaTime;
+        // store the unsimulated ms 
+        // and do not update (yet)
+    } else {
+        // at least 1/60 of a second has elapsed
+        // run the normal update
+        storedDeltaTime = 0;
+        SceneState.run(deltaTime);
+        drawPaletteEffect();
+        if (gamepad) gamepad.update();
+    }
+
 	requestAnimationFrame(update);
 };
 
