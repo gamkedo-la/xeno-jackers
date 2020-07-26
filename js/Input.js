@@ -167,7 +167,11 @@ function keyRelease(evt) {
 }
 
 function mouseButtonPressed(evt) {
-	if (!didInteract) {
+    
+    // allows arrow keys on itch.io iframe on certain browsers (EDGE/Win10Chrome)
+    window.focus(); // FIXME: this is a hack
+    
+    if (!didInteract) {
 		didInteract = true;
 		console.log("First click, audio now available, starting bg music.")
 		if (currentBackgroundMusic) {
