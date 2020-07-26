@@ -4,13 +4,10 @@ function oneUp(posX, posY) {
     const SIZE = {width:WIDTH, height:HEIGHT};
     const FRAME_NUM = 0; //TODO: restore after testing complete
     
-    let animation = new SpriteAnimation('idle', oneUpAnim, [0, 1, 2, 3, 4, 5, 6, 7], WIDTH, HEIGHT, [200], false, true);
-    //TODO: Restore once we know which image we want
-//    let animation = new SpriteAnimation('idle', 1uppickup, [FRAME_NUM], WIDTH, HEIGHT, [512], false, true);
+    let animation = new SpriteAnimation('idle', healthpickup, [8, 9], WIDTH, HEIGHT, [200], false, true);
     let position = {x:posX, y:posY};
     let velocity = {x:0, y:0};
 
-    this.health *= 2;
     this.type = EntityType.Health;
 
     this.collisionBody = new AABBCollider([
@@ -27,7 +24,6 @@ function oneUp(posX, posY) {
         position.y -= canvas.deltaY;
         
         if(this.collisionBody.isOnScreen) {
-            position.x += Math.round(velocity.x * deltaTime / 1000);
             velocity.y += Math.round(GRAVITY * deltaTime / 1000);
             position.y += Math.round(velocity.y * deltaTime / 1000);
         }
@@ -38,15 +34,18 @@ function oneUp(posX, posY) {
     };
 
     this.draw = function(deltaTime) {
-        animation.drawAt(position.x, position.y);
+        if(this.collisionBody.isOnScreen) {
+            animation.drawAt(position.x, position.y);
 
-        //colliders only draw when DRAW_COLLIDERS is set to true
-        this.collisionBody.draw();
+            //colliders only draw when DRAW_COLLIDERS is set to true
+            this.collisionBody.draw();    
+        }
     };
 
     this.didCollideWith = function(otherEntity, collisionData) {
         if(otherEntity.type === EntityType.Player) {
             SceneState.scenes[SCENE.GAME].removeMe(this);
+            SceneState.scenes[SCENE.GAME].addLife(this);
         } else if(isEnvironment(otherEntity)) {
             //Environment objects don't move, so need to move 1up object the full amount of the overlap
             if(Math.abs(collisionData.deltaX) < Math.abs(collisionData.deltaY)) {

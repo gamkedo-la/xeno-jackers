@@ -107,6 +107,7 @@ const barFrontBroke = document.createElement("img");
 //environment objects
 const lampPic = document.createElement("img");
 const jukeboxPic = document.createElement("img");
+const oneUpPic = document.createElement("img");
 const cactusFullPic = document.createElement("img");
 const cutsceneTruck = document.createElement("img");
 
@@ -195,6 +196,7 @@ function loadImages() {
         //environment objects
         { imgName: lampPic, theFile: "backgrounds/Lamp.png" },
         { imgName: jukeboxPic, theFile: "characters/jukebox.png" },
+        { imgName: oneUpPic, theFile: "characters/jukebox.png" },
         { imgName: cactusFullPic, theFile: "backgrounds/cactus_full.png" },
         { imgName: cutsceneTruck, theFile: "backgrounds/cutscenetruck.png" },
 

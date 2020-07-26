@@ -206,6 +206,16 @@ function GameScene() {
         }
     };
 
+    this.add1Up = function(posX, posY) {
+        const new1Up = new oneUp(posX, posY);
+        otherEntities.push(new1Up);
+        collisionManager.addEntity(new1Up);
+    };
+
+    this.addLife = function() {
+        remainingLives++;
+    };
+
     this.mechsDefeated = function() {
         return defeatedMechs;
     };

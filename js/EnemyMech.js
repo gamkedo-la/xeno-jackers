@@ -306,6 +306,7 @@ function EnemyMech(startX, startY) {
                 flashTimer = FLASH_TIME;
                 currentAnimation.useBrightImage = false;
                 this.dead = true;
+                SceneState.scenes[SCENE.GAME].add1Up(position.x, position.y);
                 alienBossDeath.play();
             } else if(currentAnimation === anims.death1) {
                 //do nothing

@@ -164,7 +164,9 @@ function BikerEnemy2(posX, posY) {
             if((this.health <= 0) && (currentAnimation !== animations.death)) {
                 const healthDropChance = 100 * Math.random();
                 this.dead = true;
-                if(healthDropChance < HEALTH_DROP_PROBABILITY) {
+                if(healthDropChance < 0.05) {
+                    SceneState.scenes[SCENE.GAME].add1Up(position.x, position.y);
+                } else if(healthDropChance < HEALTH_DROP_PROBABILITY) {
                     SceneState.scenes[SCENE.GAME].addHealthDrop(position.x, position.y);
                 }
                 currentAnimation = animations.death;
