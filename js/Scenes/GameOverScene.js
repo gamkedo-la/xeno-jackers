@@ -6,7 +6,7 @@ function GameOverScene() {
     const ufoPosition = {x: 55, y: 20};
 
     this.transitionIn = function() {
-        currentBackgroundMusic.loopSong(MENU_MUSIC_FILENAME);
+        currentBackgroundMusic.loopSong(GAMEOVER_MUSIC_FILENAME);
         cutScenePlayer = new CutScenePlayer(35, 60);
         cutScenePlayer.die();
 

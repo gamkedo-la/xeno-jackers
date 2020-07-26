@@ -28,6 +28,7 @@ let effectsVolume;
 let currentBackgroundMusic;
 let playerJump;
 let playerDeath;
+let gameOver;
 const VOLUME_INCREMENT = 0.05;
 const VOLUME_MUSIC = 1.0;
 
@@ -68,6 +69,7 @@ function loadAudio() {
 	nodeActivate = new SoundOverlapsClass(assetPath.Audio + "node_activate");
 	playerJump = new SoundOverlapsClass(assetPath.Audio + "jumpUp");
 	playerDeath = new SoundOverlapsClass(assetPath.Audio + "playerDeath");
+	gameOver = new SoundOverlapsClass(assetPath.Audio + "GameOver");
 }
 
 function setFormat() {
